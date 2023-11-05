@@ -124,7 +124,7 @@ class _UserResumeState extends State<UserResume> {
                             name = val;
                           });
                         },
-                        hintText: '이름 입력 칸',
+                        hintText: '이름',
                       ),
                       SizedBox(
                         height: 25,

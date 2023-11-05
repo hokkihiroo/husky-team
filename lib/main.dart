@@ -6,7 +6,6 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       home: Scaffold(
         body: Center(
           child: UserScreen(),

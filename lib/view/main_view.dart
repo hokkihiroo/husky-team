@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team_husky/car_management_system/car_mainview.dart';
 import 'package:team_husky/layout/default_layout.dart';
 
 class MainView extends StatefulWidget {
@@ -50,7 +51,7 @@ class _MainViewState extends State<MainView>
               ),
             ),
           ),
-          Center(child: Text('준비중입니다')),
+          CarManagementSystem(),
           Center(
             child: Text(
               '개발중입니다',
