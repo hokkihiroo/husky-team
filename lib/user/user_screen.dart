@@ -105,6 +105,8 @@ class _UserScreenState extends State<UserScreen> {
                           height: 5,
                         ),
                         ElevatedButton(
+                          style:
+                          ElevatedButton.styleFrom(primary: Colors.black),
                           onPressed: () {
                             Navigator.push(
                               context,
