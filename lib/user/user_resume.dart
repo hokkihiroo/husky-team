@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/user/custom_text_form.dart';
+import 'package:team_husky/user/user_auth.dart';
 
 class UserResume extends StatefulWidget {
   const UserResume({super.key});
@@ -37,7 +39,7 @@ class _UserResumeState extends State<UserResume> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: 600.0,
+              height: 800.0,
               width: MediaQuery.of(context).size.width - 20,
               margin: EdgeInsets.only(top: 10,left: 10,right: 10),
               decoration: BoxDecoration(
@@ -188,7 +190,29 @@ class _UserResumeState extends State<UserResume> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.brown),
-                            onPressed: () {},
+                            onPressed:  () async {
+                              _tryValidation();
+                              try {
+                                final newUser = await AUTH
+                                    .createUserWithEmailAndPassword(
+                                    email: email, password: password);
+
+                                await FirebaseFirestore.instance
+                                    .collection(
+                                    'user/KZwZFZ6RV8WKvynPHZDs/bonsa')
+                                    .doc(newUser.user!.uid)
+                                    .set({
+                                  'email': email,
+                                  'password': password,
+                                  'name': name,
+                                  'phoneNumber': phoneNumber,
+                                  'carNumber': carNumber,
+                                });
+                                Navigator.pop(context);
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
                             child: Text('이력서 제출'),
                           ),
                         ],
