@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/car_management_system/car_mainview.dart';
 import 'package:team_husky/layout/default_layout.dart';
+import 'package:team_husky/mypage/mypage.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -68,14 +69,7 @@ class _MainViewState extends State<MainView>
               ),
             ),
           ),
-          Center(
-            child: Text(
-              '개발중입니다',
-              style: TextStyle(
-                fontSize: 40,
-              ),
-            ),
-          ),
+          MyPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

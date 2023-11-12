@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/user/custom_text_form.dart';
+import 'package:team_husky/user/user_auth.dart';
 import 'package:team_husky/user/user_resume.dart';
+import 'package:team_husky/view/main_view.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -96,7 +98,31 @@ class _UserScreenState extends State<UserScreen> {
                           height: 20,
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+
+                          onPressed: () async {
+                            try {
+                              final newUser = await AUTH
+                                  .signInWithEmailAndPassword(
+                                email: id,
+                                password: password,
+                              );
+                              print(newUser);
+                              print(newUser);
+                              print(newUser);
+                              if (newUser.user != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return MainView();
+                                    },
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              print(e);
+                            }
+                          },
                           child: Text(
                             '로그인',
                           ),

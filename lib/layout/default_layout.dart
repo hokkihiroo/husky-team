@@ -6,7 +6,13 @@ class DefaultLayout extends StatelessWidget {
   final String? title;
   final Widget? bottomNavigationBar;
 
-  const DefaultLayout({super.key, required this.child, this.backgroundColor, this.title, this.bottomNavigationBar,  });
+  const DefaultLayout({
+    super.key,
+    required this.child,
+    this.backgroundColor,
+    this.title,
+    this.bottomNavigationBar,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +24,12 @@ class DefaultLayout extends StatelessWidget {
     );
   }
 
-  AppBar? renderAppBar(){
-    if(title ==null){
+  AppBar? renderAppBar() {
+    if (title == null) {
       return null;
-
-    }else{
+    } else {
       return AppBar(
-
+        automaticallyImplyLeading: false,
         backgroundColor: backgroundColor ?? Colors.white,
         elevation: 0,
         title: Text(
@@ -35,8 +40,6 @@ class DefaultLayout extends StatelessWidget {
           ),
         ),
         foregroundColor: Colors.black,
-
-
       );
     }
   }
