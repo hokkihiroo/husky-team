@@ -98,19 +98,15 @@ class _UserScreenState extends State<UserScreen> {
                           height: 20,
                         ),
                         ElevatedButton(
-
                           onPressed: () async {
                             try {
-                              final newUser = await AUTH
-                                  .signInWithEmailAndPassword(
+                              final newUser =
+                                  await AUTH.signInWithEmailAndPassword(
                                 email: id,
                                 password: password,
                               );
-                              print(newUser);
-                              print(newUser);
-                              print(newUser);
                               if (newUser.user != null) {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
@@ -132,7 +128,7 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                         ElevatedButton(
                           style:
-                          ElevatedButton.styleFrom(primary: Colors.black),
+                              ElevatedButton.styleFrom(primary: Colors.black),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -166,6 +162,24 @@ class _UserScreenState extends State<UserScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MyDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Text('아이디와 비밀번호를 확인하세요.'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // 여기에 버튼을 눌렀을 때 수행할 동작을 추가할 수 있습니다.
+            Navigator.pop(context); // 다이얼로그 닫기
+          },
+          child: Text('닫기'),
+        ),
+      ],
     );
   }
 }
