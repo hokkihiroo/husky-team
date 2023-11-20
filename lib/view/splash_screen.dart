@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> checkLoginStatus() async {
-    await Future.delayed(Duration(seconds: 1)); // 일부러 2초 대기
+    await Future.delayed(Duration(seconds: 1)); // 일부러 1초 대기
 
     // FirebaseAuth 인스턴스를 사용하여 현재 로그인된 사용자 가져오기
     _user = FirebaseAuth.instance.currentUser;
