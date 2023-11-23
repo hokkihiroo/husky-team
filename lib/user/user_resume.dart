@@ -184,6 +184,9 @@ class _UserResumeState extends State<UserResume> {
                             },
                             child: Text(
                               '돌아가기',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           //이력서 제출
@@ -213,7 +216,11 @@ class _UserResumeState extends State<UserResume> {
                                 print(e);
                               }
                             },
-                            child: Text('이력서 제출'),
+                            child: Text('이력서 제출',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),),
+
                           ),
                         ],
                       ),
