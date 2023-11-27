@@ -145,6 +145,9 @@ class _UserScreenState extends State<UserScreen> {
                           },
                           child: Text(
                             '이력서작성',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
