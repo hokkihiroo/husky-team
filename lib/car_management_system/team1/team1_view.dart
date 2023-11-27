@@ -17,9 +17,10 @@ class _Team1ViewState extends State<Team1View> {
         backgroundColor: Colors.black,
         appBar: AppBar(
           title: Text('차량관리 시스템',
-          style: TextStyle(
-            color: Colors.white,
-          ),),
+            style: TextStyle(
+              color: Colors.green,
+            ),
+          ),
 
           backgroundColor: Colors.black,
           centerTitle: true,
