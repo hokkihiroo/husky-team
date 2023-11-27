@@ -98,6 +98,9 @@ class _UserScreenState extends State<UserScreen> {
                           height: 20,
                         ),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                          ),
                           onPressed: () async {
                             try {
                               final newUser =
@@ -121,6 +124,9 @@ class _UserScreenState extends State<UserScreen> {
                           },
                           child: Text(
                             '로그인',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         SizedBox(
