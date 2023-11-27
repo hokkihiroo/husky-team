@@ -16,7 +16,11 @@ class _Team1ViewState extends State<Team1View> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: Text('차량관리 시스템'),
+          title: Text('차량관리 시스템',
+          style: TextStyle(
+            color: Colors.white,
+          ),),
+
           backgroundColor: Colors.black,
           centerTitle: true,
         ),
