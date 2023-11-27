@@ -38,8 +38,8 @@ class DefaultLayout extends StatelessWidget {
             fontSize: 25.0,
             fontWeight: FontWeight.w900,
           ),
-          textAlign: TextAlign.left,
         ),
+        centerTitle: false,
         foregroundColor: Colors.black,
       );
     }
