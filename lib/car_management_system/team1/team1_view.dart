@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
+import 'package:team_husky/car_management_system/team1/team1_model.dart';
 
 class Team1View extends StatefulWidget {
   const Team1View({super.key});
@@ -29,6 +32,7 @@ class _Team1ViewState extends State<Team1View> {
               SizedBox(
                 height: 20,
               ),
+             // _Lists(name: '염호경',),
             ],
           ),
         ),
@@ -75,7 +79,21 @@ class _Team1ViewState extends State<Team1View> {
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: ()  async {
+                                  Navigator.pop(context);
+                                  try {
+                                    await FirebaseFirestore.instance
+                                        .collection(LOTARY)
+                                        .add({
+                                      'carNumber': carNumber,
+                                      'name': '',
+                                      'createdAt': FieldValue.serverTimestamp(),
+                                      'location': 0,
+                                      'color': 1,
+                                      'etc': '',
+                                    });
+                                  } catch (e) {}
+                                },
                                 child: Text('입력'),
                               ),
                             ),
@@ -186,6 +204,81 @@ class _LocationName extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _Lists extends StatelessWidget {
+  final String name;
+
+  const _Lists({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              RotaryList(
+                name: name,
+                location: LOTARY,
+                reverse: 1,
+                check: () {},
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              RotaryList(
+                name: name,
+                location: OUTSIDE,
+                reverse: 1,
+                check: () {},
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              RotaryList(
+                name: name,
+                location: MAIN,
+                reverse: 1,
+                check: () {},
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              RotaryList(
+                name: name,
+                location: MOON,
+                reverse: 1,
+                check: () {},
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              RotaryList(
+                name: name,
+                location: SINSA,
+                reverse: 1,
+                check: () {},
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
