@@ -26,6 +26,7 @@ class _Team1ViewState extends State<Team1View> {
             ),
           ),
           backgroundColor: Colors.black,
+          iconTheme: IconThemeData(color: Colors.white),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
