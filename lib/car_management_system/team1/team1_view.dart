@@ -21,6 +21,9 @@ class _Team1ViewState extends State<Team1View> {
         appBar: AppBar(
           title: Text(
             '차량관리 시스템',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
           backgroundColor: Colors.black,
           centerTitle: true,
@@ -32,7 +35,6 @@ class _Team1ViewState extends State<Team1View> {
               SizedBox(
                 height: 20,
               ),
-             // _Lists(name: '염호경',),
             ],
           ),
         ),
