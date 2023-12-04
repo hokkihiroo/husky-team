@@ -15,23 +15,38 @@ class CarManagementSystem extends StatelessWidget {
             );
           },
           child: Container(
-            child: Column(
+            width: 300.0,
+            height: 70.0,
+            color: Colors.grey,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '1팀 HMS 강남 ',
-                  style: TextStyle(
-                    letterSpacing: 3.0,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  ' 차량관리, 시승차 관리 시스템',
-                  style: TextStyle(
-                    letterSpacing: 3.0,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Text('1팀',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 3.0,
+                ),),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      ' HMS 강남 차량관리',
+                      style: TextStyle(
+                        letterSpacing: 3.0,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '시승차 관리 시스템',
+                      style: TextStyle(
+                        letterSpacing: 3.0,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
