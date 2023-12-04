@@ -25,6 +25,7 @@ class _Team1ViewState extends State<Team1View> {
               color: Colors.white,
             ),
           ),
+          iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.black,
           centerTitle: true,
         ),
