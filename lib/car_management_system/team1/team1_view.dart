@@ -36,6 +36,7 @@ class _Team1ViewState extends State<Team1View> {
               SizedBox(
                 height: 20,
               ),
+              _Lists(name: '염호경',),
             ],
           ),
         ),
