@@ -47,7 +47,11 @@ class _Team1ViewState extends State<Team1View> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          SizedBox(
+            width: 5,
+          ),
           Expanded(
+            flex: 3,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
@@ -82,7 +86,7 @@ class _Team1ViewState extends State<Team1View> {
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: ()  async {
+                                onPressed: () async {
                                   Navigator.pop(context);
                                   try {
                                     await FirebaseFirestore.instance
@@ -117,18 +121,27 @@ class _Team1ViewState extends State<Team1View> {
                   },
                 );
               },
-              child: Text('입차'),
+              child: Text('ENTER'),
             ),
           ),
+          SizedBox(
+            width: 10,
+          ),
           Expanded(
+            flex: 1,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
               ),
               onPressed: () {},
-              child: Text('입차리스트'),
+              child: Icon(
+                Icons.description_outlined,
+              ),
             ),
-          )
+          ),
+          SizedBox(
+            width: 5,
+          ),
         ],
       ),
       color: Colors.black,
