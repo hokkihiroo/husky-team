@@ -474,7 +474,7 @@ class _RotaryListState extends State<RotaryList> {
                           print('문서 삭제 오류: $e');
                         }
                       },
-                      child: Text('차량 삭제하기')),
+                      child: Text('차량삭제')),
                 ),
               ],
             ),

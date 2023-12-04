@@ -18,17 +18,20 @@ class CarManagementSystem extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '1팀 HMS 강남 \n차량관리 시스템',
+                  '1팀 HMS 강남 ',
                   style: TextStyle(
                     letterSpacing: 3.0,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Image.asset(
-                  'asset/img/ddo.png',
-                  width: 160,
-                  height: 160,
+                Text(
+                  ' 차량관리, 시승차 관리 시스템',
+                  style: TextStyle(
+                    letterSpacing: 3.0,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
