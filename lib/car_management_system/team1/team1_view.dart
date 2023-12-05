@@ -5,7 +5,9 @@ import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
 import 'package:team_husky/car_management_system/team1/team1_model.dart';
 
 class Team1View extends StatefulWidget {
-  const Team1View({super.key});
+  const Team1View({super.key, required this.name});
+
+  final String name;
 
   @override
   State<Team1View> createState() => _Team1ViewState();
@@ -36,7 +38,8 @@ class _Team1ViewState extends State<Team1View> {
               SizedBox(
                 height: 20,
               ),
-              // _Lists(name: '염호경',),
+              _Lists(name: widget.name,),
+              //이름이 두글자거나 다섯글자 이상이면 에러뜸
             ],
           ),
         ),

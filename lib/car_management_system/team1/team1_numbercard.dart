@@ -17,6 +17,8 @@ class NumberCard extends StatelessWidget {
   String splitNames() {
     if (name == '') {
       return '';
+    } else if (name!.length == 2) {
+      return name!.substring(0, 2);
     } else if (name!.length == 3) {
       return name!.substring(1, 3); // 두 번째와 세 번째 글자 추출
     } else if (name!.length == 4) {

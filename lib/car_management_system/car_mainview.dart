@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/car_management_system/team1/team1_view.dart';
 
 class CarManagementSystem extends StatelessWidget {
-  const CarManagementSystem({super.key});
+  const CarManagementSystem({super.key, required this.name});
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class CarManagementSystem extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Team1View()),
+              context, MaterialPageRoute(builder: (context) => Team1View(name:name)),
             );
           },
           child: Container(

@@ -4,7 +4,9 @@ import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/mypage/mypage.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({super.key});
+  const MainView({super.key, required this.name });
+
+  final String name;
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -52,7 +54,7 @@ class _MainViewState extends State<MainView>
               ),
             ),
           ),
-          CarManagementSystem(),
+          CarManagementSystem(name: widget.name,),
           Center(
             child: Text(
               '개발중입니다',
