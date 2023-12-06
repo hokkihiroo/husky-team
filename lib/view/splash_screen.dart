@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // 사용자가 로그인되어 있는지 확인
     if (_user != null) {
-      print(_user);
+      print(_user!.emailVerified);
       // try {
       //   DocumentSnapshot<Map<String, dynamic>> snapshot =
       //       await FirebaseFirestore.instance
