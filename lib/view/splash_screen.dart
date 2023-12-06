@@ -17,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   late User? _user;
   late String name;
+
   @override
   void initState() {
     super.initState();
@@ -33,37 +34,34 @@ class _SplashScreenState extends State<SplashScreen> {
     // 사용자가 로그인되어 있는지 확인
     if (_user != null) {
       try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-          .collection(myInfoAdress)
-          .doc(_user!.uid)
-          .get();
-      if (snapshot.exists && snapshot.data() != null) {
-        name = snapshot.data()!['name'];
-      }
-
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection(myInfoAdress)
+                .doc(_user!.uid)
+                .get();
+        if (snapshot.exists && snapshot.data() != null) {
+          name = snapshot.data()!['name'];
+        }
       } catch (e) {
         print('Error fetching data: $e');
         return null;
         // 여기에 이름이 존재 하지않는다면 무한루프에 빠지므로
         // 절대적으로 이름을 넣도록 해야함
-
       }
-
-      print(_user!.email);
-      print(_user!.uid);
-      print(name);
 
       // 사용자가 로그인된 경우
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainView(name: name,)),
+        MaterialPageRoute(
+            builder: (context) => MainView(
+                  name: name,
+                )),
       );
     } else {
       // 사용자가 로그인되어 있지 않은 경우
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => UserScreen()),
-
       );
     }
   }
@@ -93,4 +91,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
