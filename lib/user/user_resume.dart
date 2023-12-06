@@ -201,12 +201,10 @@ class _UserResumeState extends State<UserResume> {
                                     email: email, password: password);
 
                                 await FirebaseFirestore.instance
-                                    .collection(
-                                    'user/KZwZFZ6RV8WKvynPHZDs/bonsa')
+                                    .collection(BONSA)
                                     .doc(newUser.user!.uid)
                                     .set({
                                   'email': email,
-                                  'password': password,
                                   'name': name,
                                   'phoneNumber': phoneNumber,
                                   'carNumber': carNumber,

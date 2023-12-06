@@ -12,10 +12,10 @@ class RotaryList extends StatefulWidget {
 
   const RotaryList(
       {super.key,
-        required this.location,
-        required this.reverse,
-        required this.check,
-        required this.name});
+      required this.location,
+      required this.reverse,
+      required this.check,
+      required this.name});
 
   @override
   State<RotaryList> createState() => _RotaryListState();
@@ -28,8 +28,8 @@ class _RotaryListState extends State<RotaryList> {
   String dataAdress = ''; // 차번호 클릭시 나오는 위치 주소값
   int color = 1; //출차누르면 값이 2로 바뀌고 1이아닌색생은 노랑으로 표시
   DateTime dateTime = DateTime.now();
-  String name = '';
-  String etc = '';
+  String name = '';  //픽업 하는 사람 이름
+  String etc = '';  // 특이사항
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +61,8 @@ class _RotaryListState extends State<RotaryList> {
                   // 활성화 시키면 bar 가 바뀜 데이터 클릭시마다
                   // model.changeBottomBar(1);
 
+                  var document = docs[index];
+                  dataId = document.id;
                   name = docs[index]['name'];
                   carNumber = docs[index]['carNumber'];
                   location = docs[index]['location'];
@@ -69,25 +71,8 @@ class _RotaryListState extends State<RotaryList> {
                   Timestamp createdAt = docs[index]['createdAt'];
                   dateTime = createdAt.toDate();
                   dataAdress = CheckLocation(location); //파이어베이스 데이터주소
-                  print('$dataAdress');
-                  try {
-                    QuerySnapshot<Map<String, dynamic>> getDataId =
-                    await FirebaseFirestore.instance
-                        .collection(dataAdress)
-                        .where('carNumber', isEqualTo: carNumber)
-                        .get();
-                    if (getDataId.docs.isNotEmpty) {
-                      // 첫 번째로 일치하는 문서의 ID 반환
-                      dataId = getDataId.docs[0].id;
-                      print(dataId);
-                    } else {
-                      // 일치하는 문서가 없을 경우 null 반환
-                      return null;
-                    }
-                  } catch (e) {
-                    print('에러 발생: $e');
-                    return null;
-                  }
+                  print('데이터 주소 : $dataAdress');
+                  print('sdsdsdsdsdsddID: $dataId');
 
                   showDialog(
                     context: context,
@@ -339,7 +324,7 @@ class _RotaryListState extends State<RotaryList> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       textStyle:
-                      TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
@@ -366,7 +351,7 @@ class _RotaryListState extends State<RotaryList> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       textStyle:
-                      TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
@@ -420,7 +405,7 @@ class _RotaryListState extends State<RotaryList> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       textStyle:
-                      TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
@@ -523,7 +508,7 @@ class _RotaryListState extends State<RotaryList> {
                                                         await FirebaseFirestore
                                                             .instance
                                                             .collection(
-                                                            dataAdress)
+                                                                dataAdress)
                                                             .doc(dataId)
                                                             .update({
                                                           'etc': etc,
@@ -562,7 +547,7 @@ class _RotaryListState extends State<RotaryList> {
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black,
                       textStyle:
-                      TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
