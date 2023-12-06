@@ -16,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late User? _user;
-  late String name;
+  late String? name;
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => MainView(
-                  name: name,
+                  name: name!,
                 )),
       );
     } else {
