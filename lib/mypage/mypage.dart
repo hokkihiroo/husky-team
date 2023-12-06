@@ -32,31 +32,66 @@ class MyPage extends StatelessWidget {
             ],
           ),
           ElevatedButton(
-            onPressed: () async {
-              try {
-                User? currentUser = FirebaseAuth.instance.currentUser;
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+// AlertDialog를 반환하여 대화 상자 내용을 정의
+                  return AlertDialog(
+                    content: Text('모든 데이터가 소실되어 \n 더이상 앱사용이 불가합니다.\n 계속 하시겠습니까?'),
+                    actions: [
+                      Row(
 
-                if (currentUser != null) {
-                  String userId = currentUser.uid;
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                try {
+                                  User? currentUser = FirebaseAuth.instance.currentUser;
 
-                  await FIRESTORE
-                      .collection('user/KZwZFZ6RV8WKvynPHZDs/bonsa')
-                      .doc(userId)
-                      .delete();
-                  await currentUser.delete();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return UserScreen();
-                      },
-                    ),
+                                  if (currentUser != null) {
+                                    String userId = currentUser.uid;
+
+                                    await FIRESTORE
+                                        .collection('user/KZwZFZ6RV8WKvynPHZDs/bonsa')
+                                        .doc(userId)
+                                        .delete();
+                                    await currentUser.delete();
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return UserScreen();
+                                        },
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  print('Error deleting user: $e');
+                                }
+                              },
+                              child: Text('퇴사하기'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () {
+// 대화 상자 닫기
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('취소'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   );
-                }
-              } catch (e) {
-                print('Error deleting user: $e');
-              }
+                },
+              );
             },
+
             child: Text('퇴사하기'),
           ),
         ],
