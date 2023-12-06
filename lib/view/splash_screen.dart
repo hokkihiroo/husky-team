@@ -48,7 +48,9 @@ class _SplashScreenState extends State<SplashScreen> {
         // 여기에 이름이 존재 하지않는다면 무한루프에 빠지므로
         // 절대적으로 이름을 넣도록 해야함
       }
-
+      print(_user!.email);
+      print(_user!.uid);
+      print(name);
       // 사용자가 로그인된 경우
       Navigator.pushReplacement(
         context,
