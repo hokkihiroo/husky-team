@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
+import 'package:team_husky/car_management_system/team1/team1_car_list.dart';
 import 'package:team_husky/car_management_system/team1/team1_model.dart';
 
 class Team1View extends StatefulWidget {
@@ -15,6 +16,7 @@ class Team1View extends StatefulWidget {
 
 class _Team1ViewState extends State<Team1View> {
   String carNumber = '';
+  String CarListAdress = CARLIST+formatTodayDate();
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +106,20 @@ class _Team1ViewState extends State<Team1View> {
                                       'etc': '',
                                     });
                                   } catch (e) {}
+                                  try {
+                                    await FirebaseFirestore.instance
+                                        .collection(CarListAdress)
+                                        .add({
+                                      'carNumber': carNumber,
+                                      'name': '',
+                                      'enter': FieldValue.serverTimestamp(),
+                                      'out': '',
+                                      'location': '',
+                                      'color': '',
+                                      'etc': '',
+                                    });
+                                  } catch (e) {}
+
                                 },
                                 child: Text('입력'),
                               ),
@@ -137,7 +153,14 @@ class _Team1ViewState extends State<Team1View> {
               style: ElevatedButton.styleFrom(
                 textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CarList(),
+                  ),
+                );
+              },
               child: Icon(
                 Icons.description_outlined,
               ),
