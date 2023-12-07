@@ -4,9 +4,10 @@ import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/mypage/mypage.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({super.key, required this.name });
+  const MainView({super.key, required this.name, required this.email });
 
   final String name;
+  final String email;
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -71,7 +72,7 @@ class _MainViewState extends State<MainView>
               ),
             ),
           ),
-          MyPage(),
+          MyPage(name: widget.name, email: widget.email,),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

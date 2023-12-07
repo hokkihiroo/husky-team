@@ -17,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   late User? _user;
   late String name;
+  late String email;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 .get();
         if (snapshot.exists && snapshot.data() != null) {
           name = snapshot.data()!['name'];
+          email = snapshot.data()!['email'];
         }
       } catch (e) {
         print('Error fetching data: $e');
@@ -57,6 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
         MaterialPageRoute(
             builder: (context) => MainView(
                   name: name,
+              email : email,
                 )),
       );
     } else {
