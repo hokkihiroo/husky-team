@@ -54,10 +54,12 @@ class _CarListState extends State<CarList> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('입차리스트',
+        title: Text(
+          '입차리스트',
           style: TextStyle(
             color: Colors.white,
-          ),),
+          ),
+        ),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,

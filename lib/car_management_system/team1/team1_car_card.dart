@@ -16,14 +16,14 @@ class CarListCard extends StatelessWidget {
 
   String getInTime(Timestamp inTime) {
     final String a = inTime.toDate().hour.toString();
-    final String b = inTime.toDate().minute.toString();
+    final String b = inTime.toDate().minute.toString().padLeft(2, '0');
     final String c = '$a:$b';
     return c;
   }
 
   String getOutTime(DateTime outTime) {
     final String a = outTime.hour.toString();
-    final String b = outTime.minute.toString();
+    final String b = outTime.minute.toString().padLeft(2, '0');
     final String c = '$a:$b';
 
     return c;
