@@ -16,7 +16,7 @@ class Team1View extends StatefulWidget {
 
 class _Team1ViewState extends State<Team1View> {
   String carNumber = '';
-  String CarListAdress = CARLIST+formatTodayDate();
+  String CarListAdress = CARLIST + formatTodayDate();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,9 @@ class _Team1ViewState extends State<Team1View> {
               SizedBox(
                 height: 20,
               ),
-              _Lists(name: widget.name,),
+              _Lists(
+                name: widget.name,
+              ),
               //이름이 두글자거나 다섯글자 이상이면 에러뜸
             ],
           ),
@@ -94,10 +96,15 @@ class _Team1ViewState extends State<Team1View> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   Navigator.pop(context);
+                                  String documentId = FirebaseFirestore.instance
+                                      .collection(LOTARY)
+                                      .doc()
+                                      .id;
                                   try {
                                     await FirebaseFirestore.instance
                                         .collection(LOTARY)
-                                        .add({
+                                        .doc(documentId)
+                                        .set({
                                       'carNumber': carNumber,
                                       'name': '',
                                       'createdAt': FieldValue.serverTimestamp(),
@@ -109,7 +116,8 @@ class _Team1ViewState extends State<Team1View> {
                                   try {
                                     await FirebaseFirestore.instance
                                         .collection(CarListAdress)
-                                        .add({
+                                        .doc(documentId)
+                                        .set({
                                       'carNumber': carNumber,
                                       'name': '',
                                       'enter': FieldValue.serverTimestamp(),
@@ -119,7 +127,6 @@ class _Team1ViewState extends State<Team1View> {
                                       'etc': '',
                                     });
                                   } catch (e) {}
-
                                 },
                                 child: Text('입력'),
                               ),

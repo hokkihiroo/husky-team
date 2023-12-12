@@ -207,7 +207,9 @@ class ListModel extends StatelessWidget {
                     index: index + 1,
                     carNum: docs[index]['carNumber'],
                     inTime: docs[index]['enter'],
-                    outTime: '',
+                    outTime: docs[index]['out'] is Timestamp
+                        ? (docs[index]['out'] as Timestamp).toDate()
+                        : null,
                   ),
                 ),
               ),

@@ -28,8 +28,9 @@ class _RotaryListState extends State<RotaryList> {
   String dataAdress = ''; // 차번호 클릭시 나오는 위치 주소값
   int color = 1; //출차누르면 값이 2로 바뀌고 1이아닌색생은 노랑으로 표시
   DateTime dateTime = DateTime.now();
-  String name = '';  //픽업 하는 사람 이름
-  String etc = '';  // 특이사항
+  String name = ''; //픽업 하는 사람 이름
+  String etc = ''; // 특이사항
+  String CarListAdress = CARLIST + formatTodayDate();
 
   @override
   Widget build(BuildContext context) {
@@ -434,7 +435,29 @@ class _RotaryListState extends State<RotaryList> {
                         textStyle: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 18),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        Navigator.pop(context);
+
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                              .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                              .delete();
+                          print('문서 삭제 완료');
+                        } catch (e) {
+                          print('문서 삭제 오류: $e');
+                        }
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection(CarListAdress)
+                              .doc(dataId)
+                              .update({
+                            'out': FieldValue.serverTimestamp(),
+                          });
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
                       child: Text('출차완료')),
                 ),
                 SizedBox(

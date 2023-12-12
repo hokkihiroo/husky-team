@@ -5,20 +5,35 @@ class CarListCard extends StatelessWidget {
   final int index;
   final String carNum;
   final Timestamp inTime;
-  final String outTime;
+  final DateTime? outTime;
 
-  const CarListCard(
-      {super.key,
-        required this.index,
-        required this.carNum,
-        required this.inTime,
-        required this.outTime});
+  const CarListCard({super.key,
+    required this.index,
+    required this.carNum,
+    required this.inTime,
+    required this.outTime});
 
-  String getInTime(Timestamp inTime){
-    final String a = inTime.toDate().hour.toString();
-    final String b = inTime.toDate().minute.toString();
+  String getInTime(Timestamp inTime) {
+    final String a = inTime
+        .toDate()
+        .hour
+        .toString();
+    final String b = inTime
+        .toDate()
+        .minute
+        .toString();
     final String c = '$a:$b';
-    return  c;
+    return c;
+  }
+  String getOutTime(DateTime outTime) {
+    final String a = outTime
+        .hour
+        .toString();
+    final String b = outTime
+        .minute
+        .toString();
+    final String c = '$a:$b';
+    return c;
   }
 
   @override
@@ -45,7 +60,7 @@ class CarListCard extends StatelessWidget {
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
           ),
           Text(
-            '10:10',
+            outTime != null ? getOutTime(outTime!) : '',
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
           ),
