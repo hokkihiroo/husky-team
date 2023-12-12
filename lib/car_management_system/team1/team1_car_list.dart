@@ -64,19 +64,21 @@ class _CarListState extends State<CarList> {
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          _DateControl(
-            onPressLeft: _previousDay,
-            onPressRight: _nextDay,
-            onPressGoToday: goToday,
-            selectedDate: selectedDate,
-          ),
-          _ListState(),
-          ListModel(
-            adress: DBAdress,
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _DateControl(
+              onPressLeft: _previousDay,
+              onPressRight: _nextDay,
+              onPressGoToday: goToday,
+              selectedDate: selectedDate,
+            ),
+            _ListState(),
+            ListModel(
+              adress: DBAdress,
+            ),
+          ],
+        ),
       ),
     );
   }
