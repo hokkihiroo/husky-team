@@ -204,7 +204,14 @@ class ListModel extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return enterList();
+                    },
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: CarListCard(
@@ -223,4 +230,10 @@ class ListModel extends StatelessWidget {
       },
     );
   }
+}
+
+Widget enterList() {
+  return AlertDialog(
+    title: Text('차정보'),
+  );
 }

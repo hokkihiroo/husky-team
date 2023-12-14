@@ -456,6 +456,8 @@ class _RotaryListState extends State<RotaryList> {
                           });
                         } catch (e) {
                           print(e);
+                          print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+
                         }
                       },
                       child: Text('출차완료')),
