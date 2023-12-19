@@ -95,7 +95,6 @@ class _Team1ViewState extends State<Team1View> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  Navigator.pop(context);
                                   String documentId = FirebaseFirestore.instance
                                       .collection(LOTARY)
                                       .doc()
@@ -113,6 +112,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'etc': '',
                                     });
                                   } catch (e) {}
+
                                   try {
                                     await FirebaseFirestore.instance
                                         .collection(CarListAdress)
@@ -127,7 +127,10 @@ class _Team1ViewState extends State<Team1View> {
                                       'etc': '',
                                     });
                                   } catch (e) {}
+                                  Navigator.pop(context);
+
                                 },
+
                                 child: Text('입력'),
                               ),
                             ),
