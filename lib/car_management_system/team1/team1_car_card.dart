@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
 
 class CarListCard extends StatelessWidget {
   final int index;
@@ -13,21 +14,6 @@ class CarListCard extends StatelessWidget {
       required this.carNum,
       required this.inTime,
       required this.outTime});
-
-  String getInTime(Timestamp inTime) {
-    final String a = inTime.toDate().hour.toString();
-    final String b = inTime.toDate().minute.toString().padLeft(2, '0');
-    final String c = '$a:$b';
-    return c;
-  }
-
-  String getOutTime(DateTime outTime) {
-    final String a = outTime.hour.toString();
-    final String b = outTime.minute.toString().padLeft(2, '0');
-    final String c = '$a:$b';
-
-    return c;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +34,6 @@ class CarListCard extends StatelessWidget {
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
           ),
           Text(
-
             getInTime(inTime),
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),

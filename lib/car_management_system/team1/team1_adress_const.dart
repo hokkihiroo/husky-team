@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 final LOTARY ='local/q0LRMbznxA2yPca1DKNw/team1/1ACUzVo3Quod24RLILGr/rotary';
 
 final OUTSIDE ='local/q0LRMbznxA2yPca1DKNw/team1/1ACUzVo3Quod24RLILGr/outside';
@@ -36,3 +38,17 @@ String formatTodayDate() {
 
 // 입차 리스트 주소
 final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team1/7ttV1ueseWgiC2HhKj2Z/';
+ // -------------------날짜 변환 함수 -----------------------------
+String getInTime(Timestamp inTime) {
+  final String a = inTime.toDate().hour.toString();
+  final String b = inTime.toDate().minute.toString().padLeft(2, '0');
+  final String c = '$a:$b';
+  return c;
+}
+
+String getOutTime(DateTime outTime) {
+  final String a = outTime.hour.toString();
+  final String b = outTime.minute.toString().padLeft(2, '0');
+  final String c = '$a:$b';
+  return c;
+}

@@ -119,10 +119,10 @@ class _Team1ViewState extends State<Team1View> {
                                         .doc(documentId)
                                         .set({
                                       'carNumber': carNumber,
-                                      'name': '',
+                                      'enterName': widget.name,
                                       'enter': FieldValue.serverTimestamp(),
                                       'out': '',
-                                      'location': '',
+                                      'outName': '',
                                       'color': '',
                                       'etc': '',
                                     });

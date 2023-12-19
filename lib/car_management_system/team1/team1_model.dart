@@ -60,7 +60,6 @@ class _RotaryListState extends State<RotaryList> {
               child: GestureDetector(
                 onTap: () async {
                   // 활성화 시키면 bar 가 바뀜 데이터 클릭시마다
-                  // model.changeBottomBar(1);
 
                   var document = docs[index];
                   dataId = document.id;
@@ -453,11 +452,11 @@ class _RotaryListState extends State<RotaryList> {
                               .doc(dataId)
                               .update({
                             'out': FieldValue.serverTimestamp(),
+                            'outName' :widget.name,
                           });
                         } catch (e) {
                           print(e);
                           print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-
                         }
                       },
                       child: Text('출차완료')),

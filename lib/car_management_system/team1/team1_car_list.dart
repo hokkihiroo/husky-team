@@ -177,8 +177,14 @@ class _ListState extends StatelessWidget {
 
 class ListModel extends StatelessWidget {
   final String adress;
+  String dataId = '';
+  String carNumber = '';
+  String enterTime = '';
+  String enterName = '';
+  DateTime? outTime;
+  String outName = '';
 
-  const ListModel({super.key, required this.adress});
+  ListModel({super.key, required this.adress});
 
   @override
   Widget build(BuildContext context) {
@@ -204,13 +210,37 @@ class ListModel extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return enterList();
-                    },
-                  );
+                onTap: () async {
+                  var document = docs[index];
+                  print(document.id);
+                  dataId = document.id;
+                  carNumber = docs[index]['carNumber'];
+                  Timestamp sam = docs[index]['enter']; //입차시각
+                  enterTime = getInTime(sam); //입차시각 변환코드
+                  enterName = docs[index]['enterName']; //입차한사람 이름
+
+                  outTime = docs[index]['out'] is Timestamp
+                      ? (docs[index]['out'] as Timestamp).toDate()
+                      : null;
+
+                  String outname = docs[index]['outName']; //출차한사람 이름
+                  if (outname == null) {
+                    outName = '';
+                  } else {
+                    outName = outname;
+                  }
+
+                  showCarInfoBottomSheet(context, dataId, carNumber, enterTime,
+                      enterName, outName, outTime);
+
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return AlertDialog(
+                  //       title: Text('차정보'),
+                  //     );
+                  //   },
+                  // );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
@@ -230,10 +260,49 @@ class ListModel extends StatelessWidget {
       },
     );
   }
-}
 
-Widget enterList() {
-  return AlertDialog(
-    title: Text('차정보'),
-  );
+  void showCarInfoBottomSheet(
+      context, id, carNumber, enterTime, enterName, outName, outTime) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      '차번호:$carNumber',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 300,
+                  // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('입차 시각 : $enterTime'),
+                      Text('입차자 : $enterName'),
+                      Text('출차 시각 : ${outTime != null ? getOutTime(outTime) : ''}'),
+                      Text('출차자 : ${outName ?? ''}'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
