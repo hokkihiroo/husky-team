@@ -24,7 +24,7 @@ class CarListCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            index.toString(),
+            index.toString().padLeft(2, '0'),
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
           ),
