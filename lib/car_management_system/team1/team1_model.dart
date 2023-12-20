@@ -78,7 +78,7 @@ class _RotaryListState extends State<RotaryList> {
                     context: context,
                     builder: (BuildContext context) {
                       return bottomTwo(carNumber, name, color, location,
-                          dateTime, dataAdress, dataId, etc);
+                          dateTime, dataAdress, dataId, etc,);
                     },
                   );
                 },
@@ -447,12 +447,16 @@ class _RotaryListState extends State<RotaryList> {
                           print('문서 삭제 오류: $e');
                         }
                         try {
+                          print(location);
+                          print(location);
+                          print(location);
                           await FirebaseFirestore.instance
                               .collection(CarListAdress)
                               .doc(dataId)
                               .update({
                             'out': FieldValue.serverTimestamp(),
                             'outName' :widget.name,
+                            'outLocation' : location,
                           });
                         } catch (e) {
                           print(e);

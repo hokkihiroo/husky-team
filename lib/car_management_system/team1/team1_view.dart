@@ -123,7 +123,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'enter': FieldValue.serverTimestamp(),
                                       'out': '',
                                       'outName': '',
-                                      'color': '',
+                                      'outLocation': '',
                                       'etc': '',
                                     });
                                   } catch (e) {}

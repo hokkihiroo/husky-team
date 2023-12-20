@@ -183,6 +183,7 @@ class ListModel extends StatelessWidget {
   String enterName = '';
   DateTime? outTime;
   String outName = '';
+  String outLocation = '';
 
   ListModel({super.key, required this.adress});
 
@@ -229,9 +230,11 @@ class ListModel extends StatelessWidget {
                   } else {
                     outName = outname;
                   }
+                  int location = docs[index]['outLocation']; //출차한사람 이름
+                  outLocation = checkOutLocation(location);
 
                   showCarInfoBottomSheet(context, dataId, carNumber, enterTime,
-                      enterName, outName, outTime);
+                      enterName, outName, outTime, outLocation);
 
                   // showDialog(
                   //   context: context,
@@ -261,8 +264,8 @@ class ListModel extends StatelessWidget {
     );
   }
 
-  void showCarInfoBottomSheet(
-      context, id, carNumber, enterTime, enterName, outName, outTime) {
+  void showCarInfoBottomSheet(context, id, carNumber, enterTime, enterName,
+      outName, outTime, outLocation) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -291,10 +294,23 @@ class ListModel extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('입차 시각 : $enterTime'),
-                      Text('입차자 : $enterName'),
-                      Text('출차 시각 : ${outTime != null ? getOutTime(outTime) : ''}'),
-                      Text('출차자 : ${outName ?? ''}'),
+                      Text(
+                        '입차',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Text('시각 : $enterTime'),
+                      Text('이름 : $enterName'),
+                      Text('출차',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),),
+                      Text('시각 : ${outTime != null ? getOutTime(outTime) : ''}'),
+                      Text('이름 : ${outName ?? ''}'),
+                      Text('위치 : ${outLocation ?? ''}'),
                     ],
                   ),
                 ),

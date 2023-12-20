@@ -52,3 +52,18 @@ String getOutTime(DateTime outTime) {
   final String c = '$a:$b';
   return c;
 }
+
+String checkOutLocation(int location){
+  if(location ==0){
+    return '로터리';
+  }else if (location ==1){
+    return '외벽';
+  }else if(location==2){
+    return '광장';
+  }else if(location==3){
+    return '문';
+  }else if(location==4){
+    return '신사면옥';
+  }
+  return '';
+}
