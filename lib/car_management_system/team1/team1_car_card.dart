@@ -48,7 +48,7 @@ class CarListCard extends StatelessWidget {
             ),
           if (outTime == null)
             Text(
-              '00:00',
+              '11:00',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
