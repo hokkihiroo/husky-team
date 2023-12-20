@@ -447,9 +447,6 @@ class _RotaryListState extends State<RotaryList> {
                           print('문서 삭제 오류: $e');
                         }
                         try {
-                          print(location);
-                          print(location);
-                          print(location);
                           await FirebaseFirestore.instance
                               .collection(CarListAdress)
                               .doc(dataId)

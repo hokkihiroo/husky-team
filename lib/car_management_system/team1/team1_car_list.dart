@@ -230,7 +230,7 @@ class ListModel extends StatelessWidget {
                   } else {
                     outName = outname;
                   }
-                  int location = docs[index]['outLocation']; //출차한사람 이름
+                  int location = docs[index]['outLocation']; //출차한위치 이름
                   outLocation = checkOutLocation(location);
 
                   showCarInfoBottomSheet(context, dataId, carNumber, enterTime,
@@ -308,7 +308,7 @@ class ListModel extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           fontSize: 20,
                         ),),
-                      Text('시각 : ${outTime != null ? getOutTime(outTime) : ''}'),
+                      Text('시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
                       Text('이름 : ${outName ?? ''}'),
                       Text('위치 : ${outLocation ?? ''}'),
                     ],

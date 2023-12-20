@@ -40,14 +40,14 @@ String formatTodayDate() {
 final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team1/7ttV1ueseWgiC2HhKj2Z/';
  // -------------------날짜 변환 함수 -----------------------------
 String getInTime(Timestamp inTime) {
-  final String a = inTime.toDate().hour.toString();
+  final String a = inTime.toDate().hour.toString().padLeft(2, '0');
   final String b = inTime.toDate().minute.toString().padLeft(2, '0');
   final String c = '$a:$b';
   return c;
 }
 
 String getOutTime(DateTime outTime) {
-  final String a = outTime.hour.toString();
+  final String a = outTime.hour.toString().padLeft(2, '0');
   final String b = outTime.minute.toString().padLeft(2, '0');
   final String c = '$a:$b';
   return c;
