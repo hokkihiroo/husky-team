@@ -67,3 +67,14 @@ String checkOutLocation(int location){
   }
   return '';
 }
+String getRemainTime(createdAtDateTime){
+
+
+DateTime now = DateTime.now();
+Duration difference = now.difference(createdAtDateTime);
+
+int hours = difference.inHours;
+int minutes = difference.inMinutes.remainder(60);
+String val ='$hours시간$minutes분';
+return val;
+}

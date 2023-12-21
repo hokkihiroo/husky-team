@@ -30,6 +30,7 @@ class _RotaryListState extends State<RotaryList> {
   DateTime dateTime = DateTime.now();
   String name = ''; //픽업 하는 사람 이름
   String etc = ''; // 특이사항
+  String remainTime = ''; // 경과시간
   String CarListAdress = CARLIST + formatTodayDate();
 
   @override
@@ -70,7 +71,9 @@ class _RotaryListState extends State<RotaryList> {
                   etc = docs[index]['etc'];
                   Timestamp createdAt = docs[index]['createdAt'];
                   dateTime = createdAt.toDate();
+                  remainTime = getRemainTime(dateTime);
                   dataAdress = CheckLocation(location); //파이어베이스 데이터주소
+
                   print('데이터 주소 : $dataAdress');
                   print('sdsdsdsdsdsddID: $dataId');
 
@@ -78,7 +81,7 @@ class _RotaryListState extends State<RotaryList> {
                     context: context,
                     builder: (BuildContext context) {
                       return bottomTwo(carNumber, name, color, location,
-                          dateTime, dataAdress, dataId, etc,);
+                          dateTime, dataAdress, dataId, etc, remainTime);
                     },
                   );
                 },
@@ -100,9 +103,9 @@ class _RotaryListState extends State<RotaryList> {
   }
 
   Widget bottomTwo(String carNumber, String name, int color, int location,
-      DateTime dateTime, String dataAdress, String dataId, String etc) {
+      DateTime dateTime, String dataAdress, String dataId, String etc,String remainTime) {
     return AlertDialog(
-      title: Text('차량번호: $carNumber'),
+      title: Text('차량번호: $carNumber - $remainTime'),
       content: Container(
         width: MediaQuery.of(context).size.width,
         height: 300,
