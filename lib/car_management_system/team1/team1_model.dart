@@ -105,7 +105,12 @@ class _RotaryListState extends State<RotaryList> {
   Widget bottomTwo(String carNumber, String name, int color, int location,
       DateTime dateTime, String dataAdress, String dataId, String etc,String remainTime) {
     return AlertDialog(
-      title: Text('차량번호: $carNumber - $remainTime'),
+      title: Column(
+        children: [
+          Text('차량번호: $carNumber'),
+          Text('경과시간: $remainTime'),
+        ],
+      ),
       content: Container(
         width: MediaQuery.of(context).size.width,
         height: 300,
