@@ -184,6 +184,7 @@ class ListModel extends StatelessWidget {
   DateTime? outTime;
   String outName = '';
   String outLocation = '';
+  String movedLocation = '';
 
   ListModel({super.key, required this.adress});
 
@@ -233,8 +234,10 @@ class ListModel extends StatelessWidget {
                   int location = docs[index]['outLocation']; //출차한위치 이름
                   outLocation = checkOutLocation(location);
 
+                  movedLocation = docs[index]['movedLocation']; //출차한위치 이름
+
                   showCarInfoBottomSheet(context, dataId, carNumber, enterTime,
-                      enterName, outName, outTime, outLocation);
+                      enterName, outName, outTime, outLocation, movedLocation);
 
                   // showDialog(
                   //   context: context,
@@ -265,7 +268,7 @@ class ListModel extends StatelessWidget {
   }
 
   void showCarInfoBottomSheet(context, id, carNumber, enterTime, enterName,
-      outName, outTime, outLocation) {
+      outName, outTime, outLocation, movedLocation) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -301,16 +304,40 @@ class ListModel extends StatelessWidget {
                           fontSize: 20,
                         ),
                       ),
-                      Text('시각 : $enterTime'),
-                      Text('이름 : $enterName'),
+                      Row(
+                        children: [
+                          Text('시각 : $enterTime'),
+                          SizedBox(width: 10,),
+                          Text('이름 : $enterName'),
+
+                        ],
+                      ),
+                      Text(
+                        '이동',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text('위치 : $movedLocation'),
+                        ],
+                      ),
                       Text('출차',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20,
                         ),),
-                      Text('시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
-                      Text('이름 : ${outName ?? ''}'),
-                      Text('위치 : ${outLocation ?? ''}'),
+                      Row(
+                        children: [
+                          Text('시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
+                          SizedBox(width: 10,),
+                          Text('이름 : ${outName ?? ''}'),
+                          SizedBox(width: 10,),
+                          Text('위치 : ${outLocation ?? ''}'),
+                        ],
+                      ),
                     ],
                   ),
                 ),

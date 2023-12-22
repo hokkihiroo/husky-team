@@ -110,6 +110,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'location': 0,
                                       'color': 1,
                                       'etc': '',
+                                      'movedLocation': '',
                                     });
                                   } catch (e) {}
 
@@ -125,6 +126,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'outName': '',
                                       'outLocation': 5,
                                       'etc': '',
+                                      'movedLocation': '',
                                     });
                                   } catch (e) {}
                                   Navigator.pop(context);

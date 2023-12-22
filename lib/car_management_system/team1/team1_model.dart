@@ -32,6 +32,9 @@ class _RotaryListState extends State<RotaryList> {
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
   String CarListAdress = CARLIST + formatTodayDate();
+  String movingLocation ='';  //현재 이동위치
+  String movedLocation ='';  //과거 이동위치
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,19 +72,30 @@ class _RotaryListState extends State<RotaryList> {
                   location = docs[index]['location'];
                   color = docs[index]['color'];
                   etc = docs[index]['etc'];
+                  movedLocation = docs[index]['movedLocation'];
                   Timestamp createdAt = docs[index]['createdAt'];
                   dateTime = createdAt.toDate();
                   remainTime = getRemainTime(dateTime);
                   dataAdress = CheckLocation(location); //파이어베이스 데이터주소
 
+
                   print('데이터 주소 : $dataAdress');
                   print('sdsdsdsdsdsddID: $dataId');
+
+                  movingLocation = checkOutLocation(location);
+                  print(movedLocation);
+                  print(movedLocation);
+                  print(movingLocation);
+                  print(movingLocation);
+
+
+
 
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return bottomTwo(carNumber, name, color, location,
-                          dateTime, dataAdress, dataId, etc, remainTime);
+                          dateTime, dataAdress, dataId, etc, remainTime, movingLocation, movedLocation);
                     },
                   );
                 },
@@ -111,7 +125,9 @@ class _RotaryListState extends State<RotaryList> {
       String dataAdress,
       String dataId,
       String etc,
-      String remainTime) {
+      String remainTime,
+      String movingLocation,
+      String movedLocation) {
     return AlertDialog(
       title: Column(
         children: [
@@ -156,6 +172,7 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 0,
                               'name': name,
                               'etc': etc,
+                              'movedLocation': '$movedLocation->$movingLocation',
                             });
                           } catch (e) {
                             print(e);
@@ -197,6 +214,7 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 1,
                               'name': name,
                               'etc': etc,
+                              'movedLocation': '$movedLocation->$movingLocation',
                             });
                           } catch (e) {
                             print(e);
@@ -238,6 +256,7 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 2,
                               'name': name,
                               'etc': etc,
+                              'movedLocation': '$movedLocation->$movingLocation',
                             });
                           } catch (e) {
                             print(e);
@@ -279,6 +298,7 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 3,
                               'name': name,
                               'etc': etc,
+                              'movedLocation': '$movedLocation->$movingLocation',
                             });
                           } catch (e) {
                             print(e);
@@ -320,6 +340,7 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 4,
                               'name': name,
                               'etc': etc,
+                              'movedLocation': '$movedLocation->$movingLocation',
                             });
                           } catch (e) {
                             print(e);
@@ -471,6 +492,7 @@ class _RotaryListState extends State<RotaryList> {
                             'out': FieldValue.serverTimestamp(),
                             'outName': widget.name,
                             'outLocation': location,
+                            'movedLocation': '$movedLocation->$movingLocation',
                           });
                         } catch (e) {
                           print(e);
