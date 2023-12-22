@@ -451,7 +451,6 @@ class _RotaryListState extends State<RotaryList> {
                             fontWeight: FontWeight.w500, fontSize: 18),
                       ),
                       onPressed: () async {
-                        Navigator.pop(context);
 
                         try {
                           await FirebaseFirestore.instance
@@ -462,6 +461,8 @@ class _RotaryListState extends State<RotaryList> {
                         } catch (e) {
                           print('문서 삭제 오류: $e');
                         }
+                        Navigator.pop(context);
+
                         try {
                           await FirebaseFirestore.instance
                               .collection(CarListAdress)
