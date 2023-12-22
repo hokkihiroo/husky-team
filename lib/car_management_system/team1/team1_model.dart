@@ -102,8 +102,16 @@ class _RotaryListState extends State<RotaryList> {
     );
   }
 
-  Widget bottomTwo(String carNumber, String name, int color, int location,
-      DateTime dateTime, String dataAdress, String dataId, String etc,String remainTime) {
+  Widget bottomTwo(
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataAdress,
+      String dataId,
+      String etc,
+      String remainTime) {
     return AlertDialog(
       title: Column(
         children: [
@@ -136,7 +144,6 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print('문서 삭제 오류: $e');
                           }
-                          Navigator.pop(context);
 
                           try {
                             await FirebaseFirestore.instance
@@ -153,6 +160,7 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print(e);
                           }
+                          Navigator.pop(context);
                         },
                         child: Text('로터')),
                   ),
@@ -177,7 +185,6 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print('문서 삭제 오류: $e');
                           }
-                          Navigator.pop(context);
 
                           try {
                             await FirebaseFirestore.instance
@@ -194,6 +201,7 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print(e);
                           }
+                          Navigator.pop(context);
                         },
                         child: Text('외벽')),
                   ),
@@ -218,7 +226,6 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print('문서 삭제 오류: $e');
                           }
-                          Navigator.pop(context);
 
                           try {
                             await FirebaseFirestore.instance
@@ -235,6 +242,7 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print(e);
                           }
+                          Navigator.pop(context);
                         },
                         child: Text('광장')),
                   ),
@@ -259,7 +267,6 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print('문서 삭제 오류: $e');
                           }
-                          Navigator.pop(context);
 
                           try {
                             await FirebaseFirestore.instance
@@ -276,6 +283,7 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print(e);
                           }
+                          Navigator.pop(context);
                         },
                         child: Text('문앞')),
                   ),
@@ -300,7 +308,6 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print('문서 삭제 오류: $e');
                           }
-                          Navigator.pop(context);
 
                           try {
                             await FirebaseFirestore.instance
@@ -317,6 +324,7 @@ class _RotaryListState extends State<RotaryList> {
                           } catch (e) {
                             print(e);
                           }
+                          Navigator.pop(context);
                         },
                         child: Text('신사')),
                   ),
@@ -460,12 +468,19 @@ class _RotaryListState extends State<RotaryList> {
                               .doc(dataId)
                               .update({
                             'out': FieldValue.serverTimestamp(),
-                            'outName' :widget.name,
-                            'outLocation' : location,
+                            'outName': widget.name,
+                            'outLocation': location,
                           });
                         } catch (e) {
                           print(e);
                           print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('하루 지난 데이터 입니다 '),
+                                );
+                              });
                         }
                       },
                       child: Text('출차완료')),
