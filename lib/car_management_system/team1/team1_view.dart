@@ -111,6 +111,8 @@ class _Team1ViewState extends State<Team1View> {
                                       'color': 1,
                                       'etc': '',
                                       'movedLocation': '로터리',
+                                      'wigetName': '',
+
                                     });
                                   } catch (e) {}
 

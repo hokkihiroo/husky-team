@@ -169,7 +169,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 0,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->로터리 이름:${widget.name}=로터리',
+                              'movedLocation': '$movedLocation->로터리=로터리',
+                              'wigetName': '이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -212,7 +213,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 1,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->외벽 이름:${widget.name}=외벽',
+                              'movedLocation': '$movedLocation->외벽=외벽',
+                              'wigetName': '이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -255,7 +257,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 2,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->광장 이름:${widget.name}=광장',
+                              'movedLocation': '$movedLocation->광장=광장',
+                              'wigetName': '이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -298,7 +301,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 3,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->문 이름:${widget.name}=문',
+                              'movedLocation': '$movedLocation->문=문',
+                              'wigetName': '이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -341,7 +345,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 4,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->신사 이름:${widget.name}=신사',
+                              'movedLocation': '$movedLocation->신사=신사',
+                              'wigetName': '이름:${widget.name}',
 
                             });
                           } catch (e) {
