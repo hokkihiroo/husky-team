@@ -129,6 +129,9 @@ class _Team1ViewState extends State<Team1View> {
                                       'outLocation': 5,
                                       'etc': '',
                                       'movedLocation': '',
+                                      'wigetName': '',
+
+
                                     });
                                   } catch (e) {}
                                   Navigator.pop(context);

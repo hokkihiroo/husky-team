@@ -185,6 +185,7 @@ class ListModel extends StatelessWidget {
   String outName = '';
   String outLocation = '';
   String movedLocation = '';
+  String wigetName = '';
 
   ListModel({super.key, required this.adress});
 
@@ -235,9 +236,10 @@ class ListModel extends StatelessWidget {
                   outLocation = checkOutLocation(location);
 
                   movedLocation = docs[index]['movedLocation']; //출차한위치 이름
+                  wigetName = docs[index]['wigetName']; //출차한위치 이름
 
                   showCarInfoBottomSheet(context, dataId, carNumber, enterTime,
-                      enterName, outName, outTime, outLocation, movedLocation);
+                      enterName, outName, outTime, outLocation, movedLocation,wigetName);
 
                   // showDialog(
                   //   context: context,
@@ -268,7 +270,7 @@ class ListModel extends StatelessWidget {
   }
 
   void showCarInfoBottomSheet(context, id, carNumber, enterTime, enterName,
-      outName, outTime, outLocation, movedLocation) {
+      outName, outTime, outLocation, movedLocation,wigetName) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -326,6 +328,7 @@ class ListModel extends StatelessWidget {
                       Row(
                         children: [
                           Text(movedLocation.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
+                          Text(wigetName.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
 
                         ],
                       ),

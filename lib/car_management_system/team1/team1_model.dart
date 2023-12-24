@@ -33,6 +33,8 @@ class _RotaryListState extends State<RotaryList> {
   String remainTime = ''; // 경과시간
   String CarListAdress = CARLIST + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
+  String wigetName = ''; //추가할 이름들 뽑음
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,7 @@ class _RotaryListState extends State<RotaryList> {
                   location = docs[index]['location'];
                   color = docs[index]['color'];
                   etc = docs[index]['etc'];
+                  wigetName = docs[index]['wigetName'];
                   movedLocation = docs[index]['movedLocation'];
                   Timestamp createdAt = docs[index]['createdAt'];
                   dateTime = createdAt.toDate();
@@ -78,7 +81,6 @@ class _RotaryListState extends State<RotaryList> {
 
                   print('데이터 주소 : $dataAdress');
                   print('sdsdsdsdsdsddID: $dataId');
-
 
                   showDialog(
                     context: context,
@@ -93,7 +95,11 @@ class _RotaryListState extends State<RotaryList> {
                           dataId,
                           etc,
                           remainTime,
-                          movedLocation);
+                          movedLocation,
+                          wigetName,
+
+
+                      );
                     },
                   );
                 },
@@ -124,7 +130,9 @@ class _RotaryListState extends State<RotaryList> {
       String dataId,
       String etc,
       String remainTime,
-      String movedLocation) {
+      String movedLocation,
+      String wigetName,
+      ) {
     return AlertDialog(
       title: Column(
         children: [
@@ -170,7 +178,7 @@ class _RotaryListState extends State<RotaryList> {
                               'name': name,
                               'etc': etc,
                               'movedLocation': '$movedLocation->로터리=로터리',
-                              'wigetName': '이름:${widget.name}',
+                              'wigetName': '$wigetName=이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -214,7 +222,7 @@ class _RotaryListState extends State<RotaryList> {
                               'name': name,
                               'etc': etc,
                               'movedLocation': '$movedLocation->외벽=외벽',
-                              'wigetName': '이름:${widget.name}',
+                              'wigetName': '$wigetName=이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -258,7 +266,7 @@ class _RotaryListState extends State<RotaryList> {
                               'name': name,
                               'etc': etc,
                               'movedLocation': '$movedLocation->광장=광장',
-                              'wigetName': '이름:${widget.name}',
+                              'wigetName': '$wigetName=이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -302,7 +310,7 @@ class _RotaryListState extends State<RotaryList> {
                               'name': name,
                               'etc': etc,
                               'movedLocation': '$movedLocation->문=문',
-                              'wigetName': '이름:${widget.name}',
+                              'wigetName': '$wigetName=이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -346,7 +354,7 @@ class _RotaryListState extends State<RotaryList> {
                               'name': name,
                               'etc': etc,
                               'movedLocation': '$movedLocation->신사=신사',
-                              'wigetName': '이름:${widget.name}',
+                              'wigetName': '$wigetName=이름:${widget.name}',
 
                             });
                           } catch (e) {
@@ -499,6 +507,7 @@ class _RotaryListState extends State<RotaryList> {
                             'outName': widget.name,
                             'outLocation': location,
                             'movedLocation': '$movedLocation',
+                            'wigetName': wigetName,
                           });
                         } catch (e) {
                           print(e);
