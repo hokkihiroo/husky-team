@@ -328,7 +328,7 @@ class ListModel extends StatelessWidget {
                       Row(
                         children: [
                           Text(movedLocation.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
-                          Text(wigetName.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
+                          Text(wigetName.replaceAll('=', '\n')),
 
                         ],
                       ),
