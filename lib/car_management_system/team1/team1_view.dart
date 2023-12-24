@@ -110,7 +110,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'location': 0,
                                       'color': 1,
                                       'etc': '',
-                                      'movedLocation': '',
+                                      'movedLocation': '로터리',
                                     });
                                   } catch (e) {}
 

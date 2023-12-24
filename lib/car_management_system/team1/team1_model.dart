@@ -32,9 +32,7 @@ class _RotaryListState extends State<RotaryList> {
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
   String CarListAdress = CARLIST + formatTodayDate();
-  String movingLocation ='';  //현재 이동위치
-  String movedLocation ='';  //과거 이동위치
-
+  String movedLocation = ''; //과거 이동위치
 
   @override
   Widget build(BuildContext context) {
@@ -78,24 +76,24 @@ class _RotaryListState extends State<RotaryList> {
                   remainTime = getRemainTime(dateTime);
                   dataAdress = CheckLocation(location); //파이어베이스 데이터주소
 
-
                   print('데이터 주소 : $dataAdress');
                   print('sdsdsdsdsdsddID: $dataId');
-
-                  movingLocation = checkOutLocation(location);
-                  print(movedLocation);
-                  print(movedLocation);
-                  print(movingLocation);
-                  print(movingLocation);
-
-
 
 
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return bottomTwo(carNumber, name, color, location,
-                          dateTime, dataAdress, dataId, etc, remainTime, movingLocation, movedLocation);
+                      return bottomTwo(
+                          carNumber,
+                          name,
+                          color,
+                          location,
+                          dateTime,
+                          dataAdress,
+                          dataId,
+                          etc,
+                          remainTime,
+                          movedLocation);
                     },
                   );
                 },
@@ -126,7 +124,6 @@ class _RotaryListState extends State<RotaryList> {
       String dataId,
       String etc,
       String remainTime,
-      String movingLocation,
       String movedLocation) {
     return AlertDialog(
       title: Column(
@@ -172,7 +169,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 0,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->$movingLocation',
+                              'movedLocation': '$movedLocation->로터리 이름:${widget.name}=로터리',
+
                             });
                           } catch (e) {
                             print(e);
@@ -214,7 +212,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 1,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->$movingLocation',
+                              'movedLocation': '$movedLocation->외벽 이름:${widget.name}=외벽',
+
                             });
                           } catch (e) {
                             print(e);
@@ -256,7 +255,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 2,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->$movingLocation',
+                              'movedLocation': '$movedLocation->광장 이름:${widget.name}=광장',
+
                             });
                           } catch (e) {
                             print(e);
@@ -298,7 +298,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 3,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->$movingLocation',
+                              'movedLocation': '$movedLocation->문 이름:${widget.name}=문',
+
                             });
                           } catch (e) {
                             print(e);
@@ -340,7 +341,8 @@ class _RotaryListState extends State<RotaryList> {
                               'location': 4,
                               'name': name,
                               'etc': etc,
-                              'movedLocation': '$movedLocation->$movingLocation',
+                              'movedLocation': '$movedLocation->신사 이름:${widget.name}=신사',
+
                             });
                           } catch (e) {
                             print(e);
@@ -472,7 +474,6 @@ class _RotaryListState extends State<RotaryList> {
                             fontWeight: FontWeight.w500, fontSize: 18),
                       ),
                       onPressed: () async {
-
                         try {
                           await FirebaseFirestore.instance
                               .collection(dataAdress) // 컬렉션 이름을 지정하세요
@@ -492,7 +493,7 @@ class _RotaryListState extends State<RotaryList> {
                             'out': FieldValue.serverTimestamp(),
                             'outName': widget.name,
                             'outLocation': location,
-                            'movedLocation': '$movedLocation->$movingLocation',
+                            'movedLocation': '$movedLocation',
                           });
                         } catch (e) {
                           print(e);
@@ -502,6 +503,14 @@ class _RotaryListState extends State<RotaryList> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('하루 지난 데이터 입니다 '),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('확인'),
+                                    ),
+                                  ],
                                 );
                               });
                         }

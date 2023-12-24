@@ -312,16 +312,21 @@ class ListModel extends StatelessWidget {
 
                         ],
                       ),
-                      Text(
-                        '이동',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            '이동',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
                       ),
                       Row(
                         children: [
-                          Text('위치 : $movedLocation'),
+                          Text(movedLocation.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
+
                         ],
                       ),
                       Text('출차',
