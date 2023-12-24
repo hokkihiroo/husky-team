@@ -326,10 +326,10 @@ class ListModel extends StatelessWidget {
                         ],
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(movedLocation.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
                           Text(wigetName.replaceAll('=', '\n')),
-
                         ],
                       ),
                       Text('출차',
