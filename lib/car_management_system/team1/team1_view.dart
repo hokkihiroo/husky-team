@@ -112,6 +112,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'etc': '',
                                       'movedLocation': '로터리',
                                       'wigetName': '',
+                                      'movingTime': '',
 
                                     });
                                   } catch (e) {}
@@ -130,6 +131,7 @@ class _Team1ViewState extends State<Team1View> {
                                       'etc': '',
                                       'movedLocation': '',
                                       'wigetName': '',
+                                      'movingTime': '',
 
 
                                     });

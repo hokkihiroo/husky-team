@@ -36,6 +36,16 @@ String formatTodayDate() {
   return year + month + day;
 }
 
+String getTodayTime() {
+  final now = DateTime.now();
+  final hour = now.hour.toString().padLeft(2, '0');
+  final minute = now.minute.toString().padLeft(2, '0');
+  final todayTime ='시각:$hour시 $minute분';
+  return todayTime;
+
+}
+
+
 // 입차 리스트 주소
 final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team1/7ttV1ueseWgiC2HhKj2Z/';
  // -------------------날짜 변환 함수 -----------------------------

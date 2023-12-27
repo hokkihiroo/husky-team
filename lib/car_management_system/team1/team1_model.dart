@@ -34,6 +34,7 @@ class _RotaryListState extends State<RotaryList> {
   String CarListAdress = CARLIST + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
+  String movingTime = ''; //이동할 시각들 뽑음
 
 
   @override
@@ -74,6 +75,7 @@ class _RotaryListState extends State<RotaryList> {
                   etc = docs[index]['etc'];
                   wigetName = docs[index]['wigetName'];
                   movedLocation = docs[index]['movedLocation'];
+                  movingTime = docs[index]['movingTime'];
                   Timestamp createdAt = docs[index]['createdAt'];
                   dateTime = createdAt.toDate();
                   remainTime = getRemainTime(dateTime);
@@ -81,6 +83,11 @@ class _RotaryListState extends State<RotaryList> {
 
                   print('데이터 주소 : $dataAdress');
                   print('sdsdsdsdsdsddID: $dataId');
+                  String getMovingTime = getTodayTime();
+                  print(getMovingTime);
+
+
+
 
                   showDialog(
                     context: context,
@@ -97,6 +104,8 @@ class _RotaryListState extends State<RotaryList> {
                           remainTime,
                           movedLocation,
                           wigetName,
+                          movingTime,
+                          getMovingTime,
 
 
                       );
@@ -132,6 +141,9 @@ class _RotaryListState extends State<RotaryList> {
       String remainTime,
       String movedLocation,
       String wigetName,
+      String movingTime,
+      String getMovingTime,
+
       ) {
     return AlertDialog(
       title: Column(
@@ -179,6 +191,7 @@ class _RotaryListState extends State<RotaryList> {
                               'etc': etc,
                               'movedLocation': '$movedLocation->로터리=로터리',
                               'wigetName': '$wigetName=이름:${widget.name}',
+                              'movingTime': '$movingTime=$getMovingTime',
 
                             });
                           } catch (e) {
@@ -223,6 +236,8 @@ class _RotaryListState extends State<RotaryList> {
                               'etc': etc,
                               'movedLocation': '$movedLocation->외벽=외벽',
                               'wigetName': '$wigetName=이름:${widget.name}',
+                              'movingTime': '$movingTime=$getMovingTime',
+
 
                             });
                           } catch (e) {
@@ -267,6 +282,8 @@ class _RotaryListState extends State<RotaryList> {
                               'etc': etc,
                               'movedLocation': '$movedLocation->광장=광장',
                               'wigetName': '$wigetName=이름:${widget.name}',
+                              'movingTime': '$movingTime=$getMovingTime',
+
 
                             });
                           } catch (e) {
@@ -311,6 +328,8 @@ class _RotaryListState extends State<RotaryList> {
                               'etc': etc,
                               'movedLocation': '$movedLocation->문=문',
                               'wigetName': '$wigetName=이름:${widget.name}',
+                              'movingTime': '$movingTime=$getMovingTime',
+
 
                             });
                           } catch (e) {
@@ -355,6 +374,8 @@ class _RotaryListState extends State<RotaryList> {
                               'etc': etc,
                               'movedLocation': '$movedLocation->신사=신사',
                               'wigetName': '$wigetName=이름:${widget.name}',
+                              'movingTime': '$movingTime=$getMovingTime',
+
 
                             });
                           } catch (e) {
@@ -508,6 +529,7 @@ class _RotaryListState extends State<RotaryList> {
                             'outLocation': location,
                             'movedLocation': '$movedLocation',
                             'wigetName': wigetName,
+                            'movingTime': movingTime,
                           });
                         } catch (e) {
                           print(e);

@@ -186,6 +186,7 @@ class ListModel extends StatelessWidget {
   String outLocation = '';
   String movedLocation = '';
   String wigetName = '';
+  String movingTime = '';
 
   ListModel({super.key, required this.adress});
 
@@ -236,10 +237,21 @@ class ListModel extends StatelessWidget {
                   outLocation = checkOutLocation(location);
 
                   movedLocation = docs[index]['movedLocation']; //출차한위치 이름
+                  movingTime = docs[index]['movingTime']; //출차한위치 이름
                   wigetName = docs[index]['wigetName']; //출차한위치 이름
 
-                  showCarInfoBottomSheet(context, dataId, carNumber, enterTime,
-                      enterName, outName, outTime, outLocation, movedLocation,wigetName);
+                  showCarInfoBottomSheet(
+                      context,
+                      dataId,
+                      carNumber,
+                      enterTime,
+                      enterName,
+                      outName,
+                      outTime,
+                      outLocation,
+                      movedLocation,
+                      wigetName,
+                      movingTime);
 
                   // showDialog(
                   //   context: context,
@@ -270,86 +282,114 @@ class ListModel extends StatelessWidget {
   }
 
   void showCarInfoBottomSheet(context, id, carNumber, enterTime, enterName,
-      outName, outTime, outLocation, movedLocation,wigetName) {
+      outName, outTime, outLocation, movedLocation, wigetName, movingTime) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
+          height: 300,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '차번호:$carNumber',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 300,
-                  // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '입차',
+                        '차번호:$carNumber',
                         style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Text('시각 : $enterTime'),
-                          SizedBox(width: 10,),
-                          Text('이름 : $enterName'),
-
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '이동',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(movedLocation.replaceAll('=', '\n').split('\n').sublist(0, movedLocation.split('=').length - 1).join('\n')),
-                          Text(wigetName.replaceAll('=', '\n')),
-                        ],
-                      ),
-                      Text('출차',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),),
-                      Row(
-                        children: [
-                          Text('시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
-                          SizedBox(width: 10,),
-                          Text('이름 : ${outName ?? ''}'),
-                          SizedBox(width: 10,),
-                          Text('위치 : ${outLocation ?? ''}'),
-                        ],
                       ),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: 20,),
+                  Container(
+                    // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '입차',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text('시각 : $enterTime'),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('이름 : $enterName'),
+                          ],
+                        ),
+                        SizedBox(height: 10,),
+                        Row(
+                          children: [
+                            Text(
+                              '이동',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              movedLocation
+                                  .replaceAll('=', '\n')
+                                  .split('\n')
+                                  .sublist(0, movedLocation.split('=').length - 1)
+                                  .join('\n'),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              wigetName.replaceAll('=', '\n'),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              movingTime.replaceAll('=', '\n'),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10,),
+                        Text(
+                          '출차',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                '시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('이름 : ${outName ?? ''}'),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('위치 : ${outLocation ?? ''}'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
