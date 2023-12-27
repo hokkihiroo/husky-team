@@ -322,7 +322,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text('시각 : $enterTime'),
+                            Text('시각 : $enterTime분'),
                             SizedBox(
                               width: 10,
                             ),
