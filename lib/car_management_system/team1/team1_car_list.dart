@@ -287,7 +287,7 @@ class ListModel extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 300,
+          height: 400,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
@@ -305,7 +305,9 @@ class ListModel extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Container(
                     // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
                     child: Column(
@@ -327,7 +329,9 @@ class ListModel extends StatelessWidget {
                             Text('이름 : $enterName'),
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             Text(
@@ -346,7 +350,8 @@ class ListModel extends StatelessWidget {
                               movedLocation
                                   .replaceAll('=', '\n')
                                   .split('\n')
-                                  .sublist(0, movedLocation.split('=').length - 1)
+                                  .sublist(
+                                      0, movedLocation.split('=').length - 1)
                                   .join('\n'),
                             ),
                             SizedBox(
@@ -363,7 +368,9 @@ class ListModel extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           '출차',
                           style: TextStyle(
