@@ -1,4 +1,4 @@
-package com.example.team_husky
+package com.hokki.team_husky
 
 import io.flutter.embedding.android.FlutterActivity
 
