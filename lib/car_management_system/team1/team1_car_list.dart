@@ -240,27 +240,27 @@ class ListModel extends StatelessWidget {
                   movingTime = docs[index]['movingTime']; //출차한위치 이름
                   wigetName = docs[index]['wigetName']; //출차한위치 이름
 
-                  // showCarInfoBottomSheet(
-                  //     context,
-                  //     dataId,
-                  //     carNumber,
-                  //     enterTime,
-                  //     enterName,
-                  //     outName,
-                  //     outTime,
-                  //     outLocation,
-                  //     movedLocation,
-                  //     wigetName,
-                  //     movingTime);
+                  showCarInfoBottomSheet(
+                      context,
+                      dataId,
+                      carNumber,
+                      enterTime,
+                      enterName,
+                      outName,
+                      outTime,
+                      outLocation,
+                      movedLocation,
+                      wigetName,
+                      movingTime);
 
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('차정보'),
-                      );
-                    },
-                  );
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return AlertDialog(
+                  //       title: Text('차정보'),
+                  //     );
+                  //   },
+                  // );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),

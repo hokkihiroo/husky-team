@@ -40,7 +40,11 @@ class NumberCard extends StatelessWidget {
             child: Text(
               carNumber,
               style: TextStyle(
-                color: color == 1 ? Colors.white : Colors.yellow,
+                color: color == 1
+                    ? Colors.white
+                    : (color == 2 && name == '')
+                        ? Colors.red
+                        : Colors.yellow,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
