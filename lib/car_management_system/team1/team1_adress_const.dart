@@ -88,3 +88,22 @@ int minutes = difference.inMinutes.remainder(60);
 String val ='$hours시간$minutes분';
 return val;
 }
+
+String getWeeks(int dayOfWeek){
+  if(dayOfWeek ==1){
+    return '월';
+  }else if (dayOfWeek==2){
+    return '화';
+  }else if(dayOfWeek==3){
+    return '수';
+  }else if(dayOfWeek==4){
+    return '목';
+  }else if(dayOfWeek==5){
+    return '금';
+  }else if(dayOfWeek==6){
+    return '토';
+  }else if(dayOfWeek==7){
+    return '일';
+  }
+  return '';
+}

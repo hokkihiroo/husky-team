@@ -114,6 +114,9 @@ class _DateControl extends StatelessWidget {
           "${selectedDate.toLocal()}".split(' ')[0],
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
+        SizedBox(width: 2,),
+        Text(getWeeks(selectedDate.weekday),
+          style: TextStyle(color: Colors.white, fontSize: 20),),
         IconButton(
           icon: Icon(
             Icons.chevron_right_outlined,

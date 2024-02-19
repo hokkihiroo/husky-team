@@ -207,7 +207,7 @@ class _LocationName extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '로터리',
+              '로터',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
