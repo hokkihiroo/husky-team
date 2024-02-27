@@ -46,7 +46,9 @@ class _SmsReceiverState extends State<Team1Telephony> {
       onNewMessage: (SmsMessage message) {
         // SMS가 도착하면 이 함수가 호출됩니다.
         String? phoneNumber = message.address;
+        print(phoneNumber);
         String? messageBody = message.body;
+        print(messageBody);
         // 여기서 메시지를 가공하고 필요한 작업을 수행합니다.
         print('Received SMS from $phoneNumber: $messageBody');
       },
