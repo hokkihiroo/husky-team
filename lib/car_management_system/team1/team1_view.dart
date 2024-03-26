@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
 import 'package:team_husky/car_management_system/team1/team1_car_list.dart';
 import 'package:team_husky/car_management_system/team1/team1_model.dart';
+import 'package:telephony/telephony.dart';
+import 'package:vibration/vibration.dart';
 
 class Team1View extends StatefulWidget {
   const Team1View({super.key, required this.name});
@@ -17,6 +20,25 @@ class Team1View extends StatefulWidget {
 class _Team1ViewState extends State<Team1View> {
   String carNumber = '';
   String CarListAdress = CARLIST + formatTodayDate();
+  Telephony telephony = Telephony.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    requestSmsPermission(context);
+  }
+
+
+
+  void requestSmsPermission(BuildContext context) async {
+     bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
+     if (permissionsGranted ?? false) {
+       print("퍼미션이 허용되었습니다.");
+     } else {
+       print('SMS 및 전화 수신에 대한 퍼미션이 거부되었습니다.');
+     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +64,7 @@ class _Team1ViewState extends State<Team1View> {
               ),
               _Lists(
                 name: widget.name,
+
               ),
               //이름이 두글자거나 다섯글자 이상이면 에러뜸
             ],
@@ -113,7 +136,6 @@ class _Team1ViewState extends State<Team1View> {
                                       'movedLocation': '로터리',
                                       'wigetName': '',
                                       'movingTime': '',
-
                                     });
                                   } catch (e) {}
 
@@ -132,14 +154,10 @@ class _Team1ViewState extends State<Team1View> {
                                       'movedLocation': '',
                                       'wigetName': '',
                                       'movingTime': '',
-
-
                                     });
                                   } catch (e) {}
                                   Navigator.pop(context);
-
                                 },
-
                                 child: Text('입력'),
                               ),
                             ),
@@ -193,6 +211,17 @@ class _Team1ViewState extends State<Team1View> {
       color: Colors.black,
     );
   }
+}
+
+Future<void> _handleBackgroundMessage(SmsMessage message) async {
+  String? phoneNumber = message.address;
+  String? messageBody = message.body;
+
+  // *여기서 phoneNumber와 messageBody를 이용하여 작업을 수행
+  // *예: Firestore에 저장하거나 특정 동작 실행 등
+  print('Received SMS in background from $phoneNumber: $messageBody');
+  Vibration.vibrate(duration: 500);
+
 }
 
 class _LocationName extends StatelessWidget {

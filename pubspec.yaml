@@ -43,6 +43,7 @@ dependencies:
   change_app_package_name: ^1.1.0
   telephony: ^0.2.0
   permission_handler: ^11.3.0
+  vibration: ^1.8.4
 
 dev_dependencies:
   flutter_test:

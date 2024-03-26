@@ -2,10 +2,20 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera"/>
+
     <application
         android:label="team_husky"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+<!--        <receiver android:name="com.hokki.team_husky.SmsReceiver"-->
+<!--            android:permission="android.permission.BROADCAST_SMS" android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
         <activity
             android:name=".MainActivity"
             android:exported="true"

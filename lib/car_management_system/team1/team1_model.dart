@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
 import 'package:team_husky/car_management_system/team1/team1_numbercard.dart';
+import 'dart:io' show Platform;
 
 class RotaryList extends StatefulWidget {
   final String location;
@@ -15,7 +17,7 @@ class RotaryList extends StatefulWidget {
       required this.location,
       required this.reverse,
       required this.check,
-      required this.name});
+      required this.name,});
 
   @override
   State<RotaryList> createState() => _RotaryListState();
@@ -36,6 +38,181 @@ class _RotaryListState extends State<RotaryList> {
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
 
+  String sender = '';
+  String message = '';
+
+  static const EventChannel _eventChannel =
+  EventChannel('com.hokki.team_husky.SMS_RECEIVED');
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) {
+      _initializeSmsReceiver();
+    }
+  }
+
+  void _initializeSmsReceiver() {
+    _eventChannel.receiveBroadcastStream().listen((dynamic event) {
+      setState(() {
+        String data = event;
+        print(data);
+
+        List<String> splitData = data.split(':');
+        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
+        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
+        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
+        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
+        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
+        if (splitData.length == 2) {
+          sender = splitData[0].trim(); // 첫 번째 데이터를 _sender에 저장 (앞뒤 공백 제거)
+          message = splitData[1].trim(); // 두 번째 데이터를 _message에 저장 (앞뒤 공백 제거)
+
+          print('모듈에서받음: $sender');
+          print('모듈임: $message');
+          _smsControl();
+
+        } else {
+          // 예외 처리: 적절한 데이터가 없는 경우
+          print('잘못된 형식의 데이터입니다.');
+        }
+      });
+    });
+  }
+
+  void _smsControl() async{
+    print('이부분시작');
+      try {
+        QuerySnapshot querySnapshot1= await FirebaseFirestore.instance
+            .collection(LOTARY)
+            .where('carNumber', isEqualTo: message)
+            .get();
+        QuerySnapshot querySnapshot2= await FirebaseFirestore.instance
+            .collection(OUTSIDE)
+            .where('carNumber', isEqualTo: message)
+            .get();
+        QuerySnapshot querySnapshot3= await FirebaseFirestore.instance
+            .collection(MAIN)
+            .where('carNumber', isEqualTo: message)
+            .get();
+        QuerySnapshot querySnapshot4= await FirebaseFirestore.instance
+            .collection(MOON)
+            .where('carNumber', isEqualTo: message)
+            .get();
+        QuerySnapshot querySnapshot5= await FirebaseFirestore.instance
+            .collection(SINSA)
+            .where('carNumber', isEqualTo: message)
+            .get();
+
+
+        if (querySnapshot1.docs.isNotEmpty) {
+          // 문서가 있으면 해당 문서의 ID를 출력합니다.
+          String documentId1 = querySnapshot1.docs.first.id;
+
+          print('querySnapshot1 ID: $documentId1');
+
+          try {
+            await FirebaseFirestore.instance
+                .collection(LOTARY)
+                .doc(documentId1)
+                .update({
+              'color': 2, // 업데이트할 필드와 값
+            });
+            print('문서 업데이트가 성공했습니다.');
+          } catch (e) {
+            print('문서 업데이트 오류: $e');
+          }
+
+        } else {
+          // 문서가 없으면 해당 문서가 없음을 출력합니다.
+          print('querySnapshot1 ID 문서가 없습니다.');
+        }
+
+        if (querySnapshot2.docs.isNotEmpty) {
+          // 문서가 있으면 해당 문서의 ID를 출력합니다.
+          String documentId2 = querySnapshot2.docs.first.id;
+          print('querySnapshot2 ID: $documentId2');
+          try {
+            await FirebaseFirestore.instance
+                .collection(OUTSIDE)
+                .doc(documentId2)
+                .update({
+              'color': 2, // 업데이트할 필드와 값
+            });
+            print('문서 업데이트가 성공했습니다.');
+          } catch (e) {
+            print('문서 업데이트 오류: $e');
+          }
+        } else {
+          // 문서가 없으면 해당 문서가 없음을 출력합니다.
+          print('querySnapshot2 ID 문서가 없습니다.');
+        }
+
+        if (querySnapshot3.docs.isNotEmpty) {
+          // 문서가 있으면 해당 문서의 ID를 출력합니다.
+          String documentId3 = querySnapshot3.docs.first.id;
+          print('querySnapshot3 ID: $documentId3');
+          try {
+            await FirebaseFirestore.instance
+                .collection(MAIN)
+                .doc(documentId3)
+                .update({
+              'color': 2, // 업데이트할 필드와 값
+            });
+            print('문서 업데이트가 성공했습니다.');
+          } catch (e) {
+            print('문서 업데이트 오류: $e');
+          }
+        } else {
+          // 문서가 없으면 해당 문서가 없음을 출력합니다.
+          print('querySnapshot3 ID 문서가 없습니다.');
+        }
+
+        if (querySnapshot4.docs.isNotEmpty) {
+          // 문서가 있으면 해당 문서의 ID를 출력합니다.
+          String documentId4 = querySnapshot4.docs.first.id;
+          print('querySnapshot4 ID: $documentId4');
+          try {
+            await FirebaseFirestore.instance
+                .collection(MOON)
+                .doc(documentId4)
+                .update({
+              'color': 2, // 업데이트할 필드와 값
+            });
+            print('문서 업데이트가 성공했습니다.');
+          } catch (e) {
+            print('문서 업데이트 오류: $e');
+          }
+        } else {
+          // 문서가 없으면 해당 문서가 없음을 출력합니다.
+          print('querySnapshot4 ID 문서가 없습니다.');
+        }
+
+        if (querySnapshot5.docs.isNotEmpty) {
+          // 문서가 있으면 해당 문서의 ID를 출력합니다.
+          String documentId5 = querySnapshot5.docs.first.id;
+          print('querySnapshot5 ID: $documentId5');
+          try {
+            await FirebaseFirestore.instance
+                .collection(SINSA)
+                .doc(documentId5)
+                .update({
+              'color': 2, // 업데이트할 필드와 값
+            });
+            print('문서 업데이트가 성공했습니다.');
+          } catch (e) {
+            print('문서 업데이트 오류: $e');
+          }
+        } else {
+          // 문서가 없으면 해당 문서가 없음을 출력합니다.
+          print('querySnapshot5 ID 문서가 없습니다.');
+        }
+
+
+      } catch (e) {
+        print(e);
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,28 +263,23 @@ class _RotaryListState extends State<RotaryList> {
                   String getMovingTime = getTodayTime();
                   print(getMovingTime);
 
-
-
-
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return bottomTwo(
-                          carNumber,
-                          name,
-                          color,
-                          location,
-                          dateTime,
-                          dataAdress,
-                          dataId,
-                          etc,
-                          remainTime,
-                          movedLocation,
-                          wigetName,
-                          movingTime,
-                          getMovingTime,
-
-
+                        carNumber,
+                        name,
+                        color,
+                        location,
+                        dateTime,
+                        dataAdress,
+                        dataId,
+                        etc,
+                        remainTime,
+                        movedLocation,
+                        wigetName,
+                        movingTime,
+                        getMovingTime,
                       );
                     },
                   );
@@ -130,21 +302,20 @@ class _RotaryListState extends State<RotaryList> {
   }
 
   Widget bottomTwo(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataAdress,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataAdress,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+  ) {
     return AlertDialog(
       title: Column(
         children: [
@@ -192,7 +363,6 @@ class _RotaryListState extends State<RotaryList> {
                               'movedLocation': '$movedLocation->로터리=로터리',
                               'wigetName': '$wigetName=이름:${widget.name}',
                               'movingTime': '$movingTime=$getMovingTime',
-
                             });
                           } catch (e) {
                             print(e);
@@ -237,8 +407,6 @@ class _RotaryListState extends State<RotaryList> {
                               'movedLocation': '$movedLocation->외벽=외벽',
                               'wigetName': '$wigetName=이름:${widget.name}',
                               'movingTime': '$movingTime=$getMovingTime',
-
-
                             });
                           } catch (e) {
                             print(e);
@@ -283,8 +451,6 @@ class _RotaryListState extends State<RotaryList> {
                               'movedLocation': '$movedLocation->광장=광장',
                               'wigetName': '$wigetName=이름:${widget.name}',
                               'movingTime': '$movingTime=$getMovingTime',
-
-
                             });
                           } catch (e) {
                             print(e);
@@ -329,8 +495,6 @@ class _RotaryListState extends State<RotaryList> {
                               'movedLocation': '$movedLocation->문=문',
                               'wigetName': '$wigetName=이름:${widget.name}',
                               'movingTime': '$movingTime=$getMovingTime',
-
-
                             });
                           } catch (e) {
                             print(e);
@@ -375,8 +539,6 @@ class _RotaryListState extends State<RotaryList> {
                               'movedLocation': '$movedLocation->신사=신사',
                               'wigetName': '$wigetName=이름:${widget.name}',
                               'movingTime': '$movingTime=$getMovingTime',
-
-
                             });
                           } catch (e) {
                             print(e);
