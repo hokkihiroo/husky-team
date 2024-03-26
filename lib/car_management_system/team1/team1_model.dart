@@ -41,8 +41,9 @@ class _RotaryListState extends State<RotaryList> {
   String sender = '';
   String message = '';
 
-  static const EventChannel _eventChannel =
-  EventChannel('com.hokki.team_husky.SMS_RECEIVED');
+  EventChannel? _eventChannel;
+
+
 
   @override
   void initState() {
@@ -53,7 +54,8 @@ class _RotaryListState extends State<RotaryList> {
   }
 
   void _initializeSmsReceiver() {
-    _eventChannel.receiveBroadcastStream().listen((dynamic event) {
+     _eventChannel = EventChannel('com.hokki.team_husky.SMS_RECEIVED');
+    _eventChannel!.receiveBroadcastStream().listen((dynamic event) {
       setState(() {
         String data = event;
         print(data);
