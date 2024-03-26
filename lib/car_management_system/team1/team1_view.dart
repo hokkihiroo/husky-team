@@ -7,6 +7,8 @@ import 'package:team_husky/car_management_system/team1/team1_car_list.dart';
 import 'package:team_husky/car_management_system/team1/team1_model.dart';
 import 'package:telephony/telephony.dart';
 import 'package:vibration/vibration.dart';
+import 'dart:io' show Platform;
+
 
 class Team1View extends StatefulWidget {
   const Team1View({super.key, required this.name});
@@ -25,8 +27,10 @@ class _Team1ViewState extends State<Team1View> {
   @override
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      requestSmsPermission(context);
 
-    requestSmsPermission(context);
+    }
   }
 
 
