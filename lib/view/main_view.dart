@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:team_husky/car_management_system/car_mainview.dart';
+import 'package:team_husky/1insa/Insa.dart';
 import 'package:team_husky/layout/default_layout.dart';
-import 'package:team_husky/mypage/mypage.dart';
+import '../2car_management_system/car_mainview.dart';
+import '../5mypage/mypage.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({super.key, required this.name, required this.email });
+  const MainView({super.key, required this.name, required this.email});
 
   final String name;
   final String email;
@@ -47,22 +48,9 @@ class _MainViewState extends State<MainView>
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          Center(
-            child: Text(
-              '개발중입니다',
-              style: TextStyle(
-                fontSize: 40,
-              ),
-            ),
-          ),
-          CarManagementSystem(name: widget.name,),
-          Center(
-            child: Text(
-              '개발중입니다',
-              style: TextStyle(
-                fontSize: 40,
-              ),
-            ),
+          Organization(),
+          CarManagementSystem(
+            name: widget.name,
           ),
           Center(
             child: Text(
@@ -72,7 +60,18 @@ class _MainViewState extends State<MainView>
               ),
             ),
           ),
-          MyPage(name: widget.name, email: widget.email,),
+          Center(
+            child: Text(
+              '개발중입니다',
+              style: TextStyle(
+                fontSize: 40,
+              ),
+            ),
+          ),
+          MyPage(
+            name: widget.name,
+            email: widget.email,
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/user/user_screen.dart';
 import 'package:team_husky/view/color.dart';
 import 'package:team_husky/view/main_view.dart';
-
 import 'adress.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> checkLoginStatus() async {
-    await Future.delayed(Duration(seconds: 1)); // 일부러 1초 대기
+    await Future.delayed(Duration(seconds: 0)); // 일부러 1초 대기
 
     // FirebaseAuth 인스턴스를 사용하여 현재 로그인된 사용자 가져오기
     _user = FirebaseAuth.instance.currentUser;
@@ -59,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
         MaterialPageRoute(
             builder: (context) => MainView(
                   name: name,
-              email : email,
+                  email: email,
                 )),
       );
     } else {

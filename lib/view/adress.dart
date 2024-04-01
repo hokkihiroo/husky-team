@@ -1,1 +1,1 @@
-String myInfoAdress ='user/KZwZFZ6RV8WKvynPHZDs/bonsa';
+String myInfoAdress ='user';

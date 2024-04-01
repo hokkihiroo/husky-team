@@ -24,9 +24,18 @@ class _UserResumeState extends State<UserResume> {
   String email = '';
   String password = '';
   String name = '';
+  String birthDay = '';
   String phoneNumber = '';
-  String carNumber = '';
-  String adress = '';
+  String carNumber = '';            //자차번호
+  String address = '';              //주소
+  String career = '';               //운전경력
+  String hobby = '';                //취미
+  String footSize = '';             //발사이즈
+  String tShirtSize = '';           //상의
+  String pantsSize = '';            //하의
+  String cm = '';                   //키
+  String kg = '';                   //몸무게
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,7 @@ class _UserResumeState extends State<UserResume> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: 800.0,
+              height: 1400.0,
               width: MediaQuery.of(context).size.width - 20,
               margin: EdgeInsets.only(top: 10,left: 10,right: 10),
               decoration: BoxDecoration(
@@ -150,12 +159,17 @@ class _UserResumeState extends State<UserResume> {
                       ),
                       CustomTextForm(
                         key: ValueKey(5),
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return ' 생년월일을 입력바랍니다.';
+                          }
+                        },
                         onSaved: (val) {
                           setState(() {
-                            carNumber = val!;
+                            birthDay = val;
                           });
                         },
-                        hintText: '차량번호입력',
+                        hintText: '생년월일 예) 1999년 01월 14일',
                       ),
                       SizedBox(
                         height: 25,
@@ -164,10 +178,107 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(6),
                         onSaved: (val) {
                           setState(() {
-                            adress = val!;
+                            carNumber = val!;
                           });
                         },
-                        hintText: '주소',
+                        hintText: '차량번호 or 없음',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(7),
+                        onSaved: (val) {
+
+                          setState(() {
+                            address = val!;
+                          });
+                        },
+                        hintText: '주소 예)서울 강남구 대치동 434-1번지',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(8),
+                        onSaved: (val) {
+                          setState(() {
+                            career = val!;
+                          });
+                        },
+                        hintText: '운전경력 예) 5년',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(9),
+                        onSaved: (val) {
+                          setState(() {
+                            hobby = val!;
+                          });
+                        },
+                        hintText: '취미',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(10),
+                        onSaved: (val) {
+                          setState(() {
+                            footSize = val!;
+                          });
+                        },
+                        hintText: '발사이즈 예) 260',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(11),
+                        onSaved: (val) {
+                          setState(() {
+                            tShirtSize = val!;
+                          });
+                        },
+                        hintText: '상의사이즈 예) 100',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(12),
+                        onSaved: (val) {
+                          setState(() {
+                            pantsSize = val!;
+                          });
+                        },
+                        hintText: '하의사이즈 예) 32',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(13),
+                        onSaved: (val) {
+                          setState(() {
+                            cm = val!;
+                          });
+                        },
+                        hintText: '키 예) 175',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(14),
+                        onSaved: (val) {
+                          setState(() {
+                            kg = val!;
+                          });
+                        },
+                        hintText: '몸무게 예) 70',
                       ),
                       SizedBox(
                         height: 25,
@@ -201,13 +312,27 @@ class _UserResumeState extends State<UserResume> {
                                     email: email, password: password);
 
                                 await FirebaseFirestore.instance
-                                    .collection(BONSA)
+                                    .collection(USER)
                                     .doc(newUser.user!.uid)
                                     .set({
                                   'email': email,
                                   'name': name,
+                                  'birthDay': birthDay,
                                   'phoneNumber': phoneNumber,
                                   'carNumber': carNumber,
+                                  'address': address,
+                                  'career': career,
+                                  'hobby': hobby,
+                                  'footSize': footSize,
+                                  'tShirtSize': tShirtSize,
+                                  'pantsSize': pantsSize,
+                                  'cm': cm,
+                                  'kg': kg,
+                                  'grade': 0,                                    //등급
+                                  'team': 0,                                     //팀  0이 본사
+                                  'enterDay': FieldValue.serverTimestamp(),      //입사일
+
+
                                 });
                                 Navigator.pop(context);
                               } catch (e) {

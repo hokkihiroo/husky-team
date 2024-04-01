@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
+import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart';
 
 class CarListCard extends StatelessWidget {
   final int index;

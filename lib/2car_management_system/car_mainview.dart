@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:team_husky/car_management_system/team1/team1_view.dart';
+import 'package:team_husky/2car_management_system/team1/team1_view.dart';
 
 class CarManagementSystem extends StatelessWidget {
   const CarManagementSystem({super.key, required this.name});
@@ -13,7 +13,8 @@ class CarManagementSystem extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Team1View(name:name)),
+              context,
+              MaterialPageRoute(builder: (context) => Team1View(name: name)),
             );
           },
           child: Container(
@@ -23,12 +24,14 @@ class CarManagementSystem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('1팀',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 3.0,
-                ),),
+                Text(
+                  '1팀',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 3.0,
+                  ),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

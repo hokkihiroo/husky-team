@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:team_husky/car_management_system/team1/team1_adress_const.dart';
-import 'package:team_husky/car_management_system/team1/team1_numbercard.dart';
+import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart';
 import 'dart:io' show Platform;
+
+import 'package:team_husky/2car_management_system/team1/team1_numbercard.dart';
 
 class RotaryList extends StatefulWidget {
   final String location;

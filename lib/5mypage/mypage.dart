@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:team_husky/5mypage/management/management.dart';
 import 'package:team_husky/user/user_auth.dart';
 import 'package:team_husky/user/user_screen.dart';
 
@@ -21,7 +22,35 @@ class MyPage extends StatelessWidget {
               Text('이름 :$name'),
             ],
           ),
-          SizedBox(height: 300,),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                style:
+                ElevatedButton.styleFrom(primary: Colors.black),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return Management();
+                    }),
+                  );
+                },
+                child: Text(
+                  '관리자페이지',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 200,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
