@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/user/custom_text_form.dart';
 import 'package:team_husky/user/user_auth.dart';
@@ -26,21 +27,20 @@ class _UserResumeState extends State<UserResume> {
   String name = '';
   String birthDay = '';
   String phoneNumber = '';
-  String carNumber = '';            //자차번호
-  String address = '';              //주소
-  String career = '';               //운전경력
-  String hobby = '';                //취미
-  String footSize = '';             //발사이즈
-  String tShirtSize = '';           //상의
-  String pantsSize = '';            //하의
-  String cm = '';                   //키
-  String kg = '';                   //몸무게
-
+  String carNumber = ''; //자차번호
+  String address = ''; //주소
+  String career = ''; //운전경력
+  String hobby = ''; //취미
+  String footSize = ''; //발사이즈
+  String tShirtSize = ''; //상의
+  String pantsSize = ''; //하의
+  String cm = ''; //키
+  String kg = ''; //몸무게
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      backgroundColor: Colors.brown,
+        backgroundColor: Colors.brown,
         title: '직원이력',
         child: GestureDetector(
           onTap: () {
@@ -50,7 +50,7 @@ class _UserResumeState extends State<UserResume> {
             child: Container(
               height: 1400.0,
               width: MediaQuery.of(context).size.width - 20,
-              margin: EdgeInsets.only(top: 10,left: 10,right: 10),
+              margin: EdgeInsets.only(top: 10, left: 10, right: 10),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15.0),
@@ -189,7 +189,6 @@ class _UserResumeState extends State<UserResume> {
                       CustomTextForm(
                         key: ValueKey(7),
                         onSaved: (val) {
-
                           setState(() {
                             address = val!;
                           });
@@ -288,8 +287,8 @@ class _UserResumeState extends State<UserResume> {
                         children: [
                           //돌아가기
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.brown),
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.brown),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -302,14 +301,14 @@ class _UserResumeState extends State<UserResume> {
                           ),
                           //이력서 제출
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.brown),
-                            onPressed:  () async {
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.brown),
+                            onPressed: () async {
                               _tryValidation();
                               try {
-                                final newUser = await AUTH
-                                    .createUserWithEmailAndPassword(
-                                    email: email, password: password);
+                                final newUser =
+                                    await AUTH.createUserWithEmailAndPassword(
+                                        email: email, password: password);
 
                                 await FirebaseFirestore.instance
                                     .collection(USER)
@@ -328,22 +327,33 @@ class _UserResumeState extends State<UserResume> {
                                   'pantsSize': pantsSize,
                                   'cm': cm,
                                   'kg': kg,
-                                  'grade': 0,                                    //등급
-                                  'team': 0,                                     //팀  0이 본사
-                                  'enterDay': FieldValue.serverTimestamp(),      //입사일
+                                  'grade': 0,
+                                  //등급
+                                  'enterDay': FieldValue.serverTimestamp(),
+                                  //입사일
+                                });
 
-
+                                await FirebaseFirestore.instance
+                                    .collection(INSA)
+                                    .doc(BOSNA)
+                                    .collection(LIST)
+                                    .doc(newUser.user!.uid)
+                                    .set({
+                                  'name': name,  //이름
+                                  'grade': '사원',
+                                  'position': '드라이버',
                                 });
                                 Navigator.pop(context);
                               } catch (e) {
                                 print(e);
                               }
                             },
-                            child: Text('이력서 제출',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),),
-
+                            child: Text(
+                              '이력서 제출',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ],
                       ),

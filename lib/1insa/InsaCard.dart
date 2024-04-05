@@ -2,28 +2,29 @@ import 'package:flutter/material.dart';
 
 class OrganizationCard extends StatelessWidget {
   final String name;
-  final String team;
+  final String grade;
   final String position;
 
   const OrganizationCard(
       {super.key,
         required this.position,
         required this.name,
-        required this.team});
+        required this.grade});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Container(
-        height: 50,
+        height: 30,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               name,
               style: TextStyle(
                 letterSpacing: 3.0,
-                fontSize: 10,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -31,10 +32,9 @@ class OrganizationCard extends StatelessWidget {
               width: 10,
             ),
             Text(
-              team,
+              grade,
               style: TextStyle(
-                letterSpacing: 3.0,
-                fontSize: 10,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -44,7 +44,7 @@ class OrganizationCard extends StatelessWidget {
             Text(
               position,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:team_husky/5mypage/management/manegement/2moveInsa.dart';
 
-import 'makeTeam.dart';
+import 'manegement/1makeTeam.dart';
 
 class Management extends StatefulWidget {
   const Management({super.key});
@@ -23,6 +24,7 @@ class _ManagementState extends State<Management> {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         centerTitle: true,
+
       ),
       backgroundColor: Colors.white,
       body: Column(
@@ -42,6 +44,23 @@ class _ManagementState extends State<Management> {
               );
             },
             child: Text('팀 개설'),
+          ),
+          SizedBox(height: 10,),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+
+              minimumSize: Size(double.infinity, 50),
+            ),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return MoveInsa();
+                }),
+              );
+            },
+            child: Text('인사이동'),
           ),
         ],
       ),

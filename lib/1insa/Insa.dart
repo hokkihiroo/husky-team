@@ -67,10 +67,11 @@ class _OrganizationState extends State<Organization> {
                               itemBuilder: (context, index) {
                                 // 2단계 컬렉션의 데이터를 표시하는 위젯 반환
                                 var data = docs[index].data() ?? {}; // 데이터가 널인 경우 빈 맵을 사용
+                                print(data);
                                 return OrganizationCard(
                                   name: data['name'] ?? '', // 이름이 널인 경우 빈 문자열 사용
-                                  team: data['team'] ?? '', // 팀이 널인 경우 빈 문자열 사용
-                                  position: data['position'] ?? '', // 포지션이 널인 경우 빈 문자열 사용
+                                  grade: data['grade']?? '',// 포지션이 널인 경우 빈 문자열 사용
+                                  position: data['position'] ?? '',
                                 );
                               },
                             );

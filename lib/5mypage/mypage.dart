@@ -94,10 +94,11 @@ class MyPage extends StatelessWidget {
 
                                         await FIRESTORE
                                             .collection(
-                                                'user/KZwZFZ6RV8WKvynPHZDs/bonsa')
+                                                'user')
                                             .doc(userId)
                                             .delete();
                                         await currentUser.delete();
+                                        await FirebaseAuth.instance.signOut();
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
