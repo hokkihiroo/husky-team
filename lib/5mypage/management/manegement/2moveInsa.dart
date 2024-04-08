@@ -21,6 +21,8 @@ class _MoveInsaState extends State<MoveInsa> {
   String memberName = '';
   String memberPosition = '';
   String memberGrade = '';
+  Timestamp memberEnter = Timestamp.now();
+  String image = '';
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class _MoveInsaState extends State<MoveInsa> {
                     Map<String, dynamic> data = {
                       'name': doc['name'],
                       'docId': doc['docId'],
+                      'position': doc['position'],
                     };
                     teamList.add(data);
                   }
@@ -83,8 +86,9 @@ class _MoveInsaState extends State<MoveInsa> {
                         // 활성화 시키면 bar 가 바뀜 데이터 클릭시마다
                       },
                       child: MoveInsaCard(
-                        name: docs[index]['name'],
                         image: Image.asset(docs[index]['image']),
+                        name: docs[index]['name'],
+                        position: docs[index]['position'],
                       ),
                     );
                   },
@@ -102,7 +106,7 @@ class _MoveInsaState extends State<MoveInsa> {
                     .collection(INSA)
                     .doc(docId)
                     .collection('list')
-                    // .orderBy('createdAt')
+                    .orderBy('enterDay')
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -130,17 +134,22 @@ class _MoveInsaState extends State<MoveInsa> {
                           memberName = docs[index]['name'];
                           memberPosition = docs[index]['position'];
                           memberGrade = docs[index]['grade'];
+                          memberEnter = docs[index]['enterDay'];
+                          image = docs[index]['image'];
 
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return MoveInsaButton(
-                                  teamList,
-                                  memberId,
-                                  memberName,
-                                  memberPosition,
-                                  memberGrade,
-                                  docId);
+                                teamList,
+                                memberId,
+                                memberName,
+                                memberPosition,
+                                memberGrade,
+                                docId,
+                                memberEnter,
+                                image,
+                              );
                             },
                           );
                         },
@@ -167,18 +176,35 @@ class _MoveInsaState extends State<MoveInsa> {
     String memberPosition,
     String memberGrade,
     String docId,
+    Timestamp memberEnter,
+    String image,
   ) {
     return AlertDialog(
-      title: Text('이동할 팀 선택'),
+      title: Center(
+        child: Text(
+          '이동할 팀 선택',
+          textAlign: TextAlign.center,
+        ),
+      ),
       content: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width / 2,
         height: 300,
         child: ListView.builder(
           itemCount: teamList.length,
           itemBuilder: (context, index) {
             Map<String, dynamic> teamData = teamList[index];
             return ListTile(
-              title: Text(teamData['name']),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    teamData['name'],
+                  ),
+                  Text(
+                    teamData['position'],
+                  ),
+                ],
+              ),
               onTap: () async {
                 // 특정 팀을 선택했을 때 수행할 동작 추가
                 // 예: 선택한 팀의 정보를 활용하여 다른 작업을 수행할 수 있음
@@ -204,6 +230,8 @@ class _MoveInsaState extends State<MoveInsa> {
                     'grade': memberGrade,
                     'name': memberName,
                     'position': memberPosition,
+                    'enterDay': memberEnter,
+                    'image': image,
                   });
                 } catch (e) {
                   print(e);

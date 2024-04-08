@@ -14,6 +14,8 @@ class UserResume extends StatefulWidget {
 
 class _UserResumeState extends State<UserResume> {
   final _formKey = GlobalKey<FormState>();
+  String image = 'asset/img/face.png'; //팀명
+
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -314,6 +316,7 @@ class _UserResumeState extends State<UserResume> {
                                     .collection(USER)
                                     .doc(newUser.user!.uid)
                                     .set({
+                                  'image': image,
                                   'email': email,
                                   'name': name,
                                   'birthDay': birthDay,
@@ -339,9 +342,12 @@ class _UserResumeState extends State<UserResume> {
                                     .collection(LIST)
                                     .doc(newUser.user!.uid)
                                     .set({
+                                  'image': image,
                                   'name': name,  //이름
                                   'grade': '사원',
                                   'position': '드라이버',
+                                  'enterDay': FieldValue.serverTimestamp(),
+
                                 });
                                 Navigator.pop(context);
                               } catch (e) {

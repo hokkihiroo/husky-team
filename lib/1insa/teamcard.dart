@@ -33,18 +33,18 @@ class BuildingCard extends StatelessWidget {
             // ClipOval로 이미지를 감싸서 원형으로 잘라냄
             ClipOval(
               child: Container(
-                height: 80, // 이미지의 높이를 조정, 필요에 따라 조절
-                width: 80, // 이미지의 너비를 조정, 필요에 따라 조절
+                height: 60, // 이미지의 높이를 조정, 필요에 따라 조절
+                width: 60, // 이미지의 너비를 조정, 필요에 따라 조절
                 child: image,
               ),
             ),
-            SizedBox(width: 10),
+            SizedBox(width: 20),
             Text(
               name,
               style: TextStyle(
                 letterSpacing: 3.0,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
               ),
             ),
             SizedBox(width: 20),
@@ -52,8 +52,8 @@ class BuildingCard extends StatelessWidget {
               position,
               style: TextStyle(
                 letterSpacing: 3.0,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class MoveInsaCard extends StatelessWidget {
   final String name;
   final Widget? image;
+  final String position;
 
   const MoveInsaCard({
     Key? key,
     required this.name,
+    required this.position,
     required this.image,
   }) : super(key: key);
 
@@ -25,13 +27,26 @@ class MoveInsaCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 4), // 이미지와 텍스트 사이의 간격 조정
-          Text(
-            name,
-            style: TextStyle(
-              letterSpacing: 1.0,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                  letterSpacing: 1.0,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 10,),
+              Text(position,
+                style: TextStyle(
+                  letterSpacing: 1.0,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ],
       ),

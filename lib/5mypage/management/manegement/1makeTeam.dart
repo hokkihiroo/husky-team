@@ -21,7 +21,7 @@ class _MakeTeamState extends State<MakeTeam> {
     }
   }
 
-  String image = 'asset/img/ddo.png'; //팀명
+  String image = 'asset/img/husky_Logo.png'; //팀명
   String name = ''; //팀명
   String position = ''; //팀 위치
 
