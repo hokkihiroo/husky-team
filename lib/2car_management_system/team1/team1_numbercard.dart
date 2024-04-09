@@ -31,7 +31,7 @@ class NumberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 60,
       color: Colors.black,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

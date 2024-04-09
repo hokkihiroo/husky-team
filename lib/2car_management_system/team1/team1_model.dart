@@ -69,6 +69,7 @@ class _RotaryListState extends State<RotaryList> {
         // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
         if (splitData.length == 2) {
           sender = splitData[0].trim(); // 첫 번째 데이터를 _sender에 저장 (앞뒤 공백 제거)
+
           message = splitData[1].trim(); // 두 번째 데이터를 _message에 저장 (앞뒤 공백 제거)
 
           print('모듈에서받음: $sender');
