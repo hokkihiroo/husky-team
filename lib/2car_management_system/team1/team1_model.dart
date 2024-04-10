@@ -38,9 +38,10 @@ class _RotaryListState extends State<RotaryList> {
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
-
-  String sender = '';
-  String message = '';
+  // 온문자내용 추출
+  String sender = '';          //보낸사람 저장
+  String message = '';         //통으로 오는문자 저장
+  String match = '';         //추출번호 저장
 
   EventChannel? _eventChannel;
 
@@ -59,21 +60,28 @@ class _RotaryListState extends State<RotaryList> {
     _eventChannel!.receiveBroadcastStream().listen((dynamic event) {
       setState(() {
         String data = event;
-        print(data);
+        print('이건 통째 보는 프린트 내용 :$data');
 
         List<String> splitData = data.split(':');
-        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
-        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
-        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
-        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
-        // 나중에 여기 부분을 날라오는 번호에 맞는 형태로 구성해야함
         if (splitData.length == 2) {
           sender = splitData[0].trim(); // 첫 번째 데이터를 _sender에 저장 (앞뒤 공백 제거)
 
           message = splitData[1].trim(); // 두 번째 데이터를 _message에 저장 (앞뒤 공백 제거)
 
-          print('모듈에서받음: $sender');
-          print('모듈임: $message');
+          if (sender != '01088528694') {
+            print('잘못된 보낸 사람입니다.');
+            return; // 예외 처리 후 함수 종료
+          }
+
+          print('보낸사람 : $sender');
+
+          ///////////////////////////////////
+          // message에서 호출 앞에 있는 숫자 네 자리 추출
+          RegExp regex = RegExp(r'\d{4}(?= 호출)');
+          message = regex.stringMatch(message) ?? '';
+          print(' 내용 : $message');
+          ///////////////////////////////////////
+
           _smsControl();
 
         } else {

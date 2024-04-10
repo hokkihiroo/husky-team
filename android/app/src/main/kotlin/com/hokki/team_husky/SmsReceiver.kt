@@ -18,13 +18,18 @@ class SmsReceiver(private val smsListener: SmsListener) : BroadcastReceiver() {
             if (bundle != null) {
                 val pdus = bundle.get("pdus") as Array<Any>?
                 if (pdus != null) {
+
                     for (pdu in pdus) {
                         val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray)
                         val messageBody = smsMessage.messageBody
                         val sender = smsMessage.originatingAddress
                         // SMS 데이터 로그에 찍기
-                        Log.d("SmsReceiver", "번호: $sender, 내용: $messageBody")
-                        smsListener.onSmsReceived(sender, messageBody)
+                        Log.d("SmsReceiver", "messageBody 내용: ${messageBody.replace("\n", " ")}")
+
+                        smsListener.onSmsReceived(sender, messageBody.replace("\n", " "))
+
+
+
                     }
                 }
             }
