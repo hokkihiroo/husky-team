@@ -17,6 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   late User? _user;
   late String name;
   late String email;
+  late int grade;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (snapshot.exists && snapshot.data() != null) {
           name = snapshot.data()!['name'];
           email = snapshot.data()!['email'];
+          grade = snapshot.data()!['grade'];
         }
       } catch (e) {
         print('Error fetching data: $e');
@@ -51,7 +53,8 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       print(_user!.email);
       print(_user!.uid);
-      print(name);
+      print('유저의 이름 $name');
+      print('유저의 등급 $grade');
       // 사용자가 로그인된 경우
       Navigator.pushReplacement(
         context,
@@ -59,6 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
             builder: (context) => MainView(
                   name: name,
                   email: email,
+                  grade: grade,
                 )),
       );
     } else {

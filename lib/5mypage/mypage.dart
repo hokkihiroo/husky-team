@@ -1,14 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
 import 'package:team_husky/user/user_auth.dart';
 import 'package:team_husky/user/user_screen.dart';
 
 class MyPage extends StatelessWidget {
-  const MyPage({super.key, required this.name, required this.email});
+  const MyPage(
+      {super.key,
+      required this.name,
+      required this.email,
+      required this.grade});
 
   final String name;
   final String email;
+  final int grade;
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +34,76 @@ class MyPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+
               ElevatedButton(
-                style:
-                ElevatedButton.styleFrom(primary: Colors.black),
+                style: ElevatedButton.styleFrom(primary: Colors.black),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return Management();
-                    }),
-                  );
+                  if (grade == 0) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('접근 거부'),
+                          content: Text('관리자 권한이 필요합니다.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('확인'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return Management();
+                      }),
+                    );
+                  }
                 },
                 child: Text(
                   '관리자페이지',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.black),
+                onPressed: () {
+                  if (grade != 2) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('접근 거부'),
+                          content: Text('관리자 권한이 필요합니다.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('확인'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return Authorization();
+                      }),
+                    );
+                  }
+                },
+                child: Text(
+                  '관리자 권한설정',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -93,8 +156,7 @@ class MyPage extends StatelessWidget {
                                         String userId = currentUser.uid;
 
                                         await FIRESTORE
-                                            .collection(
-                                                'user')
+                                            .collection('user')
                                             .doc(userId)
                                             .delete();
                                         await currentUser.delete();

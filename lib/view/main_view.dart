@@ -5,10 +5,15 @@ import '../2car_management_system/car_mainview.dart';
 import '../5mypage/mypage.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({super.key, required this.name, required this.email});
+  const MainView(
+      {super.key,
+      required this.name,
+      required this.email,
+      required this.grade});
 
   final String name;
   final String email;
+  final int grade;
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -71,6 +76,7 @@ class _MainViewState extends State<MainView>
           MyPage(
             name: widget.name,
             email: widget.email,
+            grade: widget.grade,
           ),
         ],
       ),
