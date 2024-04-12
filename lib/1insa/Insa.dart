@@ -138,15 +138,15 @@ class _OrganizationState extends State<Organization> {
             children: [
               Text('상의 :'),
               SizedBox(
-                width: 30,
+                width: 10,
               ),
               Text(data['tShirtSize']),
               SizedBox(
-                width: 30,
+                width: 10,
               ),
               Text('하의 :'),
               SizedBox(
-                width: 30,
+                width: 10,
               ),
               Text(data['pantsSize']),
             ],
@@ -155,23 +155,24 @@ class _OrganizationState extends State<Organization> {
             children: [
               Text('신발 :'),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Text(data['footSize']),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Text('키 :'),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Text(data['cm']),
-              SizedBox(
-                width: 20,
-              ),
+            ],
+          ),
+          Row(
+            children: [
               Text('몸무게 :'),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Text(data['kg']),
             ],
@@ -188,15 +189,15 @@ class _OrganizationState extends State<Organization> {
               children: [
                 Text('이름 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(data['name']),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text('생년월일 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(data['birthDay']),
               ],
@@ -205,11 +206,11 @@ class _OrganizationState extends State<Organization> {
               children: [
                 Text('연락처 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(data['phoneNumber']),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
               ],
             ),
@@ -217,7 +218,7 @@ class _OrganizationState extends State<Organization> {
               children: [
                 Text('주소 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(data['address']),
               ],
@@ -226,15 +227,15 @@ class _OrganizationState extends State<Organization> {
               children: [
                 Text('경력 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(data['career']),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text('취미 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(data['hobby']),
               ],
@@ -243,9 +244,9 @@ class _OrganizationState extends State<Organization> {
               children: [
                 Text('입사일 :'),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
-                // Text(data['enterDay']),     이건 날짜를 불러올수있는
+                 Text('24/04/12'), //    이건 날짜를 불러올수있는
                 //위젯으로 변경후 불러와야함
               ],
             ),

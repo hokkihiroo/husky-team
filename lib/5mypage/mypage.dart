@@ -34,7 +34,6 @@ class MyPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.black),
                 onPressed: () {
@@ -151,7 +150,10 @@ class MyPage extends StatelessWidget {
                                     try {
                                       User? currentUser =
                                           FirebaseAuth.instance.currentUser;
-
+                                      print(currentUser);
+                                      print(currentUser);
+                                      print(currentUser);
+                                      print(currentUser);
                                       if (currentUser != null) {
                                         String userId = currentUser.uid;
 
@@ -159,6 +161,7 @@ class MyPage extends StatelessWidget {
                                             .collection('user')
                                             .doc(userId)
                                             .delete();
+
                                         await currentUser.delete();
                                         await FirebaseAuth.instance.signOut();
                                         Navigator.pushReplacement(
