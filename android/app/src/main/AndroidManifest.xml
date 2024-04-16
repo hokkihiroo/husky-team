@@ -7,7 +7,7 @@
     <uses-feature android:name="android.hardware.camera"/>
 
     <application
-        android:label="team_husky"
+        android:label="팀허스키"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
 <!--        <receiver android:name="com.hokki.team_husky.SmsReceiver"-->
