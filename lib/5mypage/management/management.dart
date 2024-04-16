@@ -60,7 +60,7 @@ class _ManagementState extends State<Management> {
                 }),
               );
             },
-            child: Text('인사이동'),
+            child: Text('인사이동 / 직위,포지션 변경'),
           ),
         ],
       ),

@@ -17,10 +17,12 @@ class _MoveInsaState extends State<MoveInsa> {
   List<Map<String, dynamic>> teamList = [];
   List<Map<String, dynamic>> memberList = [];
 
-  String memberId = '';
-  String memberName = '';
-  String memberPosition = '';
-  String memberGrade = '';
+  String memberId = ''; //직원 문서아이디
+  String memberName = ''; //직원 이름
+  String memberPosition = ''; //직원 하는일
+  String upgradePosition = ''; //직원 하는일
+  String memberGrade = ''; //직원직책
+  String updateGrade = ''; //직원 바뀐직책
   Timestamp memberEnter = Timestamp.now();
   String image = '';
 
@@ -30,11 +32,13 @@ class _MoveInsaState extends State<MoveInsa> {
       appBar: AppBar(
         // AppBar 추가
         title: Text(
-          '인사이동',
+          '인사/직책변경',
           style: TextStyle(
             color: Colors.black,
           ),
-        ), // 앱 바 제목 설정
+        ), // 앱 바
+        centerTitle: true,
+        // 제목 설정
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -182,10 +186,157 @@ class _MoveInsaState extends State<MoveInsa> {
     return AlertDialog(
       title: Center(
         child: Text(
-          '이동할 팀 선택',
+          '$memberName \n 이동할 팀 선택',
           textAlign: TextAlign.center,
         ),
       ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(memberName),
+                      content: Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 200,
+                        child: Column(
+                          children: [
+                            Text('현재 직책: $memberGrade'),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            TextField(
+                              onChanged: (value) {
+                                if (value.length <= 4) {
+                                  updateGrade =
+                                      value; // 텍스트 필드 값이 변경될 때마다 변수에 저장
+                                }
+                              },
+                              maxLength: 4, // 최대 글자 수 제한
+                              decoration: InputDecoration(
+                                hintText: '새로운 직책', // 힌트 텍스트 설정
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(INSA)
+                                          .doc(docId)
+                                          .collection('list')
+                                          .doc(memberId)
+                                          .update({
+                                        'grade': updateGrade,
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
+                                  child: Text('확인'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('취소'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Text('직책변경'),
+            ),
+            TextButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(memberName),
+                      content: Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 200,
+                        child: Column(
+                          children: [
+                            Text('현재 직책: $memberPosition'),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            TextField(
+                              onChanged: (value) {
+                                if (value.length <= 4) {
+                                  upgradePosition =
+                                      value; // 텍스트 필드 값이 변경될 때마다 변수에 저장
+                                }
+                              },
+                              maxLength: 4, // 최대 글자 수 제한
+                              decoration: InputDecoration(
+                                hintText: '새로운 포지션', // 힌트 텍스트 설정
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(INSA)
+                                          .doc(docId)
+                                          .collection('list')
+                                          .doc(memberId)
+                                          .update({
+                                        'position': upgradePosition,
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
+                                  child: Text('확인'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('취소'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Text('업무변경'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('취소'),
+            ),
+          ],
+        ),
+      ],
       content: Container(
         width: MediaQuery.of(context).size.width / 2,
         height: 300,

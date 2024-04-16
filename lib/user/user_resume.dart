@@ -50,7 +50,7 @@ class _UserResumeState extends State<UserResume> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: 1400.0,
+              height: 1600.0,
               width: MediaQuery.of(context).size.width - 20,
               margin: EdgeInsets.only(top: 10, left: 10, right: 10),
               decoration: BoxDecoration(
@@ -142,6 +142,9 @@ class _UserResumeState extends State<UserResume> {
                       SizedBox(
                         height: 25,
                       ),
+                      Text('양식을 꼭 지켜주세요'),
+                      Text('-우덕균-'),
+                      SizedBox(height: 20,),
                       CustomTextForm(
                         key: ValueKey(4),
                         validator: (val) {
@@ -154,7 +157,7 @@ class _UserResumeState extends State<UserResume> {
                             phoneNumber = val;
                           });
                         },
-                        hintText: '전화번호',
+                        hintText: '전화번호 예) 010-1234-5678',
                       ),
                       SizedBox(
                         height: 25,
@@ -183,7 +186,7 @@ class _UserResumeState extends State<UserResume> {
                             carNumber = val!;
                           });
                         },
-                        hintText: '차량번호 or 없음',
+                        hintText: '차량번호 예) 12가3456 or 없음',
                       ),
                       SizedBox(
                         height: 25,
@@ -195,7 +198,7 @@ class _UserResumeState extends State<UserResume> {
                             address = val!;
                           });
                         },
-                        hintText: '주소 예)서울 강남구 대치동 434-1번지',
+                        hintText: '주소 예) 강남구 대치동 43번지 101호',
                       ),
                       SizedBox(
                         height: 25,
@@ -224,6 +227,8 @@ class _UserResumeState extends State<UserResume> {
                       SizedBox(
                         height: 25,
                       ),
+                      Text('숫자만 입력하세요 단위X'),
+                      SizedBox(height: 20,),
                       CustomTextForm(
                         key: ValueKey(10),
                         onSaved: (val) {

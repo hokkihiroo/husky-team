@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/1insa/InsaCard.dart';
 import 'package:team_husky/1insa/teamcard.dart';
@@ -15,6 +16,7 @@ class _OrganizationState extends State<Organization> {
   String dataId = ''; //팀 클릭시 그 팀고유 아이디값
   String name = ''; // 팀 이름
   String mansID = ''; // 팀원문서아이디
+  String formattedDate = '';
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +85,16 @@ class _OrganizationState extends State<Organization> {
                                     print(mansID);
                                     Map<String, dynamic> userData =
                                         await getData(mansID);
-                                    // String userName = userData['name'];
-
+                                    Timestamp timestamp = userData['enterDay'];
+                                    DateTime dateTime = timestamp.toDate();
+                                    formattedDate =
+                                        DateFormat('yy/MM/dd').format(dateTime);
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return viewInsa(
                                           userData,
+                                          formattedDate,
                                         );
                                       },
                                     );
@@ -121,6 +126,7 @@ class _OrganizationState extends State<Organization> {
 
   Widget viewInsa(
     Map<String, dynamic> data,
+    String formattedDate,
   ) {
     return AlertDialog(
       title: Column(
@@ -134,74 +140,16 @@ class _OrganizationState extends State<Organization> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              Text('상의 :'),
-              SizedBox(
-                width: 10,
-              ),
-              Text(data['tShirtSize']),
-              SizedBox(
-                width: 10,
-              ),
-              Text('하의 :'),
-              SizedBox(
-                width: 10,
-              ),
-              Text(data['pantsSize']),
-            ],
-          ),
-          Row(
-            children: [
-              Text('신발 :'),
-              SizedBox(
-                width: 10,
-              ),
-              Text(data['footSize']),
-              SizedBox(
-                width: 10,
-              ),
-              Text('키 :'),
-              SizedBox(
-                width: 10,
-              ),
-              Text(data['cm']),
-            ],
-          ),
-          Row(
-            children: [
-              Text('몸무게 :'),
-              SizedBox(
-                width: 10,
-              ),
-              Text(data['kg']),
-            ],
-          ),
+          Center(child: Text(data['name'])),
+          Center(child: Text(data['birthDay'])),
         ],
       ),
       content: Container(
         width: MediaQuery.of(context).size.width,
-        height: 350,
+        height: 150,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Text('이름 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['name']),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('생년월일 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['birthDay']),
-              ],
-            ),
             Row(
               children: [
                 Text('연락처 :'),
@@ -216,11 +164,11 @@ class _OrganizationState extends State<Organization> {
             ),
             Row(
               children: [
-                Text('주소 :'),
+                Text('차량번호 :'),
                 SizedBox(
                   width: 10,
                 ),
-                Text(data['address']),
+                Text(data['carNumber']),
               ],
             ),
             Row(
@@ -246,8 +194,51 @@ class _OrganizationState extends State<Organization> {
                 SizedBox(
                   width: 10,
                 ),
-                 Text('24/04/12'), //    이건 날짜를 불러올수있는
+                Text('$formattedDate'), //    이건 날짜를 불러올수있는
                 //위젯으로 변경후 불러와야함
+              ],
+            ),
+            Row(
+              children: [
+                Text('상의 :'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(data['tShirtSize']),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('하의 :'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(data['pantsSize']),
+              ],
+            ),
+            Row(
+              children: [
+                Text('신발 :'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(data['footSize']),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('키 :'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(data['cm']),
+              ],
+            ),
+            Row(
+              children: [
+                Text('몸무게 :'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(data['kg']),
               ],
             ),
           ],
