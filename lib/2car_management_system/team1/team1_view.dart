@@ -93,6 +93,7 @@ class _Team1ViewState extends State<Team1View> {
               ),
               onPressed: () {
                 CarListAdress = CARLIST + formatTodayDate();
+                print(CarListAdress);
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
