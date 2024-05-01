@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:team_husky/notification.dart';
 import 'package:team_husky/user/user_screen.dart';
 import 'package:team_husky/view/color.dart';
 import 'package:team_husky/view/main_view.dart';
@@ -21,9 +22,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    Notice();
     super.initState();
 
     checkLoginStatus();
+  }
+  Notice() async {
+    await FlutterLocalNotification.init();
+    Future.delayed(const Duration(seconds: 0),
+    FlutterLocalNotification.requestNotificationPermission());
   }
 
   Future<void> checkLoginStatus() async {
