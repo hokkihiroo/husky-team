@@ -254,6 +254,11 @@ class _RotaryListState extends State<RotaryList> {
               child: GestureDetector(
                 onTap: () async {
                   // 활성화 시키면 bar 가 바뀜 데이터 클릭시마다
+                  CarListAdress = CARLIST + formatTodayDate();
+                  print(CarListAdress);
+                  print(CarListAdress);
+                  print(CarListAdress);
+                  print(CarListAdress);
 
                   var document = docs[index];
                   dataId = document.id;
@@ -351,6 +356,8 @@ class _RotaryListState extends State<RotaryList> {
                               fontWeight: FontWeight.w500, fontSize: 18),
                         ),
                         onPressed: () async {
+
+
                           try {
                             await FirebaseFirestore.instance
                                 .collection(dataAdress) // 컬렉션 이름을 지정하세요

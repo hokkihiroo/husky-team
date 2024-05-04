@@ -22,16 +22,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    Notice();
+   // Notice();
     super.initState();
 
     checkLoginStatus();
   }
-  Notice() async {
-    await FlutterLocalNotification.init();
-    Future.delayed(const Duration(seconds: 0),
-    FlutterLocalNotification.requestNotificationPermission());
-  }
+  //   Notice() async {
+  //   await FlutterLocalNotification.init();
+  //   FlutterLocalNotification.requestNotificationPermission();
+  // }
 
   Future<void> checkLoginStatus() async {
     await Future.delayed(Duration(seconds: 0)); // 일부러 1초 대기

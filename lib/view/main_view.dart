@@ -61,7 +61,15 @@ class _MainViewState extends State<MainView>
           CarManagementSystem(
             name: widget.name,
           ),
-          Notication(),
+          Center(
+            child: Text(
+              '개발중입니다',
+              style: TextStyle(
+                fontSize: 40,
+              ),
+            ),
+          ),
+          //Notication(),
           Center(
             child: Text(
               '개발중입니다',
