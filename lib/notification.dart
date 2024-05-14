@@ -16,6 +16,13 @@ class PushNotication {
       provisional: false,
       sound: true,
     );
+    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+
+      print('토큰변경됨');
+      print('토큰변경됨');
+      print('토큰변경됨');
+    }).onError((err) {
+    });
   }
 
   static Future<void> IosToken() async {
