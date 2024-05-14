@@ -1,61 +1,40 @@
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-//
-// class FlutterLocalNotification {
-//   FlutterLocalNotification._();
-//
-//   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//       FlutterLocalNotificationsPlugin();
-//
-//   static init() async {
-//     AndroidInitializationSettings androidInitializationSettings =
-//         const AndroidInitializationSettings('mipmap/ic_launcher');
-//
-//     DarwinInitializationSettings iosInitializationSettings =
-//         const DarwinInitializationSettings(
-//       requestAlertPermission: false,
-//       requestBadgePermission: false,
-//       requestSoundPermission: false,
-//     );
-//
-//     InitializationSettings initializationSettings = InitializationSettings(
-//       android: androidInitializationSettings,
-//       iOS: iosInitializationSettings,
-//     );
-//
-//     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-//     print('이거작동되고있는거야?');
-//   }
-//
-//   static requestNotificationPermission() {
-//     flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//             IOSFlutterLocalNotificationsPlugin>()
-//         ?.requestPermissions(
-//           alert: true,
-//           badge: true,
-//           sound: true,
-//         );
-//     print('이거작동되고있는거야?2');
-//   }
-//
-//   static Future<void> showNotification() async {
-//     print('눌럿을때 뜨나?');
-//     const AndroidNotificationDetails androidNotificationDetails =
-//         AndroidNotificationDetails('channel id', 'channel name',
-//             channelDescription: 'channel description',
-//             importance: Importance.max,
-//             priority: Priority.max,
-//             showWhen: false);
-//     print('눌럿을때 뜨나?2');
-//
-//     const NotificationDetails notificationDetails = NotificationDetails(
-//         android: androidNotificationDetails,
-//         iOS: DarwinNotificationDetails(badgeNumber: 1));
-//     print('눌럿을때 뜨나?3');
-//
-//     await flutterLocalNotificationsPlugin.show(
-//         0, 'test title', 'test body', notificationDetails);
-//     print('눌럿을때 뜨나?4');
-//
-//   }
-// }
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+class PushNotication {
+  static final push = FirebaseMessaging.instance;
+  static String? androidToken;
+  static String? iosAPNSToken;
+  static String? iosToken;
+
+  static Future<void> Init() async {
+    await push.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+  }
+
+  static Future<void> IosToken() async {
+    try {
+      iosAPNSToken = await push.getAPNSToken();
+      iosToken = await push.getToken();
+      print('ios APNS 토큰 $iosAPNSToken');
+      print('ios 토큰 $iosToken');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> AndroidToken() async {
+    try {
+      androidToken = await push.getToken();
+      print('안드로이드토큰 $androidToken');
+    } catch (e) {
+      print(e);
+    }
+  }
+}

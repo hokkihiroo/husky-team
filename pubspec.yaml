@@ -45,7 +45,8 @@ dependencies:
   permission_handler: ^11.3.0
   vibration: ^1.8.4
   intl: ^0.19.0
-  flutter_local_notifications: ^16.3.3
+  flutter_local_notifications: ^17.1.2
+  firebase_messaging: ^14.7.3
 
 dev_dependencies:
   flutter_test:

@@ -13,12 +13,13 @@ class RotaryList extends StatefulWidget {
   final VoidCallback check;
   final String name;
 
-  const RotaryList(
-      {super.key,
-      required this.location,
-      required this.reverse,
-      required this.check,
-      required this.name,});
+  const RotaryList({
+    super.key,
+    required this.location,
+    required this.reverse,
+    required this.check,
+    required this.name,
+  });
 
   @override
   State<RotaryList> createState() => _RotaryListState();
@@ -39,13 +40,11 @@ class _RotaryListState extends State<RotaryList> {
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
   // 온문자내용 추출
-  String sender = '';          //보낸사람 저장
-  String message = '';         //통으로 오는문자 저장
-  String match = '';         //추출번호 저장
+  String sender = ''; //보낸사람 저장
+  String message = ''; //통으로 오는문자 저장
+  String match = ''; //추출번호 저장
 
   EventChannel? _eventChannel;
-
-
 
   @override
   void initState() {
@@ -56,11 +55,10 @@ class _RotaryListState extends State<RotaryList> {
   }
 
   void _initializeSmsReceiver() {
-     _eventChannel = EventChannel('com.hokki.team_husky.SMS_RECEIVED');
+    _eventChannel = EventChannel('com.hokki.team_husky.SMS_RECEIVED');
     _eventChannel!.receiveBroadcastStream().listen((dynamic event) {
       setState(() {
         String data = event;
-        print('이건 통째 보는 프린트 내용 :$data');
 
         List<String> splitData = data.split(':');
         if (splitData.length == 2) {
@@ -83,7 +81,6 @@ class _RotaryListState extends State<RotaryList> {
           ///////////////////////////////////////
 
           _smsControl();
-
         } else {
           // 예외 처리: 적절한 데이터가 없는 경우
           print('잘못된 형식의 데이터입니다.');
@@ -92,138 +89,131 @@ class _RotaryListState extends State<RotaryList> {
     });
   }
 
-  void _smsControl() async{
-    print('이부분시작');
-      try {
-        QuerySnapshot querySnapshot1= await FirebaseFirestore.instance
-            .collection(LOTARY)
-            .where('carNumber', isEqualTo: message)
-            .get();
-        QuerySnapshot querySnapshot2= await FirebaseFirestore.instance
-            .collection(OUTSIDE)
-            .where('carNumber', isEqualTo: message)
-            .get();
-        QuerySnapshot querySnapshot3= await FirebaseFirestore.instance
-            .collection(MAIN)
-            .where('carNumber', isEqualTo: message)
-            .get();
-        QuerySnapshot querySnapshot4= await FirebaseFirestore.instance
-            .collection(MOON)
-            .where('carNumber', isEqualTo: message)
-            .get();
-        QuerySnapshot querySnapshot5= await FirebaseFirestore.instance
-            .collection(SINSA)
-            .where('carNumber', isEqualTo: message)
-            .get();
+  void _smsControl() async {
+    try {
+      QuerySnapshot querySnapshot1 = await FirebaseFirestore.instance
+          .collection(LOTARY)
+          .where('carNumber', isEqualTo: message)
+          .get();
+      QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+          .collection(OUTSIDE)
+          .where('carNumber', isEqualTo: message)
+          .get();
+      QuerySnapshot querySnapshot3 = await FirebaseFirestore.instance
+          .collection(MAIN)
+          .where('carNumber', isEqualTo: message)
+          .get();
+      QuerySnapshot querySnapshot4 = await FirebaseFirestore.instance
+          .collection(MOON)
+          .where('carNumber', isEqualTo: message)
+          .get();
+      QuerySnapshot querySnapshot5 = await FirebaseFirestore.instance
+          .collection(SINSA)
+          .where('carNumber', isEqualTo: message)
+          .get();
 
+      if (querySnapshot1.docs.isNotEmpty) {
+        // 문서가 있으면 해당 문서의 ID를 출력합니다.
+        String documentId1 = querySnapshot1.docs.first.id;
 
-        if (querySnapshot1.docs.isNotEmpty) {
-          // 문서가 있으면 해당 문서의 ID를 출력합니다.
-          String documentId1 = querySnapshot1.docs.first.id;
-
-          print('querySnapshot1 ID: $documentId1');
-
-          try {
-            await FirebaseFirestore.instance
-                .collection(LOTARY)
-                .doc(documentId1)
-                .update({
-              'color': 2, // 업데이트할 필드와 값
-            });
-            print('문서 업데이트가 성공했습니다.');
-          } catch (e) {
-            print('문서 업데이트 오류: $e');
-          }
-
-        } else {
-          // 문서가 없으면 해당 문서가 없음을 출력합니다.
-          print('querySnapshot1 ID 문서가 없습니다.');
+        try {
+          await FirebaseFirestore.instance
+              .collection(LOTARY)
+              .doc(documentId1)
+              .update({
+            'color': 2, // 업데이트할 필드와 값
+          });
+          print('문서 업데이트가 성공했습니다.');
+        } catch (e) {
+          print('문서 업데이트 오류: $e');
         }
-
-        if (querySnapshot2.docs.isNotEmpty) {
-          // 문서가 있으면 해당 문서의 ID를 출력합니다.
-          String documentId2 = querySnapshot2.docs.first.id;
-          print('querySnapshot2 ID: $documentId2');
-          try {
-            await FirebaseFirestore.instance
-                .collection(OUTSIDE)
-                .doc(documentId2)
-                .update({
-              'color': 2, // 업데이트할 필드와 값
-            });
-            print('문서 업데이트가 성공했습니다.');
-          } catch (e) {
-            print('문서 업데이트 오류: $e');
-          }
-        } else {
-          // 문서가 없으면 해당 문서가 없음을 출력합니다.
-          print('querySnapshot2 ID 문서가 없습니다.');
-        }
-
-        if (querySnapshot3.docs.isNotEmpty) {
-          // 문서가 있으면 해당 문서의 ID를 출력합니다.
-          String documentId3 = querySnapshot3.docs.first.id;
-          print('querySnapshot3 ID: $documentId3');
-          try {
-            await FirebaseFirestore.instance
-                .collection(MAIN)
-                .doc(documentId3)
-                .update({
-              'color': 2, // 업데이트할 필드와 값
-            });
-            print('문서 업데이트가 성공했습니다.');
-          } catch (e) {
-            print('문서 업데이트 오류: $e');
-          }
-        } else {
-          // 문서가 없으면 해당 문서가 없음을 출력합니다.
-          print('querySnapshot3 ID 문서가 없습니다.');
-        }
-
-        if (querySnapshot4.docs.isNotEmpty) {
-          // 문서가 있으면 해당 문서의 ID를 출력합니다.
-          String documentId4 = querySnapshot4.docs.first.id;
-          print('querySnapshot4 ID: $documentId4');
-          try {
-            await FirebaseFirestore.instance
-                .collection(MOON)
-                .doc(documentId4)
-                .update({
-              'color': 2, // 업데이트할 필드와 값
-            });
-            print('문서 업데이트가 성공했습니다.');
-          } catch (e) {
-            print('문서 업데이트 오류: $e');
-          }
-        } else {
-          // 문서가 없으면 해당 문서가 없음을 출력합니다.
-          print('querySnapshot4 ID 문서가 없습니다.');
-        }
-
-        if (querySnapshot5.docs.isNotEmpty) {
-          // 문서가 있으면 해당 문서의 ID를 출력합니다.
-          String documentId5 = querySnapshot5.docs.first.id;
-          print('querySnapshot5 ID: $documentId5');
-          try {
-            await FirebaseFirestore.instance
-                .collection(SINSA)
-                .doc(documentId5)
-                .update({
-              'color': 2, // 업데이트할 필드와 값
-            });
-            print('문서 업데이트가 성공했습니다.');
-          } catch (e) {
-            print('문서 업데이트 오류: $e');
-          }
-        } else {
-          // 문서가 없으면 해당 문서가 없음을 출력합니다.
-          print('querySnapshot5 ID 문서가 없습니다.');
-        }
-
-
-      } catch (e) {
-        print(e);
+      } else {
+        // 문서가 없으면 해당 문서가 없음을 출력합니다.
+        print('querySnapshot1 ID 문서가 없습니다.');
       }
+
+      if (querySnapshot2.docs.isNotEmpty) {
+        // 문서가 있으면 해당 문서의 ID를 출력합니다.
+        String documentId2 = querySnapshot2.docs.first.id;
+        print('querySnapshot2 ID: $documentId2');
+        try {
+          await FirebaseFirestore.instance
+              .collection(OUTSIDE)
+              .doc(documentId2)
+              .update({
+            'color': 2, // 업데이트할 필드와 값
+          });
+          print('문서 업데이트가 성공했습니다.');
+        } catch (e) {
+          print('문서 업데이트 오류: $e');
+        }
+      } else {
+        // 문서가 없으면 해당 문서가 없음을 출력합니다.
+        print('querySnapshot2 ID 문서가 없습니다.');
+      }
+
+      if (querySnapshot3.docs.isNotEmpty) {
+        // 문서가 있으면 해당 문서의 ID를 출력합니다.
+        String documentId3 = querySnapshot3.docs.first.id;
+        print('querySnapshot3 ID: $documentId3');
+        try {
+          await FirebaseFirestore.instance
+              .collection(MAIN)
+              .doc(documentId3)
+              .update({
+            'color': 2, // 업데이트할 필드와 값
+          });
+          print('문서 업데이트가 성공했습니다.');
+        } catch (e) {
+          print('문서 업데이트 오류: $e');
+        }
+      } else {
+        // 문서가 없으면 해당 문서가 없음을 출력합니다.
+        print('querySnapshot3 ID 문서가 없습니다.');
+      }
+
+      if (querySnapshot4.docs.isNotEmpty) {
+        // 문서가 있으면 해당 문서의 ID를 출력합니다.
+        String documentId4 = querySnapshot4.docs.first.id;
+        print('querySnapshot4 ID: $documentId4');
+        try {
+          await FirebaseFirestore.instance
+              .collection(MOON)
+              .doc(documentId4)
+              .update({
+            'color': 2, // 업데이트할 필드와 값
+          });
+          print('문서 업데이트가 성공했습니다.');
+        } catch (e) {
+          print('문서 업데이트 오류: $e');
+        }
+      } else {
+        // 문서가 없으면 해당 문서가 없음을 출력합니다.
+        print('querySnapshot4 ID 문서가 없습니다.');
+      }
+
+      if (querySnapshot5.docs.isNotEmpty) {
+        // 문서가 있으면 해당 문서의 ID를 출력합니다.
+        String documentId5 = querySnapshot5.docs.first.id;
+        print('querySnapshot5 ID: $documentId5');
+        try {
+          await FirebaseFirestore.instance
+              .collection(SINSA)
+              .doc(documentId5)
+              .update({
+            'color': 2, // 업데이트할 필드와 값
+          });
+          print('문서 업데이트가 성공했습니다.');
+        } catch (e) {
+          print('문서 업데이트 오류: $e');
+        }
+      } else {
+        // 문서가 없으면 해당 문서가 없음을 출력합니다.
+        print('querySnapshot5 ID 문서가 없습니다.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -255,11 +245,6 @@ class _RotaryListState extends State<RotaryList> {
                 onTap: () async {
                   // 활성화 시키면 bar 가 바뀜 데이터 클릭시마다
                   CarListAdress = CARLIST + formatTodayDate();
-                  print(CarListAdress);
-                  print(CarListAdress);
-                  print(CarListAdress);
-                  print(CarListAdress);
-
                   var document = docs[index];
                   dataId = document.id;
                   name = docs[index]['name'];
@@ -275,10 +260,7 @@ class _RotaryListState extends State<RotaryList> {
                   remainTime = getRemainTime(dateTime);
                   dataAdress = CheckLocation(location); //파이어베이스 데이터주소
 
-                  print('데이터 주소 : $dataAdress');
-                  print('sdsdsdsdsdsddID: $dataId');
                   String getMovingTime = getTodayTime();
-                  print(getMovingTime);
 
                   showDialog(
                     context: context,
@@ -356,8 +338,6 @@ class _RotaryListState extends State<RotaryList> {
                               fontWeight: FontWeight.w500, fontSize: 18),
                         ),
                         onPressed: () async {
-
-
                           try {
                             await FirebaseFirestore.instance
                                 .collection(dataAdress) // 컬렉션 이름을 지정하세요

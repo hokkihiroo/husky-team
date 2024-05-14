@@ -64,11 +64,6 @@ class _OrganizationState extends State<Organization> {
                             }
                             final docs = snapshot.data!.docs;
 
-                            docs.forEach((doc) {
-                              print('Document ID: ${doc.id}');
-                              print(doc.data()); // 각 문서의 데이터를 출력
-                            });
-
                             return ListView.builder(
                               shrinkWrap: true,
                               // 리스트뷰가 컨테이너의 크기에 맞게 축소될 수 있도록 설정
@@ -82,7 +77,6 @@ class _OrganizationState extends State<Organization> {
                                   onTap: () async {
                                     var document = docs[index];
                                     mansID = document.id;
-                                    print(mansID);
                                     Map<String, dynamic> userData =
                                         await getData(mansID);
                                     Timestamp timestamp = userData['enterDay'];
@@ -260,7 +254,6 @@ Future<Map<String, dynamic>> getData(String documentId) async {
     if (documentSnapshot.exists) {
       Map<String, dynamic> data = documentSnapshot.data()!;
       if (data != null) {
-        print(data);
         return data;
       } else {
         print('문서 데이터가 null입니다.');
