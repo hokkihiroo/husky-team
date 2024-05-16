@@ -99,6 +99,7 @@ void main() async {
 
   }
 
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (!kIsWeb) {
     await setupFlutterNotifications();
