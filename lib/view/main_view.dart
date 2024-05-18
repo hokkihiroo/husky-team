@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/1insa/Insa.dart';
 import 'package:team_husky/3notice/notication.dart';
 import 'package:team_husky/layout/default_layout.dart';
-import 'package:team_husky/notification.dart';
 import '../2car_management_system/car_mainview.dart';
 import '../5mypage/mypage.dart';
 
@@ -34,7 +33,6 @@ class _MainViewState extends State<MainView>
 
     controller = TabController(length: 5, vsync: this);
     controller.addListener(tabListner);
-
   }
 
   @override
@@ -61,15 +59,15 @@ class _MainViewState extends State<MainView>
           CarManagementSystem(
             name: widget.name,
           ),
-          Center(
-            child: Text(
-              '개발중입니다',
-              style: TextStyle(
-                fontSize: 40,
-              ),
-            ),
-          ),
-          //Notication(),
+          // Center(
+          //   child: Text(
+          //     '개발중입니다',
+          //     style: TextStyle(
+          //       fontSize: 40,
+          //     ),
+          //   ),
+          // ),
+          Notication(),
           Center(
             child: Text(
               '개발중입니다',
