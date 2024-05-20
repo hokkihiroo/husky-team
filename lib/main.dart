@@ -81,18 +81,10 @@ void main() async {
   );
   PushNotication.Init();
   if (Platform.isIOS) {
-    print('아이폰진입');
     PushNotication.IosToken();
-    print('아이폰끝');
-
   } else {
-    print('안드로이드 진입');
-
      PushNotication.AndroidToken();
-    print('안드로이드끝');
-
   }
-
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (!kIsWeb) {
