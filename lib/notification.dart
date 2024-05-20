@@ -51,40 +51,43 @@ class PushNotication {
 
   static Future<void> sendPushMessage(
       {required String title, required String message}) async {
+    final sender ='990003848885';
+    final serverkey ='f6ba5dabeff2c1ed29548d8b46c2573ba1935f5c';
+
     final jsonCredentials =
-        await rootBundle.loadString('assets/data/auth.json');
+    await rootBundle.loadString('asset/data/auth.json');
     final creds =
-        await auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+    await auth.ServiceAccountCredentials.fromJson(jsonCredentials);
     final client = await auth.clientViaServiceAccount(
         creds, ['https://www.googleapis.com/auth/cloud-platform']);
 
     String constructFCMPayload(String? token) {
       _messageCount++;
       return jsonEncode({
-        'token': token,
-        'data': {
-          'via': 'FlutterFire Cloud Messaging!!!',
-          'count': _messageCount.toString(),
-        },
-        'notification': {
-          'title': 'Hello FlutterFire!',
-          'body': 'This notification (#$_messageCount) was created via FCM!',
+        'message': {
+          'token': token,
+          'data': {
+            'via': 'FlutterFire Cloud Messaging!!!',
+            'count': _messageCount.toString(),
+            'title': 'Hello FlutterFire!',
+            'body': 'This notification (#$_messageCount) was created via FCM!',
+          },
         },
       });
     }
+
 
     if (token == null) {
       print('Unable to send FCM message, no token exists.');
       return;
     }
 
-    final response = await http.post(
+    final response = await client.post(
       Uri.parse(
-          'https://fcm.googleapis.com/v1/projects/990003848885/messages:send'),
+          'https://fcm.googleapis.com/v1/projects/$sender/messages:send'),
       // 발신자아이디
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'key=SERVER_KEY', // Firebase 프로젝트의 서버 키
       },
       body: constructFCMPayload(token),
     );
@@ -96,6 +99,9 @@ class PushNotication {
     } else {
       print(response.statusCode);
       print(response.reasonPhrase);
+      print('문제가뭐야');
+      print('문제가뭐야');
+      print('문제가뭐야');
       print(response.body);
     }
   }
