@@ -71,6 +71,7 @@ class PushNotication {
             'count': _messageCount.toString(),
             'title': 'Hello FlutterFire!',
             'body': 'This notification (#$_messageCount) was created via FCM!',
+            'action': 'gongji',
           },
         },
       });
