@@ -64,14 +64,11 @@ class PushNotication {
       return jsonEncode({
         'message': {
           'token': token,
-          'data': {
-            'via': 'FlutterFire Cloud Messaging!!!',
-            'count': _messageCount.toString(),
-            'title': '$title',
+          'notification': {
             'body': '$message',
-            'action': 'gongji',
-          },
-        },
+            'title': '$title',
+          }
+        }
       });
     }
 
