@@ -90,6 +90,7 @@ void main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
+  FirebaseMessaging.onMessage.listen(showFlutterNotification);
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,

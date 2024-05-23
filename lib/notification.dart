@@ -51,13 +51,11 @@ class PushNotication {
 
   static Future<void> sendPushMessage(
       {required String title, required String message}) async {
-    final sender ='990003848885';
-    final serverkey ='f6ba5dabeff2c1ed29548d8b46c2573ba1935f5c';
-
-    final jsonCredentials =
-    await rootBundle.loadString('asset/data/auth.json');
+    final sender = '990003848885';
+    //final serverkey ='f6ba5dabeff2c1ed29548d8b46c2573ba1935f5c';
+    final jsonCredentials = await rootBundle.loadString('asset/data/auth.json');
     final creds =
-    await auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+        await auth.ServiceAccountCredentials.fromJson(jsonCredentials);
     final client = await auth.clientViaServiceAccount(
         creds, ['https://www.googleapis.com/auth/cloud-platform']);
 
@@ -69,14 +67,13 @@ class PushNotication {
           'data': {
             'via': 'FlutterFire Cloud Messaging!!!',
             'count': _messageCount.toString(),
-            'title': 'Hello FlutterFire!',
-            'body': 'This notification (#$_messageCount) was created via FCM!',
+            'title': '$title',
+            'body': '$message',
             'action': 'gongji',
           },
         },
       });
     }
-
 
     if (token == null) {
       print('Unable to send FCM message, no token exists.');
@@ -84,8 +81,7 @@ class PushNotication {
     }
 
     final response = await client.post(
-      Uri.parse(
-          'https://fcm.googleapis.com/v1/projects/$sender/messages:send'),
+      Uri.parse('https://fcm.googleapis.com/v1/projects/$sender/messages:send'),
       // 발신자아이디
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
