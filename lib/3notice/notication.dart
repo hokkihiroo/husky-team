@@ -12,7 +12,7 @@ class Notication extends StatelessWidget {
         child: TextButton(
           onPressed: () {
 
-            PushNotication.sendPushMessage(title: '공지가 ', message: '등록됨요');
+            PushNotication.sendPushMessage(title: '팀허스키 ', message: '공지가 등록되었습둥');
 
 
           },

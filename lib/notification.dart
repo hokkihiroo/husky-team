@@ -52,7 +52,6 @@ class PushNotication {
   static Future<void> sendPushMessage(
       {required String title, required String message}) async {
     final sender = '990003848885';
-    //final serverkey ='f6ba5dabeff2c1ed29548d8b46c2573ba1935f5c';
     final jsonCredentials = await rootBundle.loadString('asset/data/auth.json');
     final creds =
         await auth.ServiceAccountCredentials.fromJson(jsonCredentials);
@@ -60,10 +59,13 @@ class PushNotication {
         creds, ['https://www.googleapis.com/auth/cloud-platform']);
 
     String constructFCMPayload(String? token) {
+
       _messageCount++;
       return jsonEncode({
         'message': {
-          'token': token,
+       //  'token': 'dNyWjRBAAkyqqWXkA5ZuIi:APA91bGFvPJ3d48Z98jhXh8ku0Q87fPVMfY_SHdr3R1neNH8cLbwU1gtRxkrCG2hrgyPV0OBM1DNTnMEKXKxYjsrOjhrnBngZm7uVe3E5tK3uKmu6aMfIVVECbPnk4Bp_aGVWmGfic5-',
+       //   'token': token,
+          'topic': 'allDevices', // 모든 기기에 메시지를 전송
           'notification': {
             'body': '$message',
             'title': '$title',
@@ -93,9 +95,6 @@ class PushNotication {
     } else {
       print(response.statusCode);
       print(response.reasonPhrase);
-      print('문제가뭐야');
-      print('문제가뭐야');
-      print('문제가뭐야');
       print(response.body);
     }
   }
