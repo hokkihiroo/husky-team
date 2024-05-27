@@ -64,7 +64,7 @@ class PushNotication {
       return jsonEncode({
         'message': {
        //  'token': 'dNyWjRBAAkyqqWXkA5ZuIi:APA91bGFvPJ3d48Z98jhXh8ku0Q87fPVMfY_SHdr3R1neNH8cLbwU1gtRxkrCG2hrgyPV0OBM1DNTnMEKXKxYjsrOjhrnBngZm7uVe3E5tK3uKmu6aMfIVVECbPnk4Bp_aGVWmGfic5-',
-       //   'token': token,
+          //'token': token,
           'topic': 'allDevices', // 모든 기기에 메시지를 전송
           'notification': {
             'body': '$message',

@@ -86,7 +86,7 @@ void main() async {
      PushNotication.AndroidToken();
   }
 
-  await FirebaseMessaging.instance.subscribeToTopic('allDevices');
+  FirebaseMessaging.instance.subscribeToTopic('allDevices');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (!kIsWeb) {
     await setupFlutterNotifications();
