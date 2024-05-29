@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/1insa/Insa.dart';
-import 'package:team_husky/3notice/notication.dart';
+import 'package:team_husky/3notice/gongji.dart';
 import 'package:team_husky/layout/default_layout.dart';
 import '../2car_management_system/car_mainview.dart';
 import '../5mypage/mypage.dart';

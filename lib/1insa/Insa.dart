@@ -116,7 +116,6 @@ class _OrganizationState extends State<Organization> {
         });
   }
 
-  // String userName = userName['name'];
 
   Widget viewInsa(
     Map<String, dynamic> data,
