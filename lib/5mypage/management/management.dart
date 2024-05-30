@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/2moveInsa.dart';
+import 'package:team_husky/5mypage/management/manegement/3manageGongji.dart';
 
 import 'manegement/1makeTeam.dart';
 
@@ -61,6 +62,24 @@ class _ManagementState extends State<Management> {
               );
             },
             child: Text('인사이동 / 직위,포지션 변경'),
+          ),
+          SizedBox(height: 10,),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+
+              minimumSize: Size(double.infinity, 50),
+            ),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return ManageGongji();
+                }),
+              );
+            },
+            child: Text('공지사항관리'),
           ),
         ],
       ),

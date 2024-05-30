@@ -18,7 +18,7 @@ class _NoticationState extends State<Notication> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection(GONGJI)
-        //  .orderBy('createdAt', descending: true)
+          .orderBy('createdAt', descending: true)
           .snapshots(),
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -49,5 +49,4 @@ class _NoticationState extends State<Notication> {
   }
 }
 
-// PushNotication.sendPushMessage(
-// title: '팀허스키 ', message: '공지가 등록되었습둥');
+
