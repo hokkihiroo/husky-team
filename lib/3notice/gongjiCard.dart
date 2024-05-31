@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class GongjiCard extends StatelessWidget {
   final String subject;
-  final String writer;
+  final String date;
 
-  const GongjiCard({super.key, required this.subject, required this.writer});
+  const GongjiCard({super.key, required this.subject, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +32,22 @@ class GongjiCard extends StatelessWidget {
                 subject,
                 style: TextStyle(
                   letterSpacing: 1.5,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal,
                   color: Colors.black87,
                 ),
               ),
               SizedBox(
-                height: 8, // Reduced height of the SizedBox
+                height: 4, // Reduced height of the SizedBox
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: Container()),
-                  // This will push the writer to the right
-                  Text(
-                    '-$writer-',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
+              Text(
+                date, // 여기에 원하는 날짜를 넣으세요.
+                style: TextStyle(
+                  letterSpacing: 1.5,
+                  fontSize: 14, // 크기를 더 작게 조정
+                  fontWeight: FontWeight.normal, // 일반 굵기로 변경 (필요시)
+                  color: Colors.blueGrey, // 회색으로 변경
+                ),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:team_husky/3notice/Address.dart';
 import 'package:team_husky/3notice/gongjiCard.dart';
 
@@ -13,6 +14,8 @@ class Notication extends StatefulWidget {
 }
 
 class _NoticationState extends State<Notication> {
+  String formattedDate = '';
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -32,13 +35,16 @@ class _NoticationState extends State<Notication> {
         return ListView.builder(
           itemCount: docs.length,
           itemBuilder: (context, index) {
+            Timestamp timestamp = docs[index]['createdAt'];
+            DateTime date = timestamp.toDate();
+            formattedDate = DateFormat('yyyy.MM.dd').format(date);
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsets.only(bottom: 6),
                 child: GongjiCard(
                   subject: docs[index]['subject'],
-                  writer: docs[index]['writer'],
+                  date: formattedDate,
                 ),
               ),
             );
@@ -48,5 +54,3 @@ class _NoticationState extends State<Notication> {
     );
   }
 }
-
-
