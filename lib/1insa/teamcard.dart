@@ -33,8 +33,8 @@ class BuildingCard extends StatelessWidget {
             // ClipOval로 이미지를 감싸서 원형으로 잘라냄
             ClipOval(
               child: Container(
-                height: 60, // 이미지의 높이를 조정, 필요에 따라 조절
-                width: 60, // 이미지의 너비를 조정, 필요에 따라 조절
+                height: 40, // 이미지의 높이를 조정, 필요에 따라 조절
+                width: 40, // 이미지의 너비를 조정, 필요에 따라 조절
                 child: image,
               ),
             ),

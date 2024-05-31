@@ -40,14 +40,28 @@ class GongjiCard extends StatelessWidget {
               SizedBox(
                 height: 4, // Reduced height of the SizedBox
               ),
-              Text(
-                date, // 여기에 원하는 날짜를 넣으세요.
-                style: TextStyle(
-                  letterSpacing: 1.5,
-                  fontSize: 14, // 크기를 더 작게 조정
-                  fontWeight: FontWeight.normal, // 일반 굵기로 변경 (필요시)
-                  color: Colors.blueGrey, // 회색으로 변경
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    date, // 여기에 원하는 날짜를 넣으세요.
+                    style: TextStyle(
+                      letterSpacing: 1.5,
+                      fontSize: 14, // 크기를 더 작게 조정
+                      fontWeight: FontWeight.normal, // 일반 굵기로 변경 (필요시)
+                      color: Colors.blueGrey, // 회색으로 변경
+                    ),
+                  ),
+                  Text(
+                    '>', // 여기에 원하는 날짜를 넣으세요.
+                    style: TextStyle(
+                      letterSpacing: 1.5,
+                      fontSize: 14, // 크기를 더 작게 조정
+                      fontWeight: FontWeight.normal, // 일반 굵기로 변경 (필요시)
+                      color: Colors.blueGrey, // 회색으로 변경
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
