@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:team_husky/3notice/Address.dart';
 import 'package:team_husky/3notice/gongjiCard.dart';
+import 'package:team_husky/3notice/gongji_detail.dart';
 
 import '../notification.dart';
 
@@ -42,9 +43,17 @@ class _NoticationState extends State<Notication> {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 6),
-                child: GongjiCard(
-                  subject: docs[index]['subject'],
-                  date: formattedDate,
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GongjiDetail()),
+                    );
+                  },
+                  child: GongjiCard(
+                    subject: docs[index]['subject'],
+                    date: formattedDate,
+                  ),
                 ),
               ),
             );
