@@ -69,6 +69,7 @@ class _ManageGongjiState extends State<ManageGongji> {
                     });
                   },
                   hintText: '내용',
+                  maxLines: 10,
                 ),
                 SizedBox(
                   height: 20,
