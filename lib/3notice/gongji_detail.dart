@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
-class GongjiDetail extends StatefulWidget {
-  const GongjiDetail({super.key});
+class GongjiDetail extends StatelessWidget {
+  final String writer;
+  final String formattedDate;
+  final String contents;
+  final String subject;
 
-  @override
-  State<GongjiDetail> createState() => _GongjiDetailState();
-}
+  GongjiDetail({
+    super.key,
+    required this.writer,
+    required this.formattedDate,
+    required this.contents,
+    required this.subject,
+  });
 
-class _GongjiDetailState extends State<GongjiDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +31,65 @@ class _GongjiDetailState extends State<GongjiDetail> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  subject,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '작성시각: $formattedDate',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '작성자: $writer',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Divider(color: Colors.grey[400]),
+              SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  contents,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

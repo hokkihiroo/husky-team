@@ -16,6 +16,10 @@ class Notication extends StatefulWidget {
 
 class _NoticationState extends State<Notication> {
   String formattedDate = '';
+  String writer = '';
+  String docId = '';
+  String contents = '';
+  String subject = '';
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +48,21 @@ class _NoticationState extends State<Notication> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
+                    writer = docs[index]['writer'];
+                    docId = docs[index]['docId'];
+                    contents = docs[index]['contents'];
+                    subject = docs[index]['subject'];
+                    Timestamp timestamp = docs[index]['createdAt'];
+                    DateTime date = timestamp.toDate();
+                    formattedDate = DateFormat('yyyy.MM.dd').format(date);
+
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => GongjiDetail()),
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            GongjiDetail(writer: writer, formattedDate: formattedDate, contents: contents, subject: subject,),
+                      ),
                     );
                   },
                   child: GongjiCard(
