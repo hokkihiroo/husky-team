@@ -96,6 +96,7 @@ class _Team1ViewState extends State<Team1View> {
                 onPressed: () {
                   CarListAdress = CARLIST + formatTodayDate();
                   print(CarListAdress);
+                  carNumber='0000';
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -174,13 +175,115 @@ class _Team1ViewState extends State<Team1View> {
                               ),
                               Expanded(
                                 child: ElevatedButton(
+                                    onPressed: () async{
+                                      String documentId = FirebaseFirestore.instance
+                                          .collection(LOTARY)
+                                          .doc()
+                                          .id;
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(LOTARY)
+                                            .doc(documentId)
+                                            .set({
+                                          'carNumber': carNumber,
+                                          'name': '',
+                                          'createdAt': FieldValue.serverTimestamp(),
+                                          'location': 0,
+                                          'color': 1,
+                                          'etc': '직원',
+                                          'movedLocation': '로터리',
+                                          'wigetName': '',
+                                          'movingTime': '',
+                                        });
+                                      } catch (e) {}
+
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(CarListAdress)
+                                            .doc(documentId)
+                                            .set({
+                                          'carNumber': carNumber,
+                                          'enterName': widget.name,
+                                          'enter': FieldValue.serverTimestamp(),
+                                          'out': '',
+                                          'outName': '',
+                                          'outLocation': 5,
+                                          'etc': '직원',
+                                          'movedLocation': '',
+                                          'wigetName': '',
+                                          'movingTime': '',
+                                        });
+                                      } catch (e) {}
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('직원')),
+                              ),
+
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    String documentId = FirebaseFirestore.instance
+                                        .collection(LOTARY)
+                                        .doc()
+                                        .id;
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(LOTARY)
+                                          .doc(documentId)
+                                          .set({
+                                        'carNumber': carNumber,
+                                        'name': '',
+                                        'createdAt': FieldValue.serverTimestamp(),
+                                        'location': 0,
+                                        'color': 1,
+                                        'etc': '작업차량',
+                                        'movedLocation': '로터리',
+                                        'wigetName': '',
+                                        'movingTime': '',
+                                      });
+                                    } catch (e) {}
+
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(CarListAdress)
+                                          .doc(documentId)
+                                          .set({
+                                        'carNumber': carNumber,
+                                        'enterName': widget.name,
+                                        'enter': FieldValue.serverTimestamp(),
+                                        'out': '',
+                                        'outName': '',
+                                        'outLocation': 5,
+                                        'etc': '작업차량',
+                                        'movedLocation': '',
+                                        'wigetName': '',
+                                        'movingTime': '',
+                                      });
+                                    } catch (e) {}
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('작업'),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: ElevatedButton(
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
                                     child: Text('취소')),
                               ),
+
                             ],
                           ),
+
                         ],
                       );
                     },
