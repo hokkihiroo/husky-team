@@ -5,7 +5,8 @@ import 'package:team_husky/notification.dart';
 import 'package:team_husky/user/custom_text_form.dart';
 
 class ManageGongji extends StatefulWidget {
-  const ManageGongji({super.key});
+  String name ='';
+   ManageGongji({super.key,required this.name});
 
   @override
   State<ManageGongji> createState() => _ManageGongjiState();
@@ -22,7 +23,6 @@ class _ManageGongjiState extends State<ManageGongji> {
     }
   }
 
-  String name = '염호경';     // 내이름
   String subject = '';  // 제목
   String contents = ''; // 내용
 
@@ -103,7 +103,7 @@ class _ManageGongjiState extends State<ManageGongji> {
                                 .collection(GONGJI)
                                 .doc(documentId)
                                 .set({
-                              'writer': name,
+                              'writer': widget.name,
                               'subject': subject,
                               'createdAt': FieldValue.serverTimestamp(),
                               'docId' : documentId,

@@ -59,7 +59,7 @@ class MyPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return Management();
+                        return Management(name: name,);
                       }),
                     );
                   }

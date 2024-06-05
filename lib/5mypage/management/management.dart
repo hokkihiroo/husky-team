@@ -5,7 +5,8 @@ import 'package:team_husky/5mypage/management/manegement/3manageGongji.dart';
 import 'manegement/1makeTeam.dart';
 
 class Management extends StatefulWidget {
-  const Management({super.key});
+  String name ='';
+   Management({super.key,required this.name,});
 
   @override
   State<Management> createState() => _ManagementState();
@@ -75,7 +76,7 @@ class _ManagementState extends State<Management> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return ManageGongji();
+                  return ManageGongji(name: widget.name,);
                 }),
               );
             },

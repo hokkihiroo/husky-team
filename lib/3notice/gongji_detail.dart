@@ -52,7 +52,7 @@ class GongjiDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '작성시각: $formattedDate',
+                    '작성일: $formattedDate',
                     style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.grey[600],
