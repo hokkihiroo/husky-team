@@ -66,8 +66,6 @@ class PushNotication {
           'notification': {
             'body': '$message',
             'title': '$title',
-            "sound": "default"
-
           }
         }
       });
