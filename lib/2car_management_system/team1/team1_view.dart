@@ -87,104 +87,107 @@ class _Team1ViewState extends State<Team1View> {
           ),
           Expanded(
             flex: 3,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-              ),
-              onPressed: () {
-                CarListAdress = CARLIST + formatTodayDate();
-                print(CarListAdress);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                        '입차번호',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
-                      ),
-                      actions: [
-                        TextField(
-                          keyboardType: TextInputType.number,
-                          autofocus: true,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                          ],
-                          maxLength: 4,
-                          decoration: InputDecoration(
-                            hintText: '입차번호를 입력해주세요',
-                          ),
-                          onChanged: (value) {
-                            carNumber = value;
-                          },
+            child: SizedBox(
+              height: 100,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
+                ),
+                onPressed: () {
+                  CarListAdress = CARLIST + formatTodayDate();
+                  print(CarListAdress);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          '입차번호',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  String documentId = FirebaseFirestore.instance
-                                      .collection(LOTARY)
-                                      .doc()
-                                      .id;
-                                  try {
-                                    await FirebaseFirestore.instance
+                        actions: [
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            autofocus: true,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                            ],
+                            maxLength: 4,
+                            decoration: InputDecoration(
+                              hintText: '입차번호를 입력해주세요',
+                            ),
+                            onChanged: (value) {
+                              carNumber = value;
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    String documentId = FirebaseFirestore.instance
                                         .collection(LOTARY)
-                                        .doc(documentId)
-                                        .set({
-                                      'carNumber': carNumber,
-                                      'name': '',
-                                      'createdAt': FieldValue.serverTimestamp(),
-                                      'location': 0,
-                                      'color': 1,
-                                      'etc': '',
-                                      'movedLocation': '로터리',
-                                      'wigetName': '',
-                                      'movingTime': '',
-                                    });
-                                  } catch (e) {}
+                                        .doc()
+                                        .id;
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(LOTARY)
+                                          .doc(documentId)
+                                          .set({
+                                        'carNumber': carNumber,
+                                        'name': '',
+                                        'createdAt': FieldValue.serverTimestamp(),
+                                        'location': 0,
+                                        'color': 1,
+                                        'etc': '',
+                                        'movedLocation': '로터리',
+                                        'wigetName': '',
+                                        'movingTime': '',
+                                      });
+                                    } catch (e) {}
 
-                                  try {
-                                    await FirebaseFirestore.instance
-                                        .collection(CarListAdress)
-                                        .doc(documentId)
-                                        .set({
-                                      'carNumber': carNumber,
-                                      'enterName': widget.name,
-                                      'enter': FieldValue.serverTimestamp(),
-                                      'out': '',
-                                      'outName': '',
-                                      'outLocation': 5,
-                                      'etc': '',
-                                      'movedLocation': '',
-                                      'wigetName': '',
-                                      'movingTime': '',
-                                    });
-                                  } catch (e) {}
-                                  Navigator.pop(context);
-                                },
-                                child: Text('입력'),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: ElevatedButton(
-                                  onPressed: () {
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(CarListAdress)
+                                          .doc(documentId)
+                                          .set({
+                                        'carNumber': carNumber,
+                                        'enterName': widget.name,
+                                        'enter': FieldValue.serverTimestamp(),
+                                        'out': '',
+                                        'outName': '',
+                                        'outLocation': 5,
+                                        'etc': '',
+                                        'movedLocation': '',
+                                        'wigetName': '',
+                                        'movingTime': '',
+                                      });
+                                    } catch (e) {}
                                     Navigator.pop(context);
                                   },
-                                  child: Text('취소')),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('ENTER'),
+                                  child: Text('입력'),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('취소')),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('ENTER'),
+              ),
             ),
           ),
           SizedBox(
@@ -192,20 +195,23 @@ class _Team1ViewState extends State<Team1View> {
           ),
           Expanded(
             flex: 1,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CarList(),
-                  ),
-                );
-              },
-              child: Icon(
-                Icons.description_outlined,
+            child: SizedBox(
+              height: 100,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CarList(),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.description_outlined,
+                ),
               ),
             ),
           ),

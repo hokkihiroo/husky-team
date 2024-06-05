@@ -42,93 +42,98 @@ class _ManageGongjiState extends State<ManageGongji> {
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Container(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: Column(
-                children: [
-                  CustomTextForm(
-                    key: ValueKey(1),
-                    onSaved: (val) {
-                      setState(() {
-                        subject = val!;
-                      });
-                    },
-                    hintText: '제목',
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  CustomTextForm(
-                    key: ValueKey(2),
-                    onSaved: (val) {
-                      setState(() {
-                        contents = val!;
-                      });
-                    },
-                    hintText: '내용',
-                    maxLines: 10,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.brown),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '돌아가기',
-                          style: TextStyle(
-                            color: Colors.white,
+      body: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                child: Column(
+                  children: [
+                    CustomTextForm(
+                      key: ValueKey(1),
+                      onSaved: (val) {
+                        setState(() {
+                          subject = val!;
+                        });
+                      },
+                      hintText: '제목',
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    CustomTextForm(
+                      key: ValueKey(2),
+                      onSaved: (val) {
+                        setState(() {
+                          contents = val!;
+                        });
+                      },
+                      hintText: '내용',
+                      maxLines: 10,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(primary: Colors.brown),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '돌아가기',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.black),
-                        onPressed: () async {
-                          _tryValidation();
-                          String documentId = FirebaseFirestore.instance
-                              .collection(GONGJI)
-                              .doc()
-                              .id;
-                          try {
-                            await FirebaseFirestore.instance
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(primary: Colors.black),
+                          onPressed: () async {
+                            _tryValidation();
+                            String documentId = FirebaseFirestore.instance
                                 .collection(GONGJI)
-                                .doc(documentId)
-                                .set({
-                              'writer': widget.name,
-                              'subject': subject,
-                              'createdAt': FieldValue.serverTimestamp(),
-                              'docId' : documentId,
-                              'contents' : contents,
+                                .doc()
+                                .id;
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(GONGJI)
+                                  .doc(documentId)
+                                  .set({
+                                'writer': widget.name,
+                                'subject': subject,
+                                'createdAt': FieldValue.serverTimestamp(),
+                                'docId' : documentId,
+                                'contents' : contents,
 
-                            });
-                            //알람울려달라고 서버로 던짐
-                            PushNotication.sendPushMessage(
-                                title: '팀허스키 ',
-                                message: '공지가 등록되었습니다.');
-                          } catch (e) {
-                            print(e);
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '공지작성',
-                          style: TextStyle(
-                            color: Colors.white,
+                              });
+                              //알람울려달라고 서버로 던짐
+                              PushNotication.sendPushMessage(
+                                  title: '팀허스키 ',
+                                  message: '공지가 등록되었습니다.');
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '공지작성',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
