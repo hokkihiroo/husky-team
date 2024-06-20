@@ -151,6 +151,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   return ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
+                      SizedBox(width: 4,),
                       Row(
                         children: [
                           Container(
@@ -193,9 +194,9 @@ class _SchedulePageState extends State<SchedulePage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    getWeekday(day),
+                                    '$day',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 12, // Adjusted font size
                                       color: isHoliday(day)
                                           ? Colors.blue
                                           : getWeekdayColor(day),
@@ -203,9 +204,9 @@ class _SchedulePageState extends State<SchedulePage> {
                                   ),
                                   SizedBox(height: 7.0),
                                   Text(
-                                    '$day',
+                                    getWeekday(day),
                                     style: TextStyle(
-                                      fontSize: 12, // Adjusted font size
+                                      fontSize: 12,
                                       color: isHoliday(day)
                                           ? Colors.blue
                                           : getWeekdayColor(day),
