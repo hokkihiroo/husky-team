@@ -170,7 +170,7 @@ class _SchedulePageState extends State<SchedulePage> {
                           ),
                           for (var day in days)
                             Container(
-                              width: MediaQuery.of(context).size.width / 16,
+                              width: MediaQuery.of(context).size.width / 17,
                               padding: EdgeInsets.all(3.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
