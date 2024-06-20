@@ -6,8 +6,6 @@ import 'package:team_husky/1insa/InsaCard.dart';
 import 'package:team_husky/1insa/newSchedule/newSchedule.dart';
 import 'package:team_husky/1insa/teamcard.dart';
 
-import 'schdule/Schedule.dart';
-
 class Organization extends StatefulWidget {
   const Organization({super.key});
 
@@ -51,8 +49,7 @@ class _OrganizationState extends State<Organization> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    SchedulePage(),
+                                builder: (context) => SchedulePage(),
                               ),
                             );
                           },
