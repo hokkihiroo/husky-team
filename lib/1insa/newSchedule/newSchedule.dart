@@ -214,7 +214,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                   SizedBox(height: 4.0),
                                   for (var schedule in schedules)
                                     Text(
-                                      '${schedule['date']}',
+                                      '${schedule['$day']}',
                                       style: TextStyle(
                                         fontSize: 12, // Adjusted font size
                                       ),
