@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:team_husky/firebase_options.dart';
 import 'package:team_husky/notification.dart';
 import 'package:team_husky/view/splash_screen.dart';
@@ -75,6 +76,7 @@ void showFlutterNotification(RemoteMessage message) {
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 void main() async {
+  await initializeDateFormatting('ko_KR', null);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -83,7 +85,7 @@ void main() async {
   if (Platform.isIOS) {
     PushNotication.IosToken();
   } else {
-     PushNotication.AndroidToken();
+    PushNotication.AndroidToken();
   }
 
   FirebaseMessaging.instance.subscribeToTopic('allDevices');

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/1insa/InsaCard.dart';
+import 'package:team_husky/1insa/newSchedule/newSchedule.dart';
 import 'package:team_husky/1insa/teamcard.dart';
+
+import 'schdule/Schedule.dart';
 
 class Organization extends StatefulWidget {
   const Organization({super.key});
@@ -43,10 +46,21 @@ class _OrganizationState extends State<Organization> {
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Column(
                       children: [
-                        BuildingCard(
-                          image: Image.asset(docs[index]['image']),
-                          name: docs[index]['name'],
-                          position: docs[index]['position'],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SchedulePage(),
+                              ),
+                            );
+                          },
+                          child: BuildingCard(
+                            image: Image.asset(docs[index]['image']),
+                            name: docs[index]['name'],
+                            position: docs[index]['position'],
+                          ),
                         ),
                         StreamBuilder(
                           stream: FirebaseFirestore.instance
@@ -67,15 +81,18 @@ class _OrganizationState extends State<Organization> {
                             // 바뀐 부분: ListView 대신 Column을 사용하여 하위 컬렉션의 데이터를 표시
                             return Column(
                               children: subDocs.map((subDoc) {
-                                var data = subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
+                                var data =
+                                    subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
                                 return GestureDetector(
                                   onTap: () async {
                                     var document = subDoc;
                                     mansID = document.id;
-                                    Map<String, dynamic> userData = await getData(mansID);
+                                    Map<String, dynamic> userData =
+                                        await getData(mansID);
                                     Timestamp timestamp = userData['enterDay'];
                                     DateTime dateTime = timestamp.toDate();
-                                    formattedDate = DateFormat('yy/MM/dd').format(dateTime);
+                                    formattedDate =
+                                        DateFormat('yy/MM/dd').format(dateTime);
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -90,8 +107,10 @@ class _OrganizationState extends State<Organization> {
                                     image: data['image'] != null
                                         ? Image.asset(data['image'])
                                         : Icon(Icons.image_outlined),
-                                    name: data['name'] ?? '', // 이름이 널인 경우 빈 문자열 사용
-                                    grade: data['grade'] ?? '', // 포지션이 널인 경우 빈 문자열 사용
+                                    name: data['name'] ?? '',
+                                    // 이름이 널인 경우 빈 문자열 사용
+                                    grade: data['grade'] ?? '',
+                                    // 포지션이 널인 경우 빈 문자열 사용
                                     position: data['position'] ?? '',
                                   ),
                                 );
@@ -106,7 +125,6 @@ class _OrganizationState extends State<Organization> {
               });
         });
   }
-
 
   Widget viewInsa(
     Map<String, dynamic> data,

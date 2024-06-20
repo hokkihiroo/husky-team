@@ -29,6 +29,7 @@ class BuildingCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // ClipOval로 이미지를 감싸서 원형으로 잘라냄
             ClipOval(
@@ -54,6 +55,16 @@ class BuildingCard extends StatelessWidget {
                 letterSpacing: 3.0,
                 fontSize: 20,
                 fontWeight: FontWeight.w900,
+              ),
+            ),
+            Spacer(),
+            Text(
+              '>',
+              style: TextStyle(
+                letterSpacing: 3.0,
+                fontSize: 20,
+                fontWeight: FontWeight.w200,
+                color: Colors.grey.withOpacity(0.9), // 색상과 투명도 설정
               ),
             ),
           ],
