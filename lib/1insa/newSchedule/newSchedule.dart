@@ -170,23 +170,23 @@ class _SchedulePageState extends State<SchedulePage> {
                           ),
                           for (var day in days)
                             Container(
-                              width: MediaQuery.of(context).size.width / 17,
-                              padding: EdgeInsets.all(4.0),
+                              width: MediaQuery.of(context).size.width / 16,
+                              padding: EdgeInsets.all(3.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
                                     getWeekday(day),
                                     style: TextStyle(
-                                      fontSize: 13,
+                                      fontSize: 12,
                                       color: isHoliday(day) ? Colors.blue : getWeekdayColor(day),
                                     ),
                                   ),
-                                  SizedBox(height: 4.0),
+                                  SizedBox(height: 7.0),
                                   Text(
                                     '$day',
                                     style: TextStyle(
-                                      fontSize: 13, // Adjusted font size
+                                      fontSize: 12, // Adjusted font size
                                       color: isHoliday(day) ? Colors.blue : getWeekdayColor(day),
                                     ),
                                   ),
