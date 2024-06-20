@@ -178,7 +178,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                   Text(
                                     getWeekday(day),
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       color: isHoliday(day) ? Colors.blue : getWeekdayColor(day),
                                     ),
                                   ),
@@ -186,7 +186,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                   Text(
                                     '$day',
                                     style: TextStyle(
-                                      fontSize: 14, // Adjusted font size
+                                      fontSize: 13, // Adjusted font size
                                       color: isHoliday(day) ? Colors.blue : getWeekdayColor(day),
                                     ),
                                   ),
