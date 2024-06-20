@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:team_husky/1insa/newSchedule/nameCard.dart';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -88,7 +89,9 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final lastDay = DateTime(_currentYear, _currentMonth + 1, 0).day;
-    final days = _isFirstHalf ? List.generate(15, (index) => index + 1) : List.generate(lastDay - 15, (index) => index + 16);
+    final days = _isFirstHalf
+        ? List.generate(15, (index) => index + 1)
+        : List.generate(lastDay - 15, (index) => index + 16);
 
     return Scaffold(
       appBar: AppBar(
@@ -110,7 +113,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 ),
                 SizedBox(width: 4.0),
                 Text(
-                  '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상' : '하'}',
+                  '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 4.0),
@@ -125,8 +128,12 @@ class _SchedulePageState extends State<SchedulePage> {
           Expanded(
             child: SafeArea(
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('schedules').snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                stream: FirebaseFirestore.instance
+                    .collection('schedules')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -147,24 +154,34 @@ class _SchedulePageState extends State<SchedulePage> {
                       Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(4.0),
+                            padding: EdgeInsets.all(3.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '',
+                                  '    ',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                SizedBox(height: 7.0),
                                 Text(
-                                  '  이름',
+                                  '이름',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                SizedBox(height: 4.0),
+                                for (var schedule in schedules)
+                                  Text(
+                                    '${schedule['name']}',
+                                    style: TextStyle(
+                                      fontSize: 12, // Adjusted font size
+                                    ),
+                                  ),
+                                SizedBox(height: 4.0),
                               ],
                             ),
                           ),
@@ -179,7 +196,9 @@ class _SchedulePageState extends State<SchedulePage> {
                                     getWeekday(day),
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: isHoliday(day) ? Colors.blue : getWeekdayColor(day),
+                                      color: isHoliday(day)
+                                          ? Colors.blue
+                                          : getWeekdayColor(day),
                                     ),
                                   ),
                                   SizedBox(height: 7.0),
@@ -187,9 +206,19 @@ class _SchedulePageState extends State<SchedulePage> {
                                     '$day',
                                     style: TextStyle(
                                       fontSize: 12, // Adjusted font size
-                                      color: isHoliday(day) ? Colors.blue : getWeekdayColor(day),
+                                      color: isHoliday(day)
+                                          ? Colors.blue
+                                          : getWeekdayColor(day),
                                     ),
                                   ),
+                                  SizedBox(height: 4.0),
+                                  for (var schedule in schedules)
+                                    Text(
+                                      '${schedule['date']}',
+                                      style: TextStyle(
+                                        fontSize: 12, // Adjusted font size
+                                      ),
+                                    ),
                                   SizedBox(height: 4.0),
                                 ],
                               ),
