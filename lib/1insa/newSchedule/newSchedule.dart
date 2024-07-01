@@ -188,12 +188,17 @@ class _SchedulePageState extends State<SchedulePage> {
                                 ),
                                 SizedBox(height: 4.0),
                                 for (var schedule in schedules)
-                                  Text(
-                                    '${schedule['name']}',
-                                    style: TextStyle(
-                                      fontSize: 12, // Adjusted font size
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        '${schedule['name']}',
+                                        style: TextStyle(
+                                          fontSize: 12, // Adjusted font size
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5,),
+                                    ],
                                   ),
                                 SizedBox(height: 4.0),
                               ],
@@ -227,11 +232,17 @@ class _SchedulePageState extends State<SchedulePage> {
                                   ),
                                   SizedBox(height: 4.0),
                                   for (var schedule in schedules)
-                                    Text(
-                                      '${schedule['$day']}',
-                                      style: TextStyle(
-                                        fontSize: 12, // Adjusted font size
-                                      ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          '${schedule['$day']}',
+                                          style: TextStyle(
+                                            fontSize: 12, // Adjusted font size
+                                          ),
+                                        ),
+                                        SizedBox(height: 5,),
+
+                                      ],
                                     ),
                                   SizedBox(height: 4.0),
                                 ],

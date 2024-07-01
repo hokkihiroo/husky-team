@@ -16,6 +16,13 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   late int _currentMonth;
   late bool _isFirstHalf;
   int enter = 0; //스케줄에서 인원 추가할때 순서정하려고 만든숫자
+///////////////////////////////////////    개별업데이트시 필요한 내용
+  String scheduleDocument = '';               //스케줄별 문서이름
+  String scheduleTime = '';                   // 누른 날짜의 출근시각
+  String selectedDay = '';                    // 선택된 날짜
+  String selectedName = '';                   // 선택된 이름
+
+/////////////////////////////////////// 여기까지
 
   @override
   void initState() {
@@ -118,7 +125,9 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                 ),
                 SizedBox(width: 4.0),
                 Text(
-                  '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
+                  '$_currentYear년 $_currentMonth월 ${_isFirstHalf
+                      ? '상반기'
+                      : '하반기'}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 4.0),
@@ -139,10 +148,11 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                     .collection('schedule')
                     .doc('1EjNGZtze07iY1WJKyvh')
                     .collection('$_currentYear$_currentMonth')
+                    .orderBy('enter')
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
+                    snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -187,12 +197,19 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                 ),
                                 SizedBox(height: 4.0),
                                 for (var schedule in schedules)
-                                  Text(
-                                    '${schedule['name']}',
-                                    style: TextStyle(
-                                      fontSize: 12, // Adjusted font size
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        '${schedule['name']}',
+                                        style: TextStyle(
+                                          fontSize: 12, // Adjusted font size
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
                                   ),
                                 SizedBox(height: 4.0),
                               ],
@@ -200,7 +217,10 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                           ),
                           for (var day in days)
                             Container(
-                              width: MediaQuery.of(context).size.width / 17,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 17,
                               padding: EdgeInsets.all(3.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -226,18 +246,41 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                   ),
                                   SizedBox(height: 4.0),
                                   for (var schedule in schedules)
-                                    GestureDetector(
-                                      onTap: () {
-                                        // 여기에서 실행할 코드를 넣습니다.
-                                        print(
-                                            'Schedule tapped: ${schedule['$day']}');
-                                      },
-                                      child: Text(
-                                        '${schedule['$day']}',
-                                        style: TextStyle(
-                                          fontSize: 12, // Adjusted font size
+                                    Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            // 여기에서 실행할 코드를 넣습니다.
+                                            scheduleDocument = '${schedule.id}';
+                                            scheduleTime = '${schedule['$day']}';
+                                            selectedDay = '$day';
+                                            selectedName = '${schedule['name']}';
+                                            print('$_currentMonth월 이고');
+                                            print('문서이름은 $scheduleDocument');
+                                            print('출근시각은 $scheduleTime시');
+                                            print('날짜는 $selectedDay일');
+                                            print('이름은 $selectedName');
+
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return changeSchedule(
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Text(
+                                            '${schedule['$day']}',
+                                            style: TextStyle(
+                                              fontSize:
+                                              12, // Adjusted font size
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
                                     ),
                                   SizedBox(height: 4.0),
                                 ],
@@ -324,6 +367,148 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget changeSchedule() {
+    return AlertDialog(
+        title: Column(
+
+          children: [
+            ElevatedButton(
+                onPressed: ()async{
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('insa')
+                        .doc('${widget.teamId}')
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .doc('$scheduleDocument')
+                        .update({
+                      '$selectedDay': 8, // 업데이트할 필드와 값
+                    });
+                    print('문서 업데이트가 성공했습니다.');
+
+                    Navigator.pop(context);
+
+                  } catch (e) {
+                    print('문서 업데이트 오류: $e');
+                  }
+                },
+                child: Text('8시')),
+            ElevatedButton(
+                onPressed: ()async{
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('insa')
+                        .doc('${widget.teamId}')
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .doc('$scheduleDocument')
+                        .update({
+                      '$selectedDay': 9, // 업데이트할 필드와 값
+                    });
+                    print('문서 업데이트가 성공했습니다.');
+
+                    Navigator.pop(context);
+
+                  } catch (e) {
+                    print('문서 업데이트 오류: $e');
+                  }
+                },
+                child: Text('9시')),
+            ElevatedButton(
+                onPressed: ()async{
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('insa')
+                        .doc('${widget.teamId}')
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .doc('$scheduleDocument')
+                        .update({
+                      '$selectedDay': 10, // 업데이트할 필드와 값
+                    });
+                    print('문서 업데이트가 성공했습니다.');
+
+                    Navigator.pop(context);
+
+                  } catch (e) {
+                    print('문서 업데이트 오류: $e');
+                  }
+                },
+                child: Text('10시')),
+            ElevatedButton(
+                onPressed: ()async{
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('insa')
+                        .doc('${widget.teamId}')
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .doc('$scheduleDocument')
+                        .update({
+                      '$selectedDay': 11, // 업데이트할 필드와 값
+                    });
+                    print('문서 업데이트가 성공했습니다.');
+
+                    Navigator.pop(context);
+
+                  } catch (e) {
+                    print('문서 업데이트 오류: $e');
+                  }
+                },
+                child: Text('11시')),
+            ElevatedButton(
+                onPressed: ()async{
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('insa')
+                        .doc('${widget.teamId}')
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .doc('$scheduleDocument')
+                        .update({
+                      '$selectedDay': 12, // 업데이트할 필드와 값
+                    });
+                    print('문서 업데이트가 성공했습니다.');
+
+                    Navigator.pop(context);
+
+                  } catch (e) {
+                    print('문서 업데이트 오류: $e');
+                  }
+                },
+                child: Text('12시')),
+            ElevatedButton(
+                onPressed: ()async{
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('insa')
+                        .doc('${widget.teamId}')
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .doc('$scheduleDocument')
+                        .update({
+                      '$selectedDay': 'X', // 업데이트할 필드와 값
+                    });
+                    print('문서 업데이트가 성공했습니다.');
+
+                    Navigator.pop(context);
+
+                  } catch (e) {
+                    print('문서 업데이트 오류: $e');
+                  }
+                },
+                child: Text('X')),
+          ],
+        ),
     );
   }
 }
