@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/2moveInsa.dart';
 import 'package:team_husky/5mypage/management/manegement/3manageGongji.dart';
+import 'package:team_husky/5mypage/management/manegement/4scchedule/4schedule.dart';
 
 import 'manegement/1makeTeam.dart';
 
@@ -81,6 +82,24 @@ class _ManagementState extends State<Management> {
               );
             },
             child: Text('공지사항관리'),
+          ),
+          SizedBox(height: 10,),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+
+              minimumSize: Size(double.infinity, 50),
+            ),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return ManageSchedule();
+                }),
+              );
+            },
+            child: Text('스케줄관리'),
           ),
         ],
       ),

@@ -39,7 +39,7 @@ class CustomTextForm extends StatelessWidget {
       onSaved: onSaved,
       onChanged: onChanged,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      maxLines: maxLines,
+      maxLines: 1,
       decoration: InputDecoration(
         prefixIcon: icon,
         contentPadding: EdgeInsets.all(20),

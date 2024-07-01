@@ -14,7 +14,7 @@ class Organization extends StatefulWidget {
 }
 
 class _OrganizationState extends State<Organization> {
-  String dataId = ''; //팀 클릭시 그 팀고유 아이디값
+  String teamId = ''; //팀 클릭시 그 팀 고유문서 아이디값
   String name = ''; // 팀 이름
   String mansID = ''; // 팀원문서아이디
   String formattedDate = '';
@@ -46,10 +46,14 @@ class _OrganizationState extends State<Organization> {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            teamId = docs[index].id;
+                            print(teamId);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SchedulePage(),
+                                builder: (context) => SchedulePage(
+                                  teamId: teamId,
+                                ),
                               ),
                             );
                           },

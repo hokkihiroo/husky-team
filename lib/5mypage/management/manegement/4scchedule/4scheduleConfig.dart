@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:team_husky/1insa/newSchedule/nameCard.dart';
 
-class SchedulePage extends StatefulWidget {
+class ScheduleConfig extends StatefulWidget {
   final String teamId;
 
-  const SchedulePage({super.key, required this.teamId});
+  const ScheduleConfig({super.key, required this.teamId});
 
   @override
-  _SchedulePageState createState() => _SchedulePageState();
+  State<ScheduleConfig> createState() => _ScheduleConfigState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class _ScheduleConfigState extends State<ScheduleConfig> {
   late int _currentYear;
   late int _currentMonth;
   late bool _isFirstHalf;
@@ -100,7 +99,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('스케쥴'),
+        title: Text('스케줄 설정'),
         centerTitle: true,
       ),
       body: Column(
@@ -226,10 +225,17 @@ class _SchedulePageState extends State<SchedulePage> {
                                   ),
                                   SizedBox(height: 4.0),
                                   for (var schedule in schedules)
-                                    Text(
-                                      '${schedule['$day']}',
-                                      style: TextStyle(
-                                        fontSize: 12, // Adjusted font size
+                                    GestureDetector(
+                                      onTap: () {
+                                        // 여기에서 실행할 코드를 넣습니다.
+                                        print(
+                                            'Schedule tapped: ${schedule['$day']}');
+                                      },
+                                      child: Text(
+                                        '${schedule['$day']}',
+                                        style: TextStyle(
+                                          fontSize: 12, // Adjusted font size
+                                        ),
                                       ),
                                     ),
                                   SizedBox(height: 4.0),

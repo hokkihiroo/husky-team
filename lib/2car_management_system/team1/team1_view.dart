@@ -1,14 +1,13 @@
+import 'dart:io' show Platform;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart';
 import 'package:team_husky/2car_management_system/team1/team1_car_list.dart';
 import 'package:team_husky/2car_management_system/team1/team1_model.dart';
 import 'package:telephony/telephony.dart';
 import 'package:vibration/vibration.dart';
-import 'dart:io' show Platform;
-
 
 class Team1View extends StatefulWidget {
   const Team1View({super.key, required this.name});
@@ -29,19 +28,16 @@ class _Team1ViewState extends State<Team1View> {
     super.initState();
     if (Platform.isAndroid) {
       requestSmsPermission(context);
-
     }
   }
 
-
-
   void requestSmsPermission(BuildContext context) async {
-     bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
-     if (permissionsGranted ?? false) {
-       print("퍼미션이 허용되었습니다.");
-     } else {
-       print('SMS 및 전화 수신에 대한 퍼미션이 거부되었습니다.');
-     }
+    bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
+    if (permissionsGranted ?? false) {
+      print("퍼미션이 허용되었습니다.");
+    } else {
+      print('SMS 및 전화 수신에 대한 퍼미션이 거부되었습니다.');
+    }
   }
 
   @override
@@ -68,7 +64,6 @@ class _Team1ViewState extends State<Team1View> {
               ),
               _Lists(
                 name: widget.name,
-
               ),
               //이름이 두글자거나 다섯글자 이상이면 에러뜸
             ],
@@ -91,12 +86,13 @@ class _Team1ViewState extends State<Team1View> {
               height: 100,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
                 ),
                 onPressed: () {
                   CarListAdress = CARLIST + formatTodayDate();
                   print(CarListAdress);
-                  carNumber='0000';
+                  carNumber = '0000';
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -111,7 +107,8 @@ class _Team1ViewState extends State<Team1View> {
                             keyboardType: TextInputType.number,
                             autofocus: true,
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
                             ],
                             maxLength: 4,
                             decoration: InputDecoration(
@@ -127,7 +124,8 @@ class _Team1ViewState extends State<Team1View> {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    String documentId = FirebaseFirestore.instance
+                                    String documentId = FirebaseFirestore
+                                        .instance
                                         .collection(LOTARY)
                                         .doc()
                                         .id;
@@ -138,7 +136,8 @@ class _Team1ViewState extends State<Team1View> {
                                           .set({
                                         'carNumber': carNumber,
                                         'name': '',
-                                        'createdAt': FieldValue.serverTimestamp(),
+                                        'createdAt':
+                                            FieldValue.serverTimestamp(),
                                         'location': 0,
                                         'color': 1,
                                         'etc': '',
@@ -175,8 +174,9 @@ class _Team1ViewState extends State<Team1View> {
                               ),
                               Expanded(
                                 child: ElevatedButton(
-                                    onPressed: () async{
-                                      String documentId = FirebaseFirestore.instance
+                                    onPressed: () async {
+                                      String documentId = FirebaseFirestore
+                                          .instance
                                           .collection(LOTARY)
                                           .doc()
                                           .id;
@@ -187,7 +187,8 @@ class _Team1ViewState extends State<Team1View> {
                                             .set({
                                           'carNumber': carNumber,
                                           'name': '',
-                                          'createdAt': FieldValue.serverTimestamp(),
+                                          'createdAt':
+                                              FieldValue.serverTimestamp(),
                                           'location': 0,
                                           'color': 1,
                                           'etc': '직원',
@@ -218,7 +219,6 @@ class _Team1ViewState extends State<Team1View> {
                                     },
                                     child: Text('직원')),
                               ),
-
                             ],
                           ),
                           Row(
@@ -227,7 +227,8 @@ class _Team1ViewState extends State<Team1View> {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    String documentId = FirebaseFirestore.instance
+                                    String documentId = FirebaseFirestore
+                                        .instance
                                         .collection(LOTARY)
                                         .doc()
                                         .id;
@@ -238,7 +239,8 @@ class _Team1ViewState extends State<Team1View> {
                                           .set({
                                         'carNumber': carNumber,
                                         'name': '',
-                                        'createdAt': FieldValue.serverTimestamp(),
+                                        'createdAt':
+                                            FieldValue.serverTimestamp(),
                                         'location': 0,
                                         'color': 1,
                                         'etc': '작업차량',
@@ -280,10 +282,8 @@ class _Team1ViewState extends State<Team1View> {
                                     },
                                     child: Text('취소')),
                               ),
-
                             ],
                           ),
-
                         ],
                       );
                     },
@@ -302,7 +302,8 @@ class _Team1ViewState extends State<Team1View> {
               height: 100,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -336,7 +337,6 @@ Future<void> _handleBackgroundMessage(SmsMessage message) async {
   // *예: Firestore에 저장하거나 특정 동작 실행 등
   print('Received SMS in background from $phoneNumber: $messageBody');
   Vibration.vibrate(duration: 500);
-
 }
 
 class _LocationName extends StatelessWidget {
