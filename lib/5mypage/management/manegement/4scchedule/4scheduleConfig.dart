@@ -15,6 +15,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   late int _currentYear;
   late int _currentMonth;
   late bool _isFirstHalf;
+  int enter = 0; //스케줄에서 인원 추가할때 순서정하려고 만든숫자
 
   @override
   void initState() {
@@ -249,6 +250,77 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                 },
               ),
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    QuerySnapshot querySnapshot = await FirebaseFirestore
+                        .instance
+                        .collection('insa')
+                        .doc(widget.teamId)
+                        .collection('list')
+                        .orderBy('enterDay')
+                        .get();
+
+                    querySnapshot.docs.forEach((doc) async {
+                      String name = doc['name']; // 'name' 필드 추출
+                      print(name); // 콘솔에 출력
+                      enter++;
+
+                      await FirebaseFirestore.instance
+                          .collection('insa')
+                          .doc(widget.teamId)
+                          .collection('schedule')
+                          .doc('1EjNGZtze07iY1WJKyvh')
+                          .collection('$_currentYear$_currentMonth')
+                          .doc()
+                          .set({
+                        'enter': enter,
+                        'name': name,
+                        '1': 'X',
+                        '2': 'X',
+                        '3': 'X',
+                        '4': 'X',
+                        '5': 'X',
+                        '6': 'X',
+                        '7': 'X',
+                        '8': 'X',
+                        '9': 'X',
+                        '10': 'X',
+                        '11': 'X',
+                        '12': 'X',
+                        '13': 'X',
+                        '14': 'X',
+                        '15': 'X',
+                        '16': 'X',
+                        '17': 'X',
+                        '18': 'X',
+                        '19': 'X',
+                        '20': 'X',
+                        '21': 'X',
+                        '22': 'X',
+                        '23': 'X',
+                        '24': 'X',
+                        '25': 'X',
+                        '26': 'X',
+                        '27': 'X',
+                        '28': 'X',
+                        '29': 'X',
+                        '30': 'X',
+                        '31': 'X',
+                      });
+                    });
+                  } catch (e) {
+                    print("Error getting data: $e");
+                  }
+                  enter = 0;
+                },
+                child: Text('$_currentMonth월 인원추가하기'),
+              ),
+            ],
           ),
         ],
       ),
