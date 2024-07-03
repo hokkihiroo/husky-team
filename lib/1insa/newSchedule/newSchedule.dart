@@ -17,6 +17,8 @@ class _SchedulePageState extends State<SchedulePage> {
   late int _currentMonth;
   late bool _isFirstHalf;
 
+  int count = 0; // 이름별로 몇일 근무했는지 파악하려고 사용하는용도
+
   @override
   void initState() {
     super.initState();
@@ -100,65 +102,79 @@ class _SchedulePageState extends State<SchedulePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('스케쥴'),
+        title: Text('스케줄 설정'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: _navigateToPreviousMonth,
-                ),
-                SizedBox(width: 4.0),
-                Text(
-                  '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(width: 4.0),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: Icon(Icons.arrow_forward),
-                  onPressed: _navigateToNextMonth,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SafeArea(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('insa')
-                    .doc(widget.teamId)
-                    .collection('schedule')
-                    .doc('1EjNGZtze07iY1WJKyvh')
-                    .collection('$_currentYear$_currentMonth')
-                    .orderBy('enter')
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('insa')
+            .doc(widget.teamId)
+            .collection('schedule')
+            .doc('1EjNGZtze07iY1WJKyvh')
+            .collection('$_currentYear$_currentMonth')
+            .orderBy('enter')
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: Text('No data found'),
-                    );
-                  }
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text('No data found'),
+            );
+          }
 
-                  final schedules = snapshot.data!.docs;
+          final schedules = snapshot.data!.docs;
 
-                  return ListView(
+          List<int> dayss = List.generate(31, (index) => index + 1);
+          List<int> numericData = []; //인트값 돌려서 여기에 담음
+
+          for (var schedule in schedules) {
+            for (var day in dayss) {
+              var value = schedule['$day'];
+              if (value is int) {
+                count++;
+              }
+            }
+            numericData.add(count);
+            count = 0;
+          }
+
+          return Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: _navigateToPreviousMonth,
+                    ),
+                    SizedBox(width: 4.0),
+                    Text(
+                      '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
+                      style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 4.0),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(Icons.arrow_forward),
+                      onPressed: _navigateToNextMonth,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SafeArea(
+                  child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
                       SizedBox(
@@ -197,10 +213,11 @@ class _SchedulePageState extends State<SchedulePage> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: 5,),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                     ],
                                   ),
-                                SizedBox(height: 4.0),
                               ],
                             ),
                           ),
@@ -237,26 +254,66 @@ class _SchedulePageState extends State<SchedulePage> {
                                         Text(
                                           '${schedule['$day']}',
                                           style: TextStyle(
-                                            fontSize: 12, // Adjusted font size
+                                            fontSize:
+                                            12, // Adjusted font size
                                           ),
                                         ),
-                                        SizedBox(height: 5,),
-
+                                        SizedBox(
+                                          height: 5,
+                                        ),
                                       ],
                                     ),
-                                  SizedBox(height: 4.0),
                                 ],
                               ),
                             ),
                         ],
                       ),
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: schedules.map((value) {
+                      return Column(
+                        children: [
+                          Text(
+                            '${value['name']}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    children: numericData.map((value) {
+                      return Column(
+                        children: [
+                          Text(
+                            '$value',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20,),
+            ],
+          );
+        },
       ),
     );
   }
