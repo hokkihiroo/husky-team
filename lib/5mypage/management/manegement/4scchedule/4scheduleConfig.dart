@@ -317,43 +317,45 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: schedules.map((value) {
-                      return Column(
-                        children: [
-                          Text(
-                            '${value['name']}',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: schedules.map((value) {
+                        return Column(
+                          children: [
+                            Text(
+                              '${value['name']}',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    children: numericData.map((value) {
-                      return Column(
-                        children: [
-                          Text(
-                            '$value ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(height: 5),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      children: numericData.map((value) {
+                        return Column(
+                          children: [
+                            Text(
+                              '$value ',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ],
+                            SizedBox(height: 5),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 20,
