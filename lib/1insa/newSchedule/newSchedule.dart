@@ -102,7 +102,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('스케줄 설정'),
+        title: Text('스케줄'),
         centerTitle: true,
       ),
       body: StreamBuilder(

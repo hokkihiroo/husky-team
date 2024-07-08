@@ -63,8 +63,8 @@ class BuildingCard extends StatelessWidget {
               style: TextStyle(
                 letterSpacing: 3.0,
                 fontSize: 13,
-                fontWeight: FontWeight.w200,
-                color: Colors.grey.withOpacity(0.9), // 색상과 투명도 설정
+                fontWeight: FontWeight.w900,
+                color: Colors.blueGrey, // 더 진한 회색 설정
               ),
             ),
           ],
