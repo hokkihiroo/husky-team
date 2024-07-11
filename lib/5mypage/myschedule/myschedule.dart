@@ -146,15 +146,6 @@ class _MyScheduleState extends State<MySchedule> {
                 ElevatedButton(
                     onPressed: (){
                       Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return MySchedule(
-                            team: widget.team,
-                            uid: widget.uid,
-                          );
-                        }),
-                      );
                     },
                     child: Text(
                     '돌아가기'),),
