@@ -306,7 +306,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 6),
                           ],
                         );
                       }).toList(),
