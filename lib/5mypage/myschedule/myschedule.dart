@@ -1,25 +1,29 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:team_husky/1insa/newSchedule/nameCard.dart';
 
-class SchedulePage extends StatefulWidget {
-  final String teamId;
+class MySchedule extends StatefulWidget {
+  String team;
 
-  const SchedulePage({super.key, required this.teamId});
+  String uid;
+
+  MySchedule({super.key, required this.team, required this.uid});
 
   @override
-  _SchedulePageState createState() => _SchedulePageState();
+  State<MySchedule> createState() => _MyScheduleState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class _MyScheduleState extends State<MySchedule> {
   late int _currentYear;
   late int _currentMonth;
   late bool _isFirstHalf;
 
   int totalCount = 0; // 파베에 31일중 몇개가 인트값인지확인
-  int weekDayCount=0; //평일이 몇개인지확인용
-  int weekEndCount=0; //주말이 몇개인지확인용
+  int weekDayCount = 0; //평일이 몇개인지확인용
+  int weekEndCount = 0; //주말이 몇개인지확인용
+
+  String scheduleTime = ''; // 누른 날짜의 출근시각
+  String selectedDay = ''; // 선택된 날짜
 
   @override
   void initState() {
@@ -106,62 +110,85 @@ class _SchedulePageState extends State<SchedulePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('스케줄'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text('나의 스케줄'),
         centerTitle: true,
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('insa')
-            .doc(widget.teamId)
+            .doc(widget.team)
             .collection('schedule')
             .doc('1EjNGZtze07iY1WJKyvh')
             .collection('$_currentYear$_currentMonth')
-            .orderBy('enter')
+            .doc('${widget.uid}')
             .snapshots(),
         builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if (!snapshot.hasData) {
-            return Center(
-              child: Text('No data found'),
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Column(
+              children: [
+                Center(
+                  child: Text('선택한 날짜에 스케줄은 열리지 않았습니다 '),
+                ),
+                SizedBox(height: 50,),
+                ElevatedButton(
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return MySchedule(
+                            team: widget.team,
+                            uid: widget.uid,
+                          );
+                        }),
+                      );
+                    },
+                    child: Text(
+                    '돌아가기'),),
+              ],
             );
           }
 
-          final schedules = snapshot.data!.docs;
+          var document = snapshot.data!;
 
           List<int> dayss = List.generate(31, (index) => index + 1);
           List<int> numericTotal = []; //인트값 돌려서 여기에 담음 1부터31까지 숫자로되어있는거 전부담음
           List<int> numericWeekday = []; //1부터 31까지 평일인거 담음
           List<int> numericWeekend = []; //1부터 31까지 주말담음
 
-          for (var schedule in schedules) {
-            for (var day in dayss) {
-              var value = schedule['$day'];
-              if (value is int) {
-                totalCount++;
-                String yoil = getWeekday(day);
-                if (['월','화', '수', '목', '금'].contains(yoil)) {
-                  weekDayCount++;
-                }
-                if (['토','일'].contains(yoil)) {
-                  weekEndCount++;
-                }
-
+          for (var day in dayss) {
+            var value = document['$day'];
+            if (value is int) {
+              totalCount++;
+              String yoil = getWeekday(day);
+              if (['월', '화', '수', '목', '금'].contains(yoil)) {
+                weekDayCount++;
+              }
+              if (['토', '일'].contains(yoil)) {
+                weekEndCount++;
               }
             }
-            numericTotal.add(totalCount);
-            numericWeekday.add(weekDayCount);
-            numericWeekend.add(weekEndCount);
-
-            totalCount = 0;
-            weekDayCount =0;
-            weekEndCount =0;
           }
+          numericTotal.add(totalCount);
+          numericWeekday.add(weekDayCount);
+          numericWeekend.add(weekEndCount);
+
+          totalCount = 0;
+          weekDayCount = 0;
+          weekEndCount = 0;
 
           return Column(
             children: [
@@ -180,7 +207,7 @@ class _SchedulePageState extends State<SchedulePage> {
                     Text(
                       '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
                       style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(width: 4.0),
                     IconButton(
@@ -222,21 +249,16 @@ class _SchedulePageState extends State<SchedulePage> {
                                   ),
                                 ),
                                 SizedBox(height: 4.0),
-                                for (var schedule in schedules)
-                                  Column(
-                                    children: [
-                                      Text(
-                                        '${schedule['name']}',
-                                        style: TextStyle(
-                                          fontSize: 12, // Adjusted font size
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
+                                Text(
+                                  '${document['name']}',
+                                  style: TextStyle(
+                                    fontSize: 12, // Adjusted font size
+                                    fontWeight: FontWeight.bold,
                                   ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
                               ],
                             ),
                           ),
@@ -267,21 +289,27 @@ class _SchedulePageState extends State<SchedulePage> {
                                     ),
                                   ),
                                   SizedBox(height: 4.0),
-                                  for (var schedule in schedules)
-                                    Column(
-                                      children: [
-                                        Text(
-                                          '${schedule['$day']}',
-                                          style: TextStyle(
-                                            fontSize:
-                                            12, // Adjusted font size
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                      ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      scheduleTime = '${document['$day']}';
+                                      selectedDay = '$day';
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return changeSchedule();
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      '${document['$day']}',
+                                      style: TextStyle(
+                                        fontSize: 12, // Adjusted font size
+                                      ),
                                     ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                 ],
                               ),
                             ),
@@ -291,84 +319,91 @@ class _SchedulePageState extends State<SchedulePage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: schedules.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '${value['name']}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 7),
-                          ],
-                        );
-                      }).toList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${document['name']}',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericTotal.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '총: $value일',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Text(
+                    '총: ${numericTotal[0]}일',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericWeekday.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '평일: $value일',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Text(
+                    '평일: ${numericWeekday[0]}일',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericWeekend.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '주말: $value일',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Text(
+                    '주말: ${numericWeekend[0]}일',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget changeSchedule() {
+    return AlertDialog(
+      title: Column(
+        children: [
+          Text('선택한 날짜: $selectedDay'),
+          Text('현재상태: $scheduleTime'),
+        ],
+      ),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+              onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance
+                      .collection('insa')
+                      .doc('${widget.team}')
+                      .collection('schedule')
+                      .doc('1EjNGZtze07iY1WJKyvh')
+                      .collection('$_currentYear$_currentMonth')
+                      .doc('${widget.uid}')
+                      .update({
+                    '$selectedDay': '-', // 업데이트할 필드와 값
+                  });
+                  print('문서 업데이트가 성공했습니다.');
+
+                  Navigator.pop(context);
+                } catch (e) {
+                  print('문서 업데이트 오류: $e');
+                }
+              },
+              child: Text('근무 불가')),
+          ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+              child: Text('취소')),
+        ],
       ),
     );
   }

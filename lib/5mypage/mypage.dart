@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
+import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_auth.dart';
 import 'package:team_husky/user/user_screen.dart';
 
@@ -9,10 +10,14 @@ class MyPage extends StatelessWidget {
   const MyPage(
       {super.key,
       required this.name,
+      required this.uid,
+      required this.team,
       required this.email,
       required this.grade});
 
   final String name;
+  final String uid;
+  final String team;
   final String email;
   final int grade;
 
@@ -26,12 +31,25 @@ class MyPage extends StatelessWidget {
             children: [
               Text('메일 : $email'),
               Text('이름 :$name'),
+              ElevatedButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return UserScreen();
+                      },
+                    ),
+                  );
+                },
+                child: Text('로그아웃'),
+              ),
             ],
           ),
           SizedBox(
             height: 20,
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -60,7 +78,9 @@ class MyPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return Management(name: name,);
+                        return Management(
+                          name: name,
+                        );
                       }),
                     );
                   }
@@ -118,20 +138,25 @@ class MyPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
               ElevatedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacement(
+                onPressed: () {
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return UserScreen();
-                      },
-                    ),
+                    MaterialPageRoute(builder: (context) {
+                      return MySchedule(
+                        team: team,
+                        uid: uid,
+                      );
+                    }),
                   );
                 },
-                child: Text('로그아웃'),
+                child: Text('나의 스케줄',
+                style: TextStyle(
+                  color: Colors.green
+                ),),
               ),
+
 //               ElevatedButton(
 //                 onPressed: () {
 //                   showDialog(

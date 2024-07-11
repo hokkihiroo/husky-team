@@ -8,11 +8,15 @@ import '../5mypage/mypage.dart';
 class MainView extends StatefulWidget {
   const MainView(
       {super.key,
+      required this.myUid,
       required this.name,
+      required this.team,
       required this.email,
       required this.grade});
 
+  final String myUid;
   final String name;
+  final String team;
   final String email;
   final int grade;
 
@@ -80,6 +84,8 @@ class _MainViewState extends State<MainView>
             name: widget.name,
             email: widget.email,
             grade: widget.grade,
+            team: widget.team,
+            uid: widget.myUid,
           ),
         ],
       ),

@@ -21,7 +21,9 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   String scheduleTime = ''; // 누른 날짜의 출근시각
   String selectedDay = ''; // 선택된 날짜
   String selectedName = ''; // 선택된 이름
-  int count = 0; // 파베에 31일중 몇개가 인트값인지확인
+  int totalCount = 0; // 파베에 31일중 몇개가 인트값인지확인
+  int weekDayCount=0; //평일이 몇개인지확인용
+  int weekEndCount=0; //주말이 몇개인지확인용
   int maxEnterValue = 0; //한명추가시 최근enterDay값 추출해서 제일큰숫자 추출해서 넣음
   String addName = ''; //스케줄에 한명추가시 넣을이름
 /////////////////////////////////////// 여기까지
@@ -77,8 +79,10 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   Color getWeekdayColor(int day) {
     final date = DateTime(_currentYear, _currentMonth, day);
     final weekday = DateFormat('E', 'ko_KR').format(date);
-    if (weekday == '토' || weekday == '일') {
+    if (weekday == '일') {
       return Colors.red;
+    } else if (weekday == '토') {
+      return Colors.blue;
     } else {
       return Colors.black;
     }
@@ -141,17 +145,33 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
           final schedules = snapshot.data!.docs;
 
           List<int> dayss = List.generate(31, (index) => index + 1);
-          List<int> numericData = []; //인트값 돌려서 여기에 담음
+          List<int> numericTotal = []; //인트값 돌려서 여기에 담음 1부터31까지 숫자로되어있는거 전부담음
+          List<int> numericWeekday = []; //1부터 31까지 평일인거 담음
+          List<int> numericWeekend = []; //1부터 31까지 주말담음
+
 
           for (var schedule in schedules) {
             for (var day in dayss) {
               var value = schedule['$day'];
               if (value is int) {
-                count++;
+                      totalCount++;
+                     String yoil = getWeekday(day);
+                      if (['월','화', '수', '목', '금'].contains(yoil)) {
+                        weekDayCount++;
+                       }
+                      if (['토','일'].contains(yoil)) {
+                        weekEndCount++;
+                      }
+
               }
             }
-            numericData.add(count);
-            count = 0;
+            numericTotal.add(totalCount);
+            numericWeekday.add(weekDayCount);
+            numericWeekend.add(weekEndCount);
+
+            totalCount = 0;
+            weekDayCount =0;
+            weekEndCount =0;
           }
 
           return Column(
@@ -255,7 +275,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                     style: TextStyle(
                                       fontSize: 12, // Adjusted font size
                                       color: isHoliday(day)
-                                          ? Colors.blue
+                                          ? Colors.red
                                           : getWeekdayColor(day),
                                     ),
                                   ),
@@ -265,7 +285,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: isHoliday(day)
-                                          ? Colors.blue
+                                          ? Colors.red
                                           : getWeekdayColor(day),
                                     ),
                                   ),
@@ -317,45 +337,78 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: schedules.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '${value['name']}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    children: schedules.map((value) {
+                      return Column(
+                        children: [
+                          Text(
+                            '${value['name']}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericData.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '$value ',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                          SizedBox(height: 7),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    children: numericTotal.map((value) {
+                      return Column(
+                        children: [
+                          Text(
+                            '총: $value일',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    children: numericWeekday.map((value) {
+                      return Column(
+                        children: [
+                          Text(
+                            '평일: $value일',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    children: numericWeekend.map((value) {
+                      return Column(
+                        children: [
+                          Text(
+                            '주말: $value일',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 20,
@@ -376,7 +429,10 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
 
                         querySnapshot.docs.forEach((doc) async {
                           String name = doc['name']; // 'name' 필드 추출
+                          String userId = doc.id; // 'name' 필드 추출
+
                           print(name); // 콘솔에 출력
+                          print(userId); // 콘솔에 출력
                           enter++;
 
                           await FirebaseFirestore.instance
@@ -385,7 +441,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                               .collection('schedule')
                               .doc('1EjNGZtze07iY1WJKyvh')
                               .collection('$_currentYear$_currentMonth')
-                              .doc()
+                              .doc(userId)
                               .set({
                             'enter': enter,
                             'name': name,

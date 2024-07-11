@@ -17,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   late User? _user;
   late String name;
+  late String team;
   late String email;
   late int grade;
 
@@ -41,6 +42,24 @@ class _SplashScreenState extends State<SplashScreen> {
     // 사용자가 로그인되어 있는지 확인
     if (_user != null) {
       try {
+
+        String userID = _user!.uid;
+          CollectionReference insa = await FirebaseFirestore.instance.collection('insa');
+
+          QuerySnapshot querySnapshot = await insa.get();
+          for (var doc in querySnapshot.docs) {
+            // Get the list collection for each insa document
+            CollectionReference listCollection = insa.doc(doc.id).collection('list');
+            DocumentSnapshot subDocSnapshot = await listCollection.doc(userID).get();
+
+            // Check if the sub-document exists in the list collection
+            if (subDocSnapshot.exists) {
+              team = doc.id;
+              print('Document ID: $team');
+
+            }
+          }
+
         DocumentSnapshot<Map<String, dynamic>> snapshot =
             await FirebaseFirestore.instance
                 .collection(myInfoAdress)
@@ -69,6 +88,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   name: name,
                   email: email,
                   grade: grade,
+                  team: team,
+                  myUid: _user!.uid,
                 )),
       );
     } else {
@@ -78,6 +99,8 @@ class _SplashScreenState extends State<SplashScreen> {
         MaterialPageRoute(builder: (context) => UserScreen()),
       );
     }
+
+
   }
 
   @override
