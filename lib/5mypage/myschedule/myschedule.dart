@@ -391,6 +391,27 @@ class _MyScheduleState extends State<MySchedule> {
               child: Text('근무 불가')),
           ElevatedButton(
               onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance
+                      .collection('insa')
+                      .doc('${widget.team}')
+                      .collection('schedule')
+                      .doc('1EjNGZtze07iY1WJKyvh')
+                      .collection('$_currentYear$_currentMonth')
+                      .doc('${widget.uid}')
+                      .update({
+                    '$selectedDay': 'X', // 업데이트할 필드와 값
+                  });
+                  print('문서 업데이트가 성공했습니다.');
+
+                  Navigator.pop(context);
+                } catch (e) {
+                  print('문서 업데이트 오류: $e');
+                }
+              },
+              child: Text('근무 가능')),
+          ElevatedButton(
+              onPressed: () async {
                 Navigator.pop(context);
               },
               child: Text('취소')),
