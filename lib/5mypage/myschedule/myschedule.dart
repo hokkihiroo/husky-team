@@ -140,7 +140,7 @@ class _MyScheduleState extends State<MySchedule> {
             return Column(
               children: [
                 Center(
-                  child: Text('선택한 날짜에 스케줄은 열리지 않았습니다 '),
+                  child: Text('스케줄이 열리지 않았어요 '),
                 ),
                 SizedBox(height: 50,),
                 ElevatedButton(

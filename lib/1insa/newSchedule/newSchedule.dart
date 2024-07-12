@@ -18,8 +18,8 @@ class _SchedulePageState extends State<SchedulePage> {
   late bool _isFirstHalf;
 
   int totalCount = 0; // 파베에 31일중 몇개가 인트값인지확인
-  int weekDayCount=0; //평일이 몇개인지확인용
-  int weekEndCount=0; //주말이 몇개인지확인용
+  int weekDayCount = 0; //평일이 몇개인지확인용
+  int weekEndCount = 0; //주말이 몇개인지확인용
 
   @override
   void initState() {
@@ -145,13 +145,12 @@ class _SchedulePageState extends State<SchedulePage> {
               if (value is int) {
                 totalCount++;
                 String yoil = getWeekday(day);
-                if (['월','화', '수', '목', '금'].contains(yoil)) {
+                if (['월', '화', '수', '목', '금'].contains(yoil)) {
                   weekDayCount++;
                 }
-                if (['토','일'].contains(yoil)) {
+                if (['토', '일'].contains(yoil)) {
                   weekEndCount++;
                 }
-
               }
             }
             numericTotal.add(totalCount);
@@ -159,111 +158,50 @@ class _SchedulePageState extends State<SchedulePage> {
             numericWeekend.add(weekEndCount);
 
             totalCount = 0;
-            weekDayCount =0;
-            weekEndCount =0;
+            weekDayCount = 0;
+            weekEndCount = 0;
           }
 
-          return Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: _navigateToPreviousMonth,
-                    ),
-                    SizedBox(width: 4.0),
-                    Text(
-                      '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 4.0),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(Icons.arrow_forward),
-                      onPressed: _navigateToNextMonth,
-                    ),
-                  ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                _ControlFirst(
+                  navigateToPreviousMonth: _navigateToPreviousMonth,
+                  navigateToNextMonth: _navigateToNextMonth,
+                  currentYear: _currentYear,
+                  currentMonth: _currentMonth,
+                  isFirstHalf: _isFirstHalf,
                 ),
-              ),
-              Expanded(
-                child: SafeArea(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(3.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  ' $_currentMonth월',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 7.0),
-                                Text(
-                                  '이름',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 4.0),
-                                for (var schedule in schedules)
-                                  Column(
-                                    children: [
-                                      Text(
-                                        '${schedule['name']}',
-                                        style: TextStyle(
-                                          fontSize: 12, // Adjusted font size
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ),
-                          for (var day in days)
+                Container(
+                  height: 360,
+                  width: 450,
+                  child: SafeArea(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Row(
+                          children: [
                             Container(
-                              width: MediaQuery.of(context).size.width / 17,
                               padding: EdgeInsets.all(3.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '$day',
+                                    ' $_currentMonth월',
                                     style: TextStyle(
-                                      fontSize: 12, // Adjusted font size
-                                      color: isHoliday(day)
-                                          ? Colors.red
-                                          : getWeekdayColor(day),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(height: 7.0),
                                   Text(
-                                    getWeekday(day),
+                                    '이름',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: isHoliday(day)
-                                          ? Colors.red
-                                          : getWeekdayColor(day),
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(height: 4.0),
@@ -271,10 +209,10 @@ class _SchedulePageState extends State<SchedulePage> {
                                     Column(
                                       children: [
                                         Text(
-                                          '${schedule['$day']}',
+                                          '${schedule['name']}',
                                           style: TextStyle(
-                                            fontSize:
-                                            12, // Adjusted font size
+                                            fontSize: 12, // Adjusted font size
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         SizedBox(
@@ -285,14 +223,58 @@ class _SchedulePageState extends State<SchedulePage> {
                                 ],
                               ),
                             ),
-                        ],
-                      ),
-                    ],
+                            for (var day in days)
+                              Container(
+                                width: MediaQuery.of(context).size.width / 17,
+                                padding: EdgeInsets.all(3.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '$day',
+                                      style: TextStyle(
+                                        fontSize: 12, // Adjusted font size
+                                        color: isHoliday(day)
+                                            ? Colors.red
+                                            : getWeekdayColor(day),
+                                      ),
+                                    ),
+                                    SizedBox(height: 7.0),
+                                    Text(
+                                      getWeekday(day),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isHoliday(day)
+                                            ? Colors.red
+                                            : getWeekdayColor(day),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4.0),
+                                    for (var schedule in schedules)
+                                      Column(
+                                        children: [
+                                          Text(
+                                            '${schedule['$day']}',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  12, // Adjusted font size
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(
@@ -302,7 +284,7 @@ class _SchedulePageState extends State<SchedulePage> {
                             Text(
                               '${value['name']}',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -319,7 +301,7 @@ class _SchedulePageState extends State<SchedulePage> {
                             Text(
                               '총: $value일',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -336,7 +318,7 @@ class _SchedulePageState extends State<SchedulePage> {
                             Text(
                               '평일: $value일',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -353,7 +335,7 @@ class _SchedulePageState extends State<SchedulePage> {
                             Text(
                               '주말: $value일',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -364,11 +346,60 @@ class _SchedulePageState extends State<SchedulePage> {
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 20,),
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _ControlFirst extends StatelessWidget {
+  final VoidCallback navigateToPreviousMonth;
+  final VoidCallback
+      navigateToNextMonth; // 추가: _navigateToNextMonth도 final로 선언해야 합니다.
+  final int currentYear;
+  final int currentMonth;
+  final bool isFirstHalf;
+
+  const _ControlFirst({
+    super.key,
+    required this.navigateToPreviousMonth,
+    required this.navigateToNextMonth, // 추가: 생성자에 _navigateToNextMonth 추가
+    required this.currentYear, // 추가: 생성자에 _currentYear 추가
+    required this.currentMonth, // 추가: 생성자에 _currentMonth 추가
+    required this.isFirstHalf, // 추가: 생성자에 _isFirstHalf 추가
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_back),
+            onPressed: navigateToPreviousMonth,
+          ),
+          SizedBox(width: 4.0),
+          Text(
+            '$currentYear년 $currentMonth월 ${isFirstHalf ? '상반기' : '하반기'}',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 4.0),
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_forward),
+            onPressed: navigateToNextMonth,
+          ),
+        ],
       ),
     );
   }

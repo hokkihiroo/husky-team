@@ -22,8 +22,8 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   String selectedDay = ''; // 선택된 날짜
   String selectedName = ''; // 선택된 이름
   int totalCount = 0; // 파베에 31일중 몇개가 인트값인지확인
-  int weekDayCount=0; //평일이 몇개인지확인용
-  int weekEndCount=0; //주말이 몇개인지확인용
+  int weekDayCount = 0; //평일이 몇개인지확인용
+  int weekEndCount = 0; //주말이 몇개인지확인용
   int maxEnterValue = 0; //한명추가시 최근enterDay값 추출해서 제일큰숫자 추출해서 넣음
   String addName = ''; //스케줄에 한명추가시 넣을이름
 /////////////////////////////////////// 여기까지
@@ -113,12 +113,10 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
 
     return Scaffold(
       appBar: AppBar(
-
         title: Text('스케줄 설정'),
         centerTitle: true,
       ),
-      resizeToAvoidBottomInset:true,
-
+      resizeToAvoidBottomInset: true,
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('insa')
@@ -149,20 +147,18 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
           List<int> numericWeekday = []; //1부터 31까지 평일인거 담음
           List<int> numericWeekend = []; //1부터 31까지 주말담음
 
-
           for (var schedule in schedules) {
             for (var day in dayss) {
               var value = schedule['$day'];
               if (value is int) {
-                      totalCount++;
-                     String yoil = getWeekday(day);
-                      if (['월','화', '수', '목', '금'].contains(yoil)) {
-                        weekDayCount++;
-                       }
-                      if (['토','일'].contains(yoil)) {
-                        weekEndCount++;
-                      }
-
+                totalCount++;
+                String yoil = getWeekday(day);
+                if (['월', '화', '수', '목', '금'].contains(yoil)) {
+                  weekDayCount++;
+                }
+                if (['토', '일'].contains(yoil)) {
+                  weekEndCount++;
+                }
               }
             }
             numericTotal.add(totalCount);
@@ -170,123 +166,52 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
             numericWeekend.add(weekEndCount);
 
             totalCount = 0;
-            weekDayCount =0;
-            weekEndCount =0;
+            weekDayCount = 0;
+            weekEndCount = 0;
           }
 
-          return Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: _navigateToPreviousMonth,
-                    ),
-                    SizedBox(width: 4.0),
-                    Text(
-                      '$_currentYear년 $_currentMonth월 ${_isFirstHalf ? '상반기' : '하반기'}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 4.0),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(Icons.arrow_forward),
-                      onPressed: _navigateToNextMonth,
-                    ),
-                  ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+            
+                _ControlFirst(
+                  navigateToPreviousMonth: _navigateToPreviousMonth,
+                  navigateToNextMonth: _navigateToNextMonth,
+                  currentYear: _currentYear,
+                  currentMonth: _currentMonth,
+                  isFirstHalf: _isFirstHalf,
                 ),
-              ),
-              Expanded(
-                child: SafeArea(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(3.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  ' $_currentMonth월',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 7.0),
-                                Text(
-                                  '이름',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 4.0),
-                                for (var schedule in schedules)
-                                  Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          scheduleDocument = '${schedule.id}';
-                                          selectedName = '${schedule['name']}';
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return deleteName();
-                                            },
-                                          );
-                                        },
-                                        child: Text(
-                                          '${schedule['name']}',
-                                          style: TextStyle(
-                                            fontSize: 12, // Adjusted font size
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 7,
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ),
-                          for (var day in days)
+            
+                Container(
+                  height: 380,
+                  width: 450,
+                  child: SafeArea(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Row(
+                          children: [
                             Container(
-                              width: MediaQuery.of(context).size.width / 17,
                               padding: EdgeInsets.all(3.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '$day',
+                                    ' $_currentMonth월',
                                     style: TextStyle(
-                                      fontSize: 12, // Adjusted font size
-                                      color: isHoliday(day)
-                                          ? Colors.red
-                                          : getWeekdayColor(day),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(height: 7.0),
                                   Text(
-                                    getWeekday(day),
+                                    '이름',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: isHoliday(day)
-                                          ? Colors.red
-                                          : getWeekdayColor(day),
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(height: 4.0),
@@ -295,31 +220,20 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            // 여기에서 실행할 코드를 넣습니다.
                                             scheduleDocument = '${schedule.id}';
-                                            scheduleTime =
-                                                '${schedule['$day']}';
-                                            selectedDay = '$day';
-                                            selectedName =
-                                                '${schedule['name']}';
-                                            print('$_currentMonth월 이고');
-                                            print('문서이름은 $scheduleDocument');
-                                            print('출근시각은 $scheduleTime시');
-                                            print('날짜는 $selectedDay일');
-                                            print('이름은 $selectedName');
-
+                                            selectedName = '${schedule['name']}';
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return changeSchedule();
+                                                return deleteName();
                                               },
                                             );
                                           },
                                           child: Text(
-                                            '${schedule['$day']}',
+                                            '${schedule['name']}',
                                             style: TextStyle(
-                                              fontSize:
-                                                  12, // Adjusted font size
+                                              fontSize: 12, // Adjusted font size
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
@@ -331,199 +245,268 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                 ],
                               ),
                             ),
-                        ],
-                      ),
-                    ],
+                            for (var day in days)
+                              Container(
+                                width: MediaQuery.of(context).size.width / 17,
+                                padding: EdgeInsets.all(3.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '$day',
+                                      style: TextStyle(
+                                        fontSize: 12, // Adjusted font size
+                                        color: isHoliday(day)
+                                            ? Colors.red
+                                            : getWeekdayColor(day),
+                                      ),
+                                    ),
+                                    SizedBox(height: 7.0),
+                                    Text(
+                                      getWeekday(day),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isHoliday(day)
+                                            ? Colors.red
+                                            : getWeekdayColor(day),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4.0),
+                                    for (var schedule in schedules)
+                                      Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              // 여기에서 실행할 코드를 넣습니다.
+                                              scheduleDocument = '${schedule.id}';
+                                              scheduleTime =
+                                                  '${schedule['$day']}';
+                                              selectedDay = '$day';
+                                              selectedName =
+                                                  '${schedule['name']}';
+                                              print('$_currentMonth월 이고');
+                                              print('문서이름은 $scheduleDocument');
+                                              print('출근시각은 $scheduleTime시');
+                                              print('날짜는 $selectedDay일');
+                                              print('이름은 $selectedName');
+
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return changeSchedule();
+                                                },
+                                              );
+                                            },
+                                            child: Text(
+                                              '${schedule['$day']}',
+                                              style: TextStyle(
+                                                fontSize:
+                                                    12, // Adjusted font size
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 7,
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Column(
-                    children: schedules.map((value) {
-                      return Column(
-                        children: [
-                          Text(
-                            '${value['name']}',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: schedules.map((value) {
+                        return Column(
+                          children: [
+                            Text(
+                              '${value['name']}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 7),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    children: numericTotal.map((value) {
-                      return Column(
-                        children: [
-                          Text(
-                            '총: $value일',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(height: 6),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      children: numericTotal.map((value) {
+                        return Column(
+                          children: [
+                            Text(
+                              '총: $value일',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    children: numericWeekday.map((value) {
-                      return Column(
-                        children: [
-                          Text(
-                            '평일: $value일',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(height: 5),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      children: numericWeekday.map((value) {
+                        return Column(
+                          children: [
+                            Text(
+                              '평일: $value일',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    children: numericWeekend.map((value) {
-                      return Column(
-                        children: [
-                          Text(
-                            '주말: $value일',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(height: 5),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      children: numericWeekend.map((value) {
+                        return Column(
+                          children: [
+                            Text(
+                              '주말: $value일',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        QuerySnapshot querySnapshot = await FirebaseFirestore
-                            .instance
-                            .collection('insa')
-                            .doc(widget.teamId)
-                            .collection('list')
-                            .orderBy('enterDay')
-                            .get();
-
-                        querySnapshot.docs.forEach((doc) async {
-                          String name = doc['name']; // 'name' 필드 추출
-                          String userId = doc.id; // 'name' 필드 추출
-
-                          print(name); // 콘솔에 출력
-                          print(userId); // 콘솔에 출력
-                          enter++;
-
-                          await FirebaseFirestore.instance
+                            SizedBox(height: 5),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          QuerySnapshot querySnapshot = await FirebaseFirestore
+                              .instance
+                              .collection('insa')
+                              .doc(widget.teamId)
+                              .collection('list')
+                              .orderBy('enterDay')
+                              .get();
+            
+                          querySnapshot.docs.forEach((doc) async {
+                            String name = doc['name']; // 'name' 필드 추출
+                            String userId = doc.id; // 'name' 필드 추출
+            
+                            print(name); // 콘솔에 출력
+                            print(userId); // 콘솔에 출력
+                            enter++;
+            
+                            await FirebaseFirestore.instance
+                                .collection('insa')
+                                .doc(widget.teamId)
+                                .collection('schedule')
+                                .doc('1EjNGZtze07iY1WJKyvh')
+                                .collection('$_currentYear$_currentMonth')
+                                .doc(userId)
+                                .set({
+                              'enter': enter,
+                              'name': name,
+                              '1': 'X',
+                              '2': 'X',
+                              '3': 'X',
+                              '4': 'X',
+                              '5': 'X',
+                              '6': 'X',
+                              '7': 'X',
+                              '8': 'X',
+                              '9': 'X',
+                              '10': 'X',
+                              '11': 'X',
+                              '12': 'X',
+                              '13': 'X',
+                              '14': 'X',
+                              '15': 'X',
+                              '16': 'X',
+                              '17': 'X',
+                              '18': 'X',
+                              '19': 'X',
+                              '20': 'X',
+                              '21': 'X',
+                              '22': 'X',
+                              '23': 'X',
+                              '24': 'X',
+                              '25': 'X',
+                              '26': 'X',
+                              '27': 'X',
+                              '28': 'X',
+                              '29': 'X',
+                              '30': 'X',
+                              '31': 'X',
+                            });
+                          });
+                        } catch (e) {
+                          print("Error getting data: $e");
+                        }
+                        enter = 0;
+                      },
+                      child: Text('$_currentMonth월 멤버셋팅하기'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          QuerySnapshot querySnapshot = await FirebaseFirestore
+                              .instance
                               .collection('insa')
                               .doc(widget.teamId)
                               .collection('schedule')
                               .doc('1EjNGZtze07iY1WJKyvh')
                               .collection('$_currentYear$_currentMonth')
-                              .doc(userId)
-                              .set({
-                            'enter': enter,
-                            'name': name,
-                            '1': 'X',
-                            '2': 'X',
-                            '3': 'X',
-                            '4': 'X',
-                            '5': 'X',
-                            '6': 'X',
-                            '7': 'X',
-                            '8': 'X',
-                            '9': 'X',
-                            '10': 'X',
-                            '11': 'X',
-                            '12': 'X',
-                            '13': 'X',
-                            '14': 'X',
-                            '15': 'X',
-                            '16': 'X',
-                            '17': 'X',
-                            '18': 'X',
-                            '19': 'X',
-                            '20': 'X',
-                            '21': 'X',
-                            '22': 'X',
-                            '23': 'X',
-                            '24': 'X',
-                            '25': 'X',
-                            '26': 'X',
-                            '27': 'X',
-                            '28': 'X',
-                            '29': 'X',
-                            '30': 'X',
-                            '31': 'X',
-                          });
-                        });
-                      } catch (e) {
-                        print("Error getting data: $e");
-                      }
-                      enter = 0;
-                    },
-                    child: Text('$_currentMonth월 멤버셋팅하기'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        QuerySnapshot querySnapshot = await FirebaseFirestore
-                            .instance
-                            .collection('insa')
-                            .doc(widget.teamId)
-                            .collection('schedule')
-                            .doc('1EjNGZtze07iY1WJKyvh')
-                            .collection('$_currentYear$_currentMonth')
-                            .get();
-
-                        int maxValue = querySnapshot.docs
-                            .map((doc) => doc['enter'] as int)
-                            .reduce((value, element) =>
-                                value > element ? value : element);
-                        maxEnterValue = maxValue;
-                        print(maxEnterValue);
-                        print(maxEnterValue);
-                        print(maxEnterValue);
-                      } catch (e) {
-                        print("최대 숫자 값구하기오류: $e");
-                      }
-
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return addMember();
-                        },
-                      );
-                    },
-                    child: Text('한명추가'),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
+                              .get();
+            
+                          int maxValue = querySnapshot.docs
+                              .map((doc) => doc['enter'] as int)
+                              .reduce((value, element) =>
+                                  value > element ? value : element);
+                          maxEnterValue = maxValue;
+                          print(maxEnterValue);
+                          print(maxEnterValue);
+                          print(maxEnterValue);
+                        } catch (e) {
+                          print("최대 숫자 값구하기오류: $e");
+                        }
+            
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return addMember();
+                          },
+                        );
+                      },
+                      child: Text('한명추가'),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -594,7 +577,6 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                               '31': 'X',
                             });
                             Navigator.pop(context);
-
                           } catch (e) {
                             print("추가하기 오류: $e");
                           }
@@ -640,9 +622,9 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                             .collection('$_currentYear$_currentMonth')
                             .doc('$scheduleDocument')
                             .delete();
-        
+
                         print('삭제성공.');
-        
+
                         Navigator.pop(context);
                       } catch (e) {
                         print('문서 삭제 오류: $e');
@@ -670,135 +652,197 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
       title: SingleChildScrollView(
         child: Column(
           children: [
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('insa')
-                        .doc('${widget.teamId}')
-                        .collection('schedule')
-                        .doc('1EjNGZtze07iY1WJKyvh')
-                        .collection('$_currentYear$_currentMonth')
-                        .doc('$scheduleDocument')
-                        .update({
-                      '$selectedDay': 8, // 업데이트할 필드와 값
-                    });
-                    print('문서 업데이트가 성공했습니다.');
-        
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print('문서 업데이트 오류: $e');
-                  }
-                },
-                child: Text('8시')),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('insa')
-                        .doc('${widget.teamId}')
-                        .collection('schedule')
-                        .doc('1EjNGZtze07iY1WJKyvh')
-                        .collection('$_currentYear$_currentMonth')
-                        .doc('$scheduleDocument')
-                        .update({
-                      '$selectedDay': 9, // 업데이트할 필드와 값
-                    });
-                    print('문서 업데이트가 성공했습니다.');
-        
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print('문서 업데이트 오류: $e');
-                  }
-                },
-                child: Text('9시')),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('insa')
-                        .doc('${widget.teamId}')
-                        .collection('schedule')
-                        .doc('1EjNGZtze07iY1WJKyvh')
-                        .collection('$_currentYear$_currentMonth')
-                        .doc('$scheduleDocument')
-                        .update({
-                      '$selectedDay': 10, // 업데이트할 필드와 값
-                    });
-                    print('문서 업데이트가 성공했습니다.');
-        
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print('문서 업데이트 오류: $e');
-                  }
-                },
-                child: Text('10시')),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('insa')
-                        .doc('${widget.teamId}')
-                        .collection('schedule')
-                        .doc('1EjNGZtze07iY1WJKyvh')
-                        .collection('$_currentYear$_currentMonth')
-                        .doc('$scheduleDocument')
-                        .update({
-                      '$selectedDay': 11, // 업데이트할 필드와 값
-                    });
-                    print('문서 업데이트가 성공했습니다.');
-        
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print('문서 업데이트 오류: $e');
-                  }
-                },
-                child: Text('11시')),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('insa')
-                        .doc('${widget.teamId}')
-                        .collection('schedule')
-                        .doc('1EjNGZtze07iY1WJKyvh')
-                        .collection('$_currentYear$_currentMonth')
-                        .doc('$scheduleDocument')
-                        .update({
-                      '$selectedDay': 12, // 업데이트할 필드와 값
-                    });
-                    print('문서 업데이트가 성공했습니다.');
-        
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print('문서 업데이트 오류: $e');
-                  }
-                },
-                child: Text('12시')),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('insa')
-                        .doc('${widget.teamId}')
-                        .collection('schedule')
-                        .doc('1EjNGZtze07iY1WJKyvh')
-                        .collection('$_currentYear$_currentMonth')
-                        .doc('$scheduleDocument')
-                        .update({
-                      '$selectedDay': 'X', // 업데이트할 필드와 값
-                    });
-                    print('문서 업데이트가 성공했습니다.');
-        
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print('문서 업데이트 오류: $e');
-                  }
-                },
-                child: Text('X')),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc('${widget.teamId}')
+                            .collection('schedule')
+                            .doc('1EjNGZtze07iY1WJKyvh')
+                            .collection('$_currentYear$_currentMonth')
+                            .doc('$scheduleDocument')
+                            .update({
+                          '$selectedDay': 8, // 업데이트할 필드와 값
+                        });
+                        print('문서 업데이트가 성공했습니다.');
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('문서 업데이트 오류: $e');
+                      }
+                    },
+                    child: Text('8시')),
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc('${widget.teamId}')
+                            .collection('schedule')
+                            .doc('1EjNGZtze07iY1WJKyvh')
+                            .collection('$_currentYear$_currentMonth')
+                            .doc('$scheduleDocument')
+                            .update({
+                          '$selectedDay': 12, // 업데이트할 필드와 값
+                        });
+                        print('문서 업데이트가 성공했습니다.');
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('문서 업데이트 오류: $e');
+                      }
+                    },
+                    child: Text('12시')),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc('${widget.teamId}')
+                            .collection('schedule')
+                            .doc('1EjNGZtze07iY1WJKyvh')
+                            .collection('$_currentYear$_currentMonth')
+                            .doc('$scheduleDocument')
+                            .update({
+                          '$selectedDay': 9, // 업데이트할 필드와 값
+                        });
+                        print('문서 업데이트가 성공했습니다.');
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('문서 업데이트 오류: $e');
+                      }
+                    },
+                    child: Text('9시')),
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc('${widget.teamId}')
+                            .collection('schedule')
+                            .doc('1EjNGZtze07iY1WJKyvh')
+                            .collection('$_currentYear$_currentMonth')
+                            .doc('$scheduleDocument')
+                            .update({
+                          '$selectedDay': 10, // 업데이트할 필드와 값
+                        });
+                        print('문서 업데이트가 성공했습니다.');
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('문서 업데이트 오류: $e');
+                      }
+                    },
+                    child: Text('10시')),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc('${widget.teamId}')
+                            .collection('schedule')
+                            .doc('1EjNGZtze07iY1WJKyvh')
+                            .collection('$_currentYear$_currentMonth')
+                            .doc('$scheduleDocument')
+                            .update({
+                          '$selectedDay': 11, // 업데이트할 필드와 값
+                        });
+                        print('문서 업데이트가 성공했습니다.');
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('문서 업데이트 오류: $e');
+                      }
+                    },
+                    child: Text('11시')),
+                ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc('${widget.teamId}')
+                            .collection('schedule')
+                            .doc('1EjNGZtze07iY1WJKyvh')
+                            .collection('$_currentYear$_currentMonth')
+                            .doc('$scheduleDocument')
+                            .update({
+                          '$selectedDay': 'X', // 업데이트할 필드와 값
+                        });
+                        print('문서 업데이트가 성공했습니다.');
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('문서 업데이트 오류: $e');
+                      }
+                    },
+                    child: Text('X')),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+class _ControlFirst extends StatelessWidget {
+  final VoidCallback navigateToPreviousMonth;
+  final VoidCallback navigateToNextMonth; // 추가: _navigateToNextMonth도 final로 선언해야 합니다.
+  final int currentYear;
+  final int currentMonth;
+  final bool isFirstHalf;
+
+  const _ControlFirst({
+    super.key,
+    required this.navigateToPreviousMonth,
+    required this.navigateToNextMonth, // 추가: 생성자에 _navigateToNextMonth 추가
+    required this.currentYear, // 추가: 생성자에 _currentYear 추가
+    required this.currentMonth, // 추가: 생성자에 _currentMonth 추가
+    required this.isFirstHalf, // 추가: 생성자에 _isFirstHalf 추가
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_back),
+            onPressed: navigateToPreviousMonth,
+          ),
+          SizedBox(width: 4.0),
+          Text(
+            '$currentYear년 $currentMonth월 ${isFirstHalf ? '상반기' : '하반기'}',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 4.0),
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_forward),
+            onPressed: navigateToNextMonth,
+          ),
+        ],
+      ),
+    );
+  }
+}
+

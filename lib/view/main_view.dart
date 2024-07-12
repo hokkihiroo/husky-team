@@ -100,7 +100,7 @@ class _MainViewState extends State<MainView>
           if (index == 0) {
             title = '조직도';
           } else if (index == 1) {
-            title = '지역 시스템';
+            title = '시설';
           } else if (index == 2) {
             title = '공지사항';
           } else if (index == 3) {
@@ -121,7 +121,7 @@ class _MainViewState extends State<MainView>
             icon: Icon(
               Icons.drive_eta_outlined,
             ),
-            label: '지역',
+            label: '시설',
           ),
           BottomNavigationBarItem(
             icon: Icon(
