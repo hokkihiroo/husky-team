@@ -184,7 +184,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
             
                 Container(
                   height: 380,
-                  width: 450,
+                  width: MediaQuery.of(context).size.width,
                   child: SafeArea(
                     child: ListView(
                       scrollDirection: Axis.horizontal,

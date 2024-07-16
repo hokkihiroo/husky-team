@@ -348,7 +348,7 @@ class _MyScheduleState extends State<MySchedule> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 100,
               ),
             ],
           );

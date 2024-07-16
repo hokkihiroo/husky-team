@@ -174,7 +174,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 ),
                 Container(
                   height: 360,
-                  width: 450,
+                  width: MediaQuery.of(context).size.width,
                   child: SafeArea(
                     child: ListView(
                       scrollDirection: Axis.horizontal,
