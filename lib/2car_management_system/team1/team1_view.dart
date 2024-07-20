@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart';
 import 'package:team_husky/2car_management_system/team1/team1_car_list.dart';
 import 'package:team_husky/2car_management_system/team1/team1_model.dart';
+import 'package:team_husky/2car_management_system/team1/team1_outcar.dart';
 import 'package:telephony/telephony.dart';
 import 'package:vibration/vibration.dart';
 
@@ -65,7 +66,32 @@ class _Team1ViewState extends State<Team1View> {
               _Lists(
                 name: widget.name,
               ),
-              //이름이 두글자거나 다섯글자 이상이면 에러뜸
+              Divider(
+                color: Colors.white, // 선 색상
+                thickness: 2.0, // 선 두께
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        '출차중',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              OutCar(
+                name: widget.name,
+              ),
             ],
           ),
         ),
@@ -123,6 +149,10 @@ class _Team1ViewState extends State<Team1View> {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                  ),
                                   onPressed: () async {
                                     String documentId = FirebaseFirestore
                                         .instance
@@ -169,57 +199,10 @@ class _Team1ViewState extends State<Team1View> {
                                   child: Text('입력'),
                                 ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: ElevatedButton(
-                                    onPressed: () async {
-                                      String documentId = FirebaseFirestore
-                                          .instance
-                                          .collection(LOTARY)
-                                          .doc()
-                                          .id;
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection(LOTARY)
-                                            .doc(documentId)
-                                            .set({
-                                          'carNumber': carNumber,
-                                          'name': '',
-                                          'createdAt':
-                                              FieldValue.serverTimestamp(),
-                                          'location': 0,
-                                          'color': 1,
-                                          'etc': '직원',
-                                          'movedLocation': '로터리',
-                                          'wigetName': '',
-                                          'movingTime': '',
-                                        });
-                                      } catch (e) {}
-
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection(CarListAdress)
-                                            .doc(documentId)
-                                            .set({
-                                          'carNumber': carNumber,
-                                          'enterName': widget.name,
-                                          'enter': FieldValue.serverTimestamp(),
-                                          'out': '',
-                                          'outName': '',
-                                          'outLocation': 5,
-                                          'etc': '직원',
-                                          'movedLocation': '',
-                                          'wigetName': '',
-                                          'movingTime': '',
-                                        });
-                                      } catch (e) {}
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('직원')),
-                              ),
                             ],
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -277,10 +260,50 @@ class _Team1ViewState extends State<Team1View> {
                               ),
                               Expanded(
                                 child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      String documentId = FirebaseFirestore
+                                          .instance
+                                          .collection(LOTARY)
+                                          .doc()
+                                          .id;
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(LOTARY)
+                                            .doc(documentId)
+                                            .set({
+                                          'carNumber': carNumber,
+                                          'name': '',
+                                          'createdAt':
+                                              FieldValue.serverTimestamp(),
+                                          'location': 0,
+                                          'color': 1,
+                                          'etc': '직원',
+                                          'movedLocation': '로터리',
+                                          'wigetName': '',
+                                          'movingTime': '',
+                                        });
+                                      } catch (e) {}
+
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(CarListAdress)
+                                            .doc(documentId)
+                                            .set({
+                                          'carNumber': carNumber,
+                                          'enterName': widget.name,
+                                          'enter': FieldValue.serverTimestamp(),
+                                          'out': '',
+                                          'outName': '',
+                                          'outLocation': 5,
+                                          'etc': '직원',
+                                          'movedLocation': '',
+                                          'wigetName': '',
+                                          'movingTime': '',
+                                        });
+                                      } catch (e) {}
                                       Navigator.pop(context);
                                     },
-                                    child: Text('취소')),
+                                    child: Text('직원')),
                               ),
                             ],
                           ),
