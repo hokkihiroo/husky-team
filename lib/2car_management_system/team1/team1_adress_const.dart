@@ -44,6 +44,8 @@ String getTodayTime() {
   return todayTime;
 
 }
+// 시승차 스케줄 주소
+final CARSCHEDULE ='local/q0LRMbznxA2yPca1DKNw/team1/TxPOvECdU2W8gOh7bkPZ/';
 
 
 // 입차 리스트 주소

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart';
 import 'package:team_husky/2car_management_system/team1/team1_car_list.dart';
+import 'package:team_husky/2car_management_system/team1/team1_carschedule.dart';
+import 'package:team_husky/2car_management_system/team1/team1_carschedule_view.dart';
 import 'package:team_husky/2car_management_system/team1/team1_model.dart';
 import 'package:team_husky/2car_management_system/team1/team1_outcar.dart';
 import 'package:telephony/telephony.dart';
@@ -46,11 +48,34 @@ class _Team1ViewState extends State<Team1View> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: Text(
-            '차량관리 시스템',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Text(
+                    '차량관리 시스템',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CarSchedule()),
+                  );
+                },
+                child: Text(
+                  '시승차',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.black,
@@ -87,11 +112,59 @@ class _Team1ViewState extends State<Team1View> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               OutCar(
                 name: widget.name,
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(
+                color: Colors.white, // 선 색상
+                thickness: 2.0, // 선 두께
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Center(
+                      child: Text(
+                        '시승차 현황',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+
+                          });
+                        },
+                        child: Text(
+                          '새로고침',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              CarScheduleView(),
             ],
           ),
         ),

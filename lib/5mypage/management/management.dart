@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/2moveInsa.dart';
 import 'package:team_husky/5mypage/management/manegement/3manageGongji.dart';
 import 'package:team_husky/5mypage/management/manegement/4scchedule/4schedule.dart';
+import 'package:team_husky/5mypage/management/manegement/5gangnamCarManage/gangnamCar.dart';
 
 import 'manegement/1makeTeam.dart';
 
@@ -101,6 +102,26 @@ class _ManagementState extends State<Management> {
             },
             child: Text('스케줄관리'),
           ),
+          SizedBox(height: 10,),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+
+              minimumSize: Size(double.infinity, 50),
+            ),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return GangnamCar();
+                }),
+              );
+            },
+            child: Text('강남 시승차등록/삭제'),
+          ),
+          SizedBox(height: 10,),
+          
         ],
       ),
     );
