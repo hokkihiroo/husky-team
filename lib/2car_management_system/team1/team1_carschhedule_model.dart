@@ -22,6 +22,7 @@ class CarScheduleView extends StatefulWidget {
 class _CarScheduleViewState extends State<CarScheduleView> {
   String selectedCarName = '';
   String selectedCarTime = '';
+  String seat = '';
   String dataId = '';
 
   List<String> timeItems = [
@@ -75,6 +76,7 @@ class _CarScheduleViewState extends State<CarScheduleView> {
               selectedTime: doc['time'],
               selectedAlpha: doc['car'],
               docId: doc['docId'],
+              seat: doc['seat'],
             ));
           }
 
@@ -89,6 +91,7 @@ class _CarScheduleViewState extends State<CarScheduleView> {
 
                       selectedCarName = row.selectedAlpha;
                       selectedCarTime = row.selectedTime;
+                      seat = row.seat;
                       dataId = row.docId;
 
                       showDialog(
@@ -110,6 +113,7 @@ class _CarScheduleViewState extends State<CarScheduleView> {
                       number: row.number,
                       selectedTime: '${row.selectedTime}',
                       selectedAlpha: '${row.selectedAlpha}',
+                      seat: '${row.seat}',
                     ),
                   );
                 }).toList(),
@@ -244,6 +248,7 @@ class _CarScheduleViewState extends State<CarScheduleView> {
                               'time': ' ${item.selectedTime}',
                               'docId': documentId,
                               'seat': item.carSeat ?? 'X', // null이면 'X'를 넣음
+                              'testOk': 0, //0이면 시승대기 1이면 시승완료 2면 시승취소
                             });
                           } catch (e) {}
                         }
@@ -328,11 +333,13 @@ class RowSecond {
   final String selectedTime;
   final String selectedAlpha;
   final String docId;
+  final String seat;
 
   RowSecond({
     required this.number,
     required this.selectedTime,
     required this.selectedAlpha,
     required this.docId,
+    required this.seat,
   });
 }

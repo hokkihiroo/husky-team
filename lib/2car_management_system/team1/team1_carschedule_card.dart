@@ -4,8 +4,9 @@ class CarScheduleCard extends StatelessWidget {
   final int number;
   final String selectedTime;
   final String selectedAlpha;
+  final String seat;
 
-  const CarScheduleCard({super.key, required this.number, required this.selectedTime, required this.selectedAlpha});
+  const CarScheduleCard({super.key, required this.number, required this.selectedTime, required this.selectedAlpha, required this.seat});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,20 @@ class CarScheduleCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   '$selectedAlpha',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  '$seat',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

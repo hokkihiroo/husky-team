@@ -25,6 +25,8 @@ class _Team1ViewState extends State<Team1View> {
   String carNumber = '';
   String CarListAdress = CARLIST + formatTodayDate();
   Telephony telephony = Telephony.instance;
+  String CarScheduleAdress = formatTodayDate();
+  String dayOfWeek = '';
 
   @override
   void initState() {
@@ -32,6 +34,8 @@ class _Team1ViewState extends State<Team1View> {
     if (Platform.isAndroid) {
       requestSmsPermission(context);
     }
+    DateTime now = DateTime.now();
+    dayOfWeek = getDayOfWeek(now);
   }
 
   void requestSmsPermission(BuildContext context) async {
@@ -84,6 +88,61 @@ class _Team1ViewState extends State<Team1View> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              Divider(
+                color: Colors.white, // 선 색상
+                thickness: 2.0, // 선 두께
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '시승차 현황 ($CarScheduleAdress) $dayOfWeek',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        CarScheduleAdress = formatTodayDate();
+                        DateTime now = DateTime.now();
+                        dayOfWeek = getDayOfWeek(now);
+                      });
+                    },
+                    child: Text(
+                      '새로고침',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              CarScheduleView(
+                CarScheduleAdress: CarScheduleAdress,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                color: Colors.white, // 선 색상
+                thickness: 2.0, // 선 두께
+              ),
               _LocationName(),
               SizedBox(
                 height: 20,
@@ -120,51 +179,6 @@ class _Team1ViewState extends State<Team1View> {
               SizedBox(
                 height: 20,
               ),
-              Divider(
-                color: Colors.white, // 선 색상
-                thickness: 2.0, // 선 두께
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: Center(
-                      child: Text(
-                        '시승차 현황',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: (){
-                          setState(() {
-
-                          });
-                        },
-                        child: Text(
-                          '새로고침',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              CarScheduleView(),
             ],
           ),
         ),
