@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -61,12 +62,26 @@ class _MyPictureState extends State<MyPicture> {
             children: [
               TextButton.icon(
                   onPressed: () async{
+
                     if(pickedImage !=null) {
                       final refImage = FirebaseStorage.instance
                           .ref()
                           .child('mypicture')
                           .child(widget.uid +'.png');
                       await refImage.putFile(pickedImage!);
+                      final url = await refImage.getDownloadURL();
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('user')
+                            .doc(widget.uid)
+                            .update({
+                          'picUrl': url,
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+
                     }
                     Navigator.of(context).pop();
                   },

@@ -38,6 +38,7 @@ class _UserResumeState extends State<UserResume> {
   String pantsSize = ''; //하의
   String cm = ''; //키
   String kg = ''; //몸무게
+  String picUrl = ''; // 사진저장소주소
 
   @override
   Widget build(BuildContext context) {
@@ -322,6 +323,7 @@ class _UserResumeState extends State<UserResume> {
                                     .doc(newUser.user!.uid)
                                     .set({
                                   'image': image,
+                                  'picUrl' :picUrl,
                                   'email': email,
                                   'name': name,
                                   'birthDay': birthDay,
