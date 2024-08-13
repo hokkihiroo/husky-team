@@ -8,7 +8,11 @@ import 'package:image_picker/image_picker.dart';
 
 class MyPicture extends StatefulWidget {
   final String uid;
-  const MyPicture({super.key, required this.uid});
+  final String team;
+
+  const MyPicture({super.key,
+    required this.uid,
+    required this.team});
 
   @override
   State<MyPicture> createState() => _MyPictureState();
@@ -72,12 +76,23 @@ class _MyPictureState extends State<MyPicture> {
                       final url = await refImage.getDownloadURL();
 
                       try {
+
                         await FirebaseFirestore.instance
                             .collection('user')
                             .doc(widget.uid)
                             .update({
                           'picUrl': url,
                         });
+
+                        await FirebaseFirestore.instance
+                            .collection('insa')
+                            .doc(widget.team)
+                            .collection('list')
+                            .doc(widget.uid)
+                            .update({
+                          'picUrl': url,
+                        });
+
                       } catch (e) {
                         print(e);
                       }

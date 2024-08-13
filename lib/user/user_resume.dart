@@ -354,6 +354,8 @@ class _UserResumeState extends State<UserResume> {
                                   'grade': '사원',
                                   'position': '드라이버',
                                   'enterDay': FieldValue.serverTimestamp(),
+                                  'picUrl' :picUrl,
+
 
                                 });
                                 Navigator.pop(context);

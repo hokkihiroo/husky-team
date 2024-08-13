@@ -5,6 +5,7 @@ class OrganizationCard extends StatelessWidget {
   final String name;
   final String grade;
   final String position;
+  final String? picUrl;
 
 
   const OrganizationCard(
@@ -12,7 +13,8 @@ class OrganizationCard extends StatelessWidget {
         required this.image,
         required this.position,
         required this.name,
-        required this.grade});
+        required this.grade,
+        this.picUrl});
 
   @override
   Widget build(BuildContext context) {

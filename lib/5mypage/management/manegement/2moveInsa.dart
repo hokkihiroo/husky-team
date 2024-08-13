@@ -25,6 +25,7 @@ class _MoveInsaState extends State<MoveInsa> {
   String updateGrade = ''; //직원 바뀐직책
   Timestamp memberEnter = Timestamp.now();
   String image = '';
+  String picUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,6 @@ class _MoveInsaState extends State<MoveInsa> {
                   }
 
                   final docs = snapshot.data!.docs;
-
                   return ListView.builder(
                     shrinkWrap: true,
                     // 리스트뷰가 컨테이너의 크기에 맞게 축소될 수 있도록 설정
@@ -140,6 +140,7 @@ class _MoveInsaState extends State<MoveInsa> {
                           memberGrade = docs[index]['grade'];
                           memberEnter = docs[index]['enterDay'];
                           image = docs[index]['image'];
+                          picUrl = docs[index]['picUrl'];
 
                           showDialog(
                             context: context,
@@ -153,6 +154,7 @@ class _MoveInsaState extends State<MoveInsa> {
                                 docId,
                                 memberEnter,
                                 image,
+                                picUrl,
                               );
                             },
                           );
@@ -182,6 +184,7 @@ class _MoveInsaState extends State<MoveInsa> {
     String docId,
     Timestamp memberEnter,
     String image,
+    String picUrl,
   ) {
     return AlertDialog(
       title: Center(
@@ -383,6 +386,7 @@ class _MoveInsaState extends State<MoveInsa> {
                     'position': memberPosition,
                     'enterDay': memberEnter,
                     'image': image,
+                    'picUrl': picUrl,
                   });
                 } catch (e) {
                   print(e);

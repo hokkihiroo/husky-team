@@ -64,7 +64,9 @@ class _MyPageState extends State<MyPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return Dialog(
-                          child: MyPicture(uid: widget.uid,),
+                          child: MyPicture(
+                            uid: widget.uid,
+                            team: widget.team,),
                         );
                       },
                     );

@@ -113,6 +113,7 @@ class _OrganizationState extends State<Organization> {
                                     grade: data['grade'] ?? '',
                                     // 포지션이 널인 경우 빈 문자열 사용
                                     position: data['position'] ?? '',
+                                    picUrl: data['picUrl'] ?? '',
                                   ),
                                 );
                               }).toList(),
