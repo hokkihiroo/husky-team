@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
+import 'package:team_husky/5mypage/mypicture/mypicture.dart';
 import 'package:team_husky/5mypage/myschedule/myschedule.dart';
-import 'package:team_husky/user/user_auth.dart';
 import 'package:team_husky/user/user_screen.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   const MyPage(
       {super.key,
       required this.name,
@@ -22,6 +22,11 @@ class MyPage extends StatelessWidget {
   final int grade;
 
   @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -29,8 +34,8 @@ class MyPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text('메일 : $email'),
-              Text('이름 :$name'),
+              Text('메일 : ${widget.email}'),
+              Text('이름 :${widget.name}'),
               ElevatedButton(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
@@ -51,12 +56,33 @@ class MyPage extends StatelessWidget {
             height: 20,
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              OutlinedButton.icon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          child: MyPicture(uid: widget.uid,),
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.image),
+                  label: Text('내사진 등록')),
+              SizedBox(
+                width: 50,
+              ),
+            ],
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.black),
                 onPressed: () {
-                  if (grade == 0) {
+                  if (widget.grade == 0) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -79,7 +105,7 @@ class MyPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) {
                         return Management(
-                          name: name,
+                          name: widget.name,
                         );
                       }),
                     );
@@ -95,7 +121,7 @@ class MyPage extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.black),
                 onPressed: () {
-                  if (grade != 2) {
+                  if (widget.grade != 2) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -138,23 +164,22 @@ class MyPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
                       return MySchedule(
-                        team: team,
-                        uid: uid,
+                        team: widget.team,
+                        uid: widget.uid,
                       );
                     }),
                   );
                 },
-                child: Text('나의 스케줄',
-                style: TextStyle(
-                  color: Colors.green
-                ),),
+                child: Text(
+                  '나의 스케줄',
+                  style: TextStyle(color: Colors.green),
+                ),
               ),
 
 //               ElevatedButton(
