@@ -123,24 +123,19 @@ class _MoveInsaState extends State<MoveInsa> {
                   }
 
                   final docs = snapshot.data!.docs;
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    // 리스트뷰가 컨테이너의 크기에 맞게 축소될 수 있도록 설정
-                    // 스크롤 불가능하도록 설정
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      // 2단계 컬렉션의 데이터를 표시하는 위젯 반환
-                      var data = docs[index].data() ?? {}; // 데이터가 널인 경우 빈 맵을 사용
+                  return  Column(
+                    children: docs.map((subDoc) {
+                      var data = subDoc.data() ?? {};
+
                       return GestureDetector(
                         onTap: () async {
-                          var document = docs[index];
-                          memberId = document.id;
-                          memberName = docs[index]['name'];
-                          memberPosition = docs[index]['position'];
-                          memberGrade = docs[index]['grade'];
-                          memberEnter = docs[index]['enterDay'];
-                          image = docs[index]['image'];
-                          picUrl = docs[index]['picUrl'];
+                          memberId = subDoc.id;
+                          memberName = data['name'];
+                          memberPosition = data['position'];
+                          memberGrade = data['grade'];
+                          memberEnter = data['enterDay'];
+                          image = data['image'];
+                          picUrl = data['picUrl'];
 
                           showDialog(
                             context: context,
@@ -165,7 +160,7 @@ class _MoveInsaState extends State<MoveInsa> {
                           position: data['position'] ?? '',
                         ),
                       );
-                    },
+                    }).toList(),
                   );
                 },
               ),

@@ -18,6 +18,7 @@ class _OrganizationState extends State<Organization> {
   String name = ''; // 팀 이름
   String mansID = ''; // 팀원문서아이디
   String formattedDate = '';
+  String? picUrl= '';
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +95,15 @@ class _OrganizationState extends State<Organization> {
                                     DateTime dateTime = timestamp.toDate();
                                     formattedDate =
                                         DateFormat('yy/MM/dd').format(dateTime);
+                                     picUrl = userData['picUrl'];
+
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return viewInsa(
                                           userData,
                                           formattedDate,
+                                            picUrl!,
                                         );
                                       },
                                     );
@@ -131,14 +135,18 @@ class _OrganizationState extends State<Organization> {
   Widget viewInsa(
     Map<String, dynamic> data,
     String formattedDate,
+    String picUrl,
   ) {
     return AlertDialog(
       title: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage('asset/img/husky_Logo.png'),
-            // 이미지 경로 설정
+            backgroundImage: picUrl != null && picUrl!.isNotEmpty
+                ? NetworkImage(
+              picUrl!,
+            )
+                : AssetImage('asset/img/husky_Logo.png') as ImageProvider,
             radius: 80, // 원의 반지름 설정
           ),
           SizedBox(

@@ -7,14 +7,13 @@ class OrganizationCard extends StatelessWidget {
   final String position;
   final String? picUrl;
 
-
   const OrganizationCard(
       {super.key,
-        required this.image,
-        required this.position,
-        required this.name,
-        required this.grade,
-        this.picUrl});
+      required this.image,
+      required this.position,
+      required this.name,
+      required this.grade,
+      this.picUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +24,22 @@ class OrganizationCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(width: 30,),
-
-            Expanded(
-              child: ClipOval(
-                child: Container(
-                  height: 70, // 이미지의 높이를 조정, 필요에 따라 조절
-                  width: 70, // 이미지의 너비를 조정, 필요에 따라 조절
-                  child: image,
-                ),
+            SizedBox(
+              width: 30,
+            ),
+            ClipOval(
+              child: Container(
+                height: 40, // 이미지의 높이를 조정
+                width: 40, // 이미지의 너비를 조정
+                child: picUrl != null && picUrl!.isNotEmpty
+                    ? Image.network(
+                  picUrl!,
+                  fit: BoxFit.cover,
+                )
+                    : image, // picUrl이 null이거나 빈 값일 경우 기본 이미지 사용
               ),
             ),
+            SizedBox(width: 30,),
             Expanded(
               child: Text(
                 name,
