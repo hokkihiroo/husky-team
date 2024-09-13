@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:team_husky/user/custom_text_form.dart';
@@ -47,22 +48,35 @@ class _EducationMakingState extends State<EducationMaking> {
     });
   }
 
-  // void _pickImages() async {
-  //   final imagePicker = ImagePicker();
-  //
-  //   // 이미 선택된 이미지가 5개보다 적을 때만 실행
-  //   if (pickedImages.length < 5) {
-  //     final pickedImageFile = await imagePicker.pickImage(
-  //       source: ImageSource.gallery,
-  //       imageQuality: 50,
-  //     );
-  //     setState(() {
-  //       if (pickedImageFile != null) {
-  //         pickedImages.add(File(pickedImageFile.path));
-  //       }
-  //     });
-  //   }
-  // }
+  Future<void> _uploadImagesAndSaveUrls(String documentId) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final uploadTasks = <Future<void>>[];
+
+    for (final entry in pickedImages.entries) {
+      final num = entry.key;
+      final file = entry.value;
+
+      if (file != null) {
+        final ref = storageRef.child('education_images/${widget.docId}/$documentId/$num.png');
+        final uploadTask = ref.putFile(file);
+
+        uploadTasks.add(uploadTask.then((taskSnapshot) async {
+          final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+          await FirebaseFirestore.instance
+              .collection('education')
+              .doc(widget.docId)
+              .collection('list')
+              .doc(documentId)
+              .update({
+            'images.$num': downloadUrl,
+          });
+        }));
+      }
+    }
+
+    await Future.wait(uploadTasks);
+  }
+
 
   String subject = ''; // 제목
   String contents = ''; // 내용
@@ -461,6 +475,12 @@ class _EducationMakingState extends State<EducationMaking> {
                                 .collection('list')
                                 .doc()
                                 .id;
+
+
+                            //여기
+
+
+
                             try {
                               await FirebaseFirestore.instance
                                   .collection('education')
@@ -473,9 +493,18 @@ class _EducationMakingState extends State<EducationMaking> {
                                 'createdAt': FieldValue.serverTimestamp(),
                                 'contents': contents,
                               });
-                              //알람울려달라고 서버로 던짐
+                              // 사진작업
+                              await _uploadImagesAndSaveUrls(documentId);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('작성 완료 및 이미지 업로드 완료')),
+                              );
                             } catch (e) {
                               print(e);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('오류 발생: $e')),
+                              );
+
                             }
                             Navigator.pop(context);
                           },
