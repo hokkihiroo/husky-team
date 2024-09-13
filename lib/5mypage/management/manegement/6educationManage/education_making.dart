@@ -35,6 +35,7 @@ class _EducationMakingState extends State<EducationMaking> {
       _formKey.currentState!.save();
     }
   }
+
   void _picImage() async {
     final imagePicker = ImagePicker();
     final pickedImageFile = await imagePicker.pickImage(
@@ -138,36 +139,151 @@ class _EducationMakingState extends State<EducationMaking> {
                     ),
 
                     //(이부분)
-                    GestureDetector(
-                      onTap: () {
-                        _picImage(); // 이미지 선택 함수 호출
-                      },
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.blue,
-                            backgroundImage: pickedImage1 != null ? FileImage(pickedImage1!) : null,
-                          ),
-                          if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
-                            Positioned.fill(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '1',
-                                  style: TextStyle(
-                                    color: Colors.white, // 숫자 색상 (흰색)
-                                    fontSize: 24, // 숫자 크기
-                                    fontWeight: FontWeight.bold, // 숫자 두껍게
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+
+                        GestureDetector(
+                          onTap: () {
+                            _picImage(); // 이미지 선택 함수 호출
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.grey,
+                                backgroundImage: pickedImage1 != null
+                                    ? FileImage(pickedImage1!)
+                                    : null,
+                              ),
+                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.camera_alt, // 카메라 모양 아이콘
+                                      color: Colors.white, // 아이콘 색상 (흰색)
+                                      size: 24, // 아이콘 크기
+                                    ),
                                   ),
                                 ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _picImage(); // 이미지 선택 함수 호출
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.grey,
+                                backgroundImage: pickedImage1 != null
+                                    ? FileImage(pickedImage1!)
+                                    : null,
                               ),
-                            ),
-                        ],
-                      ),
+                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.camera_alt, // 카메라 모양 아이콘
+                                      color: Colors.white, // 아이콘 색상 (흰색)
+                                      size: 24, // 아이콘 크기
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _picImage(); // 이미지 선택 함수 호출
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.grey,
+                                backgroundImage: pickedImage1 != null
+                                    ? FileImage(pickedImage1!)
+                                    : null,
+                              ),
+                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.camera_alt, // 카메라 모양 아이콘
+                                      color: Colors.white, // 아이콘 색상 (흰색)
+                                      size: 24, // 아이콘 크기
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _picImage(); // 이미지 선택 함수 호출
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.grey,
+                                backgroundImage: pickedImage1 != null
+                                    ? FileImage(pickedImage1!)
+                                    : null,
+                              ),
+                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.camera_alt, // 카메라 모양 아이콘
+                                      color: Colors.white, // 아이콘 색상 (흰색)
+                                      size: 24, // 아이콘 크기
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _picImage(); // 이미지 선택 함수 호출
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.grey,
+                                backgroundImage: pickedImage1 != null
+                                    ? FileImage(pickedImage1!)
+                                    : null,
+                              ),
+                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
+                                Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.camera_alt, // 카메라 모양 아이콘
+                                      color: Colors.white, // 아이콘 색상 (흰색)
+                                      size: 24, // 아이콘 크기
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
 
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
