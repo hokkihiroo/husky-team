@@ -233,7 +233,7 @@ class EducationManageDetail extends StatelessWidget {
                         width: double.infinity, // 가로 길이를 화면에 맞추기 위해 설정
                         child: Image.network(
                           imageUrls![key]!, // 네트워크 이미지 URL
-                          fit: BoxFit.cover, // 이미지를 화면에 맞춰 늘림, 비율 유지
+                          fit: BoxFit.contain, // 이미지를 화면에 맞춰 늘림, 비율 유지
                         ),
                       ),
                       SizedBox(height: 10), // 이미지 사이에 간격을 넣기 위해 사용
