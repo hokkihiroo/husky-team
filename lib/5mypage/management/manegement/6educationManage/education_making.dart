@@ -21,7 +21,8 @@ class EducationMaking extends StatefulWidget {
 }
 
 class _EducationMakingState extends State<EducationMaking> {
-  List<File?> pickedImages = []; // 선택된 이미지를 저장할 리스트
+  File? pickedImage;
+
   final _formKey = GlobalKey<FormState>();
 
   void _tryValidation() {
@@ -30,23 +31,36 @@ class _EducationMakingState extends State<EducationMaking> {
       _formKey.currentState!.save();
     }
   }
-
-  void _pickImages() async {
+  void _picImage() async {
     final imagePicker = ImagePicker();
-
-    // 이미 선택된 이미지가 5개보다 적을 때만 실행
-    if (pickedImages.length < 5) {
-      final pickedImageFile = await imagePicker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-      );
-      setState(() {
-        if (pickedImageFile != null) {
-          pickedImages.add(File(pickedImageFile.path));
-        }
-      });
-    }
+    final pickedImageFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      maxHeight: 150,
+    );
+    setState(() {
+      if (pickedImageFile != null) {
+        pickedImage = File(pickedImageFile.path);
+      }
+    });
   }
+
+  // void _pickImages() async {
+  //   final imagePicker = ImagePicker();
+  //
+  //   // 이미 선택된 이미지가 5개보다 적을 때만 실행
+  //   if (pickedImages.length < 5) {
+  //     final pickedImageFile = await imagePicker.pickImage(
+  //       source: ImageSource.gallery,
+  //       imageQuality: 50,
+  //     );
+  //     setState(() {
+  //       if (pickedImageFile != null) {
+  //         pickedImages.add(File(pickedImageFile.path));
+  //       }
+  //     });
+  //   }
+  // }
 
   String subject = ''; // 제목
   String contents = ''; // 내용
@@ -120,10 +134,16 @@ class _EducationMakingState extends State<EducationMaking> {
                     ),
 
                     //(이부분)
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.blue,
+                      backgroundImage:
+                      pickedImage != null ? FileImage(pickedImage!) : null,
+                    ),
 
                     OutlinedButton.icon(
                         onPressed: () {
-                          _pickImages();
+                          _picImage();
                         },
                         icon: Icon(Icons.image),
                         label: Text('이미지 찾기')),
