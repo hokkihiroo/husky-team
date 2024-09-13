@@ -231,7 +231,6 @@ class EducationManageDetail extends StatelessWidget {
                     for (String key in imageUrls!.keys) ...[
                       Container(
                         width: double.infinity, // 가로 길이를 화면에 맞추기 위해 설정
-                        height: 200, // 원하는 이미지 높이
                         child: Image.network(
                           imageUrls![key]!, // 네트워크 이미지 URL
                           fit: BoxFit.cover, // 이미지를 화면에 맞춰 늘림, 비율 유지
