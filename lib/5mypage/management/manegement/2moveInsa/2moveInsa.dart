@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/5mypage/management/manegement/0adress_const.dart';
-import 'package:team_husky/5mypage/management/manegement/2moveInsaCard.dart';
-import 'package:team_husky/5mypage/management/manegement/2moveMemberCard.dart';
+import 'package:team_husky/5mypage/management/manegement/2moveInsa/2moveInsaCard.dart';
+import 'package:team_husky/5mypage/management/manegement/2moveInsa/2moveMemberCard.dart';
 
 class MoveInsa extends StatefulWidget {
   const MoveInsa({Key? key});

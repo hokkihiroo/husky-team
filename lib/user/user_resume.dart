@@ -139,6 +139,7 @@ class _UserResumeState extends State<UserResume> {
                           });
                         },
                         hintText: '이름',
+                        maxLength: 3,
                       ),
                       SizedBox(
                         height: 25,

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/1insa/Address.dart';
 
-import '../../../user/custom_text_form.dart';
+import '../../../../user/custom_text_form.dart';
 
 class MakeTeam extends StatefulWidget {
   const MakeTeam({super.key});

@@ -11,13 +11,14 @@ class CustomTextForm extends StatelessWidget {
   final FormFieldSetter? onSaved;
   final FormFieldValidator? validator;
   final int? maxLines; // 추가된 maxLines 속성
+  final int? maxLength; // 추가된 maxLength 속성
 
   const CustomTextForm(
       {super.key,
         this.hintText,
         this.errorText,
         this.obscureText = false,
-        this.autoFocus = false, this.onChanged, this.icon, this.onSaved, this.validator, this.maxLines});
+        this.autoFocus = false, this.onChanged, this.icon, this.onSaved, this.validator, this.maxLines, this.maxLength});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class CustomTextForm extends StatelessWidget {
       onChanged: onChanged,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       maxLines: 1,
+      maxLength: maxLength, // maxLength 속성 추가
       decoration: InputDecoration(
         prefixIcon: icon,
         contentPadding: EdgeInsets.all(20),
