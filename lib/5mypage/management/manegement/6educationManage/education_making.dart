@@ -21,7 +21,11 @@ class EducationMaking extends StatefulWidget {
 }
 
 class _EducationMakingState extends State<EducationMaking> {
-  File? pickedImage;
+  File? pickedImage1;
+  File? pickedImage2;
+  File? pickedImage3;
+  File? pickedImage4;
+  File? pickedImage5;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -40,7 +44,7 @@ class _EducationMakingState extends State<EducationMaking> {
     );
     setState(() {
       if (pickedImageFile != null) {
-        pickedImage = File(pickedImageFile.path);
+        pickedImage1 = File(pickedImageFile.path);
       }
     });
   }
@@ -135,25 +139,35 @@ class _EducationMakingState extends State<EducationMaking> {
 
                     //(이부분)
                     GestureDetector(
-                      onTap: (){
-                        _picImage();
-
+                      onTap: () {
+                        _picImage(); // 이미지 선택 함수 호출
                       },
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.blue,
-                        backgroundImage:
-                        pickedImage != null ? FileImage(pickedImage!) : null,
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.blue,
+                            backgroundImage: pickedImage1 != null ? FileImage(pickedImage1!) : null,
+                          ),
+                          if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
+                            Positioned.fill(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color: Colors.white, // 숫자 색상 (흰색)
+                                    fontSize: 24, // 숫자 크기
+                                    fontWeight: FontWeight.bold, // 숫자 두껍게
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
 
-                    OutlinedButton.icon(
-                        onPressed: () {
-                          _picImage();
-                        },
-                        icon: Icon(Icons.image),
-                        label: Text('이미지 찾기')),
-
+                    SizedBox(height: 20,),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
