@@ -24,7 +24,6 @@ class EducationMaking extends StatefulWidget {
 class _EducationMakingState extends State<EducationMaking> {
   Map<int, File?> pickedImages = {};
 
-
   final _formKey = GlobalKey<FormState>();
 
   void _tryValidation() {
@@ -57,7 +56,8 @@ class _EducationMakingState extends State<EducationMaking> {
       final file = entry.value;
 
       if (file != null) {
-        final ref = storageRef.child('education_images/${widget.docId}/$documentId/$num.png');
+        final ref = storageRef
+            .child('education_images/${widget.docId}/$documentId/$num.png');
         final uploadTask = ref.putFile(file);
 
         uploadTasks.add(uploadTask.then((taskSnapshot) async {
@@ -76,7 +76,6 @@ class _EducationMakingState extends State<EducationMaking> {
 
     await Future.wait(uploadTasks);
   }
-
 
   String subject = ''; // 제목
   String contents = ''; // 내용
@@ -180,7 +179,8 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImages[1] == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[1] ==
+                                      null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -226,7 +226,8 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImages[2] == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[2] ==
+                                      null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -272,7 +273,8 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImages[3] == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[3] ==
+                                      null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -326,7 +328,8 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImages[4] == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[4] ==
+                                      null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -372,7 +375,8 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImages[5] == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[5] ==
+                                      null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -418,7 +422,8 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImages[6] == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[6] ==
+                                      null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -475,12 +480,6 @@ class _EducationMakingState extends State<EducationMaking> {
                                 .collection('list')
                                 .doc()
                                 .id;
-
-
-                            //여기
-
-
-
                             try {
                               await FirebaseFirestore.instance
                                   .collection('education')
@@ -504,7 +503,6 @@ class _EducationMakingState extends State<EducationMaking> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('오류 발생: $e')),
                               );
-
                             }
                             Navigator.pop(context);
                           },

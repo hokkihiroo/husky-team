@@ -11,7 +11,10 @@ class EducationSelectCategory extends StatefulWidget {
   String name;
 
   EducationSelectCategory(
-      {super.key, required this.category, required this.documentID, required this.name});
+      {super.key,
+      required this.category,
+      required this.documentID,
+      required this.name});
 
   @override
   State<EducationSelectCategory> createState() =>
@@ -69,7 +72,9 @@ class _EducationSelectCategoryState extends State<EducationSelectCategory> {
                             contents: docs[index]['contents'],
                             docId: docs[index].id,
                             categoryDocId: widget.documentID,
-
+                            imageUrls: docs[index]['images'] != null
+                                ? Map<String, String>.from(docs[index]['images'])
+                                : {}, // null일 때 빈 Map을 전달
                           ),
                         ),
                       );
@@ -85,7 +90,6 @@ class _EducationSelectCategoryState extends State<EducationSelectCategory> {
         },
       ),
       bottomNavigationBar: bottomOne(),
-
     );
   }
 
@@ -100,11 +104,9 @@ class _EducationSelectCategoryState extends State<EducationSelectCategory> {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                textStyle:
-                TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
+                textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
               ),
               onPressed: () {
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -115,8 +117,6 @@ class _EducationSelectCategoryState extends State<EducationSelectCategory> {
                     ),
                   ),
                 );
-
-
               },
               child: Text('글쓰기'),
             ),
@@ -126,6 +126,4 @@ class _EducationSelectCategoryState extends State<EducationSelectCategory> {
       color: Colors.white,
     );
   }
-
-
 }
