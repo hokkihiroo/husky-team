@@ -26,6 +26,7 @@ class _EducationMakingState extends State<EducationMaking> {
   File? pickedImage3;
   File? pickedImage4;
   File? pickedImage5;
+  File? pickedImage6;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -139,144 +140,296 @@ class _EducationMakingState extends State<EducationMaking> {
                     ),
 
                     //(이부분)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Column(
                       children: [
-
-                        GestureDetector(
-                          onTap: () {
-                            _picImage(); // 이미지 선택 함수 호출
-                          },
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey,
-                                backgroundImage: pickedImage1 != null
-                                    ? FileImage(pickedImage1!)
-                                    : null,
-                              ),
-                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.camera_alt, // 카메라 모양 아이콘
-                                      color: Colors.white, // 아이콘 색상 (흰색)
-                                      size: 24, // 아이콘 크기
-                                    ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _picImage(); // 이미지 선택 함수 호출
+                              },
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: pickedImage1 != null
+                                        ? FileImage(pickedImage1!)
+                                        : null,
                                   ),
-                                ),
-                            ],
-                          ),
+                                  if (pickedImage1 ==
+                                      null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.camera_alt, // 카메라 모양 아이콘
+                                          color: Colors.white, // 아이콘 색상 (흰색)
+                                          size: 24, // 아이콘 크기
+                                        ),
+                                      ),
+                                    ),
+                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                    Positioned(
+                                      bottom: 5, // 숫자를 아이콘 아래쪽에 배치
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '1', // 숫자
+                                          style: TextStyle(
+                                            color: Colors.white, // 숫자 색상
+                                            fontSize: 12, // 숫자 크기
+                                            fontWeight:
+                                                FontWeight.bold, // 숫자 두껍게
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _picImage(); // 이미지 선택 함수 호출
+                              },
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: pickedImage1 != null
+                                        ? FileImage(pickedImage1!)
+                                        : null,
+                                  ),
+                                  if (pickedImage1 ==
+                                      null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.camera_alt, // 카메라 모양 아이콘
+                                          color: Colors.white, // 아이콘 색상 (흰색)
+                                          size: 24, // 아이콘 크기
+                                        ),
+                                      ),
+                                    ),
+                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                    Positioned(
+                                      bottom: 5, // 숫자를 아이콘 아래쪽에 배치
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '2', // 숫자
+                                          style: TextStyle(
+                                            color: Colors.white, // 숫자 색상
+                                            fontSize: 12, // 숫자 크기
+                                            fontWeight:
+                                                FontWeight.bold, // 숫자 두껍게
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _picImage(); // 이미지 선택 함수 호출
+                              },
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: pickedImage1 != null
+                                        ? FileImage(pickedImage1!)
+                                        : null,
+                                  ),
+                                  if (pickedImage1 ==
+                                      null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.camera_alt, // 카메라 모양 아이콘
+                                          color: Colors.white, // 아이콘 색상 (흰색)
+                                          size: 24, // 아이콘 크기
+                                        ),
+                                      ),
+                                    ),
+                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                    Positioned(
+                                      bottom: 5, // 숫자를 아이콘 아래쪽에 배치
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '3', // 숫자
+                                          style: TextStyle(
+                                            color: Colors.white, // 숫자 색상
+                                            fontSize: 12, // 숫자 크기
+                                            fontWeight:
+                                                FontWeight.bold, // 숫자 두껍게
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            _picImage(); // 이미지 선택 함수 호출
-                          },
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey,
-                                backgroundImage: pickedImage1 != null
-                                    ? FileImage(pickedImage1!)
-                                    : null,
-                              ),
-                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.camera_alt, // 카메라 모양 아이콘
-                                      color: Colors.white, // 아이콘 색상 (흰색)
-                                      size: 24, // 아이콘 크기
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                        SizedBox(
+                          height: 10,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            _picImage(); // 이미지 선택 함수 호출
-                          },
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey,
-                                backgroundImage: pickedImage1 != null
-                                    ? FileImage(pickedImage1!)
-                                    : null,
-                              ),
-                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.camera_alt, // 카메라 모양 아이콘
-                                      color: Colors.white, // 아이콘 색상 (흰색)
-                                      size: 24, // 아이콘 크기
-                                    ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _picImage(); // 이미지 선택 함수 호출
+                              },
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: pickedImage1 != null
+                                        ? FileImage(pickedImage1!)
+                                        : null,
                                   ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            _picImage(); // 이미지 선택 함수 호출
-                          },
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey,
-                                backgroundImage: pickedImage1 != null
-                                    ? FileImage(pickedImage1!)
-                                    : null,
-                              ),
-                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.camera_alt, // 카메라 모양 아이콘
-                                      color: Colors.white, // 아이콘 색상 (흰색)
-                                      size: 24, // 아이콘 크기
+                                  if (pickedImage1 ==
+                                      null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.camera_alt, // 카메라 모양 아이콘
+                                          color: Colors.white, // 아이콘 색상 (흰색)
+                                          size: 24, // 아이콘 크기
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            _picImage(); // 이미지 선택 함수 호출
-                          },
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.grey,
-                                backgroundImage: pickedImage1 != null
-                                    ? FileImage(pickedImage1!)
-                                    : null,
-                              ),
-                              if (pickedImage1 == null) // 이미지가 없을 때 숫자 1을 표시
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.camera_alt, // 카메라 모양 아이콘
-                                      color: Colors.white, // 아이콘 색상 (흰색)
-                                      size: 24, // 아이콘 크기
+                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                    Positioned(
+                                      bottom: 5, // 숫자를 아이콘 아래쪽에 배치
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '4', // 숫자
+                                          style: TextStyle(
+                                            color: Colors.white, // 숫자 색상
+                                            fontSize: 12, // 숫자 크기
+                                            fontWeight:
+                                                FontWeight.bold, // 숫자 두껍게
+                                          ),
+                                        ),
+                                      ),
                                     ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _picImage(); // 이미지 선택 함수 호출
+                              },
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: pickedImage1 != null
+                                        ? FileImage(pickedImage1!)
+                                        : null,
                                   ),
-                                ),
-                            ],
-                          ),
+                                  if (pickedImage1 ==
+                                      null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.camera_alt, // 카메라 모양 아이콘
+                                          color: Colors.white, // 아이콘 색상 (흰색)
+                                          size: 24, // 아이콘 크기
+                                        ),
+                                      ),
+                                    ),
+                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                    Positioned(
+                                      bottom: 5, // 숫자를 아이콘 아래쪽에 배치
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '5', // 숫자
+                                          style: TextStyle(
+                                            color: Colors.white, // 숫자 색상
+                                            fontSize: 12, // 숫자 크기
+                                            fontWeight:
+                                                FontWeight.bold, // 숫자 두껍게
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _picImage(); // 이미지 선택 함수 호출
+                              },
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: pickedImage1 != null
+                                        ? FileImage(pickedImage1!)
+                                        : null,
+                                  ),
+                                  if (pickedImage1 ==
+                                      null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.camera_alt, // 카메라 모양 아이콘
+                                          color: Colors.white, // 아이콘 색상 (흰색)
+                                          size: 24, // 아이콘 크기
+                                        ),
+                                      ),
+                                    ),
+                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                    Positioned(
+                                      bottom: 5, // 숫자를 아이콘 아래쪽에 배치
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '6', // 숫자
+                                          style: TextStyle(
+                                            color: Colors.white, // 숫자 색상
+                                            fontSize: 12, // 숫자 크기
+                                            fontWeight:
+                                                FontWeight.bold, // 숫자 두껍게
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
