@@ -21,12 +21,8 @@ class EducationMaking extends StatefulWidget {
 }
 
 class _EducationMakingState extends State<EducationMaking> {
-  File? pickedImage1;
-  File? pickedImage2;
-  File? pickedImage3;
-  File? pickedImage4;
-  File? pickedImage5;
-  File? pickedImage6;
+  Map<int, File?> pickedImages = {};
+
 
   final _formKey = GlobalKey<FormState>();
 
@@ -46,7 +42,7 @@ class _EducationMakingState extends State<EducationMaking> {
     );
     setState(() {
       if (pickedImageFile != null) {
-        pickedImage1 = File(pickedImageFile.path);
+        pickedImages[num] = File(pickedImageFile.path);
       }
     });
   }
@@ -154,11 +150,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage1 != null
-                                        ? FileImage(pickedImage1!)
+                                    backgroundImage: pickedImages[1] != null
+                                        ? FileImage(pickedImages[1]!)
                                         : null,
                                   ),
-                                  if (pickedImage1 ==
+                                  if (pickedImages[1] ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -170,7 +166,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[1] == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -200,11 +196,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage2 != null
-                                        ? FileImage(pickedImage2!)
+                                    backgroundImage: pickedImages[2] != null
+                                        ? FileImage(pickedImages[2]!)
                                         : null,
                                   ),
-                                  if (pickedImage2 ==
+                                  if (pickedImages[2] ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -216,7 +212,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage2 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[2] == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -246,11 +242,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage3 != null
-                                        ? FileImage(pickedImage3!)
+                                    backgroundImage: pickedImages[3] != null
+                                        ? FileImage(pickedImages[3]!)
                                         : null,
                                   ),
-                                  if (pickedImage3 ==
+                                  if (pickedImages[3] ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -262,7 +258,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage3 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[3] == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -300,11 +296,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage4 != null
-                                        ? FileImage(pickedImage4!)
+                                    backgroundImage: pickedImages[4] != null
+                                        ? FileImage(pickedImages[4]!)
                                         : null,
                                   ),
-                                  if (pickedImage4 ==
+                                  if (pickedImages[4] ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -316,7 +312,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage4 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[4] == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -346,11 +342,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage5 != null
-                                        ? FileImage(pickedImage5!)
+                                    backgroundImage: pickedImages[5] != null
+                                        ? FileImage(pickedImages[5]!)
                                         : null,
                                   ),
-                                  if (pickedImage5 ==
+                                  if (pickedImages[5] ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -362,7 +358,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage5 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[5] == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -392,11 +388,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage6 != null
-                                        ? FileImage(pickedImage6!)
+                                    backgroundImage: pickedImages[6] != null
+                                        ? FileImage(pickedImages[6]!)
                                         : null,
                                   ),
-                                  if (pickedImage6 ==
+                                  if (pickedImages[6] ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -408,7 +404,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage6 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImages[6] == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
