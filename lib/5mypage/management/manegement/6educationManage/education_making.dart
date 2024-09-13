@@ -134,11 +134,17 @@ class _EducationMakingState extends State<EducationMaking> {
                     ),
 
                     //(이부분)
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.blue,
-                      backgroundImage:
-                      pickedImage != null ? FileImage(pickedImage!) : null,
+                    GestureDetector(
+                      onTap: (){
+                        _picImage();
+
+                      },
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.blue,
+                        backgroundImage:
+                        pickedImage != null ? FileImage(pickedImage!) : null,
+                      ),
                     ),
 
                     OutlinedButton.icon(
