@@ -37,8 +37,6 @@ class _EducationMakingState extends State<EducationMaking> {
     final imagePicker = ImagePicker();
     final pickedImageFile = await imagePicker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 50,
-      maxHeight: 150,
     );
     setState(() {
       if (pickedImageFile != null) {
