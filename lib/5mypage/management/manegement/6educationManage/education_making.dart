@@ -37,7 +37,7 @@ class _EducationMakingState extends State<EducationMaking> {
     }
   }
 
-  void _picImage() async {
+  void _picImage(int num) async {
     final imagePicker = ImagePicker();
     final pickedImageFile = await imagePicker.pickImage(
       source: ImageSource.gallery,
@@ -147,7 +147,7 @@ class _EducationMakingState extends State<EducationMaking> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                _picImage(); // 이미지 선택 함수 호출
+                                _picImage(1); // 이미지 선택 함수 호출
                               },
                               child: Stack(
                                 children: [
@@ -193,18 +193,18 @@ class _EducationMakingState extends State<EducationMaking> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _picImage(); // 이미지 선택 함수 호출
+                                _picImage(2); // 이미지 선택 함수 호출
                               },
                               child: Stack(
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage1 != null
-                                        ? FileImage(pickedImage1!)
+                                    backgroundImage: pickedImage2 != null
+                                        ? FileImage(pickedImage2!)
                                         : null,
                                   ),
-                                  if (pickedImage1 ==
+                                  if (pickedImage2 ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -216,7 +216,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImage2 == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -239,18 +239,18 @@ class _EducationMakingState extends State<EducationMaking> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _picImage(); // 이미지 선택 함수 호출
+                                _picImage(3); // 이미지 선택 함수 호출
                               },
                               child: Stack(
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage1 != null
-                                        ? FileImage(pickedImage1!)
+                                    backgroundImage: pickedImage3 != null
+                                        ? FileImage(pickedImage3!)
                                         : null,
                                   ),
-                                  if (pickedImage1 ==
+                                  if (pickedImage3 ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -262,7 +262,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImage3 == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -293,18 +293,18 @@ class _EducationMakingState extends State<EducationMaking> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                _picImage(); // 이미지 선택 함수 호출
+                                _picImage(4); // 이미지 선택 함수 호출
                               },
                               child: Stack(
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage1 != null
-                                        ? FileImage(pickedImage1!)
+                                    backgroundImage: pickedImage4 != null
+                                        ? FileImage(pickedImage4!)
                                         : null,
                                   ),
-                                  if (pickedImage1 ==
+                                  if (pickedImage4 ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -316,7 +316,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImage4 == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -339,18 +339,18 @@ class _EducationMakingState extends State<EducationMaking> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _picImage(); // 이미지 선택 함수 호출
+                                _picImage(5); // 이미지 선택 함수 호출
                               },
                               child: Stack(
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage1 != null
-                                        ? FileImage(pickedImage1!)
+                                    backgroundImage: pickedImage5 != null
+                                        ? FileImage(pickedImage5!)
                                         : null,
                                   ),
-                                  if (pickedImage1 ==
+                                  if (pickedImage5 ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -362,7 +362,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImage5 == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
@@ -385,18 +385,18 @@ class _EducationMakingState extends State<EducationMaking> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _picImage(); // 이미지 선택 함수 호출
+                                _picImage(6); // 이미지 선택 함수 호출
                               },
                               child: Stack(
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: pickedImage1 != null
-                                        ? FileImage(pickedImage1!)
+                                    backgroundImage: pickedImage6 != null
+                                        ? FileImage(pickedImage6!)
                                         : null,
                                   ),
-                                  if (pickedImage1 ==
+                                  if (pickedImage6 ==
                                       null) // 이미지가 없을 때 카메라 아이콘과 숫자를 표시
                                     Positioned.fill(
                                       child: Align(
@@ -408,7 +408,7 @@ class _EducationMakingState extends State<EducationMaking> {
                                         ),
                                       ),
                                     ),
-                                  if (pickedImage1 == null) // 이미지가 없을 때 숫자를 표시
+                                  if (pickedImage6 == null) // 이미지가 없을 때 숫자를 표시
                                     Positioned(
                                       bottom: 5, // 숫자를 아이콘 아래쪽에 배치
                                       left: 0,
