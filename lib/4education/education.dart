@@ -132,6 +132,9 @@ class EduList extends StatelessWidget {
                           contents: docs[index]['contents'],
                           docId: docs[index].id,
                           categoryDocId:collectionAddress,
+                          imageUrls: docs[index]['images'] != null
+                              ? Map<String, String>.from(docs[index]['images'])
+                              : {}, // null일 때 빈 Map을 전달
 
 
                         ),

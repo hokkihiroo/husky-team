@@ -20,14 +20,26 @@ class _NoticationState extends State<Notication> {
   String docId = '';
   String contents = '';
   String subject = '';
+
   Color firstContents = Colors.black;
   Color secondContents = Colors.grey;
+
+// 운영내용 주소
+  String operateAddress = 'dj8Jxkbcw5BR16sCF9jg';
+
+// 사건사고 주소
+  String issueAddress = 'doQRXV02Lid2jhjQeR99';
+
+  //선택 주소
+  String address = 'dj8Jxkbcw5BR16sCF9jg';
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -50,12 +62,12 @@ class _NoticationState extends State<Notication> {
                 ],
               ),
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     firstContents = Colors.black;
                     secondContents = Colors.grey;
+                    address = operateAddress;
                   });
-
                 },
                 child: Text(
                   '운영내용',
@@ -67,8 +79,6 @@ class _NoticationState extends State<Notication> {
                 ),
               ),
             ),
-
-
             Container(
               padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
@@ -88,13 +98,12 @@ class _NoticationState extends State<Notication> {
                 ],
               ),
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     firstContents = Colors.grey;
                     secondContents = Colors.black;
+                    address = issueAddress;
                   });
-
-
                 },
                 child: Text(
                   '사건사고',
@@ -106,15 +115,17 @@ class _NoticationState extends State<Notication> {
                 ),
               ),
             ),
-
           ],
         ),
-        SizedBox(height: 10,),
-
+        SizedBox(
+          height: 10,
+        ),
         Expanded(
           child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection(GONGJI)
+                .doc(address)
+                .collection('List')
                 .orderBy('createdAt', descending: true)
                 .snapshots(),
             builder: (BuildContext context,
@@ -124,7 +135,7 @@ class _NoticationState extends State<Notication> {
                   child: CircularProgressIndicator(),
                 );
               }
-          
+
               final docs = snapshot.data!.docs;
               return ListView.builder(
                 itemCount: docs.length,
@@ -139,18 +150,24 @@ class _NoticationState extends State<Notication> {
                       child: GestureDetector(
                         onTap: () {
                           writer = docs[index]['writer'];
-                          docId = docs[index]['docId'];
                           contents = docs[index]['contents'];
                           subject = docs[index]['subject'];
                           Timestamp timestamp = docs[index]['createdAt'];
                           DateTime date = timestamp.toDate();
                           formattedDate = DateFormat('yyyy.MM.dd').format(date);
-          
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  GongjiDetail(writer: writer, formattedDate: formattedDate, contents: contents, subject: subject,),
+                              builder: (context) => GongjiDetail(
+                                writer: writer,
+                                formattedDate: formattedDate,
+                                contents: contents,
+                                subject: subject,
+                                imageUrls: docs[index]['images'] != null
+                                    ? Map<String, String>.from(docs[index]['images'])
+                                    : {},
+                              ),
                             ),
                           );
                         },

@@ -5,6 +5,8 @@ class GongjiDetail extends StatelessWidget {
   final String formattedDate;
   final String contents;
   final String subject;
+  Map<String, String>? imageUrls; // nullable로 정의
+
 
   GongjiDetail({
     super.key,
@@ -12,6 +14,8 @@ class GongjiDetail extends StatelessWidget {
     required this.formattedDate,
     required this.contents,
     required this.subject,
+    required this.imageUrls,
+
   });
 
   @override

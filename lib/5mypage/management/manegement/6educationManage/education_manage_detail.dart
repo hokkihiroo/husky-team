@@ -11,6 +11,7 @@ class EducationManageDetail extends StatelessWidget {
   String categoryDocId;
   Map<String, String>? imageUrls; // nullable로 정의
 
+
   EducationManageDetail({
     super.key,
     required this.category,
@@ -21,6 +22,7 @@ class EducationManageDetail extends StatelessWidget {
     required this.categoryDocId,
     required this.imageUrls,
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +228,7 @@ class EducationManageDetail extends StatelessWidget {
               ),
 
               if (imageUrls != null && imageUrls!.isNotEmpty)
+
                 Column( // 여러 위젯을 세로로 배치하기 위해 Column 사용
                   children: [
                     for (String key in imageUrls!.keys) ...[
@@ -239,7 +242,7 @@ class EducationManageDetail extends StatelessWidget {
                       SizedBox(height: 10), // 이미지 사이에 간격을 넣기 위해 사용
                     ],
                   ],
-                )
+                ),
 
 
             ],

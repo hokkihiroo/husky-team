@@ -4,24 +4,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:team_husky/3notice/Address.dart';
+import 'package:team_husky/notification.dart';
 import 'package:team_husky/user/custom_text_form.dart';
 
-class EducationMaking extends StatefulWidget {
+class ManageGongji extends StatefulWidget {
   String subject;
   String docId;
   String name;
 
-  EducationMaking(
+  ManageGongji(
       {super.key,
       required this.subject,
       required this.docId,
       required this.name});
 
   @override
-  State<EducationMaking> createState() => _EducationMakingState();
+  State<ManageGongji> createState() => _ManageGongjiState();
 }
 
-class _EducationMakingState extends State<EducationMaking> {
+class _ManageGongjiState extends State<ManageGongji> {
   Map<int, File?> pickedImages = {};
   String subject = ''; // 제목
   String contents = ''; // 내용
@@ -77,8 +79,6 @@ class _EducationMakingState extends State<EducationMaking> {
     await Future.wait(uploadTasks);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +117,6 @@ class _EducationMakingState extends State<EducationMaking> {
                       maxLength: 10, // 입력 문자 수 10글자
 
                       hintText: '제목',
-
                     ),
                     SizedBox(
                       height: 25,
@@ -149,8 +148,6 @@ class _EducationMakingState extends State<EducationMaking> {
                     SizedBox(
                       height: 20,
                     ),
-
-                    //(이부분)
                     Column(
                       children: [
                         Row(
@@ -450,11 +447,9 @@ class _EducationMakingState extends State<EducationMaking> {
                         ),
                       ],
                     ),
-
                     SizedBox(
                       height: 20,
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -475,18 +470,22 @@ class _EducationMakingState extends State<EducationMaking> {
                           style:
                               ElevatedButton.styleFrom(primary: Colors.black),
                           onPressed: () async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('사진업로드시 시간이걸릴수 있습니다.')),
+                            );
+
                             _tryValidation();
                             String documentId = FirebaseFirestore.instance
-                                .collection('education')
+                                .collection(GONGJI)
                                 .doc(widget.docId)
-                                .collection('list')
+                                .collection('List')
                                 .doc()
                                 .id;
                             try {
                               await FirebaseFirestore.instance
-                                  .collection('education')
+                                  .collection(GONGJI)
                                   .doc(widget.docId)
-                                  .collection('list')
+                                  .collection('List')
                                   .doc(documentId)
                                   .set({
                                 'writer': widget.name,
@@ -494,9 +493,11 @@ class _EducationMakingState extends State<EducationMaking> {
                                 'createdAt': FieldValue.serverTimestamp(),
                                 'contents': contents,
                                 'images': {},
-
                               });
-                              // 사진작업
+                              //알람울려달라고 서버로 던짐
+                              // PushNotication.sendPushMessage(
+                              //     title: '팀허스키 ', message: '공지가 등록되었습니다.');
+                              //사진작업
                               await _uploadImagesAndSaveUrls(documentId);
 
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -511,7 +512,7 @@ class _EducationMakingState extends State<EducationMaking> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '작성하기',
+                            '공지작성',
                             style: TextStyle(
                               color: Colors.white,
                             ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/2moveInsa/2moveInsa.dart';
-import 'package:team_husky/5mypage/management/manegement/3manageGongji/3manageGongji.dart';
+import 'package:team_husky/5mypage/management/manegement/3manageGongji/manageGongji.dart';
 import 'package:team_husky/5mypage/management/manegement/4scchedule/4schedule.dart';
 import 'package:team_husky/5mypage/management/manegement/5gangnamCarManage/gangnamCar.dart';
 
 import 'manegement/1makeTeam/1makeTeam.dart';
+import 'manegement/3manageGongji/gongji_category_list.dart';
 import 'manegement/6educationManage/education.dart';
 
 class Management extends StatefulWidget {
@@ -79,7 +80,7 @@ class _ManagementState extends State<Management> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return ManageGongji(name: widget.name,);
+                  return ManageGongjiList(name: widget.name,);
                 }),
               );
             },

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class EditEducationDetailScreen extends StatelessWidget {
+class EditGongjiDetail extends StatelessWidget {
   String category;
   String subject;
   String writer;
@@ -9,7 +9,7 @@ class EditEducationDetailScreen extends StatelessWidget {
   String docId;
   String categoryDocId;
 
-  EditEducationDetailScreen({
+  EditGongjiDetail({
     required this.category,
     required this.subject,
     required this.writer,
@@ -20,7 +20,6 @@ class EditEducationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 수정할 데이터를 보여주는 폼 등을 구성하여 처리
     return Scaffold(
       appBar: AppBar(title: Text('내용 수정')),
       body: SingleChildScrollView(
@@ -74,9 +73,9 @@ class EditEducationDetailScreen extends StatelessWidget {
                   // Firestore에 수정된 데이터를 저장하는 로직
                   try {
                     await FirebaseFirestore.instance
-                        .collection('education')
+                        .collection('gongji')
                         .doc(categoryDocId)
-                        .collection('list')
+                        .collection('List')
                         .doc(docId)
                         .update({
                       'subject': subject,
