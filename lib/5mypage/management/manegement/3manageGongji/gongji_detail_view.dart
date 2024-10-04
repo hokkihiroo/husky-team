@@ -249,7 +249,7 @@ import 'gongji_detail_view_edit.dart';
 
                     Column( // 여러 위젯을 세로로 배치하기 위해 Column 사용
                       children: [
-                        for (String key in imageUrls!.keys) ...[
+                        for (String key in imageUrls!.keys.toList()..sort((a, b) => int.parse(a).compareTo(int.parse(b)))) ...[
                           Container(
                             width: double.infinity, // 가로 길이를 화면에 맞추기 위해 설정
                             child: Image.network(
