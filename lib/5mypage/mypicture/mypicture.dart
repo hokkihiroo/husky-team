@@ -94,6 +94,9 @@ class _MyPictureState extends State<MyPicture> {
                           'picUrl': url,
                         });
 
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('사진등록 완료')),
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -101,7 +104,7 @@ class _MyPictureState extends State<MyPicture> {
                     }
                     Navigator.of(context).pop();
                   },
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.circle),
                   label: Text('확정')),
               TextButton.icon(
                   onPressed: () {
