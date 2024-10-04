@@ -476,6 +476,7 @@ class _EducationMakingState extends State<EducationMaking> {
                               ElevatedButton.styleFrom(primary: Colors.black),
                           onPressed: () async {
                             _tryValidation();
+
                             String documentId = FirebaseFirestore.instance
                                 .collection('education')
                                 .doc(widget.docId)

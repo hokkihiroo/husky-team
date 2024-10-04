@@ -59,15 +59,15 @@ class _ManageGongjiState extends State<ManageGongji> {
 
       if (file != null) {
         final ref = storageRef
-            .child('education_images/${widget.docId}/$documentId/$num.png');
+            .child('gongji_images/${widget.docId}/$documentId/$num.png');
         final uploadTask = ref.putFile(file);
 
         uploadTasks.add(uploadTask.then((taskSnapshot) async {
           final downloadUrl = await taskSnapshot.ref.getDownloadURL();
           await FirebaseFirestore.instance
-              .collection('education')
+              .collection('gongji')
               .doc(widget.docId)
-              .collection('list')
+              .collection('List')
               .doc(documentId)
               .update({
             'images.$num': downloadUrl,
@@ -470,20 +470,17 @@ class _ManageGongjiState extends State<ManageGongji> {
                           style:
                               ElevatedButton.styleFrom(primary: Colors.black),
                           onPressed: () async {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('사진업로드시 시간이걸릴수 있습니다.')),
-                            );
-
                             _tryValidation();
+
                             String documentId = FirebaseFirestore.instance
-                                .collection(GONGJI)
+                                .collection('gongji')
                                 .doc(widget.docId)
                                 .collection('List')
                                 .doc()
                                 .id;
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(GONGJI)
+                                  .collection('gongji')
                                   .doc(widget.docId)
                                   .collection('List')
                                   .doc(documentId)
