@@ -472,6 +472,17 @@ class _ManageGongjiState extends State<ManageGongji> {
                           onPressed: () async {
                             _tryValidation();
 
+                            // 로딩 인디케이터 표시
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // 로딩 중에는 닫을 수 없도록 설정
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(), // 로딩 인디케이터
+                                );
+                              },
+                            );
+
                             String documentId = FirebaseFirestore.instance
                                 .collection('gongji')
                                 .doc(widget.docId)
@@ -506,7 +517,10 @@ class _ManageGongjiState extends State<ManageGongji> {
                                 SnackBar(content: Text('오류 발생: $e')),
                               );
                             }
-                            Navigator.pop(context);
+                            // 로딩 인디케이터 닫기
+                            Navigator.of(context).pop();
+
+                            Navigator.pop(context); // 이전 화면으로 이동
                           },
                           child: Text(
                             '공지작성',
