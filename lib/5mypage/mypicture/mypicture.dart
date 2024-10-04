@@ -68,15 +68,29 @@ class _MyPictureState extends State<MyPicture> {
               TextButton.icon(
                   onPressed: () async{
 
-                    if(pickedImage !=null) {
+                    if (pickedImage != null) {
+                      // 로딩 인디케이터 표시
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false, // 로딩 중에는 닫을 수 없도록 설정
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: CircularProgressIndicator(), // 로딩 인디케이터
+                          );
+                        },
+                      );
+
                       final refImage = FirebaseStorage.instance
                           .ref()
                           .child('mypicture')
                           .child(widget.uid +'.png');
-                      await refImage.putFile(pickedImage!);
-                      final url = await refImage.getDownloadURL();
+
+
 
                       try {
+
+                        await refImage.putFile(pickedImage!);
+                        final url = await refImage.getDownloadURL();
 
                         await FirebaseFirestore.instance
                             .collection('user')
@@ -100,6 +114,8 @@ class _MyPictureState extends State<MyPicture> {
                       } catch (e) {
                         print(e);
                       }
+                      // 로딩 인디케이터 닫기
+                      Navigator.of(context).pop();
 
                     }
                     Navigator.of(context).pop();

@@ -477,6 +477,16 @@ class _EducationMakingState extends State<EducationMaking> {
                           onPressed: () async {
                             _tryValidation();
 
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // 로딩 중에는 닫을 수 없도록 설정
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(), // 로딩 인디케이터
+                                );
+                              },
+                            );
+
                             String documentId = FirebaseFirestore.instance
                                 .collection('education')
                                 .doc(widget.docId)
@@ -509,6 +519,10 @@ class _EducationMakingState extends State<EducationMaking> {
                                 SnackBar(content: Text('오류 발생: $e')),
                               );
                             }
+
+                            Navigator.of(context).pop();
+
+
                             Navigator.pop(context);
                           },
                           child: Text(
