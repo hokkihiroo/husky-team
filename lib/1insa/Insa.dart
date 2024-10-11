@@ -7,7 +7,9 @@ import 'package:team_husky/1insa/newSchedule/newSchedule.dart';
 import 'package:team_husky/1insa/teamcard.dart';
 
 class Organization extends StatefulWidget {
-  const Organization({super.key});
+  const Organization({super.key, required this.grade});
+
+  final int grade;
 
   @override
   State<Organization> createState() => _OrganizationState();
@@ -18,7 +20,7 @@ class _OrganizationState extends State<Organization> {
   String name = ''; // 팀 이름
   String mansID = ''; // 팀원문서아이디
   String formattedDate = '';
-  String? picUrl= '';
+  String? picUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,10 @@ class _OrganizationState extends State<Organization> {
           return ListView.builder(
               itemCount: docs.length,
               itemBuilder: (context, index) {
+                // 등급이 0이고, 문서 ID가 특정 ID일 경우 해당 아이템은 보여주지 않음
+                if (widget.grade == 0 && docs[index].id == '3LDEwvJicNKtzDemmHY6') {
+                  return SizedBox.shrink(); // 빈 공간을 반환하여 해당 아이템을 숨김
+                }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Padding(
@@ -95,7 +101,7 @@ class _OrganizationState extends State<Organization> {
                                     DateTime dateTime = timestamp.toDate();
                                     formattedDate =
                                         DateFormat('yy/MM/dd').format(dateTime);
-                                     picUrl = userData['picUrl'];
+                                    picUrl = userData['picUrl'];
 
                                     showDialog(
                                       context: context,
@@ -103,7 +109,7 @@ class _OrganizationState extends State<Organization> {
                                         return viewInsa(
                                           userData,
                                           formattedDate,
-                                            picUrl!,
+                                          picUrl!,
                                         );
                                       },
                                     );
@@ -144,8 +150,8 @@ class _OrganizationState extends State<Organization> {
           CircleAvatar(
             backgroundImage: picUrl != null && picUrl!.isNotEmpty
                 ? NetworkImage(
-              picUrl!,
-            )
+                    picUrl!,
+                  )
                 : AssetImage('asset/img/husky_Logo.png') as ImageProvider,
             radius: 80, // 원의 반지름 설정
           ),

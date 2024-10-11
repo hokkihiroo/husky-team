@@ -60,7 +60,12 @@ class _MyPictureState extends State<MyPicture> {
               icon: Icon(Icons.image),
               label: Text('이미지 찾기')),
           SizedBox(
-            height: 80,
+            height: 10,
+          ),
+          Center(child: Text('*악세사리 금지*'),),
+          Center(child: Text('*근무복장 착용*'),),
+          SizedBox(
+            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -314,6 +314,18 @@ class _UserResumeState extends State<UserResume> {
                                 ElevatedButton.styleFrom(primary: Colors.brown),
                             onPressed: () async {
                               _tryValidation();
+
+                              // 로딩 인디케이터 표시
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false, // 로딩 중에는 닫을 수 없도록 설정
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: CircularProgressIndicator(), // 로딩 인디케이터
+                                  );
+                                },
+                              );
+
                               try {
                                 final newUser =
                                     await AUTH.createUserWithEmailAndPassword(
@@ -359,9 +371,18 @@ class _UserResumeState extends State<UserResume> {
 
 
                                 });
+
+                                // 로딩 인디케이터 닫기
+                                Navigator.of(context).pop();
+
+
                                 Navigator.pop(context);
                               } catch (e) {
                                 print(e);
+
+                                // 에러가 발생하면 로딩 인디케이터 닫기
+                                Navigator.of(context).pop();
+
                               }
                             },
                             child: Text(

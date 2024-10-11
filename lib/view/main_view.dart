@@ -60,18 +60,12 @@ class _MainViewState extends State<MainView>
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          Organization(),
+          Organization(
+            grade: widget.grade,
+          ),
           CarManagementSystem(
             name: widget.name,
           ),
-          // Center(
-          //   child: Text(
-          //     '개발중입니다',
-          //     style: TextStyle(
-          //       fontSize: 40,
-          //     ),
-          //   ),
-          // ),
           Notication(),
           Education(),
           MyPage(
