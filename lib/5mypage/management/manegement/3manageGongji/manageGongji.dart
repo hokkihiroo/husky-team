@@ -502,10 +502,14 @@ class _ManageGongjiState extends State<ManageGongji> {
                                 'contents': contents,
                                 'images': {},
                               });
-                              //알람울려달라고 서버로 던짐
-                              // PushNotication.sendPushMessage(
-                              //     title: '팀허스키 ', message: '공지가 등록되었습니다.');
-                              //사진작업
+
+                             // 알람울려달라고 서버로 던짐
+
+                              PushNotication.sendPushMessage(
+                                  title: '팀허스키 ', message: '공지가 등록되었습니다.');
+
+
+                             // 사진작업
                               await _uploadImagesAndSaveUrls(documentId);
 
                               ScaffoldMessenger.of(context).showSnackBar(
