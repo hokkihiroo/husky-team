@@ -27,6 +27,10 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   int maxEnterValue = 0; //한명추가시 최근enterDay값 추출해서 제일큰숫자 추출해서 넣음
   String addName = ''; //스케줄에 한명추가시 넣을이름
 /////////////////////////////////////// 여기까지
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> globalSchedules = [];
+  List<int> numericTotals = []; //인트값 돌려서 여기에 담음 1부터31까지 숫자로되어있는거 전부담음
+  List<int> numericWeekdays = []; //1부터 31까지 평일인거 담음
+  List<int> numericWeekends = []; //1부터 31까지 주말담음
 
   @override
   void initState() {
@@ -113,7 +117,168 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('스케줄 설정'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: Center(child: Text('스케줄 설정'))),
+            GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Center(child: Text('초기화 시키겠습니까?')),
+                        content: Container(
+                          constraints: BoxConstraints(
+                            maxHeight: 120, // 최대 높이 설정
+                          ),
+                          child: Center(
+                            child: Text(
+                              '모든 멤버 스케줄이 초기화됩니다.\n(되돌릴 수 없습니다, 조심해야 해요)',
+                              style: TextStyle(
+                                fontSize: 16, // 텍스트 크기
+                                fontWeight: FontWeight.w500, // 텍스트 굵기
+                                color: Colors.black87, // 텍스트 색상
+                                letterSpacing: 1.2, // 글자 간격
+                              ),
+                              textAlign: TextAlign.center, // 중앙 정렬
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.of(context).pop(); // 팝업 닫기
+
+                                  try {
+                                    QuerySnapshot querySnapshot =
+                                        await FirebaseFirestore.instance
+                                            .collection('insa')
+                                            .doc(widget.teamId)
+                                            .collection('list')
+                                            .orderBy('enterDay')
+                                            .get();
+
+                                    querySnapshot.docs.forEach((doc) async {
+                                      String name = doc['name']; // 'name' 필드 추출
+                                      String userId = doc.id; // 'name' 필드 추출
+
+                                      print(name); // 콘솔에 출력
+                                      print(userId); // 콘솔에 출력
+                                      enter++;
+
+                                      await FirebaseFirestore.instance
+                                          .collection('insa')
+                                          .doc(widget.teamId)
+                                          .collection('schedule')
+                                          .doc('1EjNGZtze07iY1WJKyvh')
+                                          .collection(
+                                              '$_currentYear$_currentMonth')
+                                          .doc(userId)
+                                          .set({
+                                        'enter': enter,
+                                        'name': name,
+                                        '1': 'X',
+                                        '2': 'X',
+                                        '3': 'X',
+                                        '4': 'X',
+                                        '5': 'X',
+                                        '6': 'X',
+                                        '7': 'X',
+                                        '8': 'X',
+                                        '9': 'X',
+                                        '10': 'X',
+                                        '11': 'X',
+                                        '12': 'X',
+                                        '13': 'X',
+                                        '14': 'X',
+                                        '15': 'X',
+                                        '16': 'X',
+                                        '17': 'X',
+                                        '18': 'X',
+                                        '19': 'X',
+                                        '20': 'X',
+                                        '21': 'X',
+                                        '22': 'X',
+                                        '23': 'X',
+                                        '24': 'X',
+                                        '25': 'X',
+                                        '26': 'X',
+                                        '27': 'X',
+                                        '28': 'X',
+                                        '29': 'X',
+                                        '30': 'X',
+                                        '31': 'X',
+                                      });
+                                    });
+                                  } catch (e) {
+                                    print("Error getting data: $e");
+                                  }
+                                  enter = 0;
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  // 배경색을 빨간색으로 설정
+                                  primary: Colors.white,
+                                  // 텍스트 색상을 흰색으로 설정
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 12),
+                                  // 버튼의 패딩 조정
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(12), // 둥근 모서리
+                                  ),
+                                ),
+                                child: Text(
+                                  '초기화하기',
+                                  style: TextStyle(
+                                    fontSize: 16, // 텍스트 크기
+                                    fontWeight: FontWeight.bold, // 텍스트 굵게
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // 팝업 닫기
+                                  print('취소 버튼 클릭됨');
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                  // 배경색을 회색으로 설정
+                                  primary: Colors.black,
+                                  // 텍스트 색상을 검정색으로 설정
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 12),
+                                  // 버튼의 패딩 조정
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(12), // 둥근 모서리
+                                  ),
+                                ),
+                                child: Text(
+                                  '취소하기',
+                                  style: TextStyle(
+                                    fontSize: 16, // 텍스트 크기
+                                    fontWeight: FontWeight.bold, // 텍스트 굵게
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('초기화')),
+          ],
+        ),
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
@@ -140,14 +305,14 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
             );
           }
 
-          final schedules = snapshot.data!.docs;
+          globalSchedules = snapshot.data!.docs;
 
           List<int> dayss = List.generate(31, (index) => index + 1);
           List<int> numericTotal = []; //인트값 돌려서 여기에 담음 1부터31까지 숫자로되어있는거 전부담음
           List<int> numericWeekday = []; //1부터 31까지 평일인거 담음
           List<int> numericWeekend = []; //1부터 31까지 주말담음
 
-          for (var schedule in schedules) {
+          for (var schedule in globalSchedules) {
             for (var day in dayss) {
               var value = schedule['$day'];
               if (value is int) {
@@ -170,10 +335,13 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
             weekEndCount = 0;
           }
 
+          numericTotals = numericTotal;
+          numericWeekdays = numericWeekday;
+          numericWeekends = numericWeekend;
+
           return SingleChildScrollView(
             child: Column(
               children: [
-            
                 _ControlFirst(
                   navigateToPreviousMonth: _navigateToPreviousMonth,
                   navigateToNextMonth: _navigateToNextMonth,
@@ -181,9 +349,8 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                   currentMonth: _currentMonth,
                   isFirstHalf: _isFirstHalf,
                 ),
-            
                 Container(
-                  height: 380,
+                  height: 670,
                   width: MediaQuery.of(context).size.width,
                   child: SafeArea(
                     child: ListView(
@@ -215,13 +382,14 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                     ),
                                   ),
                                   SizedBox(height: 4.0),
-                                  for (var schedule in schedules)
+                                  for (var schedule in globalSchedules)
                                     Column(
                                       children: [
                                         GestureDetector(
                                           onTap: () {
                                             scheduleDocument = '${schedule.id}';
-                                            selectedName = '${schedule['name']}';
+                                            selectedName =
+                                                '${schedule['name']}';
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -232,7 +400,8 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                           child: Text(
                                             '${schedule['name']}',
                                             style: TextStyle(
-                                              fontSize: 12, // Adjusted font size
+                                              fontSize: 12,
+                                              // Adjusted font size
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -272,13 +441,14 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                       ),
                                     ),
                                     SizedBox(height: 4.0),
-                                    for (var schedule in schedules)
+                                    for (var schedule in globalSchedules)
                                       Column(
                                         children: [
                                           GestureDetector(
                                             onTap: () {
                                               // 여기에서 실행할 코드를 넣습니다.
-                                              scheduleDocument = '${schedule.id}';
+                                              scheduleDocument =
+                                                  '${schedule.id}';
                                               scheduleTime =
                                                   '${schedule['$day']}';
                                               selectedDay = '$day';
@@ -292,7 +462,8 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
 
                                               showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return changeSchedule();
                                                 },
                                               );
@@ -319,197 +490,12 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: schedules.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '${value['name']}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericTotal.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '총: $value일',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericWeekday.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '평일: $value일',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericWeekend.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '주말: $value일',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          QuerySnapshot querySnapshot = await FirebaseFirestore
-                              .instance
-                              .collection('insa')
-                              .doc(widget.teamId)
-                              .collection('list')
-                              .orderBy('enterDay')
-                              .get();
-            
-                          querySnapshot.docs.forEach((doc) async {
-                            String name = doc['name']; // 'name' 필드 추출
-                            String userId = doc.id; // 'name' 필드 추출
-            
-                            print(name); // 콘솔에 출력
-                            print(userId); // 콘솔에 출력
-                            enter++;
-            
-                            await FirebaseFirestore.instance
-                                .collection('insa')
-                                .doc(widget.teamId)
-                                .collection('schedule')
-                                .doc('1EjNGZtze07iY1WJKyvh')
-                                .collection('$_currentYear$_currentMonth')
-                                .doc(userId)
-                                .set({
-                              'enter': enter,
-                              'name': name,
-                              '1': 'X',
-                              '2': 'X',
-                              '3': 'X',
-                              '4': 'X',
-                              '5': 'X',
-                              '6': 'X',
-                              '7': 'X',
-                              '8': 'X',
-                              '9': 'X',
-                              '10': 'X',
-                              '11': 'X',
-                              '12': 'X',
-                              '13': 'X',
-                              '14': 'X',
-                              '15': 'X',
-                              '16': 'X',
-                              '17': 'X',
-                              '18': 'X',
-                              '19': 'X',
-                              '20': 'X',
-                              '21': 'X',
-                              '22': 'X',
-                              '23': 'X',
-                              '24': 'X',
-                              '25': 'X',
-                              '26': 'X',
-                              '27': 'X',
-                              '28': 'X',
-                              '29': 'X',
-                              '30': 'X',
-                              '31': 'X',
-                            });
-                          });
-                        } catch (e) {
-                          print("Error getting data: $e");
-                        }
-                        enter = 0;
-                      },
-                      child: Text('$_currentMonth월 멤버셋팅하기'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          QuerySnapshot querySnapshot = await FirebaseFirestore
-                              .instance
-                              .collection('insa')
-                              .doc(widget.teamId)
-                              .collection('schedule')
-                              .doc('1EjNGZtze07iY1WJKyvh')
-                              .collection('$_currentYear$_currentMonth')
-                              .get();
-            
-                          int maxValue = querySnapshot.docs
-                              .map((doc) => doc['enter'] as int)
-                              .reduce((value, element) =>
-                                  value > element ? value : element);
-                          maxEnterValue = maxValue;
-                          print(maxEnterValue);
-                          print(maxEnterValue);
-                          print(maxEnterValue);
-                        } catch (e) {
-                          print("최대 숫자 값구하기오류: $e");
-                        }
-            
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addMember();
-                          },
-                        );
-                      },
-                      child: Text('한명추가'),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
               ],
             ),
           );
         },
       ),
+      bottomNavigationBar: bottomOneBar(),
     );
   }
 
@@ -596,6 +582,191 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget bottomOneBar() {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              height: 60,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('개인별 근무일수'),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: globalSchedules.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '${value['name']}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 6),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    children: numericTotals.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '총: $value일',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    children: numericWeekdays.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '평일: $value일',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    children: numericWeekends.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '주말: $value일',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // 팝업 닫기
+                                },
+                                child: Text('취소'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // 팝업 닫기
+                                  // 여기에 확인 버튼 클릭 시 실행할 코드를 추가하세요.
+                                  print('확인 버튼 클릭됨');
+                                },
+                                child: Text('확인'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('개인별 근무일수 확인'),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            flex: 1,
+            child: SizedBox(
+              height: 60,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+                ),
+                onPressed: () async {
+                  try {
+                    QuerySnapshot querySnapshot = await FirebaseFirestore
+                        .instance
+                        .collection('insa')
+                        .doc(widget.teamId)
+                        .collection('schedule')
+                        .doc('1EjNGZtze07iY1WJKyvh')
+                        .collection('$_currentYear$_currentMonth')
+                        .get();
+
+                    int maxValue = querySnapshot.docs
+                        .map((doc) => doc['enter'] as int)
+                        .reduce((value, element) =>
+                            value > element ? value : element);
+                    maxEnterValue = maxValue;
+                    print(maxEnterValue);
+                    print(maxEnterValue);
+                    print(maxEnterValue);
+                  } catch (e) {
+                    print("최대 숫자 값구하기오류: $e");
+                  }
+
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return addMember();
+                    },
+                  );
+                },
+                child: Text('추가'),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+        ],
+      ),
+      color: Colors.white,
     );
   }
 
@@ -802,7 +973,8 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
 
 class _ControlFirst extends StatelessWidget {
   final VoidCallback navigateToPreviousMonth;
-  final VoidCallback navigateToNextMonth; // 추가: _navigateToNextMonth도 final로 선언해야 합니다.
+  final VoidCallback
+      navigateToNextMonth; // 추가: _navigateToNextMonth도 final로 선언해야 합니다.
   final int currentYear;
   final int currentMonth;
   final bool isFirstHalf;
@@ -845,4 +1017,3 @@ class _ControlFirst extends StatelessWidget {
     );
   }
 }
-

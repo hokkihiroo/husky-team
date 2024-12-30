@@ -1,51 +1,25 @@
-import 'dart:io' show Platform;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart';
-import 'package:team_husky/2car_management_system/team1/team1_car_list.dart';
-import 'package:team_husky/2car_management_system/team1/team1_carschedule.dart';
-import 'package:team_husky/2car_management_system/team1/team1_carschedule_view.dart';
-import 'package:team_husky/2car_management_system/team1/team1_model.dart';
-import 'package:team_husky/2car_management_system/team1/team1_outcar.dart';
-import 'package:telephony/telephony.dart';
-import 'package:vibration/vibration.dart';
+import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/2car_management_system/team2/team2_ipcha_view.dart';
 
-class Team1View extends StatefulWidget {
-  const Team1View({super.key, required this.name});
+import 'team2_car_list.dart';
+import 'team2_model.dart';
+import 'team2_outcar.dart';
+
+class Team2View extends StatefulWidget {
+  const Team2View({super.key, required this.name});
 
   final String name;
 
   @override
-  State<Team1View> createState() => _Team1ViewState();
+  State<Team2View> createState() => _Team2ViewState();
 }
 
-class _Team1ViewState extends State<Team1View> {
+class _Team2ViewState extends State<Team2View> {
   String carNumber = '';
   String CarListAdress = CARLIST + formatTodayDate();
-  Telephony telephony = Telephony.instance;
-  String CarScheduleAdress = formatTodayDate();
-  String dayOfWeek = '';
-
-  @override
-  void initState() {
-    super.initState();
-    if (Platform.isAndroid) {
-      requestSmsPermission(context);
-    }
-    DateTime now = DateTime.now();
-    dayOfWeek = getDayOfWeek(now);
-  }
-
-  void requestSmsPermission(BuildContext context) async {
-    bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
-    if (permissionsGranted ?? false) {
-      print("퍼미션이 허용되었습니다.");
-    } else {
-      print('SMS 및 전화 수신에 대한 퍼미션이 거부되었습니다.');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,24 +32,30 @@ class _Team1ViewState extends State<Team1View> {
               Expanded(
                 child: Center(
                   child: Text(
-                    '현대모터스튜디오 강남',
+                    '제네시스 청주',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
                     ),
                   ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CarSchedule()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => CarSchedule()),
+                  // );
                 },
                 child: Text(
                   '시승차',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.lineThrough,
+                    // 줄긋기 설정
+                    decorationColor: Colors.white,
+                    // 줄 색상
+                    decorationThickness: 2, // 줄 두께
                   ),
                 ),
               ),
@@ -93,10 +73,13 @@ class _Team1ViewState extends State<Team1View> {
                 thickness: 2.0, // 선 두께
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    width: 40,
+                  ),
                   Text(
-                    '시승차 현황 ($CarScheduleAdress) $dayOfWeek',
+                    '입차 대기',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -105,51 +88,24 @@ class _Team1ViewState extends State<Team1View> {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        CarScheduleAdress = formatTodayDate();
-                        DateTime now = DateTime.now();
-                        dayOfWeek = getDayOfWeek(now);
-                      });
-                    },
-                    child: Text(
-                      '새로고침',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              CarScheduleView(
-                CarScheduleAdress: CarScheduleAdress,
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10,),
+              Team2IpchaView(name: widget.name,),
+              SizedBox(height: 10,),
+
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
               ),
               _LocationName(),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               _Lists(
                 name: widget.name,
               ),
+
+
+
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
@@ -196,15 +152,15 @@ class _Team1ViewState extends State<Team1View> {
           Expanded(
             flex: 3,
             child: SizedBox(
-              height: 100,
+              height: 80,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   textStyle:
                       TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
                 ),
                 onPressed: () {
-                  CarListAdress = CARLIST + formatTodayDate();
-                  print(CarListAdress);
+                  // CarListAdress = CARLIST + formatTodayDate();
+                  // print(CarListAdress);
                   carNumber = '0000';
                   showDialog(
                     context: context,
@@ -243,12 +199,12 @@ class _Team1ViewState extends State<Team1View> {
                                   onPressed: () async {
                                     String documentId = FirebaseFirestore
                                         .instance
-                                        .collection(LOTARY)
+                                        .collection(FIELD)
                                         .doc()
                                         .id;
                                     try {
                                       await FirebaseFirestore.instance
-                                          .collection(LOTARY)
+                                          .collection(FIELD)
                                           .doc(documentId)
                                           .set({
                                         'carNumber': carNumber,
@@ -258,7 +214,7 @@ class _Team1ViewState extends State<Team1View> {
                                         'location': 0,
                                         'color': 1,
                                         'etc': '',
-                                        'movedLocation': '로터리',
+                                        'movedLocation': '입차',
                                         'wigetName': '',
                                         'movingTime': '',
                                       });
@@ -286,111 +242,18 @@ class _Team1ViewState extends State<Team1View> {
                                   child: Text('입력'),
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                              SizedBox(width: 15,),
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                  ),
                                   onPressed: () async {
-                                    String documentId = FirebaseFirestore
-                                        .instance
-                                        .collection(LOTARY)
-                                        .doc()
-                                        .id;
-                                    try {
-                                      await FirebaseFirestore.instance
-                                          .collection(LOTARY)
-                                          .doc(documentId)
-                                          .set({
-                                        'carNumber': carNumber,
-                                        'name': '',
-                                        'createdAt':
-                                            FieldValue.serverTimestamp(),
-                                        'location': 0,
-                                        'color': 1,
-                                        'etc': '작업차량',
-                                        'movedLocation': '로터리',
-                                        'wigetName': '',
-                                        'movingTime': '',
-                                      });
-                                    } catch (e) {}
-
-                                    try {
-                                      await FirebaseFirestore.instance
-                                          .collection(CarListAdress)
-                                          .doc(documentId)
-                                          .set({
-                                        'carNumber': carNumber,
-                                        'enterName': widget.name,
-                                        'enter': FieldValue.serverTimestamp(),
-                                        'out': '',
-                                        'outName': '',
-                                        'outLocation': 5,
-                                        'etc': '작업차량',
-                                        'movedLocation': '',
-                                        'wigetName': '',
-                                        'movingTime': '',
-                                      });
-                                    } catch (e) {}
                                     Navigator.pop(context);
                                   },
-                                  child: Text('작업'),
+                                  child: Text('취소'),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: ElevatedButton(
-                                    onPressed: () async {
-                                      String documentId = FirebaseFirestore
-                                          .instance
-                                          .collection(LOTARY)
-                                          .doc()
-                                          .id;
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection(LOTARY)
-                                            .doc(documentId)
-                                            .set({
-                                          'carNumber': carNumber,
-                                          'name': '',
-                                          'createdAt':
-                                              FieldValue.serverTimestamp(),
-                                          'location': 0,
-                                          'color': 1,
-                                          'etc': '직원',
-                                          'movedLocation': '로터리',
-                                          'wigetName': '',
-                                          'movingTime': '',
-                                        });
-                                      } catch (e) {}
-
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection(CarListAdress)
-                                            .doc(documentId)
-                                            .set({
-                                          'carNumber': carNumber,
-                                          'enterName': widget.name,
-                                          'enter': FieldValue.serverTimestamp(),
-                                          'out': '',
-                                          'outName': '',
-                                          'outLocation': 5,
-                                          'etc': '직원',
-                                          'movedLocation': '',
-                                          'wigetName': '',
-                                          'movingTime': '',
-                                        });
-                                      } catch (e) {}
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('직원')),
                               ),
                             ],
                           ),
@@ -409,7 +272,7 @@ class _Team1ViewState extends State<Team1View> {
           Expanded(
             flex: 1,
             child: SizedBox(
-              height: 100,
+              height: 80,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   textStyle:
@@ -439,16 +302,6 @@ class _Team1ViewState extends State<Team1View> {
   }
 }
 
-Future<void> _handleBackgroundMessage(SmsMessage message) async {
-  String? phoneNumber = message.address;
-  String? messageBody = message.body;
-
-  // *여기서 phoneNumber와 messageBody를 이용하여 작업을 수행
-  // *예: Firestore에 저장하거나 특정 동작 실행 등
-  print('Received SMS in background from $phoneNumber: $messageBody');
-  Vibration.vibrate(duration: 500);
-}
-
 class _LocationName extends StatelessWidget {
   const _LocationName({super.key});
 
@@ -461,7 +314,31 @@ class _LocationName extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '로터',
+              '가벽',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+          ),
+
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            child: Text(
+              'BA',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              'BB',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -474,17 +351,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '외벽',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              '광장',
+              'BC',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -497,20 +364,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '문앞',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              '신사',
+              'B2',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -537,11 +391,12 @@ class _Lists extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              RotaryList(
+              CarState(
                 name: name,
-                location: LOTARY,
+                location: FIELD,
                 reverse: 1,
                 check: () {},
+                fieldLocation:1,
               ),
             ],
           ),
@@ -549,11 +404,13 @@ class _Lists extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              RotaryList(
+              CarState(
                 name: name,
-                location: OUTSIDE,
+                location: FIELD,
                 reverse: 1,
                 check: () {},
+                fieldLocation:2,
+
               ),
             ],
           ),
@@ -561,11 +418,13 @@ class _Lists extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              RotaryList(
+              CarState(
                 name: name,
-                location: MAIN,
+                location: FIELD,
                 reverse: 1,
                 check: () {},
+                fieldLocation:3,
+
               ),
             ],
           ),
@@ -573,11 +432,13 @@ class _Lists extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              RotaryList(
+              CarState(
                 name: name,
-                location: MOON,
+                location: FIELD,
                 reverse: 1,
                 check: () {},
+                fieldLocation:4,
+
               ),
             ],
           ),
@@ -585,11 +446,13 @@ class _Lists extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              RotaryList(
+              CarState(
                 name: name,
-                location: SINSA,
+                location: FIELD,
                 reverse: 1,
                 check: () {},
+                fieldLocation:5,
+
               ),
             ],
           ),

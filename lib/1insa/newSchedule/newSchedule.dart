@@ -21,6 +21,10 @@ class _SchedulePageState extends State<SchedulePage> {
   int weekDayCount = 0; //평일이 몇개인지확인용
   int weekEndCount = 0; //주말이 몇개인지확인용
 
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> globalSchedules = [];
+  List<int> numericTotals = []; //인트값 돌려서 여기에 담음 1부터31까지 숫자로되어있는거 전부담음
+  List<int> numericWeekdays = []; //1부터 31까지 평일인거 담음
+  List<int> numericWeekends = []; //1부터 31까지 주말담음
   @override
   void initState() {
     super.initState();
@@ -132,14 +136,14 @@ class _SchedulePageState extends State<SchedulePage> {
             );
           }
 
-          final schedules = snapshot.data!.docs;
+          globalSchedules = snapshot.data!.docs;
 
           List<int> dayss = List.generate(31, (index) => index + 1);
           List<int> numericTotal = []; //인트값 돌려서 여기에 담음 1부터31까지 숫자로되어있는거 전부담음
           List<int> numericWeekday = []; //1부터 31까지 평일인거 담음
           List<int> numericWeekend = []; //1부터 31까지 주말담음
 
-          for (var schedule in schedules) {
+          for (var schedule in globalSchedules) {
             for (var day in dayss) {
               var value = schedule['$day'];
               if (value is int) {
@@ -162,6 +166,14 @@ class _SchedulePageState extends State<SchedulePage> {
             weekEndCount = 0;
           }
 
+          numericTotals = numericTotal;
+          numericWeekdays = numericWeekday;
+          numericWeekends = numericWeekend;
+
+          for (int number in numericTotal) {
+            print('Element: $number');
+          }
+
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -173,7 +185,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   isFirstHalf: _isFirstHalf,
                 ),
                 Container(
-                  height: 360,
+                  height: 550,
                   width: MediaQuery.of(context).size.width,
                   child: SafeArea(
                     child: ListView(
@@ -205,7 +217,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                     ),
                                   ),
                                   SizedBox(height: 4.0),
-                                  for (var schedule in schedules)
+                                  for (var schedule in globalSchedules)
                                     Column(
                                       children: [
                                         Text(
@@ -250,7 +262,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                       ),
                                     ),
                                     SizedBox(height: 4.0),
-                                    for (var schedule in schedules)
+                                    for (var schedule in globalSchedules)
                                       Column(
                                         children: [
                                           Text(
@@ -274,78 +286,6 @@ class _SchedulePageState extends State<SchedulePage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: schedules.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '${value['name']}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericTotal.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '총: $value일',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericWeekday.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '평일: $value일',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      children: numericWeekend.map((value) {
-                        return Column(
-                          children: [
-                            Text(
-                              '주말: $value일',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -354,6 +294,146 @@ class _SchedulePageState extends State<SchedulePage> {
           );
         },
       ),
+      bottomNavigationBar: bottomOne(),
+    );
+  }
+
+  Widget bottomOne() {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              height: 60,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('개인별 근무일수'),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: globalSchedules.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '${value['name']}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 6),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    children: numericTotals.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '총: $value일',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    children: numericWeekdays.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '평일: $value일',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    children: numericWeekends.map((value) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            '주말: $value일',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // 팝업 닫기
+                                },
+                                child: Text('취소'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // 팝업 닫기
+                                  // 여기에 확인 버튼 클릭 시 실행할 코드를 추가하세요.
+                                  print('확인 버튼 클릭됨');
+                                },
+                                child: Text('확인'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('개인별 근무일수 확인'),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+        ],
+      ),
+      color: Colors.white,
     );
   }
 }

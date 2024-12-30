@@ -39,7 +39,7 @@ class _CarScheduleViewState extends State<CarScheduleView> {
     "19:00"
   ];
   List<String> alphaItems = [];
-  List<String> carSeat = ["대","소"];
+  List<String> carSeat = ["대","소","둘다"];
 
   Future<void> fetchCarNames() async {
     final querySnapshot =
