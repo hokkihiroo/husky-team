@@ -16,7 +16,6 @@ class _UserResumeState extends State<UserResume> {
   final _formKey = GlobalKey<FormState>();
   String image = 'asset/img/face.png'; //팀명
 
-
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
@@ -39,6 +38,7 @@ class _UserResumeState extends State<UserResume> {
   String cm = ''; //키
   String kg = ''; //몸무게
   String picUrl = ''; // 사진저장소주소
+  int levelNumber = 0; //
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,9 @@ class _UserResumeState extends State<UserResume> {
                       ),
                       Text('양식을 꼭 지켜주세요'),
                       Text('-우덕균-'),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       CustomTextForm(
                         key: ValueKey(4),
                         validator: (val) {
@@ -230,7 +232,9 @@ class _UserResumeState extends State<UserResume> {
                         height: 25,
                       ),
                       Text('숫자만 입력하세요 단위X'),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       CustomTextForm(
                         key: ValueKey(10),
                         onSaved: (val) {
@@ -321,10 +325,39 @@ class _UserResumeState extends State<UserResume> {
                                 barrierDismissible: false, // 로딩 중에는 닫을 수 없도록 설정
                                 builder: (BuildContext context) {
                                   return Center(
-                                    child: CircularProgressIndicator(), // 로딩 인디케이터
+                                    child:
+                                        CircularProgressIndicator(), // 로딩 인디케이터
                                   );
                                 },
                               );
+                              try {
+                                // 컬렉션의 문서를 가져옵니다.
+                                QuerySnapshot querySnapshot =
+                                    await FirebaseFirestore.instance
+                                        .collection(INSA)
+                                        .doc(BOSNA)
+                                        .collection(LIST)
+                                        .get();
+
+                                // 문서의 개수를 반환합니다.
+                                int highestLevel = querySnapshot.docs
+                                    .map((doc) => doc['levelNumber']
+                                        as int) // levelNumber 필드 값을 가져옴
+                                    .reduce((curr, next) => curr > next
+                                        ? curr
+                                        : next); // 가장 높은 값 찾기
+
+                                print(highestLevel);
+                                print(highestLevel);
+                                print(highestLevel);
+                                levelNumber = highestLevel;
+                                print(levelNumber);
+                                print(levelNumber);
+                                print(highestLevel);
+                              } catch (e) {
+                                print(e);
+
+                              }
 
                               try {
                                 final newUser =
@@ -336,7 +369,7 @@ class _UserResumeState extends State<UserResume> {
                                     .doc(newUser.user!.uid)
                                     .set({
                                   'image': image,
-                                  'picUrl' :picUrl,
+                                  'picUrl': picUrl,
                                   'email': email,
                                   'name': name,
                                   'birthDay': birthDay,
@@ -363,18 +396,16 @@ class _UserResumeState extends State<UserResume> {
                                     .doc(newUser.user!.uid)
                                     .set({
                                   'image': image,
-                                  'name': name,  //이름
+                                  'name': name, //이름
                                   'grade': '사원',
                                   'position': '드라이버',
                                   'enterDay': FieldValue.serverTimestamp(),
-                                  'picUrl' :picUrl,
-
-
+                                  'picUrl': picUrl,
+                                  'levelNumber': levelNumber + 1,
                                 });
 
                                 // 로딩 인디케이터 닫기
                                 Navigator.of(context).pop();
-
 
                                 Navigator.pop(context);
                               } catch (e) {
@@ -382,7 +413,7 @@ class _UserResumeState extends State<UserResume> {
 
                                 // 에러가 발생하면 로딩 인디케이터 닫기
                                 Navigator.of(context).pop();
-
+                                Navigator.pop(context);
                               }
                             },
                             child: Text(

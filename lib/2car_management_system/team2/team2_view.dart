@@ -197,6 +197,14 @@ class _Team2ViewState extends State<Team2View> {
                                         vertical: 20.0), // 버튼의 위아래 패딩 조정
                                   ),
                                   onPressed: () async {
+
+
+
+
+
+
+
+
                                     String documentId = FirebaseFirestore
                                         .instance
                                         .collection(FIELD)

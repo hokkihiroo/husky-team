@@ -2,19 +2,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/5mypage/management/manegement/0adress_const.dart';
-import 'package:team_husky/5mypage/management/manegement/5gangnamCarManage/gangnamCar_Card.dart';
+import 'package:team_husky/5mypage/management/manegement/menues/teamMenues/TestDrivingCar_Card.dart';
 
-class GangnamCar extends StatefulWidget {
-  const GangnamCar({super.key});
+class TestDrivingCar extends StatefulWidget {
+  final String teamName;
+  final String position;
+  final String teamDocId;
 
+  const TestDrivingCar({
+    super.key,
+    required this.teamName,
+    required this.position,
+    required this.teamDocId,
+  });
   @override
-  State<GangnamCar> createState() => _GangnamCarState();
+  State<TestDrivingCar> createState() => _GangnamCarState();
 }
 
-class _GangnamCarState extends State<GangnamCar> {
+class _GangnamCarState extends State<TestDrivingCar> {
+  late String gangnamCarList; // 전역 변수로 선언
   String carName = '';
   String carNumber = '';
   String dataId = '';
+
+
+  @override
+  void initState() {
+    super.initState();
+    print('initState 호출됨');
+
+    gangnamCarList = getGangnamCarList(widget.teamDocId);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +42,7 @@ class _GangnamCarState extends State<GangnamCar> {
       appBar: AppBar(
         // AppBar 추가
         title: Text(
-          '강남 시승차량',
+          '${widget.position} ${widget.teamName} 시승차',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -36,7 +56,7 @@ class _GangnamCarState extends State<GangnamCar> {
           children: [
             StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection(GANGNAMCARLIST)
+                  .collection(gangnamCarList)
                   .orderBy('createdAt')
                   .snapshots(),
               builder: (BuildContext context,
@@ -76,7 +96,7 @@ class _GangnamCarState extends State<GangnamCar> {
                               },
                             );
                           },
-                          child: GangnamCarCard(
+                          child: TestDrivingCarCard(
                             carName: docs[index]['carName'],
                             carNumber: docs[index]['carNumber'],
                           ),
@@ -92,8 +112,8 @@ class _GangnamCarState extends State<GangnamCar> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                     carName = '비어있음';
-                     carNumber = '비어있음';
+                    carName = '비어있음';
+                    carNumber = '비어있음';
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -128,7 +148,9 @@ class _GangnamCarState extends State<GangnamCar> {
             carName = value;
           },
         ),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         TextField(
           decoration: InputDecoration(
             hintText: '차 번호',
@@ -151,12 +173,12 @@ class _GangnamCarState extends State<GangnamCar> {
                 ),
                 onPressed: () async {
                   String documentId = FirebaseFirestore.instance
-                      .collection(GANGNAMCARLIST)
+                      .collection(gangnamCarList)
                       .doc()
                       .id;
                   try {
                     await FirebaseFirestore.instance
-                        .collection(GANGNAMCARLIST)
+                        .collection(gangnamCarList)
                         .doc(documentId)
                         .set({
                       'carName': carName,
@@ -211,7 +233,7 @@ class _GangnamCarState extends State<GangnamCar> {
                 onPressed: () async {
                   try {
                     await FirebaseFirestore.instance
-                        .collection(GANGNAMCARLIST) // 컬렉션 이름을 지정하세요
+                        .collection(gangnamCarList) // 컬렉션 이름을 지정하세요
                         .doc(dataId) // 삭제할 문서의 ID를 지정하세요
                         .delete();
                     print('문서 삭제 완료');

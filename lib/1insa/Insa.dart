@@ -75,7 +75,7 @@ class _OrganizationState extends State<Organization> {
                               .collection(INSA)
                               .doc(docs[index].id)
                               .collection('list')
-                              .orderBy('enterDay')
+                              .orderBy('levelNumber')
                               .snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -84,11 +84,16 @@ class _OrganizationState extends State<Organization> {
                                 ConnectionState.waiting) {
                               return CircularProgressIndicator();
                             }
-                            final subDocs = snapshot.data!.docs;
+                            final docs = snapshot.data!.docs.where((subDoc) {
+                              // levelNumber 필드 값 확인 (필드가 없으면 기본값 0)
+                              final data = subDoc.data();
+                              final levelNumber = data['levelNumber'] ?? 0;
+                              return levelNumber != 0; // levelNumber가 0이 아닌 문서만 포함
+                            }).toList();
 
                             // 바뀐 부분: ListView 대신 Column을 사용하여 하위 컬렉션의 데이터를 표시
                             return Column(
-                              children: subDocs.map((subDoc) {
+                              children: docs.map((subDoc) {
                                 var data =
                                     subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
                                 return GestureDetector(

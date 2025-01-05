@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class GangnamCarCard extends StatelessWidget {
+class TestDrivingCarCard extends StatelessWidget {
   final String carName;
   final String carNumber;
 
-  const GangnamCarCard({super.key, required this.carName, required this.carNumber});
+  const TestDrivingCarCard({super.key, required this.carName, required this.carNumber});
 
 
 

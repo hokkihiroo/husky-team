@@ -26,6 +26,7 @@ class _MoveInsaState extends State<MoveInsa> {
   Timestamp memberEnter = Timestamp.now();
   String image = '';
   String picUrl = '';
+  int levelNum = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +112,7 @@ class _MoveInsaState extends State<MoveInsa> {
                     .collection(INSA)
                     .doc(docId)
                     .collection('list')
-                    .orderBy('enterDay')
+                    .orderBy('levelNumber')
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -122,7 +123,13 @@ class _MoveInsaState extends State<MoveInsa> {
                     );
                   }
 
-                  final docs = snapshot.data!.docs;
+                  final docs = snapshot.data!.docs.where((subDoc) {
+                    // levelNumber 필드 값 확인 (필드가 없으면 기본값 0)
+                    final data = subDoc.data();
+                    final levelNumber = data['levelNumber'] ?? 0;
+                    return levelNumber != 0; // levelNumber가 0이 아닌 문서만 포함
+                  }).toList();
+
                   return  Column(
                     children: docs.map((subDoc) {
                       var data = subDoc.data() ?? {};
@@ -355,6 +362,42 @@ class _MoveInsaState extends State<MoveInsa> {
                 ],
               ),
               onTap: () async {
+                levelNum=0;
+
+                var selectTeam = teamData['docId'];
+                print(selectTeam);
+                print(selectTeam);
+                print(selectTeam);
+                print(selectTeam);
+                print(selectTeam);
+                try {
+                // 컬렉션의 문서를 가져옵니다.
+                QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                    .collection(INSA)
+                    .doc(selectTeam)
+                    .collection('list')
+                    .get();
+
+                // 문서의 개수를 반환합니다.
+                int highestLevel = querySnapshot.docs
+                    .map((doc) => doc['levelNumber'] as int) // levelNumber 필드 값을 가져옴
+                    .reduce((curr, next) => curr > next ? curr : next); // 가장 높은 값 찾기
+
+                levelNum =highestLevel;
+                print(highestLevel);
+                print(highestLevel);
+                print(highestLevel);
+                print(levelNum);
+                print(levelNum);
+                print(levelNum);
+
+
+                } catch (e) {
+                  print('문서 삭제 오류: $e');
+                }
+
+
+
                 // 특정 팀을 선택했을 때 수행할 동작 추가
                 // 예: 선택한 팀의 정보를 활용하여 다른 작업을 수행할 수 있음
                 try {
@@ -369,6 +412,9 @@ class _MoveInsaState extends State<MoveInsa> {
                   print('문서 삭제 오류: $e');
                 }
 
+
+
+
                 try {
                   await FirebaseFirestore.instance
                       .collection(INSA)
@@ -382,12 +428,13 @@ class _MoveInsaState extends State<MoveInsa> {
                     'enterDay': memberEnter,
                     'image': image,
                     'picUrl': picUrl,
+                    'levelNumber':levelNum+1,
                   });
                 } catch (e) {
                   print(e);
                 }
 
-                print('선택한 팀: ${teamData['name']}');
+                print('선택한 팀: ${teamData['name']} ${teamData['docId']}');
 
                 // 여기에 선택한 팀에 대한 추가 작업 추가
                 Navigator.pop(context); // 다이얼로그 닫기

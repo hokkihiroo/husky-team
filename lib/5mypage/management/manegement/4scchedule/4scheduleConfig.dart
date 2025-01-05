@@ -15,7 +15,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
   late int _currentYear;
   late int _currentMonth;
   late bool _isFirstHalf;
-  int enter = 0; //스케줄에서 인원 추가할때 순서정하려고 만든숫자
+
 ///////////////////////////////////////    개별업데이트시 필요한 내용
   String scheduleDocument = ''; //스케줄별 문서이름
   String scheduleTime = ''; // 누른 날짜의 출근시각
@@ -159,65 +159,70 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                             .collection('insa')
                                             .doc(widget.teamId)
                                             .collection('list')
-                                            .orderBy('enterDay')
+                                            .orderBy('levelNumber')
                                             .get();
 
                                     querySnapshot.docs.forEach((doc) async {
-                                      String name = doc['name']; // 'name' 필드 추출
-                                      String userId = doc.id; // 'name' 필드 추출
+                                      int levelNumber = doc[
+                                          'levelNumber']; // 'levelNumber' 필드 추출
+                                      if (levelNumber != 0) {
+                                        // levelNumber가 0이 아닌 경우만 처리
+                                        String name =
+                                            doc['name']; // 'name' 필드 추출
+                                        String userId = doc.id; // 'name' 필드 추출
 
-                                      print(name); // 콘솔에 출력
-                                      print(userId); // 콘솔에 출력
-                                      enter++;
+                                        print(name); // 콘솔에 출력
+                                        print(userId); // 콘솔에 출력
+                                        print(levelNumber); // 콘솔에 출력
 
-                                      await FirebaseFirestore.instance
-                                          .collection('insa')
-                                          .doc(widget.teamId)
-                                          .collection('schedule')
-                                          .doc('1EjNGZtze07iY1WJKyvh')
-                                          .collection(
-                                              '$_currentYear$_currentMonth')
-                                          .doc(userId)
-                                          .set({
-                                        'enter': enter,
-                                        'name': name,
-                                        '1': 'X',
-                                        '2': 'X',
-                                        '3': 'X',
-                                        '4': 'X',
-                                        '5': 'X',
-                                        '6': 'X',
-                                        '7': 'X',
-                                        '8': 'X',
-                                        '9': 'X',
-                                        '10': 'X',
-                                        '11': 'X',
-                                        '12': 'X',
-                                        '13': 'X',
-                                        '14': 'X',
-                                        '15': 'X',
-                                        '16': 'X',
-                                        '17': 'X',
-                                        '18': 'X',
-                                        '19': 'X',
-                                        '20': 'X',
-                                        '21': 'X',
-                                        '22': 'X',
-                                        '23': 'X',
-                                        '24': 'X',
-                                        '25': 'X',
-                                        '26': 'X',
-                                        '27': 'X',
-                                        '28': 'X',
-                                        '29': 'X',
-                                        '30': 'X',
-                                        '31': 'X',
-                                      });
+                                        await FirebaseFirestore.instance
+                                            .collection('insa')
+                                            .doc(widget.teamId)
+                                            .collection('schedule')
+                                            .doc('1EjNGZtze07iY1WJKyvh')
+                                            .collection(
+                                                '$_currentYear$_currentMonth')
+                                            .doc(userId)
+                                            .set({
+                                          'levelNumber': levelNumber,
+                                          'name': name,
+                                          '1': 'X',
+                                          '2': 'X',
+                                          '3': 'X',
+                                          '4': 'X',
+                                          '5': 'X',
+                                          '6': 'X',
+                                          '7': 'X',
+                                          '8': 'X',
+                                          '9': 'X',
+                                          '10': 'X',
+                                          '11': 'X',
+                                          '12': 'X',
+                                          '13': 'X',
+                                          '14': 'X',
+                                          '15': 'X',
+                                          '16': 'X',
+                                          '17': 'X',
+                                          '18': 'X',
+                                          '19': 'X',
+                                          '20': 'X',
+                                          '21': 'X',
+                                          '22': 'X',
+                                          '23': 'X',
+                                          '24': 'X',
+                                          '25': 'X',
+                                          '26': 'X',
+                                          '27': 'X',
+                                          '28': 'X',
+                                          '29': 'X',
+                                          '30': 'X',
+                                          '31': 'X',
+                                        });
+                                      }
                                     });
                                   } catch (e) {
                                     print("Error getting data: $e");
                                   }
-                                  enter = 0;
                                 },
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.red,
@@ -289,7 +294,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
             .collection('schedule')
             .doc('1EjNGZtze07iY1WJKyvh')
             .collection('$_currentYear$_currentMonth')
-            .orderBy('enter')
+            .orderBy('levelNumber')
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -528,7 +533,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                 .collection('$_currentYear$_currentMonth')
                                 .doc()
                                 .set({
-                              'enter': maxEnterValue + 1,
+                              'levelNumber': maxEnterValue + 1,
                               'name': addName,
                               '1': 'X',
                               '2': 'X',
@@ -739,7 +744,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                         .get();
 
                     int maxValue = querySnapshot.docs
-                        .map((doc) => doc['enter'] as int)
+                        .map((doc) => doc['levelNumber'] as int)
                         .reduce((value, element) =>
                             value > element ? value : element);
                     maxEnterValue = maxValue;
