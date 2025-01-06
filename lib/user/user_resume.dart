@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/layout/default_layout.dart';
+import 'package:team_husky/user/birthDay.dart';
 import 'package:team_husky/user/custom_text_form.dart';
+import 'package:team_husky/user/phoneInput.dart';
 import 'package:team_husky/user/user_auth.dart';
 
 class UserResume extends StatefulWidget {
@@ -15,6 +17,9 @@ class UserResume extends StatefulWidget {
 class _UserResumeState extends State<UserResume> {
   final _formKey = GlobalKey<FormState>();
   String image = 'asset/img/face.png'; //팀명
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _birthDayController =
+      TextEditingController(); // 생년월일을 위한 컨트롤러 추가
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -39,6 +44,13 @@ class _UserResumeState extends State<UserResume> {
   String kg = ''; //몸무게
   String picUrl = ''; // 사진저장소주소
   int levelNumber = 0; //
+
+  @override
+  void dispose() {
+    _phoneController.dispose(); // 메모리 누수를 방지하기 위해 dispose 호출
+    _birthDayController.dispose(); // 생년월일 컨트롤러 해제
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,40 +157,49 @@ class _UserResumeState extends State<UserResume> {
                         height: 25,
                       ),
                       Text('양식을 꼭 지켜주세요'),
+                      Text('중복 가입은 예고없이 삭제됩니다.'),
                       Text('-우덕균-'),
                       SizedBox(
                         height: 20,
                       ),
-                      CustomTextForm(
-                        key: ValueKey(4),
+                      PhoneNumberInput(
+                        phoneController: _phoneController,
                         validator: (val) {
-                          if (val!.isEmpty) {
+                          if (val == null || val.isEmpty) {
                             return '전화번호는 필수사항입니다.';
                           }
+                          if (val.length != 13) {
+                            return '전화번호는 010-1234-5678 형식으로 입력해주세요.';
+                          }
+
+                          if (!RegExp(r'^010-\d{4}-\d{4}$').hasMatch(val)) {
+                            return '유효한 전화번호 형식이 아닙니다.';
+                          }
+                          return null;
                         },
                         onSaved: (val) {
                           setState(() {
-                            phoneNumber = val;
+                            phoneNumber = val!; // 하이픈 포함된 전화번호를 저장
                           });
                         },
-                        hintText: '전화번호 예) 010-1234-5678',
                       ),
                       SizedBox(
                         height: 25,
                       ),
-                      CustomTextForm(
-                        key: ValueKey(5),
+                      CustomDatePicker(
+                        dateController: _birthDayController,
+                        // 생년월일을 받을 Controller
                         validator: (val) {
                           if (val!.isEmpty) {
-                            return ' 생년월일을 입력바랍니다.';
+                            return '생년월일을 입력바랍니다.';
                           }
+                          return null;
                         },
                         onSaved: (val) {
                           setState(() {
-                            birthDay = val;
+                            birthDay = val!;
                           });
                         },
-                        hintText: '생년월일 예) 1999년 01월 14일',
                       ),
                       SizedBox(
                         height: 25,
@@ -356,7 +377,6 @@ class _UserResumeState extends State<UserResume> {
                                 print(highestLevel);
                               } catch (e) {
                                 print(e);
-
                               }
 
                               try {

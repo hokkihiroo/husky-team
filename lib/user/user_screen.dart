@@ -98,59 +98,96 @@ class _UserScreenState extends State<UserScreen> {
                         SizedBox(
                           height: 20,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                          ),
-                          onPressed: () async {
-                            try {
-                              final newUser =
-                                  await AUTH.signInWithEmailAndPassword(
-                                email: id,
-                                password: password,
-                              );
-                              if (newUser.user != null) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return SplashScreen();
-                                    },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(width: 10,),
+
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue,
+                                ),
+                                onPressed: () async {
+                                  try {
+                                    final newUser =
+                                        await AUTH.signInWithEmailAndPassword(
+                                      email: id,
+                                      password: password,
+                                    );
+                                    if (newUser.user != null) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return SplashScreen();
+                                          },
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
+                                child: Text(
+                                  '로그인',
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
-                                );
-                              }
-                            } catch (e) {
-                              print(e);
-                            }
-                          },
-                          child: Text(
-                            '로그인',
-                            style: TextStyle(
-                              color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(width: 5,),
+
+                            Expanded(
+                              child: ElevatedButton(
+                                style:
+                                ElevatedButton.styleFrom(primary: Colors.black),
+                                onPressed: () {
+                                },
+                                child: Text(
+                                  '비밀번호 찾기',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+
+                          ],
                         ),
                         SizedBox(
                           height: 5,
                         ),
-                        ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.black),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return UserResume();
-                              }),
-                            );
-                          },
-                          child: Text(
-                            '이력서작성',
-                            style: TextStyle(
-                              color: Colors.white,
+                        Row(
+                          children: [
+                            SizedBox(width: 10,),
+                            Expanded(
+                              child: ElevatedButton(
+                                style:
+                                    ElevatedButton.styleFrom(primary: Colors.black),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return UserResume();
+                                    }),
+                                  );
+                                },
+                                child: Text(
+                                  '이력서작성',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(width: 10,),
+
+                          ],
                         ),
+
                       ],
                     ),
                   ),
@@ -162,10 +199,14 @@ class _UserScreenState extends State<UserScreen> {
               child: Container(
                 width: MediaQuery.of(context).size.width - 40,
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Center(
-                  child: Text(
-                    '해당 앱은 팀허스키 직원 전용앱입니다. \n Copyright © Team.HUSKY 2018',
-                  ),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        '해당 앱은 팀허스키 직원 전용앱입니다. \n Copyright © Team.HUSKY 2018',
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
