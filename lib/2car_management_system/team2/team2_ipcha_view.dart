@@ -139,7 +139,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               Text(
                 '차량번호: $carNumber',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
@@ -148,7 +148,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               Text(
                 '경과시간: $remainTime',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[700],
                 ),
@@ -157,7 +157,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
           ),
           Container(
             height: 60,
-            width: 120,
+            width: 115,
             child: ElevatedButton(
               onPressed: () async {
                 try {
@@ -175,7 +175,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               child: Text(
                 '출차하기',
                 style: TextStyle(
-                  fontSize: 20, // 텍스트 크기 증가
+                  fontSize: 18, // 텍스트 크기 증가
                   fontWeight: FontWeight.bold, // 텍스트를 굵게
                   color: Colors.black87, // 텍스트 색상
                 ),
@@ -225,7 +225,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     child: Text(
                       '차량픽업',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -262,7 +262,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     child: Text(
                       '픽업취소',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -318,7 +318,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           child: Text(
                             'BA',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -353,7 +353,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           child: Text(
                             'BB',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -388,7 +388,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           child: Text(
                             'BC',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -427,7 +427,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           child: Text(
                             '가벽',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -462,7 +462,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           child: Text(
                             'B2',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -501,7 +501,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: Text(
                     '자가주차',
                     style: TextStyle(
-                      fontSize: 18, // 텍스트 크기 증가
+                      fontSize: 17, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
                       color: Colors.black87, // 텍스트 색상
                     ),
@@ -534,14 +534,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: Text(
                     '취소',
                     style: TextStyle(
-                      fontSize: 18, // 텍스트 크기 증가
+                      fontSize: 17, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
                       color: Colors.black87, // 텍스트 색상
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 25,
+                  width: 10,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
