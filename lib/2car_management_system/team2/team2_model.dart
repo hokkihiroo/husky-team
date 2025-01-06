@@ -154,7 +154,7 @@ class _CarStateState extends State<CarState> {
               Text(
                 '차량번호: $carNumber',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
@@ -163,7 +163,7 @@ class _CarStateState extends State<CarState> {
               Text(
                 '경과시간: $remainTime',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[700],
                 ),
@@ -190,7 +190,7 @@ class _CarStateState extends State<CarState> {
               child: Text(
                 '출차하기',
                 style: TextStyle(
-                  fontSize: 20, // 텍스트 크기 증가
+                  fontSize: 18, // 텍스트 크기 증가
                   fontWeight: FontWeight.bold, // 텍스트를 굵게
                   color: Colors.black87, // 텍스트 색상
                 ),
@@ -240,7 +240,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '차량픽업',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -277,7 +277,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '픽업취소',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -333,7 +333,7 @@ class _CarStateState extends State<CarState> {
                           child: Text(
                             'BA',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -368,7 +368,7 @@ class _CarStateState extends State<CarState> {
                           child: Text(
                             'BB',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -403,7 +403,7 @@ class _CarStateState extends State<CarState> {
                           child: Text(
                             'BC',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -442,7 +442,7 @@ class _CarStateState extends State<CarState> {
                           child: Text(
                             '가벽',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -477,7 +477,7 @@ class _CarStateState extends State<CarState> {
                           child: Text(
                             'B2',
                             style: TextStyle(
-                              fontSize: 18, // 텍스트 크기 증가
+                              fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
@@ -516,7 +516,7 @@ class _CarStateState extends State<CarState> {
                   child: Text(
                     '자가주차',
                     style: TextStyle(
-                      fontSize: 18, // 텍스트 크기 증가
+                      fontSize: 17, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
                       color: Colors.black87, // 텍스트 색상
                     ),
@@ -549,14 +549,14 @@ class _CarStateState extends State<CarState> {
                   child: Text(
                     '취소',
                     style: TextStyle(
-                      fontSize: 18, // 텍스트 크기 증가
+                      fontSize: 17, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
                       color: Colors.black87, // 텍스트 색상
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 25,
+                  width: 10,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -772,7 +772,7 @@ class _CarStateState extends State<CarState> {
               Text(
                 '차량번호: $carNumber',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
@@ -781,7 +781,7 @@ class _CarStateState extends State<CarState> {
               Text(
                 '경과시간: $remainTime',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[700],
                 ),
@@ -798,7 +798,7 @@ class _CarStateState extends State<CarState> {
               child: Text(
                 '돌아가기',
                 style: TextStyle(
-                  fontSize: 20, // 텍스트 크기 증가
+                  fontSize: 18, // 텍스트 크기 증가
                   fontWeight: FontWeight.bold, // 텍스트를 굵게
                   color: Colors.black87, // 텍스트 색상
                 ),
@@ -847,7 +847,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '입차대기로이동',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -883,7 +883,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '특이사항삭제',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -919,7 +919,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '출차취소',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -993,7 +993,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '출차완료',
                       style: TextStyle(
-                        fontSize: 18, // 텍스트 크기 증가
+                        fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
