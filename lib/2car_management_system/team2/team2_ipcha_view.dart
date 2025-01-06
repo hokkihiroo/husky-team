@@ -55,7 +55,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
             crossAxisCount: 4, // 가로 아이템 개수
             crossAxisSpacing: 10.0, // 가로 간격
             mainAxisSpacing: 18.0, // 세로 간격
-            childAspectRatio: 1.9, // 아이템의 가로세로 비율
+            childAspectRatio: 1.6, // 아이템의 가로세로 비율
           ),
           itemCount: filteredDocs.length,
           itemBuilder: (context, index) {
