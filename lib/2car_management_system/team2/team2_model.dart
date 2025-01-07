@@ -792,11 +792,59 @@ class _CarStateState extends State<CarState> {
             height: 60,
             width: 120,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                print('out: ${FieldValue.serverTimestamp()}');
+                print(
+                  widget.name,
+                ); //outName
+                print(location); //outLocation
+                print(movedLocation); //movedLocation
+                print(wigetName); //wigetName
+                print(movingTime); //movingTime
+                try {
+                  await FirebaseFirestore.instance
+                      .collection(FIELD) // 컬렉션 이름을 지정하세요
+                      .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                      .delete();
+                  print('문서 삭제 완료');
+                } catch (e) {
+                  print('문서 삭제 오류: $e');
+                }
                 Navigator.pop(context);
+                try {
+                  await FirebaseFirestore.instance
+                      .collection(CarListAdress)
+                      .doc(dataId)
+                      .update({
+                    'out': FieldValue.serverTimestamp(),
+                    'outName': name,
+                    'outLocation': location,
+                    'movedLocation': '$movedLocation',
+                    'wigetName': wigetName,
+                    'movingTime': movingTime,
+                  });
+                } catch (e) {
+                  print(e);
+                  print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('하루 지난 데이터 입니다 '),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('확인'),
+                            ),
+                          ],
+                        );
+                      });
+                }
               },
               child: Text(
-                '돌아가기',
+                '출차완료',
                 style: TextStyle(
                   fontSize: 18, // 텍스트 크기 증가
                   fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -805,7 +853,7 @@ class _CarStateState extends State<CarState> {
               ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                primary: Colors.grey, // 버튼 색상
+                primary: Colors.red, // 버튼 색상
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                 ),
@@ -934,68 +982,20 @@ class _CarStateState extends State<CarState> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.red, // 버튼 색상
+                      primary: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
                     ),
-                    onPressed: () async {
-                      print('out: ${FieldValue.serverTimestamp()}');
-                      print(
-                        widget.name,
-                      ); //outName
-                      print(location); //outLocation
-                      print(movedLocation); //movedLocation
-                      print(wigetName); //wigetName
-                      print(movingTime); //movingTime
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD) // 컬렉션 이름을 지정하세요
-                            .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                            .delete();
-                        print('문서 삭제 완료');
-                      } catch (e) {
-                        print('문서 삭제 오류: $e');
-                      }
+                    onPressed: () {
                       Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(CarListAdress)
-                            .doc(dataId)
-                            .update({
-                          'out': FieldValue.serverTimestamp(),
-                          'outName': name,
-                          'outLocation': location,
-                          'movedLocation': '$movedLocation',
-                          'wigetName': wigetName,
-                          'movingTime': movingTime,
-                        });
-                      } catch (e) {
-                        print(e);
-                        print('데이터가 존재하지 않아 업데이트 할게 없습니다');
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('하루 지난 데이터 입니다 '),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('확인'),
-                                  ),
-                                ],
-                              );
-                            });
-                      }
                     },
                     child: Text(
-                      '출차완료',
+                      '돌아가기',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
+                        color: Colors.black, // 텍스트 색상
                       ),
                     ),
                   ),

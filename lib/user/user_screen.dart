@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team_husky/user/ResetPasswordPage.dart';
 import 'package:team_husky/user/custom_text_form.dart';
 import 'package:team_husky/user/user_auth.dart';
 import 'package:team_husky/user/user_resume.dart';
@@ -144,6 +145,13 @@ class _UserScreenState extends State<UserScreen> {
                                 style:
                                 ElevatedButton.styleFrom(primary: Colors.black),
                                 onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return ResetPasswordPage();
+                                    }),
+                                  );
+
                                 },
                                 child: Text(
                                   '비밀번호 찾기',
