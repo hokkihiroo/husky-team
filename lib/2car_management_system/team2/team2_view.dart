@@ -32,7 +32,7 @@ class _Team2ViewState extends State<Team2View> {
               Expanded(
                 child: Center(
                   child: Text(
-                    '테스트',
+                    '제네시스 청주',
                     style: TextStyle(
                       color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
                     ),

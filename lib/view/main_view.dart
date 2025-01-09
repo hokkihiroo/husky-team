@@ -7,19 +7,24 @@ import '../4education/education.dart';
 import '../5mypage/mypage.dart';
 
 class MainView extends StatefulWidget {
-  const MainView(
-      {super.key,
-      required this.myUid,
-      required this.name,
-      required this.team,
-      required this.email,
-      required this.grade});
+  const MainView({
+    super.key,
+    required this.myUid,
+    required this.name,
+    required this.team,
+    required this.email,
+    required this.grade,
+    required this.birthDay,
+    required this.picUrl,
+  });
 
   final String myUid;
   final String name;
   final String team;
   final String email;
   final int grade;
+  final String birthDay;
+  final String picUrl;
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -74,6 +79,8 @@ class _MainViewState extends State<MainView>
             grade: widget.grade,
             team: widget.team,
             uid: widget.myUid,
+            birthDay: widget.birthDay,
+            picUrl:widget.picUrl,
           ),
         ],
       ),

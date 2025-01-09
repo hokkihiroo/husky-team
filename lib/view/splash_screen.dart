@@ -20,14 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
   late String team;
   late String email;
   late int grade;
+  late String birth;
+  late String picUrl;
 
   @override
   void initState() {
-   // Notice();
+    // Notice();
     super.initState();
 
     checkLoginStatus();
   }
+
   //   Notice() async {
   //   await FlutterLocalNotification.init();
   //   FlutterLocalNotification.requestNotificationPermission();
@@ -42,23 +45,24 @@ class _SplashScreenState extends State<SplashScreen> {
     // 사용자가 로그인되어 있는지 확인
     if (_user != null) {
       try {
-
         String userID = _user!.uid;
-          CollectionReference insa = await FirebaseFirestore.instance.collection('insa');
+        CollectionReference insa =
+            await FirebaseFirestore.instance.collection('insa');
 
-          QuerySnapshot querySnapshot = await insa.get();
-          for (var doc in querySnapshot.docs) {
-            // Get the list collection for each insa document
-            CollectionReference listCollection = insa.doc(doc.id).collection('list');
-            DocumentSnapshot subDocSnapshot = await listCollection.doc(userID).get();
+        QuerySnapshot querySnapshot = await insa.get();
+        for (var doc in querySnapshot.docs) {
+          // Get the list collection for each insa document
+          CollectionReference listCollection =
+              insa.doc(doc.id).collection('list');
+          DocumentSnapshot subDocSnapshot =
+              await listCollection.doc(userID).get();
 
-            // Check if the sub-document exists in the list collection
-            if (subDocSnapshot.exists) {
-              team = doc.id;
-              print('Document ID: $team');
-
-            }
+          // Check if the sub-document exists in the list collection
+          if (subDocSnapshot.exists) {
+            team = doc.id;
+            print('Document ID: $team');
           }
+        }
 
         DocumentSnapshot<Map<String, dynamic>> snapshot =
             await FirebaseFirestore.instance
@@ -69,6 +73,9 @@ class _SplashScreenState extends State<SplashScreen> {
           name = snapshot.data()!['name'];
           email = snapshot.data()!['email'];
           grade = snapshot.data()!['grade'];
+          birth = snapshot.data()!['birthDay'];
+          picUrl = snapshot.data()?['picUrl'] ?? ''; // picUrl이 null이면 빈 문자열로 설정
+     //     picUrl: picUrl ?? 'default_image_url', // 기본 URL 설정
         }
       } catch (e) {
         print('Error fetching data: $e');
@@ -90,6 +97,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   grade: grade,
                   team: team,
                   myUid: _user!.uid,
+                  birthDay: birth,
+                  picUrl: picUrl,
                 )),
       );
     } else {
@@ -99,8 +108,6 @@ class _SplashScreenState extends State<SplashScreen> {
         MaterialPageRoute(builder: (context) => UserScreen()),
       );
     }
-
-
   }
 
   @override

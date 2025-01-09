@@ -7,19 +7,24 @@ import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
 
 class MyPage extends StatefulWidget {
-  const MyPage(
-      {super.key,
-      required this.name,
-      required this.uid,
-      required this.team,
-      required this.email,
-      required this.grade});
+  const MyPage({
+    super.key,
+    required this.name,
+    required this.uid,
+    required this.team,
+    required this.email,
+    required this.grade,
+    required this.birthDay,
+    required this.picUrl,
+  });
 
   final String name;
   final String uid;
   final String team;
   final String email;
   final int grade;
+  final String birthDay;
+  final String picUrl;
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -29,233 +34,301 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text('메일 : ${widget.email}'),
-              Text('이름 :${widget.name}'),
-              ElevatedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return UserScreen();
-                      },
-                    ),
-                  );
-                },
-                child: Text('로그아웃'),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              OutlinedButton.icon(
-                  onPressed: () {
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120), // AppBar 높이 설정
+        child: AppBar(
+          backgroundColor: Colors.black45, // AppBar 배경색
+          elevation: 4,
+          flexibleSpace: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              children: [
+                // 사진 섹션
+                GestureDetector(
+                  onTap: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return Dialog(
                           child: MyPicture(
                             uid: widget.uid,
-                            team: widget.team,),
+                            team: widget.team,
+                          ),
                         );
                       },
                     );
                   },
-                  icon: Icon(Icons.image),
-                  label: Text('내사진 등록')),
-              SizedBox(
-                width: 50,
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.black),
-                onPressed: () {
-                  if (widget.grade == 0) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('접근 거부'),
-                          content: Text('관리자 권한이 필요합니다.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('확인'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return Management(
-                          name: widget.name,
-                        );
-                      }),
-                    );
-                  }
-                },
-                child: Text(
-                  '관리자페이지',
-                  style: TextStyle(
-                    color: Colors.white,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: (widget.picUrl != null && widget.picUrl.isNotEmpty)
+                        ? NetworkImage(widget.picUrl)
+                        : null,
+                    child: (widget.picUrl != null && widget.picUrl.isNotEmpty)
+                        ? null
+                        : const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.black),
-                onPressed: () {
-                  if (widget.grade != 2) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('접근 거부'),
-                          content: Text('관리자 권한이 필요합니다.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('확인'),
+                const SizedBox(width: 16),
+                // 텍스트 정보 섹션
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "이름: ${widget.name}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return Authorization();
-                      }),
-                    );
-                  }
-                },
-                child: Text(
-                  '관리자 권한설정',
-                  style: TextStyle(
-                    color: Colors.white,
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.logout,
+                              color: Colors.white,
+                            ),
+                            tooltip: "로그아웃",
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const UserScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "생년월일 : ${widget.birthDay}",
+                        style: const TextStyle(
+                            fontSize: 14, color: Colors.white70),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "메일 : ${widget.email}",
+                        style: const TextStyle(
+                            fontSize: 14, color: Colors.white70),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(
-            height: 200,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return MySchedule(
-                        team: widget.team,
-                        uid: widget.uid,
-                      );
-                    }),
-                  );
-                },
-                child: Text(
-                  '나의 스케줄',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-
-//               ElevatedButton(
-//                 onPressed: () {
-//                   showDialog(
-//                     context: context,
-//                     builder: (BuildContext context) {
-// // AlertDialog를 반환하여 대화 상자 내용을 정의
-//                       return AlertDialog(
-//                         content: Text(
-//                             '모든 데이터가 소실되어 \n 더이상 앱사용이 불가합니다.\n 계속 하시겠습니까?'),
-//                         actions: [
-//                           Row(
-//                             children: [
-//                               Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: TextButton(
-//                                   onPressed: () async {
-//                                     try {
-//                                       User? currentUser =
-//                                           FirebaseAuth.instance.currentUser;
-//                                       print(currentUser);
-//                                       print(currentUser);
-//                                       print(currentUser);
-//                                       print(currentUser);
-//                                       if (currentUser != null) {
-//                                         String userId = currentUser.uid;
-//
-//                                         await FIRESTORE
-//                                             .collection('user')
-//                                             .doc(userId)
-//                                             .delete();
-//
-//                                         await currentUser.delete();
-//                                         await FirebaseAuth.instance.signOut();
-//                                         Navigator.pushReplacement(
-//                                           context,
-//                                           MaterialPageRoute(
-//                                             builder: (context) {
-//                                               return UserScreen();
-//                                             },
-//                                           ),
-//                                         );
-//                                       }
-//                                     } catch (e) {
-//                                       print('Error deleting user: $e');
-//                                     }
-//                                   },
-//                                   child: Text('퇴사하기'),
-//                                 ),
-//                               ),
-//                               Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: TextButton(
-//                                   onPressed: () {
-// // 대화 상자 닫기
-//                                     Navigator.of(context).pop();
-//                                   },
-//                                   child: Text('취소'),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ],
-//                       );
-//                     },
-//                   );
-//                 },
-//                 child: Text('퇴사하기'),
-//               ),
-            ],
-          ),
-        ],
+        ),
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 나의 스케줄 버튼
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        showContentDialog(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        // 텍스트를 왼쪽으로 정렬
+                        children: const [
+                          Icon(Icons.car_repair_outlined), // 아이콘
+                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+                          Text('운전면허증관리'), // 텍스트
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MySchedule(
+                              team: widget.team,
+                              uid: widget.uid,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        // 텍스트를 왼쪽으로 정렬
+                        children: const [
+                          Icon(Icons.schedule), // 아이콘
+                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+                          Text('나의 스케줄'), // 텍스트
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        showContentDialog(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        // 텍스트를 왼쪽으로 정렬
+                        children: const [
+                          Icon(Icons.paid_outlined), // 아이콘
+                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+                          Text('급여명세서'), // 텍스트
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        showContentDialog(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        // 텍스트를 왼쪽으로 정렬
+                        children: const [
+                          Icon(Icons.edit), // 아이콘
+                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+                          Text('근로계약서'), // 텍스트
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              if (widget.grade == 1 || widget.grade == 2)
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Management(name: widget.name),
+                              ),
+                            );
+                          },
+                          child: const Text('관리자 페이지'),
+                        ),
+                        const SizedBox(height: 16),
+                        if (widget.grade == 2)
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueGrey,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Authorization(),
+                                ),
+                              );
+                            },
+                            child: const Text('관리자 권한 설정'),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('(주) 팀허스키', style: TextStyle(fontSize: 14)),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Copyright © Team.HUSKY 2018', style: TextStyle(fontSize: 14)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showContentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('알림'),
+          content: const Text('준비중입니다'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -42,7 +42,8 @@ class _OrganizationState extends State<Organization> {
               itemCount: docs.length,
               itemBuilder: (context, index) {
                 // 등급이 0이고, 문서 ID가 특정 ID일 경우 해당 아이템은 보여주지 않음
-                if (widget.grade == 0 && docs[index].id == '3LDEwvJicNKtzDemmHY6') {
+                if (widget.grade == 0 &&
+                    docs[index].id == '3LDEwvJicNKtzDemmHY6') {
                   return SizedBox.shrink(); // 빈 공간을 반환하여 해당 아이템을 숨김
                 }
                 return Padding(
@@ -88,7 +89,8 @@ class _OrganizationState extends State<Organization> {
                               // levelNumber 필드 값 확인 (필드가 없으면 기본값 0)
                               final data = subDoc.data();
                               final levelNumber = data['levelNumber'] ?? 0;
-                              return levelNumber != 0; // levelNumber가 0이 아닌 문서만 포함
+                              return levelNumber !=
+                                  0; // levelNumber가 0이 아닌 문서만 포함
                             }).toList();
 
                             // 바뀐 부분: ListView 대신 Column을 사용하여 하위 컬렉션의 데이터를 표시
@@ -111,6 +113,7 @@ class _OrganizationState extends State<Organization> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
+
                                         return viewInsa(
                                           userData,
                                           formattedDate,
@@ -144,131 +147,163 @@ class _OrganizationState extends State<Organization> {
   }
 
   Widget viewInsa(
-    Map<String, dynamic> data,
-    String formattedDate,
-    String picUrl,
-  ) {
+      Map<String, dynamic> data,
+      String formattedDate,
+      String picUrl,
+      ) {
     return AlertDialog(
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundImage: picUrl != null && picUrl!.isNotEmpty
-                ? NetworkImage(
-                    picUrl!,
-                  )
-                : AssetImage('asset/img/husky_Logo.png') as ImageProvider,
-            radius: 80, // 원의 반지름 설정
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Center(child: Text(data['name'])),
-          Center(child: Text(data['birthDay'])),
-        ],
+      backgroundColor: Colors.white, // 전체 배경색을 기본 흰색으로 설정
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0), // 모서리 둥글게
       ),
-      content: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 150,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 브라운 색 배경 영역
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.brown.shade800, // 진한 브라운
+                  Colors.brown.shade200, // 연한 브라운
+                ],
+              ),
+            ),
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Column(
               children: [
-                Text('연락처 :'),
-                SizedBox(
-                  width: 10,
+                Text(
+                  '(주)팀허스키',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                Text(data['phoneNumber']),
-                SizedBox(
-                  width: 10,
+                SizedBox(height: 16.0),
+                GestureDetector(
+                  onTap: picUrl.isNotEmpty
+                      ? () {
+                    _showFullImage(context, picUrl);
+                  }
+                      : null, // 이미지 URL이 없으면 클릭 비활성화
+                  child: CircleAvatar(
+                    backgroundImage: picUrl != null && picUrl.isNotEmpty
+                        ? NetworkImage(picUrl)
+                        : AssetImage('asset/img/husky_Logo.png') as ImageProvider,
+                    radius: 50,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  data['name'] ?? '이름 없음',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  data['birthDay'] ?? '생일 정보 없음',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black87,
+                  ),
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text('차량번호 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['carNumber']),
-              ],
+          ),
+          // 흰색 배경 영역
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _infoRow('연락처', data['phoneNumber']),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  _infoRow('차량번호', data['carNumber']),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _infoRow('경력', data['career'])),
+                      SizedBox(width: 16),
+                      Expanded(child: _infoRow('취미', data['hobby'])),
+                    ],
+                  ),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  _infoRow('입사일', formattedDate),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _infoRow('상의', data['tShirtSize'])),
+                      SizedBox(width: 16),
+                      Expanded(child: _infoRow('하의', data['pantsSize'])),
+                    ],
+                  ),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _infoRow('신발', data['footSize'])),
+                      SizedBox(width: 16),
+                      Expanded(child: _infoRow('키', '${data['cm']} cm')),
+                    ],
+                  ),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  _infoRow('몸무게', '${data['kg']} kg'),
+                ],
+              ),
             ),
-            Row(
-              children: [
-                Text('경력 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['career']),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('취미 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['hobby']),
-              ],
-            ),
-            Row(
-              children: [
-                Text('입사일 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('$formattedDate'), //    이건 날짜를 불러올수있는
-                //위젯으로 변경후 불러와야함
-              ],
-            ),
-            Row(
-              children: [
-                Text('상의 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['tShirtSize']),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('하의 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['pantsSize']),
-              ],
-            ),
-            Row(
-              children: [
-                Text('신발 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['footSize']),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('키 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['cm']),
-              ],
-            ),
-            Row(
-              children: [
-                Text('몸무게 :'),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(data['kg']),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  Widget _infoRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14.0,
+            color: Colors.black87,
+          ),
+        ),
+        SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            value ?? '정보 없음',
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.black54,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showFullImage(BuildContext context, String imageUrl) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FullImageView(imageUrl: imageUrl),
+      ),
+    );
+  }
+
 }
 
 //선택한 직원 신상 불러오기
@@ -299,4 +334,32 @@ Future<Map<String, dynamic>> getData(String documentId) async {
 
   // 모든 분기에서 return 문을 추가하여 반환 유형이 Future<Map<String, dynamic>>을 만족시킵니다.
   return {};
+}
+
+
+class FullImageView extends StatelessWidget {
+  final String imageUrl;
+
+  FullImageView({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Center(
+          child: Hero(
+            tag: 'fullImage',
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
