@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/4education/education_card.dart';
-import 'package:team_husky/5mypage/management/manegement/6educationManage/education_manage_card.dart';
+import 'package:team_husky/5mypage/management/manegement/5educationManage/education_manage_card.dart';
 
 import 'education_select_category.dart';
 
 class EducationManage extends StatefulWidget {
   String name;
 
-   EducationManage({super.key, required this.name});
+  EducationManage({super.key, required this.name});
 
   @override
   State<EducationManage> createState() => _EducationManageState();
@@ -18,9 +18,7 @@ class EducationManage extends StatefulWidget {
 class _EducationManageState extends State<EducationManage> {
   String? documentID = '';
 
-
   void _showDialog() {
-
     final TextEditingController _textFieldController = TextEditingController();
 
     showDialog(
@@ -43,10 +41,9 @@ class _EducationManageState extends State<EducationManage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     String inputText = _textFieldController.text;
-                    String documentId = FirebaseFirestore
-                        .instance
+                    String documentId = FirebaseFirestore.instance
                         .collection('education')
                         .doc()
                         .id;
@@ -65,7 +62,6 @@ class _EducationManageState extends State<EducationManage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-
                     Navigator.of(context).pop();
                   },
                   child: Text('취소'),
@@ -124,7 +120,6 @@ class _EducationManageState extends State<EducationManage> {
                               category: data['category'],
                               documentID: '$documentID',
                               name: widget.name,
-
                             ),
                           ),
                         );
@@ -161,14 +156,10 @@ class _EducationManageState extends State<EducationManage> {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                textStyle:
-                    TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
+                textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
               ),
               onPressed: () {
-
                 _showDialog();
-
-
               },
               child: Text('카테고리추가'),
             ),
@@ -178,6 +169,4 @@ class _EducationManageState extends State<EducationManage> {
       color: Colors.white,
     );
   }
-
-
 }

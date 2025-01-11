@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
+import 'package:team_husky/5mypage/mylicense/myLicenseUpdate.dart';
 import 'package:team_husky/5mypage/mypicture/mypicture.dart';
 import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
@@ -62,16 +63,17 @@ class _MyPageState extends State<MyPage> {
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.grey[300],
-                    backgroundImage: (widget.picUrl != null && widget.picUrl.isNotEmpty)
-                        ? NetworkImage(widget.picUrl)
-                        : null,
+                    backgroundImage:
+                        (widget.picUrl != null && widget.picUrl.isNotEmpty)
+                            ? NetworkImage(widget.picUrl)
+                            : null,
                     child: (widget.picUrl != null && widget.picUrl.isNotEmpty)
                         ? null
                         : const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.white,
-                    ),
+                            Icons.person,
+                            size: 40,
+                            color: Colors.white,
+                          ),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -147,7 +149,11 @@ class _MyPageState extends State<MyPage> {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        showContentDialog(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyLicenseUpdate()),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -155,7 +161,7 @@ class _MyPageState extends State<MyPage> {
                         children: const [
                           Icon(Icons.car_repair_outlined), // 아이콘
                           SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('운전면허증관리'), // 텍스트
+                          Text('운전면허증'), // 텍스트
                         ],
                       ),
                     ),
@@ -186,7 +192,7 @@ class _MyPageState extends State<MyPage> {
                         children: const [
                           Icon(Icons.schedule), // 아이콘
                           SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('나의 스케줄'), // 텍스트
+                          Text('나의스케줄'), // 텍스트
                         ],
                       ),
                     ),
@@ -257,7 +263,7 @@ class _MyPageState extends State<MyPage> {
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
+                            backgroundColor: Colors.blueGrey,
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {

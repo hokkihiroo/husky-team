@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/5mypage/management/manegement/6educationManage/education_manage_detail_screen.dart';
+import 'package:team_husky/5mypage/management/manegement/5educationManage/education_manage_detail_screen.dart';
 
 class EducationManageDetail extends StatelessWidget {
   String category;

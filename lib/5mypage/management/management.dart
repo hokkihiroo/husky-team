@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/2moveInsa/2moveInsa.dart';
 import 'package:team_husky/5mypage/management/manegement/3manageGongji/manageGongji.dart';
 import 'package:team_husky/5mypage/management/manegement/4scchedule/4schedule.dart';
+import 'package:team_husky/5mypage/management/manegement/5educationManage/education.dart';
+import 'package:team_husky/5mypage/management/manegement/6license/licenseManage.dart';
 import 'package:team_husky/5mypage/management/manegement/menues/teamOnly.dart';
 
 import 'manegement/1makeTeam/1makeTeam.dart';
 import 'manegement/3manageGongji/gongji_category_list.dart';
-import 'manegement/6educationManage/education.dart';
 
 class Management extends StatefulWidget {
   final String name;
@@ -56,68 +57,83 @@ class _ManagementState extends State<Management> {
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildStyledButton(
-              context: context,
-              label: '팀 개설',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MakeTeam()),
-                );
-              },
-            ),
-            SizedBox(height: 15),
-            _buildStyledButton(
-              context: context,
-              label: '인사이동 / 직위, 포지션 변경',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MoveInsa()),
-                );
-              },
-            ),
-            SizedBox(height: 15),
-            _buildStyledButton(
-              context: context,
-              label: '공지사항 관리',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ManageGongjiList(name: widget.name)),
-                );
-              },
-            ),
-            SizedBox(height: 15),
-            _buildStyledButton(
-              context: context,
-              label: '스케줄 관리',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ManageSchedule()),
-                );
-              },
-            ),
-            SizedBox(height: 15),
-            _buildStyledButton(
-              context: context,
-              label: '교육자료 등록/삭제',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EducationManage(name: widget.name)),
-                );
-              },
-            ),
-            SizedBox(height: 15),
-            TeamOnly(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildStyledButton(
+                context: context,
+                label: '팀 개설',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MakeTeam()),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+              _buildStyledButton(
+                context: context,
+                label: '인사이동 / 직위, 포지션 변경',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MoveInsa()),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+              _buildStyledButton(
+                context: context,
+                label: '공지사항 관리',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ManageGongjiList(name: widget.name)),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+              _buildStyledButton(
+                context: context,
+                label: '스케줄 관리',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageSchedule()),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+              _buildStyledButton(
+                context: context,
+                label: '교육자료 등록/삭제',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EducationManage(name: widget.name)),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+              _buildStyledButton(
+                context: context,
+                label: '운전면허관리',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LicenseManage(name: widget.name)),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+          
+              TeamOnly(),
+            ],
+          ),
         ),
       ),
     );

@@ -120,7 +120,7 @@ class _SchedulePageState extends State<SchedulePage> {
             .collection('schedule')
             .doc('1EjNGZtze07iY1WJKyvh')
             .collection('$_currentYear$_currentMonth')
-            .orderBy('enter')
+            .orderBy('levelNumber')
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
