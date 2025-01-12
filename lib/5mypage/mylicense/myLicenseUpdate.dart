@@ -321,9 +321,14 @@ class FullImageView extends StatelessWidget {
         child: Center(
           child: Hero(
             tag: 'fullImage', // Hero 태그로 이미지 애니메이션 처리
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.contain, // 이미지가 화면에 맞게 확대/축소
+            child: InteractiveViewer(
+              panEnabled: true, // 이미지를 드래그해서 이동
+              minScale: 0.5, // 최소 확대 비율
+              maxScale: 4.0, // 최대 확대 비율
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.contain, // 이미지가 화면에 맞게 확대/축소
+              ),
             ),
           ),
         ),
