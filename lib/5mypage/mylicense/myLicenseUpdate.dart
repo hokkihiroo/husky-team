@@ -191,7 +191,8 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => FullImageView(imageUrl: data['licenseUrl']),
+                                  builder: (context) => FullImageView(
+                                      imageUrl: data['licenseUrl']),
                                 ),
                               );
                             },
@@ -314,24 +315,33 @@ class FullImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop(); // 화면을 탭하면 뒤로 가기
-        },
-        child: Center(
-          child: Hero(
-            tag: 'fullImage', // Hero 태그로 이미지 애니메이션 처리
-            child: InteractiveViewer(
-              panEnabled: true, // 이미지를 드래그해서 이동
-              minScale: 0.5, // 최소 확대 비율
-              maxScale: 4.0, // 최대 확대 비율
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.contain, // 이미지가 화면에 맞게 확대/축소
+      body: DraggableScrollableSheet(
+        initialChildSize: 1.0, // 처음에는 화면을 꽉 채운 상태
+        minChildSize: 0.1, // 최소 드래그 크기
+        maxChildSize: 1.0, // 최대 드래그 크기
+        builder: (context, controller) {
+          return GestureDetector(
+            onVerticalDragUpdate: (details) {
+              if (details.primaryDelta! > 0) {
+                Navigator.of(context).pop(); // 아래로 드래그하여 뒤로 가기
+              }
+            },
+            child: Center(
+              child: Hero(
+                tag: 'fullImage', // Hero 태그로 이미지 애니메이션 처리
+                child: InteractiveViewer(
+                  panEnabled: true, // 이미지를 드래그해서 이동
+                  minScale: 0.5, // 최소 확대 비율
+                  maxScale: 4.0, // 최대 확대 비율
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.contain, // 이미지가 화면에 맞게 확대/축소
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
