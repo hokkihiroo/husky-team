@@ -24,7 +24,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
   DateTime selectedDate = DateTime.now(); // 선택된 날짜를 관리
   late int currentYear;
   late int currentQuarter; // 1~4분기로 관리
-  // late String insertAddress;
+  late String insertAddress;
   File? pickedImage;
 
   @override
@@ -33,6 +33,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
     final now = DateTime.now();
     currentYear = now.year;
     currentQuarter = getQuarterFromMonth(now.month);
+    insertAddress = '${currentYear}_${currentQuarter}'; // 예: '2025_1'
   }
 
   int getQuarterFromMonth(int month) {
@@ -55,6 +56,8 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
       } else {
         currentQuarter -= 1;
       }
+      // currentYear과 currentQuarter 변경 후, currentYearAndQuarter 업데이트
+      insertAddress = '${currentYear}_${currentQuarter}';
     });
   }
 
@@ -66,6 +69,8 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
       } else {
         currentQuarter += 1;
       }
+      // currentYear과 currentQuarter 변경 후, currentYearAndQuarter 업데이트
+      insertAddress = '${currentYear}_${currentQuarter}';
     });
   }
 
@@ -74,6 +79,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
       final now = DateTime.now();
       currentYear = now.year;
       currentQuarter = getQuarterFromMonth(now.month);
+      insertAddress = '${currentYear}_${currentQuarter}';
     });
   }
 
@@ -117,69 +123,93 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
         ),
         elevation: 0, // AppBar 그림자 제거
       ),
-      body: Column(
-        children: [
-          _DateControl(
-            onPressLeft: _previousQuarter,
-            onPressRight: _nextQuarter,
-            onPressGoToday: goToCurrentQuarter,
-            currentQuarterLabel: getQuarterLabel(),
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('user')
-                  .doc(widget.uid)
-                  .collection('${currentYear}_${currentQuarter}')
-                  .doc(widget.uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-
-                final data = snapshot.data!.data();
-
-                return Container(
-                  width: double.infinity, // 화면 너비를 꽉 채움
-                  height: 350, // 원하는 높이 설정
-                  color: Colors.grey[200], // 회색 배경색
-                  child: data == null || data['licenseUrl'] == null
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.photo,
-                                size: 50, color: Colors.grey), // 사진 아이콘
-                            const SizedBox(height: 8),
-                            const Text(
-                              '이번 분기 사진이 없습니다',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
-                          ],
-                        )
-                      : Image.network(
-                    data['licenseUrl'], // 이미지 URL 사용
-                          fit: BoxFit.cover, // 이미지를 가득 채움
-                          width: double.infinity,
-                          height: double.infinity,
-                          errorBuilder: (context, error, stackTrace) => Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            _DateControl(
+              onPressLeft: _previousQuarter,
+              onPressRight: _nextQuarter,
+              onPressGoToday: goToCurrentQuarter,
+              currentQuarterLabel: getQuarterLabel(),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(widget.uid)
+                    .collection(insertAddress)
+                    .doc(widget.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+        
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('데이터를 불러오는 중 오류가 발생했습니다.'),
+                    );
+                  }
+        
+                  if (!snapshot.hasData || snapshot.data == null) {
+                    return const Center(
+                      child: Text('해당 문서를 찾을 수 없습니다.'),
+                    );
+                  }
+        
+                  final data = snapshot.data!.data();
+                  if (data == null) {
+                    return const Center(
+                      child: Text(
+                        '이번분기 사진이 없습니다.',
+                      ),
+                    );
+                  }
+        
+                  return Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width, // 화면 너비 제한
+                    ),
+                    height: 350, // 원하는 높이 설정
+                    color: Colors.grey[200], // 회색 배경색
+                    child: data == null || data['licenseUrl'] == null
+                        ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.broken_image,
-                                  size: 50, color: Colors.grey),
+                              const Icon(Icons.photo,
+                                  size: 50, color: Colors.grey), // 사진 아이콘
                               const SizedBox(height: 8),
-                              const Text(
-                                '이미지를 불러올 수 없습니다',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 16),
-                              ),
                             ],
+                          )
+                        : Image.network(
+                            data['licenseUrl'], // 이미지 URL 사용
+                            fit: BoxFit.cover, // 이미지를 가득 채움
+                            width: double.infinity,
+                            height: double.infinity,
+                            errorBuilder: (context, error, stackTrace) => Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.broken_image,
+                                    size: 50, color: Colors.grey),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  '이미지를 불러올 수 없습니다',
+                                  style:
+                                      TextStyle(color: Colors.grey, fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                );
-              }),
-          const SizedBox(height: 20),
-        ],
+                  );
+                }),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20),
@@ -204,7 +234,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                       child: LicensePicture(
                           uid: widget.uid,
                           team: widget.team,
-                          date:'${currentYear}_${currentQuarter}'),
+                          date: insertAddress),
                     );
                   },
                 );
