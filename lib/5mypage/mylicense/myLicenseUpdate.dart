@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/updatePicture/licensePicture.dart';
 
@@ -27,17 +28,6 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
   String? licenseUrl;
   File? pickedImage;
 
-  // void _pickImage() async {
-  //   final imagePicker = ImagePicker();
-  //   final pickedImageFile = await imagePicker.pickImage(
-  //     source: ImageSource.gallery,
-  //   );
-  //   setState(() {
-  //     if (pickedImageFile != null) {
-  //       pickedImage = File(pickedImageFile.path);
-  //     }
-  //   });
-  // }
   @override
   void initState() {
     super.initState();
@@ -47,11 +37,13 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
   void updateCurrentYearAndMonth() {
     setState(() {
       currentYearAndMonth =
-      '${selectedDate.year}년 ${selectedDate.month.toString().padLeft(2, '0')}월';
+          '${selectedDate.year}년 ${selectedDate.month.toString().padLeft(2, '0')}월';
       currentQuarter = getQuarterFromMonth(selectedDate.month); // 분기 업데이트
-      insertAddress = '${selectedDate.year}_${getQuarterNumber(selectedDate.month)}quarter'; // insertAddress 설정
+      insertAddress =
+          '${selectedDate.year}_${getQuarterNumber(selectedDate.month)}quarter'; // insertAddress 설정
     });
   }
+
   String getQuarterNumber(int month) {
     if (month >= 1 && month <= 3) {
       return '1';
@@ -78,14 +70,16 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
 
   void _previousDay() {
     setState(() {
-      selectedDate = DateTime(selectedDate.year, selectedDate.month - 1); // 이전 달로 이동
+      selectedDate =
+          DateTime(selectedDate.year, selectedDate.month - 1); // 이전 달로 이동
       updateCurrentYearAndMonth(); // 텍스트 업데이트
     });
   }
 
   void _nextDay() {
     setState(() {
-      selectedDate = DateTime(selectedDate.year, selectedDate.month + 1); // 다음 달로 이동
+      selectedDate =
+          DateTime(selectedDate.year, selectedDate.month + 1); // 다음 달로 이동
       updateCurrentYearAndMonth(); // 텍스트 업데이트
     });
   }
@@ -96,7 +90,6 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
       updateCurrentYearAndMonth(); // 텍스트 업데이트
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,71 +127,106 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
         ),
         elevation: 0, // AppBar 그림자 제거
       ),
-      body: Column(
-        children: [
-          _DateControl(
-            onPressLeft: _previousDay,
-            onPressRight: _nextDay,
-            onPressGoToday: goToday,
-            currentYearAndMonth: currentYearAndMonth,
-          ),
-          SizedBox(height: 10,),
-          Text(
-            currentQuarter, // 분기를 텍스트로 표시
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            insertAddress, // 분기를 텍스트로 표시
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+      body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          stream: FirebaseFirestore.instance
+              .collection('user')
+              .doc(widget.uid)
+              .collection(insertAddress)
+              .doc(widget.uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState ==
+                ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            }
 
-          SizedBox(
-            height: 30,
-          ),
-          GestureDetector(
-            onTap: () {
-              print(widget.team);
-            },
-            child: Container(
-              width: double.infinity, // 화면 너비를 꽉 채움
-              height: 200, // 원하는 높이 설정
-              color: Colors.grey[200], // 회색 배경색
-              child: licenseUrl == null
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.photo,
-                            size: 50, color: Colors.grey), // 사진 아이콘
-                        const SizedBox(height: 8),
-                        const Text(
-                          '이번 분기 사진이 없습니다',
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                      ],
-                    )
-                  : Image.network(
-                      licenseUrl!, // 이미지 URL 사용
-                      fit: BoxFit.cover, // 이미지를 가득 채움
-                      width: double.infinity,
-                      height: double.infinity,
-                      errorBuilder: (context, error, stackTrace) => Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.broken_image,
-                              size: 50, color: Colors.grey),
-                          const SizedBox(height: 8),
-                          const Text(
-                            '이미지를 불러올 수 없습니다',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
+            // 에러 상태 처리
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('데이터를 불러오는 중 오류가 발생했습니다.'),
+              );
+            }
+
+            final data = snapshot.data!.data();
+            if (data != null) {
+              licenseUrl = data['picUrl'] as String?;
+            }
+
+
+
+
+            return Column(
+              children: [
+                _DateControl(
+                  onPressLeft: _previousDay,
+                  onPressRight: _nextDay,
+                  onPressGoToday: goToday,
+                  currentYearAndMonth: currentYearAndMonth,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  currentQuarter, // 분기를 텍스트로 표시
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  insertAddress, // 분기를 텍스트로 표시
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print(widget.team);
+                  },
+                  child: Container(
+                    width: double.infinity, // 화면 너비를 꽉 채움
+                    height: 350, // 원하는 높이 설정
+                    color: Colors.grey[200], // 회색 배경색
+                    child: licenseUrl == null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.photo,
+                                  size: 50, color: Colors.grey), // 사진 아이콘
+                              const SizedBox(height: 8),
+                              const Text(
+                                '이번 분기 사진이 없습니다',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 16),
+                              ),
+                            ],
+                          )
+                        : Image.network(
+                            licenseUrl!, // 이미지 URL 사용
+                            fit: BoxFit.cover, // 이미지를 가득 채움
+                            width: double.infinity,
+                            height: double.infinity,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.broken_image,
+                                    size: 50, color: Colors.grey),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  '이미지를 불러올 수 없습니다',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            );
+          }),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Row(

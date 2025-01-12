@@ -165,6 +165,7 @@ class _LicensePictureState extends State<LicensePicture> {
                           .doc(widget.uid)
                           .set({
                         'picUrl': url,
+
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(
