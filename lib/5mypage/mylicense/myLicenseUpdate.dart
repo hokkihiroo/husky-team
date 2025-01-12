@@ -149,19 +149,19 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   }
-        
+
                   if (snapshot.hasError) {
                     return const Center(
                       child: Text('데이터를 불러오는 중 오류가 발생했습니다.'),
                     );
                   }
-        
+
                   if (!snapshot.hasData || snapshot.data == null) {
                     return const Center(
                       child: Text('해당 문서를 찾을 수 없습니다.'),
                     );
                   }
-        
+
                   final data = snapshot.data!.data();
                   if (data == null) {
                     return const Center(
@@ -170,7 +170,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                       ),
                     );
                   }
-        
+
                   return Container(
                     constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width, // 화면 너비 제한
@@ -186,23 +186,37 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                               const SizedBox(height: 8),
                             ],
                           )
-                        : Image.network(
-                            data['licenseUrl'], // 이미지 URL 사용
-                            fit: BoxFit.cover, // 이미지를 가득 채움
-                            width: double.infinity,
-                            height: double.infinity,
-                            errorBuilder: (context, error, stackTrace) => Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.broken_image,
-                                    size: 50, color: Colors.grey),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  '이미지를 불러올 수 없습니다',
-                                  style:
-                                      TextStyle(color: Colors.grey, fontSize: 16),
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FullImageView(imageUrl: data['licenseUrl']),
                                 ),
-                              ],
+                              );
+                            },
+                            child: Hero(
+                              tag: 'fullImage', // Hero 태그 설정
+                              child: Image.network(
+                                data['licenseUrl'], // 이미지 URL 사용
+                                fit: BoxFit.cover, // 이미지를 가득 채움
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.broken_image,
+                                        size: 50, color: Colors.grey),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      '이미지를 불러올 수 없습니다',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                   );
@@ -302,14 +316,14 @@ class FullImageView extends StatelessWidget {
       backgroundColor: Colors.black,
       body: GestureDetector(
         onTap: () {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(); // 화면을 탭하면 뒤로 가기
         },
         child: Center(
           child: Hero(
-            tag: 'fullImage',
+            tag: 'fullImage', // Hero 태그로 이미지 애니메이션 처리
             child: Image.network(
               imageUrl,
-              fit: BoxFit.contain,
+              fit: BoxFit.contain, // 이미지가 화면에 맞게 확대/축소
             ),
           ),
         ),
