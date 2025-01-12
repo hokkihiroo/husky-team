@@ -227,17 +227,17 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.only(bottom: 40),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 버튼 간격 균등 배치
           children: [
             // 텍스트 삭제하기 버튼
             ElevatedButton(
               onPressed: () {
-                print(currentYear);
-                print(currentQuarter);
+                Navigator.of(context).pop();
+
               },
-              child: const Text('텍스트 삭제하기'),
+              child: const Text('뒤로가기'),
             ),
             // 사진 올리기 버튼
             ElevatedButton(
@@ -317,7 +317,7 @@ class FullImageView extends StatelessWidget {
       backgroundColor: Colors.black,
       body: DraggableScrollableSheet(
         initialChildSize: 1.0, // 처음에는 화면을 꽉 채운 상태
-        minChildSize: 0.1, // 최소 드래그 크기
+        minChildSize: 0.2, // 최소 드래그 크기
         maxChildSize: 1.0, // 최대 드래그 크기
         builder: (context, controller) {
           return GestureDetector(
