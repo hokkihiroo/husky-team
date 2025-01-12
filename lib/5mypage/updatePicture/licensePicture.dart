@@ -164,7 +164,7 @@ class _LicensePictureState extends State<LicensePicture> {
                           .collection(widget.date)
                           .doc(widget.uid)
                           .set({
-                        'picUrl': url,
+                        'licenseUrl': url,
 
                       });
 
