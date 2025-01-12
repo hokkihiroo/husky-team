@@ -8,7 +8,11 @@ class MyPicture extends StatefulWidget {
   final String uid;
   final String team;
 
-  const MyPicture({super.key, required this.uid, required this.team});
+  const MyPicture({
+    super.key,
+    required this.uid,
+    required this.team,
+  });
 
   @override
   State<MyPicture> createState() => _MyPictureState();
@@ -52,7 +56,7 @@ class _MyPictureState extends State<MyPicture> {
             radius: 50,
             backgroundColor: Colors.grey[200],
             backgroundImage:
-            pickedImage != null ? FileImage(pickedImage!) : null,
+                pickedImage != null ? FileImage(pickedImage!) : null,
             child: pickedImage == null
                 ? const Icon(Icons.person, size: 50, color: Colors.grey)
                 : null,

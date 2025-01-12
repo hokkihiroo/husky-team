@@ -1,97 +1,102 @@
 import 'dart:io';
-import 'package:path/path.dart' as path;
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/material.dart';
-import 'package:team_husky/5mypage/mylicense/PDFViewer.dart';
-import 'package:team_husky/5mypage/mylicense/downloadPDF.dart';
+import 'package:team_husky/5mypage/updatePicture/licensePicture.dart';
 
 class MyLicenseUpdate extends StatefulWidget {
-  const MyLicenseUpdate({super.key});
+  final String name;
+  final String uid;
+  final String team;
+
+  const MyLicenseUpdate({
+    super.key,
+    required this.name,
+    required this.uid,
+    required this.team,
+  });
 
   @override
   State<MyLicenseUpdate> createState() => _LicenseUpdateState();
 }
 
 class _LicenseUpdateState extends State<MyLicenseUpdate> {
-  // PDF 업로드함수
+  DateTime selectedDate = DateTime.now(); // 선택된 날짜를 관리
+  late String currentYearAndMonth;
+  late String currentQuarter;
+  late String insertAddress;
+  String? licenseUrl;
+  File? pickedImage;
 
-  Future<void> uploadPdfFile() async {
-    try {
-      // 1. 사용자에게 파일 선택 창 열기
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf'], // PDF만 선택 가능
-      );
+  // void _pickImage() async {
+  //   final imagePicker = ImagePicker();
+  //   final pickedImageFile = await imagePicker.pickImage(
+  //     source: ImageSource.gallery,
+  //   );
+  //   setState(() {
+  //     if (pickedImageFile != null) {
+  //       pickedImage = File(pickedImageFile.path);
+  //     }
+  //   });
+  // }
+  @override
+  void initState() {
+    super.initState();
+    updateCurrentYearAndMonth(); // 초기 값 설정
+  }
 
-      if (result == null) {
-        print('No file selected.');
-        return; // 사용자가 파일 선택을 취소
-      }
-
-      final file = File(result.files.single.path!);
-
-      // 2. Firebase Storage 경로 설정
-      final fileName = path.basename(file.path); // 파일 이름 가져오기
-      final storageRef = FirebaseStorage.instance.ref().child('pdfs/$fileName');
-
-      // 3. Firebase Storage에 업로드
-      final uploadTask = storageRef.putFile(file);
-
-      // 4. 업로드 진행 상태 확인 (선택 사항)
-      uploadTask.snapshotEvents.listen((event) {
-        final progress = (event.bytesTransferred / event.totalBytes) * 100;
-        print('Upload is $progress% complete.');
-      });
-
-      // 5. 업로드 완료 후 다운로드 URL 가져오기
-      final snapshot = await uploadTask;
-      final downloadUrl = await snapshot.ref.getDownloadURL();
-
-      print('PDF uploaded successfully. Download URL: $downloadUrl');
-    } catch (e) {
-      print('Error uploading PDF: $e');
+  void updateCurrentYearAndMonth() {
+    setState(() {
+      currentYearAndMonth =
+      '${selectedDate.year}년 ${selectedDate.month.toString().padLeft(2, '0')}월';
+      currentQuarter = getQuarterFromMonth(selectedDate.month); // 분기 업데이트
+      insertAddress = '${selectedDate.year}_${getQuarterNumber(selectedDate.month)}quarter'; // insertAddress 설정
+    });
+  }
+  String getQuarterNumber(int month) {
+    if (month >= 1 && month <= 3) {
+      return '1';
+    } else if (month >= 4 && month <= 6) {
+      return '2';
+    } else if (month >= 7 && month <= 9) {
+      return '3';
+    } else {
+      return '4';
     }
   }
 
+  String getQuarterFromMonth(int month) {
+    if (month >= 1 && month <= 3) {
+      return '1분기 사진';
+    } else if (month >= 4 && month <= 6) {
+      return '2분기 사진';
+    } else if (month >= 7 && month <= 9) {
+      return '3분기 사진';
+    } else {
+      return '4분기 사진';
+    }
+  }
 
-  //어제로 이동
   void _previousDay() {
-    // final goToOneDayAgo = selectedDate.subtract(Duration(days: 1));
-    // final year = goToOneDayAgo.year.toString();
-    // final month = goToOneDayAgo.month.toString().padLeft(2, '0');
-    // final day = goToOneDayAgo.day.toString().padLeft(2, '0');
     setState(() {
-      // selectedDate = goToOneDayAgo;
-      // DBAdress = year + month + day;
+      selectedDate = DateTime(selectedDate.year, selectedDate.month - 1); // 이전 달로 이동
+      updateCurrentYearAndMonth(); // 텍스트 업데이트
     });
   }
 
-  //다음날로 이동
   void _nextDay() {
-    // final today = DateTime.now();
-    // final nextDay = selectedDate.add(Duration(days: 1));
-    // final year = nextDay.year.toString();
-    // final month = nextDay.month.toString().padLeft(2, '0');
-    // final day = nextDay.day.toString().padLeft(2, '0');
-
     setState(() {
-      // if (nextDay.isBefore(today)) {
-      //   setState(() {
-      //     selectedDate = nextDay;
-      //     DBAdress = year + month + day;
-      //   });
-      // }
+      selectedDate = DateTime(selectedDate.year, selectedDate.month + 1); // 다음 달로 이동
+      updateCurrentYearAndMonth(); // 텍스트 업데이트
     });
   }
 
-  //오늘로 이동
   void goToday() {
     setState(() {
-      // selectedDate = DateTime.now();
-      // DBAdress = formatTodayDate();
+      selectedDate = DateTime.now(); // 현재 날짜로 이동
+      updateCurrentYearAndMonth(); // 텍스트 업데이트
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,36 +140,98 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
             onPressLeft: _previousDay,
             onPressRight: _nextDay,
             onPressGoToday: goToday,
+            currentYearAndMonth: currentYearAndMonth,
+          ),
+          SizedBox(height: 10,),
+          Text(
+            currentQuarter, // 분기를 텍스트로 표시
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            insertAddress, // 분기를 텍스트로 표시
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
 
-// 이공간에 flutter_pdfview 를 통해 파이어 베이스에 저장된 pdf를 이미지화 시키고 싶어
-//     파이어 베이스와 기본적인것들은 다 연동이 되어있어
-//       코어니 어스니 스토리지같은것들은.
-        // 여기에 한번 그려줘
-
-          // Expanded(
-          //   child: FutureBuilder<File>(
-          //     future: downloadPdf('example.pdf'), // PDF 파일 이름
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return Center(child: CircularProgressIndicator());
-          //       } else if (snapshot.hasError) {
-          //         return Center(child: Text('Error: ${snapshot.error}'));
-          //       } else if (snapshot.hasData) {
-          //         return PdfViewer(pdfFile: snapshot.data!);
-          //       } else {
-          //         return Center(child: Text('No PDF found.'));
-          //       }
-          //     },
-          //   ),
-          // ),
-
-          ElevatedButton(
-            onPressed: uploadPdfFile, // 업로드 함수 연결
-            child: Text('PDF 파일 업로드'),
+          SizedBox(
+            height: 30,
           ),
-
+          GestureDetector(
+            onTap: () {
+              print(widget.team);
+            },
+            child: Container(
+              width: double.infinity, // 화면 너비를 꽉 채움
+              height: 200, // 원하는 높이 설정
+              color: Colors.grey[200], // 회색 배경색
+              child: licenseUrl == null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.photo,
+                            size: 50, color: Colors.grey), // 사진 아이콘
+                        const SizedBox(height: 8),
+                        const Text(
+                          '이번 분기 사진이 없습니다',
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      ],
+                    )
+                  : Image.network(
+                      licenseUrl!, // 이미지 URL 사용
+                      fit: BoxFit.cover, // 이미지를 가득 채움
+                      width: double.infinity,
+                      height: double.infinity,
+                      errorBuilder: (context, error, stackTrace) => Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.broken_image,
+                              size: 50, color: Colors.grey),
+                          const SizedBox(height: 8),
+                          const Text(
+                            '이미지를 불러올 수 없습니다',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+            ),
+          ),
+          const SizedBox(height: 20),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 버튼 간격 균등 배치
+          children: [
+            // 텍스트 삭제하기 버튼
+            ElevatedButton(
+              onPressed: () {
+                // 텍스트 삭제 동작 정의
+                print('텍스트 삭제하기 버튼 클릭');
+              },
+              child: const Text('텍스트 삭제하기'),
+            ),
+            // 사진 올리기 버튼
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      child: LicensePicture(
+                        uid: widget.uid,
+                        team: widget.team,
+                        date: insertAddress,
+                      ),
+                    );
+                  },
+                );
+              },
+              child: const Text('사진 올리기'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -174,13 +241,15 @@ class _DateControl extends StatelessWidget {
   final VoidCallback onPressLeft;
   final VoidCallback onPressRight;
   final VoidCallback onPressGoToday;
+  final String currentYearAndMonth; // 연도와 월 텍스트
 
-  const _DateControl(
-      {super.key,
-      required this.onPressLeft,
-      required this.onPressRight,
-      required this.onPressGoToday,
-      });
+  const _DateControl({
+    super.key,
+    required this.onPressLeft,
+    required this.onPressRight,
+    required this.onPressGoToday,
+    required this.currentYearAndMonth,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -189,32 +258,30 @@ class _DateControl extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left_outlined,
             color: Colors.black,
           ),
           onPressed: onPressLeft,
         ),
-
-        SizedBox(
-          width: 2,
+        const SizedBox(width: 2),
+        Text(
+          currentYearAndMonth, // 현재 연도와 월 표시
+          style: const TextStyle(
+            fontSize: 20,
+          ),
         ),
-        Text('1분기',
-        style: TextStyle(
-          fontSize: 20,
-        ),),
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_right_outlined,
             color: Colors.black,
-
           ),
           onPressed: onPressRight,
         ),
         GestureDetector(
           onTap: onPressGoToday,
-          child: Text(
-            'TODAY',
+          child: const Text(
+            '이번달',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,
@@ -222,6 +289,33 @@ class _DateControl extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class FullImageView extends StatelessWidget {
+  final String imageUrl;
+
+  FullImageView({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Center(
+          child: Hero(
+            tag: 'fullImage',
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

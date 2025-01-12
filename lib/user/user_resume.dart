@@ -404,6 +404,7 @@ class _UserResumeState extends State<UserResume> {
                                   'cm': cm,
                                   'kg': kg,
                                   'grade': 0,
+                                  'teamId':BOSNA,
                                   //등급
                                   'enterDay': FieldValue.serverTimestamp(),
                                   //입사일

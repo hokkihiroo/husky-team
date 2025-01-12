@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
 import 'package:team_husky/5mypage/mylicense/myLicenseUpdate.dart';
-import 'package:team_husky/5mypage/mypicture/mypicture.dart';
 import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
+
+import 'updatePicture/mypicture.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({
@@ -152,7 +153,11 @@ class _MyPageState extends State<MyPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MyLicenseUpdate()),
+                              builder: (context) => MyLicenseUpdate(
+                                name: widget.name,
+                                uid: widget.uid,
+                                team: widget.team,
+                              )),
                         );
                       },
                       child: Row(

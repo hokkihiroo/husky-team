@@ -396,8 +396,16 @@ class _MoveInsaState extends State<MoveInsa> {
                   print('문서 삭제 오류: $e');
                 }
 
-
-
+                try {
+                  await FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(memberId)
+                      .update({
+                    'teamId': selectTeam,
+                  });
+                } catch (e) {
+                  print(e);
+                }
                 // 특정 팀을 선택했을 때 수행할 동작 추가
                 // 예: 선택한 팀의 정보를 활용하여 다른 작업을 수행할 수 있음
                 try {
@@ -411,9 +419,6 @@ class _MoveInsaState extends State<MoveInsa> {
                 } catch (e) {
                   print('문서 삭제 오류: $e');
                 }
-
-
-
 
                 try {
                   await FirebaseFirestore.instance
