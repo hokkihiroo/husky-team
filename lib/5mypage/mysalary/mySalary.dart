@@ -68,8 +68,6 @@ class _MySalaryState extends State<MySalary> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // 화면의 너비
-    final screenHeight = MediaQuery.of(context).size.height; // 화면의 높이
     String formattedAmount = NumberFormat('#,###').format(amount);
 
     return Scaffold(
@@ -109,9 +107,9 @@ class _MySalaryState extends State<MySalary> {
       body: Container(
         child: Center(
           child: Container(
-            color: Colors.blueGrey,
-            height: screenHeight * 0.8,
-            width: screenWidth * 0.9,
+            color: Colors.white,
+            height: 600,
+            width: 380,
             child: SingleChildScrollView(
               child: Column(
                 children: [
