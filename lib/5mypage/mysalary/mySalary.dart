@@ -109,7 +109,7 @@ class _MySalaryState extends State<MySalary> {
           child: Container(
             color: Colors.white,
             height: 600,
-            width: 380,
+            width: 360,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -172,11 +172,10 @@ class _MySalaryState extends State<MySalary> {
                     height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         color: Color(0xFFefefef),
-                        width: 70,
+                        width: 67,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -190,10 +189,13 @@ class _MySalaryState extends State<MySalary> {
                           textAlign: TextAlign.center, // 텍스트 중앙 정렬
                         ),
                       ),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Container(
                         color: Color(0xFFfff3cc),
+                        width: 98,
 
-                        width: 100,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -208,12 +210,12 @@ class _MySalaryState extends State<MySalary> {
                         ),
                       ),
                       SizedBox(
-                        width: 15,
+                        width: 20,
                       ),
                       Container(
                         color: Color(0xFFefefef),
 
-                        width: 70,
+                        width: 67,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -227,10 +229,13 @@ class _MySalaryState extends State<MySalary> {
                           textAlign: TextAlign.center, // 텍스트 중앙 정렬
                         ),
                       ),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Container(
                         color: Color(0xFFfff3cc),
 
-                        width: 100,
+                        width: 98,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -250,11 +255,10 @@ class _MySalaryState extends State<MySalary> {
                     height: 3,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         color: Color(0xFFefefef),
-                        width: 70,
+                        width: 67,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -268,10 +272,13 @@ class _MySalaryState extends State<MySalary> {
                           textAlign: TextAlign.center, // 텍스트 중앙 정렬
                         ),
                       ),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Container(
                         color: Color(0xFFfff3cc),
 
-                        width: 100,
+                        width: 98,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -286,11 +293,11 @@ class _MySalaryState extends State<MySalary> {
                         ),
                       ),
                       SizedBox(
-                        width: 15,
+                        width: 20,
                       ),
                       Container(
                         color: Color(0xFFefefef),
-                        width: 70,
+                        width: 67,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -304,10 +311,13 @@ class _MySalaryState extends State<MySalary> {
                           textAlign: TextAlign.center, // 텍스트 중앙 정렬
                         ),
                       ),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Container(
                         color: Color(0xFFfff3cc),
 
-                        width: 100,
+                        width: 98,
                         height: 20,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -331,7 +341,7 @@ class _MySalaryState extends State<MySalary> {
                     children: [
                       Container(
                         color: Color(0xFFd0dfe2),
-                        width: 176,
+                        width: 170,
                         height: 30,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -347,7 +357,7 @@ class _MySalaryState extends State<MySalary> {
                       ),
                       Container(
                         color: Color(0xFFd0dfe2),
-                        width: 176,
+                        width: 170,
                         height: 30,
                         alignment: Alignment.center,
                         // 컨테이너 내에서 중앙 정렬
@@ -364,30 +374,632 @@ class _MySalaryState extends State<MySalary> {
                     ],
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 176,
+                        width: 170,
                         height: 340,
-                        color: Colors.purple,
+                        color: Colors.white,
                         child: Column(
                           children: [
                             Divider(
-                              color: Colors.white, // 선 색상
+                              color: Colors.black, // 선 색상
+                              thickness: 2.0, // 선 두께
+                              height: 0,
+                            ),
+                            Divider(
+                              color: Colors.black, // 선 색상
+                              thickness: 2.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '기본급',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
                               thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '식대',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  Text(
+                                    '200,000',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 0,
+                            ),
+                            Container(
+                              color: Color(0xFFefefef),
+                              height: 22,
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 0,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '국민연금',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '건강보험',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '고용보험',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '장기요양보험',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '소득세',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '지방소득세',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '건강보험정산',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '요양보험정산',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '2,100,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.black,
+                              thickness: 2.0, // 선 두께
+                              height: 10,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              width: 170,
+                              height: 30,
+                              color: Color(0xFF434343),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    '₩',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 15,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    '2,060,860',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 15,
+                                        color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        width: 176,
+                        width: 170,
                         height: 340,
-                        color: Colors.purple,
+                        color: Colors.white,
                         child: Column(
-                          children: [],
+                          children: [
+                            Divider(
+                              color: Colors.black, // 선 색상
+                              thickness: 2.0, // 선 두께
+                              height: 0,
+                            ),
+                            Divider(
+                              color: Colors.black, // 선 색상
+                              thickness: 2.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '주말수당',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '80,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '추가근무',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '120,0000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '오버타임',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '명절공휴일근무',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 0,
+                            ),
+                            Container(
+                              color: Color(0xFFefefef),
+                              height: 22,
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 0,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '연차',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '만근수당',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+
+                              height: 3,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '교통비',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '30,000',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '품위유지비',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '직책수당',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '0',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 1,),
+                            Divider(
+                              color: Color(0xFFdddddd),
+                              thickness: 1.0, // 선 두께
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFFa2a2a2),
+                                    ),
+                                  ),
+                                  Text(
+                                    '',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.black,
+                              thickness: 2.0, // 선 두께
+                              height: 10,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              width: 170,
+                              height: 30,
+                              color: Color(0xFF434343),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    '₩',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 15,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    '2,060,860',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 15,
+                                        color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
