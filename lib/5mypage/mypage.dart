@@ -6,6 +6,7 @@ import 'package:team_husky/5mypage/mylicense/myLicenseUpdate.dart';
 import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
 
+import 'mysalary/mySalary.dart';
 import 'updatePicture/mypicture.dart';
 
 class MyPage extends StatefulWidget {
@@ -157,6 +158,7 @@ class _MyPageState extends State<MyPage> {
                                 name: widget.name,
                                 uid: widget.uid,
                                 team: widget.team,
+                                management: true,
                               )),
                         );
                       },
@@ -215,7 +217,13 @@ class _MyPageState extends State<MyPage> {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        showContentDialog(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MySalary(
+
+                              )),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,

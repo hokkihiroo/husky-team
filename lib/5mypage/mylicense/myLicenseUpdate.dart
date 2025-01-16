@@ -8,12 +8,14 @@ class MyLicenseUpdate extends StatefulWidget {
   final String name;
   final String uid;
   final String team;
+ final bool management ;
 
   const MyLicenseUpdate({
     super.key,
     required this.name,
     required this.uid,
     required this.team,
+    required this.management,
   });
 
   @override
@@ -93,7 +95,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          '나의 운전면허관리',
+          '${widget.name}님의 운전면허',
           style: TextStyle(
             color: Colors.white, // 텍스트를 흰색으로 변경
             fontWeight: FontWeight.bold, // 굵은 글씨
@@ -163,7 +165,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                   }
 
                   final data = snapshot.data!.data();
-                  if (data == null) {
+                    if (data == null) {
                     return const Center(
                       child: Text(
                         '이번분기 사진이 없습니다.',
@@ -223,6 +225,23 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                   );
                 }),
             const SizedBox(height: 20),
+            Text(
+              '눌러서 확대하세요',
+              style: TextStyle(
+                fontSize: 18,  // 텍스트 크기 설정
+                fontWeight: FontWeight.bold,  // 텍스트 굵게
+                color: Colors.white,  // 텍스트 색상
+                letterSpacing: 1.5,  // 글자 간격 설정
+                shadows: [
+                  Shadow(
+                    offset: Offset(1.0, 1.0), // 그림자 위치
+                    blurRadius: 5.0,  // 그림자 흐림 정도
+                    color: Colors.black.withOpacity(0.5), // 그림자 색상과 투명도
+                  ),
+                ],
+              ),
+            ),
+
           ],
         ),
       ),
@@ -235,11 +254,28 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-
               },
-              child: const Text('뒤로가기'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.black, // 버튼 배경색
+                onPrimary: Colors.yellow, // 텍스트 및 버튼 효과 색상
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // 모서리 둥글기 조정
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // 버튼 크기 조정
+                elevation: 5, // 그림자 효과
+              ),
+              child: const Text(
+                '뒤로가기',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold, // 글자 두껍게
+                  letterSpacing: 1.2, // 글자 간격
+                ),
+              ),
             ),
+
             // 사진 올리기 버튼
+            if(widget.management)
             ElevatedButton(
               onPressed: () {
                 showDialog(
@@ -247,15 +283,33 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
                   builder: (BuildContext context) {
                     return Dialog(
                       child: LicensePicture(
-                          uid: widget.uid,
-                          team: widget.team,
-                          date: insertAddress),
+                        uid: widget.uid,
+                        team: widget.team,
+                        date: insertAddress,
+                      ),
                     );
                   },
                 );
               },
-              child: const Text('사진 올리기'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.black, // 버튼 배경색
+                onPrimary: Colors.yellow, // 텍스트 및 버튼 효과 색상
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // 모서리 둥글기
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // 버튼 크기
+                elevation: 5, // 그림자 효과
+              ),
+              child: const Text(
+                '사진 올리기',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold, // 글자 두껍게
+                  letterSpacing: 1.2, // 글자 간격
+                ),
+              ),
             ),
+
           ],
         ),
       ),
@@ -264,24 +318,24 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
 }
 
 class _DateControl extends StatelessWidget {
-  final VoidCallback onPressLeft;
-  final VoidCallback onPressRight;
-  final VoidCallback onPressGoToday;
-  final String currentQuarterLabel;
+        final VoidCallback onPressLeft;
+        final VoidCallback onPressRight;
+        final VoidCallback onPressGoToday;
+        final String currentQuarterLabel;
 
-  const _DateControl({
-    super.key,
-    required this.onPressLeft,
-    required this.onPressRight,
-    required this.onPressGoToday,
-    required this.currentQuarterLabel,
-  });
+        const _DateControl({
+        super.key,
+        required this.onPressLeft,
+        required this.onPressRight,
+        required this.onPressGoToday,
+        required this.currentQuarterLabel,
+        });
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+        @override
+        Widget build(BuildContext context) {
+        return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
         IconButton(
           icon: const Icon(Icons.chevron_left_outlined, color: Colors.black),
           onPressed: onPressLeft,

@@ -113,7 +113,8 @@ class _ManagementState extends State<Management> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => EducationManage(name: widget.name)),
+                        builder: (context) =>
+                            EducationManage(name: widget.name)),
                   );
                 },
               ),
@@ -125,12 +126,14 @@ class _ManagementState extends State<Management> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LicenseManage(name: widget.name)),
+                      builder: (context) => LicenseManage(
+                        name: widget.name,
+                      ),
+                    ),
                   );
                 },
               ),
               SizedBox(height: 15),
-          
               TeamOnly(),
             ],
           ),

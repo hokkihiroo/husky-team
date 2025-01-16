@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'education_card.dart';
 import 'education_detail.dart';
 
@@ -12,7 +11,7 @@ class Education extends StatefulWidget {
 }
 
 class _EducationState extends State<Education> {
-  String collectionAddress = 'DMD0Vbc7hT5BUPzysHCq';
+  String collectionAddress = '0oB68hipcx7qvyDunh4F';
   String category = '';
 
   @override
@@ -58,8 +57,6 @@ class _EducationState extends State<Education> {
                           setState(() {
                             collectionAddress = doc.id;
                             category = localcategory;
-
-
                           });
                         },
                         child: Text(
