@@ -8,6 +8,7 @@ import 'package:team_husky/5mypage/management/manegement/menues/teamOnly.dart';
 
 import 'manegement/1makeTeam/1makeTeam.dart';
 import 'manegement/3manageGongji/gongji_category_list.dart';
+import 'manegement/7salaryManage/salaryManage.dart';
 
 class Management extends StatefulWidget {
   final String name;
@@ -134,6 +135,22 @@ class _ManagementState extends State<Management> {
                 },
               ),
               SizedBox(height: 15),
+              _buildStyledButton(
+                context: context,
+                label: '급여관리',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SalaryManage(
+                        name: widget.name,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 15),
+
               TeamOnly(),
             ],
           ),

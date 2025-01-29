@@ -221,6 +221,10 @@ class _MyPageState extends State<MyPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => MySalary(
+                                name: widget.name,
+                                uid: widget.uid,
+                                team: widget.team,
+                                management: true,
 
                               )),
                         );

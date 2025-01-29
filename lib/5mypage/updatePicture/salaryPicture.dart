@@ -5,12 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class LicensePicture extends StatefulWidget {
+class SalaryPicture extends StatefulWidget {
   final String uid;
   final String team;
   final String date;
 
-  const LicensePicture({
+
+  const SalaryPicture({
     super.key,
     required this.uid,
     required this.team,
@@ -18,10 +19,10 @@ class LicensePicture extends StatefulWidget {
   });
 
   @override
-  State<LicensePicture> createState() => _LicensePictureState();
+  State<SalaryPicture> createState() => _SalaryPictureState();
 }
 
-class _LicensePictureState extends State<LicensePicture> {
+class _SalaryPictureState extends State<SalaryPicture> {
   File? pickedImage;
 
   void _pickImage() async {
@@ -65,30 +66,30 @@ class _LicensePictureState extends State<LicensePicture> {
             ),
             child: pickedImage != null
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8), // 사진도 둥글게 클립
-                    child: Image.file(
-                      pickedImage!,
-                      fit: BoxFit.cover, // 이미지를 꽉 채우기
-                    ),
-                  )
+              borderRadius: BorderRadius.circular(8), // 사진도 둥글게 클립
+              child: Image.file(
+                pickedImage!,
+                fit: BoxFit.cover, // 이미지를 꽉 채우기
+              ),
+            )
                 : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.photo, // 사진첩 모양의 아이콘
-                        size: 40,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        '사진 없음', // 기본 텍스트
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.photo, // 사진첩 모양의 아이콘
+                  size: 40,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  '사진 없음', // 기본 텍스트
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
                   ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           OutlinedButton.icon(
@@ -120,7 +121,16 @@ class _LicensePictureState extends State<LicensePicture> {
             ),
           ),
 
-
+          const SizedBox(height: 20),
+          const Text(
+            '*급여명부가 해당직원이* \n *맞는지 확인하세요*',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.redAccent,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -141,7 +151,7 @@ class _LicensePictureState extends State<LicensePicture> {
 
                     final refImage = FirebaseStorage.instance
                         .ref()
-                        .child('myLicensePicture')
+                        .child('mySalaryPicture')
                         .child(widget.date)
                         .child('${widget.uid}.png');
 
@@ -152,6 +162,8 @@ class _LicensePictureState extends State<LicensePicture> {
                       await FirebaseFirestore.instance
                           .collection('user')
                           .doc(widget.uid)
+                          .collection('salary')
+                          .doc('SJLmYrEd97eR6EaPX67b')
                           .collection(widget.date)
                           .doc(widget.uid)
                           .set({

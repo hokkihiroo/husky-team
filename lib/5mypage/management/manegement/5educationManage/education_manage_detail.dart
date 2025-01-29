@@ -136,7 +136,6 @@ class EducationManageDetail extends StatelessWidget {
                                             TextButton(
                                               onPressed: () async {
                                                 Navigator.of(context).pop();
-
                                                 try {
                                                   await FirebaseFirestore
                                                       .instance

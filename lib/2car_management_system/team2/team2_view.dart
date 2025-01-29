@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/2car_management_system/team2/team2_carschedule.dart';
+import 'package:team_husky/2car_management_system/team2/team2_carschedule_view.dart';
 import 'package:team_husky/2car_management_system/team2/team2_ipcha_view.dart';
 
 import 'team2_car_list.dart';
@@ -20,6 +22,15 @@ class Team2View extends StatefulWidget {
 class _Team2ViewState extends State<Team2View> {
   String carNumber = '';
   String CarListAdress = CARLIST + formatTodayDate();
+  String CarScheduleAdress = formatTodayDate();
+  String dayOfWeek = '';
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime now = DateTime.now();
+    dayOfWeek = getDayOfWeek(now);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +54,34 @@ class _Team2ViewState extends State<Team2View> {
                 onTap: () {
                   // Navigator.push(
                   //   context,
-                  //   MaterialPageRoute(builder: (context) => CarSchedule()),
+                  //   MaterialPageRoute(builder: (context) => Team2CarSchedule()),
                   // );
                 },
                 child: Text(
-                  '시승차',
+                  '인도',
                   style: TextStyle(
                     color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.lineThrough,
+                    decoration: TextDecoration.lineThrough, // 줄 긋기 설정
+                    decorationColor: Colors.white,
+                    // 줄 색상
+                    decorationThickness: 2, // 줄 두께
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Team2CarSchedule()),
+                  );
+                },
+                child: Text(
+                  '시승',
+                  style: TextStyle(
+                    color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
                     // 줄긋기 설정
                     decorationColor: Colors.white,
                     // 줄 색상
@@ -73,6 +103,37 @@ class _Team2ViewState extends State<Team2View> {
                 thickness: 2.0, // 선 두께
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.refresh), // 새로고침 아이콘
+                    color: Colors.green,
+                    onPressed: () {
+                      setState(() {
+                        CarScheduleAdress = formatTodayDate();
+                        DateTime now = DateTime.now();
+                        dayOfWeek = getDayOfWeek(now);
+                      });
+                    },
+                  ),
+                  Text(
+                    '시승차 현황 ($CarScheduleAdress) $dayOfWeek',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              Team2CarSchduleView(
+                CarScheduleAdress: CarScheduleAdress,
+              ),
+              Divider(
+                color: Colors.white, // 선 색상
+                thickness: 2.0, // 선 두께
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
@@ -88,10 +149,15 @@ class _Team2ViewState extends State<Team2View> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
-              Team2IpchaView(name: widget.name,),
-              SizedBox(height: 10,),
-
+              SizedBox(
+                height: 10,
+              ),
+              Team2IpchaView(
+                name: widget.name,
+              ),
+              SizedBox(
+                height: 10,
+              ),
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
@@ -103,9 +169,6 @@ class _Team2ViewState extends State<Team2View> {
               _Lists(
                 name: widget.name,
               ),
-
-
-
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
@@ -197,14 +260,6 @@ class _Team2ViewState extends State<Team2View> {
                                         vertical: 20.0), // 버튼의 위아래 패딩 조정
                                   ),
                                   onPressed: () async {
-
-
-
-
-
-
-
-
                                     String documentId = FirebaseFirestore
                                         .instance
                                         .collection(FIELD)
@@ -250,7 +305,9 @@ class _Team2ViewState extends State<Team2View> {
                                   child: Text('입력'),
                                 ),
                               ),
-                              SizedBox(width: 15,),
+                              SizedBox(
+                                width: 15,
+                              ),
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -330,7 +387,6 @@ class _LocationName extends StatelessWidget {
               ),
             ),
           ),
-
           SizedBox(
             width: 5,
           ),
@@ -404,7 +460,7 @@ class _Lists extends StatelessWidget {
                 location: FIELD,
                 reverse: 1,
                 check: () {},
-                fieldLocation:1,
+                fieldLocation: 1,
               ),
             ],
           ),
@@ -417,8 +473,7 @@ class _Lists extends StatelessWidget {
                 location: FIELD,
                 reverse: 1,
                 check: () {},
-                fieldLocation:2,
-
+                fieldLocation: 2,
               ),
             ],
           ),
@@ -431,8 +486,7 @@ class _Lists extends StatelessWidget {
                 location: FIELD,
                 reverse: 1,
                 check: () {},
-                fieldLocation:3,
-
+                fieldLocation: 3,
               ),
             ],
           ),
@@ -445,8 +499,7 @@ class _Lists extends StatelessWidget {
                 location: FIELD,
                 reverse: 1,
                 check: () {},
-                fieldLocation:4,
-
+                fieldLocation: 4,
               ),
             ],
           ),
@@ -459,8 +512,7 @@ class _Lists extends StatelessWidget {
                 location: FIELD,
                 reverse: 1,
                 check: () {},
-                fieldLocation:5,
-
+                fieldLocation: 5,
               ),
             ],
           ),
