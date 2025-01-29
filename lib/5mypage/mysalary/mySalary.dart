@@ -46,7 +46,7 @@ class _MySalaryState extends State<MySalary> {
         currentMonth -= 1; // 이전 달로 이동
       }
       // currentYear과 currentMonth 변경 후, insertAddress 업데이트
-      insertAddress = '${currentYear}년 ${currentMonth}월';
+      insertAddress = '${currentYear}_${currentMonth}';
     });
   }
 
@@ -59,7 +59,7 @@ class _MySalaryState extends State<MySalary> {
         currentMonth += 1; // 다음 달로 이동
       }
       // currentYear과 currentMonth 변경 후, insertAddress 업데이트
-      insertAddress = '${currentYear}년 ${currentMonth}월';
+      insertAddress = '${currentYear}_${currentMonth}';
     });
   }
 
@@ -69,7 +69,7 @@ class _MySalaryState extends State<MySalary> {
       final now = DateTime.now();
       currentYear = now.year; // 현재 년도
       currentMonth = now.month; // 현재 월
-      insertAddress = '${currentYear}년 ${currentMonth}월';
+      insertAddress = '${currentYear}_${currentMonth}';
     });
   }
 
