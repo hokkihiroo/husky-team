@@ -47,7 +47,7 @@ class Team2CarScheduleViewCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Container(
               child: Text(
                 '$time',
