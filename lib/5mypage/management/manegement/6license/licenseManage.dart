@@ -134,7 +134,7 @@ class _LicenseManageState extends State<LicenseManage> {
 class LicenseList extends StatelessWidget {
   String teamId;
   int index;
-  bool management = false;
+  bool management = true;
 
 
   LicenseList({
@@ -181,7 +181,7 @@ class LicenseList extends StatelessWidget {
                       builder: (context) => MyLicenseUpdate(
                         name:data['name'],
                         uid:subDoc.id,
-                        team: data['name'],
+                        team:teamId,
                         management: management,
 
                       ),

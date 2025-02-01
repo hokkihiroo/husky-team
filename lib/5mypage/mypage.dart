@@ -158,7 +158,7 @@ class _MyPageState extends State<MyPage> {
                                 name: widget.name,
                                 uid: widget.uid,
                                 team: widget.team,
-                                management: true,
+                                management: false,
                               )),
                         );
                       },
@@ -224,7 +224,7 @@ class _MyPageState extends State<MyPage> {
                                 name: widget.name,
                                 uid: widget.uid,
                                 team: widget.team,
-                                management: true,
+                                management: false,
 
                               )),
                         );

@@ -23,11 +23,11 @@ class MyLicenseUpdate extends StatefulWidget {
 }
 
 class _LicenseUpdateState extends State<MyLicenseUpdate> {
+  File? pickedImage;
   DateTime selectedDate = DateTime.now(); // 선택된 날짜를 관리
   late int currentYear;
   late int currentQuarter; // 1~4분기로 관리
   late String insertAddress;
-  File? pickedImage;
 
   @override
   void initState() {
@@ -36,6 +36,11 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
     currentYear = now.year;
     currentQuarter = getQuarterFromMonth(now.month);
     insertAddress = '${currentYear}_${currentQuarter}'; // 예: '2025_1'
+
+    print(widget.name);
+    print(widget.name);
+    print(widget.team);
+    print(widget.management);
   }
 
   int getQuarterFromMonth(int month) {
@@ -275,7 +280,7 @@ class _LicenseUpdateState extends State<MyLicenseUpdate> {
             ),
 
             // 사진 올리기 버튼
-            if(widget.management)
+            if(!widget.management)
             ElevatedButton(
               onPressed: () {
                 showDialog(

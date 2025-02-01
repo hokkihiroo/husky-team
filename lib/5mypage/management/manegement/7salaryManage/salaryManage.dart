@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/7salaryManage/salary_card.dart';
+import 'package:team_husky/5mypage/mysalary/mySalary.dart';
 
 class SalaryManage extends StatefulWidget {
   final String name;
@@ -131,7 +132,7 @@ class _SalaryManageState extends State<SalaryManage> {
 class SalaryList extends StatelessWidget {
   String teamId;
   int index;
-  bool management = false;
+  bool management = true;
 
 
   SalaryList({
@@ -169,21 +170,21 @@ class SalaryList extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
 
-                  // print(subDoc.id);
-                  //
-                  //
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => MyLicenseUpdate(
-                  //       name:data['name'],
-                  //       uid:subDoc.id,
-                  //       team: data['name'],
-                  //       management: management,
-                  //
-                  //     ),
-                  //   ),
-                  // );
+                  print(subDoc.id);
+
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MySalary(
+                        name:data['name'],
+                        uid:subDoc.id,
+                        team: teamId,
+                        management: management,
+
+                      ),
+                    ),
+                  );
 
                 },
                 child: Padding(
