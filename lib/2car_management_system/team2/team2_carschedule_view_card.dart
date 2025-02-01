@@ -29,23 +29,7 @@ class Team2CarScheduleViewCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width, // 화면 전체 너비
       child: Row(
         children: [
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Text(
-                '$index',
-                style: TextStyle(
-                  color: testOk == 0 ? Colors.white : Colors.grey[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
+
           Expanded(
             flex: 2,
             child: Container(
