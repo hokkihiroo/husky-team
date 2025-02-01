@@ -41,7 +41,7 @@ class _Team2CarScheduleModelState extends State<Team2CarScheduleModel> {
   List<Map<String, String>> alphaItems = [];
 
   List<String> carSeat = ["필요", "X"];
-  List<String> meeting = ["대면", "비대"];
+  List<String> meeting = ["대면", "비대","찾아"];
 
   Future<void> fetchCarNames() async {
     final querySnapshot =
