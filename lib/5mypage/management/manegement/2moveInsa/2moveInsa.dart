@@ -299,8 +299,6 @@ class _MoveInsaState extends State<MoveInsa> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () async {
-                                    Navigator.pop(context);
-
                                     try {
                                       await FirebaseFirestore.instance
                                           .collection(INSA)
@@ -313,6 +311,8 @@ class _MoveInsaState extends State<MoveInsa> {
                                     } catch (e) {
                                       print(e);
                                     }
+                                    Navigator.pop(context);
+
                                   },
                                   child: Text('확인'),
                                 ),
@@ -330,8 +330,10 @@ class _MoveInsaState extends State<MoveInsa> {
                     );
                   },
                 );
+
               },
               child: Text('업무변경'),
+
             ),
             TextButton(
               onPressed: () {

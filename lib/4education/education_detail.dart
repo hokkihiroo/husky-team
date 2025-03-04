@@ -95,6 +95,14 @@ class EducationDetail extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 10), // 이미지 사이 간격
+
+                      Divider(
+                        color: Colors.grey[800],
+                        thickness: 15.0, // 두께 조절
+                      ),
+
+                      SizedBox(height: 10), // 이미지 사이 간격
+
                     ],
                   ],
                 )

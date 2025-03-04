@@ -103,7 +103,14 @@ class GongjiDetail extends StatelessWidget {
                           fit: BoxFit.contain, // 이미지를 화면에 맞춰 늘림, 비율 유지
                         ),
                       ),
-                      SizedBox(height: 10), // 이미지 사이에 간격을 넣기 위해 사용
+                      SizedBox(height: 10), // 이미지 사이 간격
+
+                      Divider(
+                        color: Colors.grey[800],
+                        thickness: 15.0, // 두께 조절
+                      ),
+
+                      SizedBox(height: 10), // 이미지 사이 간격
                     ],
                   ],
                 ),
