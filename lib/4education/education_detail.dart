@@ -81,6 +81,11 @@ class EducationDetail extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 30,),
+              Divider(
+                color: Colors.grey[700],
+                thickness: 30.0, // 원하는 두께 값 설정
+              ),
 
               if (imageUrls != null && imageUrls!.isNotEmpty)
                 Column(
@@ -94,6 +99,14 @@ class EducationDetail extends StatelessWidget {
                           fit: BoxFit.contain,
                         ),
                       ),
+                      SizedBox(height: 30), // 이미지 사이 간격
+
+                      Divider(
+                        color: Colors.grey[700],
+                        thickness: 30.0, // 원하는 두께 값 설정
+                      ),
+
+
                       SizedBox(height: 10), // 이미지 사이 간격
                     ],
                   ],
