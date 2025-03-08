@@ -31,15 +31,23 @@ class PushNotication {
   static Future<void> IosToken() async {
     print('IOS 토큰받기 시작함');
     try {
-     // iosAPNSToken = await push.getAPNSToken();
+      iosAPNSToken = await push.getAPNSToken();
       token = await push.getToken();
-     // print('ios APNS 토큰 $iosAPNSToken');
-      print('ios 토큰 $token');
-    } catch (e) {
-      print(e);
-    }
-    print('IOS 토큰받기 끝남');
 
+      print('📲 APNs 토큰: $iosAPNSToken');
+      print('📲 FCM 토큰: $token');
+
+      if (iosAPNSToken == null) {
+        print("❌ APNs 토큰이 null입니다. 3초 후 재시도...");
+        await Future.delayed(Duration(seconds: 3));
+        iosAPNSToken = await push.getAPNSToken();
+        print("📲 재시도 후 APNs 토큰: $iosAPNSToken");
+      }
+    } catch (e) {
+      print("❌ 오류 발생: $e");
+    }
+
+    print('📲 IOS 토큰받기 끝');
   }
 
   //안드로이드 토큰받기

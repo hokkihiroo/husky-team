@@ -81,11 +81,16 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  PushNotication.Init();
+  await  PushNotication.Init();
   if (Platform.isIOS) {
-    PushNotication.IosToken();
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission();
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      await PushNotication.IosToken();
+    } else {
+      print("❌ iOS 푸시 알림 권한이 거부됨");
+    }
   } else {
-    PushNotication.AndroidToken();
+    await PushNotication.AndroidToken();
   }
 
   FirebaseMessaging.instance.subscribeToTopic('allDevices');
