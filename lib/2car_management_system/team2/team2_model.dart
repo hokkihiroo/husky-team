@@ -169,6 +169,8 @@ class _CarStateState extends State<CarState> {
               ),
             ],
           ),
+          SizedBox(width: 5,),
+
           Container(
             height: 60,
             width: 110,

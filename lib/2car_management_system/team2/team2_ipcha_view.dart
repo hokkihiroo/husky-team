@@ -154,10 +154,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               ),
             ],
           ),
-          SizedBox(width: 10,),
+          SizedBox(width: 5,),
           Container(
             height: 60,
-            width: 115,
+            width: 110,
             child: ElevatedButton(
               onPressed: () async {
                 try {
