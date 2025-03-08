@@ -31,9 +31,9 @@ class PushNotication {
   static Future<void> IosToken() async {
     print('IOS 토큰받기 시작함');
     try {
-      iosAPNSToken = await push.getAPNSToken();
+     // iosAPNSToken = await push.getAPNSToken();
       token = await push.getToken();
-      print('ios APNS 토큰 $iosAPNSToken');
+     // print('ios APNS 토큰 $iosAPNSToken');
       print('ios 토큰 $token');
     } catch (e) {
       print(e);
