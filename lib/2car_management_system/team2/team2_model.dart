@@ -146,7 +146,6 @@ class _CarStateState extends State<CarState> {
   ) {
     return AlertDialog(
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 공간을 나누기 위해 사용
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,9 +169,10 @@ class _CarStateState extends State<CarState> {
               ),
             ],
           ),
+          SizedBox(width: 10,),
           Container(
             height: 60,
-            width: 120,
+            width: 110,
             child: ElevatedButton(
               onPressed: () async {
                 try {

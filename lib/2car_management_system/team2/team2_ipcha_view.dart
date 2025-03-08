@@ -131,7 +131,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   ) {
     return AlertDialog(
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 공간을 나누기 위해 사용
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,6 +154,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               ),
             ],
           ),
+          SizedBox(width: 10,),
           Container(
             height: 60,
             width: 115,
