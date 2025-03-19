@@ -184,6 +184,7 @@ class _GangnamCarState extends State<TestDrivingCar> {
                       'carName': carName,
                       'carNumber': carNumber,
                       'createdAt': FieldValue.serverTimestamp(),
+                      'oilCount' :'0',
                     });
                   } catch (e) {}
 

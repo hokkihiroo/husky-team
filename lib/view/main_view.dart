@@ -69,7 +69,7 @@ class _MainViewState extends State<MainView>
             grade: widget.grade,
           ),
           CarManagementSystem(
-            name: widget.name,
+            name: widget.name, team: widget.team,
           ),
           Notication(),
           Education(),
