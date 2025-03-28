@@ -12,8 +12,6 @@ class Team3View extends StatefulWidget {
 }
 
 class _Team3ViewState extends State<Team3View> {
-
-
   @override
   void initState() {
     super.initState();
@@ -27,13 +25,28 @@ class _Team3ViewState extends State<Team3View> {
         title: Text(
           'HMS   고양',
           style: TextStyle(
-            color: Colors.yellow, // 골드 컬러로 고급스러움 강조
+            color: Colors.yellow, // 골드 컬러
           ),
         ),
-        centerTitle: true, // 타이틀 중앙 정렬
-        iconTheme: IconThemeData(color: Colors.white),
+        centerTitle: true,
         backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 12.0),
+            child: Center(
+              child: Text(
+                '${DateTime.now().year}년 ${DateTime.now().month}월 ${DateTime.now().day}일',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -41,58 +54,24 @@ class _Team3ViewState extends State<Team3View> {
               color: Colors.white, // 선 색상
               thickness: 2.0, // 선 두께
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '현대',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            Team3Hyundae(brandName: '현대', brandNum: 1,),
+            _Lists(),
             Divider(
               color: Colors.white, // 선 색상
               thickness: 2.0, // 선 두께
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '제네시스',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+            Text(
+              '현대',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            Team3Hyundae(brandName: '제네시스', brandNum: 2,),
-
-            Divider(
-              color: Colors.white, // 선 색상
-              thickness: 2.0, // 선 두께
+            Team3Hyundae(
+              brandName: '현대',
+              brandNum: 1,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '헤리티지',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            Team3Hyundae(brandName: '헤리티지', brandNum: 3,),
-
           ],
         ),
       ),
@@ -100,20 +79,65 @@ class _Team3ViewState extends State<Team3View> {
   }
 }
 
-// class _Lists extends StatelessWidget {
-//
-//   const _Lists({super.key,});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//
-//       child:   Column(
-//         children: [
-//           Team3Hyundae(
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+class _Lists extends StatelessWidget {
+  const _Lists({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Container(
+            child: Column(
+              children: [
+                Text(
+                  '헤리티지',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Team3Hyundae(
+                  brandName: '헤리티지',
+                  brandNum: 3,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+          width: 2, // 선의 두께
+          height: 270, // 화면 높이에 맞게 설정
+          color: Colors.white.withOpacity(0.6), // 연한 흰색 (디자인적으로 부드럽게)
+          margin: EdgeInsets.symmetric(vertical: 10), // 위아래 여백 추가
+        ),
+        Expanded(
+          child: Container(
+            child: Column(
+              children: [
+                Text(
+                  '제네시스',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Team3Hyundae(
+                  brandName: '제네시스',
+                  brandNum: 2,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

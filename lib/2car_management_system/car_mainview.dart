@@ -105,7 +105,7 @@ class CarManagementSystem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'HMS 강남',
+                          '강남 [HMS]',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.lightBlueAccent,
@@ -238,7 +238,7 @@ class CarManagementSystem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '제네시스 청주',
+                          '청주 [GENESIS]',
                           style: TextStyle(
                             fontSize: 20,
                             color: Color(0xFFC6A667),
@@ -368,7 +368,7 @@ class CarManagementSystem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'HMS 고양',
+                          '고양 [HMS]',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.brown[700],

@@ -49,20 +49,20 @@ class _SplashScreenState extends State<SplashScreen> {
         CollectionReference insa =
             await FirebaseFirestore.instance.collection('insa');
 
-        QuerySnapshot querySnapshot = await insa.get();
-        for (var doc in querySnapshot.docs) {
-          // Get the list collection for each insa document
-          CollectionReference listCollection =
-              insa.doc(doc.id).collection('list');
-          DocumentSnapshot subDocSnapshot =
-              await listCollection.doc(userID).get();
-
-          // Check if the sub-document exists in the list collection
-          if (subDocSnapshot.exists) {
-            team = doc.id;
-            print('Document ID: $team');
-          }
-        }
+        // QuerySnapshot querySnapshot = await insa.get();
+        // for (var doc in querySnapshot.docs) {
+        //   // Get the list collection for each insa document
+        //   CollectionReference listCollection =
+        //       insa.doc(doc.id).collection('list');
+        //   DocumentSnapshot subDocSnapshot =
+        //       await listCollection.doc(userID).get();
+        //
+        //   // Check if the sub-document exists in the list collection
+        //   if (subDocSnapshot.exists) {
+        //     team = doc.id;
+        //     print('Document ID: $team');
+        //   }
+        // }
 
         DocumentSnapshot<Map<String, dynamic>> snapshot =
             await FirebaseFirestore.instance
@@ -70,6 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 .doc(_user!.uid)
                 .get();
         if (snapshot.exists && snapshot.data() != null) {
+          team =  snapshot.data()!['teamId'];
           name = snapshot.data()!['name'];
           email = snapshot.data()!['email'];
           grade = snapshot.data()!['grade'];

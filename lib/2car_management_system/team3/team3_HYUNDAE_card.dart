@@ -8,45 +8,52 @@ class Team3HyundaeCard extends StatelessWidget {
   const Team3HyundaeCard({
     super.key,
     required this.oilCount,
-    required this.name, required this.brandNum,
+    required this.name,
+    required this.brandNum,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 30,
-      width: 100,
-      color: Colors.black,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 양쪽으로 정렬
         children: [
-          SizedBox(
-            width: 110, // 이름 공간 고정
-            child: Text(
-              name,
-              style: const TextStyle(
-                color: Colors.yellow,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 13,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          SizedBox(
-            width: 80,
-            child: Text(
-              oilCount == '0'
-                  ? '000 ${brandNum == 3 ? '' : 'km'}'
-                  : '$oilCount ${brandNum == 3 ? '' : 'km'}',
-              style: const TextStyle(
-                color: Colors.yellow,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    oilCount == '0'
+                        ? '000 ${brandNum == 3 ? '' : 'km'}'
+                        : '$oilCount ${brandNum == 3 ? '' : 'km'}',
+                    style: const TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 13,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-
         ],
       ),
     );

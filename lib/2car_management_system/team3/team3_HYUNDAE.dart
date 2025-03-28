@@ -149,22 +149,53 @@ class _Team3HyundaeState extends State<Team3Hyundae> {
             .toList()
           ..sort((a, b) => a['createdAt'].compareTo(b['createdAt']));
 
-        return ListView.builder(
+        return widget.brandNum == 1
+            ? GridView.builder(
           shrinkWrap: true,
-          physics: const BouncingScrollPhysics(), // 부드러운 스크롤
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // 2열 구성
+            mainAxisSpacing: 5.0, // 세로 간격
+            crossAxisSpacing: 30.0, // 가로 간격
+            childAspectRatio:7, // 카드의 가로:세로 비율 조정 가능
+          ),
+          itemCount: docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () async {
+                carName = docs[index]['carName'];
+                oilCount = docs[index]['oilCount'];
+                var document = docs[index];
+                dataId = document.id;
 
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return bottomTwo(
+                      carName,
+                      oilCount,
+                      dataId,
+                    );
+                  },
+                );
+              },
+              child: Team3HyundaeCard(
+                name: docs[index]['carName'],
+                oilCount: docs[index]['oilCount'],
+                brandNum: widget.brandNum,
+              ),
+            );
+          },
+        )
+            : ListView.builder(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
           itemCount: docs.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 5.0,
-                vertical: index == docs.length - 1
-                    ? 5.0
-                    : 10.0, // 마지막 데이터일 때만 여유 공간 추가
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
               child: GestureDetector(
                 onTap: () async {
-
                   carName = docs[index]['carName'];
                   oilCount = docs[index]['oilCount'];
                   var document = docs[index];
@@ -177,7 +208,6 @@ class _Team3HyundaeState extends State<Team3Hyundae> {
                         carName,
                         oilCount,
                         dataId,
-
                       );
                     },
                   );
@@ -191,6 +221,7 @@ class _Team3HyundaeState extends State<Team3Hyundae> {
             );
           },
         );
+
       },
     );
   }
