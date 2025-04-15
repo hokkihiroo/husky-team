@@ -7,6 +7,8 @@ final TEAM2CARSCHEDULE ='local/q0LRMbznxA2yPca1DKNw/team2/TxPOvECdU2W8gOh7bkPZ/'
 
 final CHUNGJUCARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar/';
 
+final BRANDMANAGE ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
+
 final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/LXhg3awh7ikVeUqVarsP/';
 
 String getRemainTime(createdAtDateTime){

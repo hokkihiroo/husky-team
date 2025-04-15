@@ -153,35 +153,40 @@ class _ListState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            '번호',
-            style: TextStyle(
-                fontSize: 19, fontWeight: FontWeight.w800, color: Colors.white),
-          ),
-          Text(
-            '차량번호',
-            style: TextStyle(
-                fontSize: 19, fontWeight: FontWeight.w800, color: Colors.white),
-          ),
-          Text(
-            '입차시각',
-            style: TextStyle(
-                fontSize: 19, fontWeight: FontWeight.w800, color: Colors.white),
-          ),
-          Text(
-            '출차시각',
-            style: TextStyle(
-                fontSize: 19, fontWeight: FontWeight.w800, color: Colors.white),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        height: 40,
+        color: Colors.grey.shade800,
+        child: Row(
+          children: [
+            _buildHeaderCell(width: 40, label: '번호'),
+            _buildHeaderCell(width: 75, label: '브랜드'),
+            _buildHeaderCell(width: 60, label: '차종'),
+            _buildHeaderCell(width: 65, label: '차량번호'),
+            _buildHeaderCell(width: 65, label: '입차'),
+            _buildHeaderCell(width: 65, label: '출차'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderCell({required double width, required String label}) {
+    return Container(
+      width: width,
+      alignment: Alignment.center,
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
       ),
     );
   }
 }
+
 
 class ListModel extends StatelessWidget {
   final String adress;
@@ -279,6 +284,8 @@ class ListModel extends StatelessWidget {
                     outTime: docs[index]['out'] is Timestamp
                         ? (docs[index]['out'] as Timestamp).toDate()
                         : null,
+                      carBrand:docs[index]['carBrand'],
+                    carModel:docs[index]['carModel'],
                   ),
                 ),
               ),

@@ -38,6 +38,41 @@ class _CarStateState extends State<CarState> {
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
+  final Map<String, List<String>> brandModels = {}; // 새로 추가할 변수
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBrandModels();
+  }
+
+  Future<void> _loadBrandModels() async {
+    final data = await fetchBrandsWithModels();
+    print('🔥 불러온 브랜드+차종 데이터: $brandModels'); // 여기서 확인 가능
+  }
+
+  Future<Map<String, List<String>>> fetchBrandsWithModels() async {
+    final brandCollection = FirebaseFirestore.instance.collection(BRANDMANAGE);
+    final brandSnapshots = await brandCollection.get();
+
+    for (var brandDoc in brandSnapshots.docs) {
+      final category = brandDoc['category'] ?? '미지정'; // 문서 필드에서 브랜드 이름 추출
+      final brand = brandDoc.id;
+      final modelSnapshots = await brandCollection
+          .doc(brand)
+          .collection('LIST')
+          .orderBy('createdAt', descending: false) // 정렬 필요시
+          .get();
+
+      final models = modelSnapshots.docs
+          .map((modelDoc) => modelDoc['carModel'] as String)
+          .toList();
+
+      brandModels[category] = models;
+    }
+
+    return brandModels;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +143,7 @@ class _CarStateState extends State<CarState> {
                         wigetName,
                         movingTime,
                         getMovingTime,
+                        brandModels,
                       );
                     },
                   );
@@ -119,6 +155,8 @@ class _CarStateState extends State<CarState> {
                     name: filteredDocs[index]['name'],
                     color: filteredDocs[index]['color'],
                     etc: filteredDocs[index]['etc'],
+                    carBrand: filteredDocs[index]['carBrand'],
+                    carModel: filteredDocs[index]['carModel'],
                   ),
                 ),
               ),
@@ -143,7 +181,10 @@ class _CarStateState extends State<CarState> {
     String wigetName,
     String movingTime,
     String getMovingTime,
+    Map<String, List<String>> brandModels,
   ) {
+    print(name);
+
     return AlertDialog(
       title: Row(
         children: [
@@ -169,8 +210,9 @@ class _CarStateState extends State<CarState> {
               ),
             ],
           ),
-          SizedBox(width: 5,),
-
+          SizedBox(
+            width: 20,
+          ),
           Container(
             height: 60,
             width: 110,
@@ -232,7 +274,8 @@ class _CarStateState extends State<CarState> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
-                          'name': widget.name,
+                          'name':
+                              (name == null || name.isEmpty) ? widget.name : '',
                         });
                       } catch (e) {
                         print(e);
@@ -256,7 +299,7 @@ class _CarStateState extends State<CarState> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.grey, // 버튼 색상
+                      primary: Colors.blue, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -269,14 +312,14 @@ class _CarStateState extends State<CarState> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
-                          'name': '',
+                          'color': (color == 3) ? 1 : 3,
                         });
                       } catch (e) {
                         print(e);
                       }
                     },
                     child: Text(
-                      '픽업취소',
+                      '자가주차',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -332,7 +375,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'BA',
+                            'A존',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -367,7 +410,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'BB',
+                            'B존',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -402,7 +445,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'BC',
+                            'C존',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -491,68 +534,109 @@ class _CarStateState extends State<CarState> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    primary: Colors.blue, // 버튼 색상
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 60),
+                      primary: Colors.blueGrey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection(FIELD)
-                          .doc(dataId)
-                          .update({
-                        'color': 3,
-                      });
-                    } catch (e) {
-                      print(e);
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    '자가주차',
-                    style: TextStyle(
-                      fontSize: 17, // 텍스트 크기 증가
-                      fontWeight: FontWeight.bold, // 텍스트를 굵게
-                      color: Colors.black87, // 텍스트 색상
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    primary: Colors.blue, // 버튼 색상
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                    ),
-                  ),
-                  onPressed: () async {
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection(FIELD)
-                          .doc(dataId)
-                          .update({
-                        'color': 1,
-                      });
-                    } catch (e) {
-                      print(e);
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    '취소',
-                    style: TextStyle(
-                      fontSize: 17, // 텍스트 크기 증가
-                      fontWeight: FontWeight.bold, // 텍스트를 굵게
-                      color: Colors.black87, // 텍스트 색상
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              String? selectedBrand;
+
+                              return AlertDialog(
+                                title: Text('브랜드를 선택하세요',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 300, // 브랜드 리스트 높이 제한
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.grey.shade300),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Scrollbar(
+                                          child: ListView.builder(
+                                            itemCount: brandModels.keys.length,
+                                            itemBuilder: (context, index) {
+                                              String brand = brandModels.keys
+                                                  .elementAt(index);
+                                              return Card(
+                                                color: selectedBrand == brand
+                                                    ? Colors.grey.shade200
+                                                    : Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                child: ListTile(
+                                                  title: Text(
+                                                    brand,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  onTap: () async {
+                                                    Navigator.pop(
+                                                        context); // 기존 팝
+
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return carModel(
+                                                          brand,
+                                                          brandModels,
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text('닫기'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '브랜드넣기',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
                     ),
                   ),
                 ),
@@ -579,7 +663,6 @@ class _CarStateState extends State<CarState> {
                           color,
                           location,
                           dateTime,
-                          //  dataAdress,
                           dataId,
                           etc,
                           remainTime,
@@ -599,6 +682,9 @@ class _CarStateState extends State<CarState> {
                       color: Colors.black87, // 텍스트 색상
                     ),
                   ),
+                ),
+                SizedBox(
+                  width: 5,
                 ),
               ],
             ),
@@ -1006,6 +1092,71 @@ class _CarStateState extends State<CarState> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget carModel(
+    brand,
+    brandModels,
+  ) {
+    return AlertDialog(
+      title: Text(
+        '$brand 차종 선택',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
+      content: Container(
+        height: 250,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListView.builder(
+          itemCount: brandModels[brand!]!.length,
+          itemBuilder: (context, index) {
+            final model = brandModels[brand!]![index];
+
+            return ListTile(
+              leading: Icon(Icons.directions_car, color: Colors.blueAccent),
+              title: Text(model),
+              onTap: () async {
+                Navigator.pop(context); // 다이얼로그 닫기
+
+                try {
+                  await FirebaseFirestore.instance
+                      .collection(FIELD)
+                      .doc(dataId)
+                      .update({
+                    'carBrand': brand,
+                    'carModel': model,
+                  });
+                } catch (e) {
+                  print('업데이트 에러: $e');
+                }
+
+                try {
+                  await FirebaseFirestore.instance
+                      .collection(CarListAdress)
+                      .doc(dataId)
+                      .update({
+                    'carBrand': brand,
+                    'carModel': model,
+                  });
+                } catch (e) {
+                  print('업데이트 에러: $e');
+                }
+
+              },
+            );
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('닫기'),
+        ),
+      ],
     );
   }
 }

@@ -19,3 +19,13 @@ String getGangnamCarList(String teamDocId) {
 }
 
 
+String getBrandNameList(String teamDocId) {
+  if (teamDocId == 'PJcc0iQSHShpJvONGBC7') {
+    return 'local/q0LRMbznxA2yPca1DKNw/team1/SBMhSMQHzp4A0pnveh5L/brandName/';
+  } else if (teamDocId == 'zSvgctyCZUnOx8rYMioF') {
+    return 'local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
+  } else {
+    return 'local/q0LRMbznxA2yPca1DKNw/$teamDocId/SBMhSMQHzp4A0pnveh5L/brandName/'; // 기본 경로 설정
+  }
+}
+

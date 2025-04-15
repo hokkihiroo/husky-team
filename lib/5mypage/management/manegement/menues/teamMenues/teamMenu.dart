@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/management/manegement/menues/teamMenues/TestDrivingCar.dart';
 import 'package:team_husky/5mypage/management/manegement/menues/teamMenues/changeStaffNum.dart';
 
+import 'brandManage.dart';
+
 class TeamMenu extends StatelessWidget {
   final String teamName;
   final String position;
@@ -78,6 +80,34 @@ class TeamMenu extends StatelessWidget {
             },
             child: Text(
               '직원순서 변경',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          ),
+          SizedBox(height: 20), // 버튼 간 간격
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(double.infinity, 50), // 너비를 화면 전체로 설정
+              backgroundColor: Colors.black, // 버튼 배경색
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15), // 둥근 모서리
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20), // 버튼 안쪽 여백
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BrandManage(
+                    teamName: teamName,
+                    position: position,
+                    teamDocId: teamDocId,
+                  ),
+                ),
+              );
+            },
+            child: Text(
+              '브랜드관리',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),

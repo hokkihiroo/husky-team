@@ -5,6 +5,8 @@ class Team2NumberCard extends StatelessWidget {
   final String? name;
   final int color;
   final String etc;
+  final String? carBrand;
+  final String? carModel;
 
   const Team2NumberCard({
     super.key,
@@ -12,6 +14,8 @@ class Team2NumberCard extends StatelessWidget {
     this.name,
     required this.color,
     required this.etc,
+    this.carBrand,
+    this.carModel,
   });
 
   String splitNames() {
@@ -30,53 +34,67 @@ class Team2NumberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 55,
-      color: Colors.black,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-              carNumber,
-              style: TextStyle(
-                color: color == 1
-                    ? Colors.white
-                    : (color == 2 && name == '')
-                    ? Colors.red
-                    : color == 3
-                    ? Colors.blue
-                    : Colors.yellow,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Container(
+          height: 55,
+          color: Colors.black,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (etc != '')
-                Icon(
-                  Icons.priority_high_outlined,
-                  size: 16,
-                  color: Colors.green,
+              Expanded(
+                child: Text(
+                  carNumber,
+                  style: TextStyle(
+                    color: color == 1
+                        ? Colors.white
+                        : (color == 2 && name == '')
+                            ? Colors.red
+                            : color == 3
+                                ? Colors.blue
+                                : Colors.yellow,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              Text(
-                splitNames(),
-                style: TextStyle(
-                  color: Colors.yellow,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (etc != '')
+                    Icon(
+                      Icons.priority_high_outlined,
+                      size: 16,
+                      color: Colors.green,
+                    ),
+                  Text(
+                    splitNames(),
+                    style: TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          // Icon(
-          //   Icons.priority_high_outlined,
-          //   color: Colors.yellow,
-          // ),
-        ],
-      ),
+        ),
+
+        // ⭐ 브랜드가 있을 때만 별 아이콘 추가
+        if (carBrand != null && carBrand != '' && carModel != null && carModel != '')
+          Positioned(
+            top: 20, // 위로 살짝 올리기
+            left: 0,
+            right: 0,
+            child: Icon(
+              Icons.star,
+              color: Colors.yellow,
+              size: 12,
+            ),
+          ),
+      ],
     );
   }
 }

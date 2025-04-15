@@ -6,56 +6,62 @@ import 'team2_adress_const.dart';
 class CarListCard extends StatelessWidget {
   final int index;
   final String carNum;
+  final String carBrand;
+  final String carModel;
   final Timestamp inTime;
   final DateTime? outTime;
 
-  const CarListCard(
-      {super.key,
-        required this.index,
-        required this.carNum,
-        required this.inTime,
-        required this.outTime});
+  const CarListCard({super.key,
+    required this.index,
+    required this.carNum,
+    required this.inTime,
+    required this.outTime,
+    required this.carBrand,
+    required this.carModel});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 30,
-      color: Colors.black,
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0), // 좌우 여백 추가
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+        ),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            index.toString().padLeft(2, '0'),
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+          _buildCell(width: 45, text: index.toString().padLeft(2, '0')),
+          _buildCell(width: 65, text: carBrand),
+          _buildCell(width: 65, text: carModel),
+          _buildCell(width: 65, text: carNum),
+          _buildCell(width: 65, text: getInTime(inTime)),
+          _buildCell(
+            width: 55,
+            text: outTime != null ? getOutTime(outTime!) : '11:00',
+            textColor: outTime == null ? Colors.black : Colors.white,
           ),
-          Text(
-            carNum,
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-          ),
-          Text(
-            getInTime(inTime),
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-          ),
-          if (outTime != null)
-            Text(
-              getOutTime(outTime!),
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800),
-            ),
-          if (outTime == null)
-            Text(
-              '11:00',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800),
-            ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCell({
+    required double width,
+    required String text,
+    Color? textColor,
+  }) {
+    return Container(
+      width: width,
+      alignment: Alignment.center, // 텍스트 왼쪽 정렬
+      child: Text(
+        text,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: textColor ?? Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

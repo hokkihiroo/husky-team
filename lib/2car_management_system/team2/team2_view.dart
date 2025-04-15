@@ -30,7 +30,10 @@ class _Team2ViewState extends State<Team2View> {
     super.initState();
     DateTime now = DateTime.now();
     dayOfWeek = getDayOfWeek(now);
+
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -280,6 +283,8 @@ class _Team2ViewState extends State<Team2View> {
                                         'movedLocation': '입차',
                                         'wigetName': '',
                                         'movingTime': '',
+                                        'carBrand': '',
+                                        'carModel': '',
                                       });
                                     } catch (e) {}
 
@@ -298,6 +303,8 @@ class _Team2ViewState extends State<Team2View> {
                                         'movedLocation': '',
                                         'wigetName': '',
                                         'movingTime': '',
+                                        'carBrand': '',
+                                        'carModel': '',
                                       });
                                     } catch (e) {}
                                     Navigator.pop(context);
@@ -445,7 +452,10 @@ class _LocationName extends StatelessWidget {
 class _Lists extends StatelessWidget {
   final String name;
 
-  const _Lists({super.key, required this.name});
+  _Lists({
+    super.key,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
