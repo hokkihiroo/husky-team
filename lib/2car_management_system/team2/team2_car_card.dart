@@ -32,10 +32,10 @@ class CarListCard extends StatelessWidget {
       child: Row(
         children: [
           _buildCell(width: 45, text: index.toString().padLeft(2, '0')),
-          _buildCell(width: 65, text: carBrand),
-          _buildCell(width: 65, text: carModel),
-          _buildCell(width: 65, text: carNum),
-          _buildCell(width: 65, text: getInTime(inTime)),
+          _buildCell(width: 60, text: carBrand),
+          _buildCell(width: 60, text: carModel),
+          _buildCell(width: 60, text: carNum),
+          _buildCell(width: 60, text: getInTime(inTime)),
           _buildCell(
             width: 55,
             text: outTime != null ? getOutTime(outTime!) : '11:00',

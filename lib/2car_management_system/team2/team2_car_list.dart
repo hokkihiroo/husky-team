@@ -153,18 +153,18 @@ class _ListState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
         height: 40,
         color: Colors.grey.shade800,
         child: Row(
           children: [
             _buildHeaderCell(width: 40, label: '번호'),
-            _buildHeaderCell(width: 75, label: '브랜드'),
+            _buildHeaderCell(width: 70, label: '브랜드'),
             _buildHeaderCell(width: 60, label: '차종'),
-            _buildHeaderCell(width: 65, label: '차량번호'),
-            _buildHeaderCell(width: 65, label: '입차'),
-            _buildHeaderCell(width: 65, label: '출차'),
+            _buildHeaderCell(width: 60, label: '차량번호'),
+            _buildHeaderCell(width: 60, label: '입차'),
+            _buildHeaderCell(width: 60, label: '출차'),
           ],
         ),
       ),
