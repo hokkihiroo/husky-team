@@ -445,7 +445,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'C존',
+                            'B2',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -519,7 +519,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B2',
+                            '외부',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게

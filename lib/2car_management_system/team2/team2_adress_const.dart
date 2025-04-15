@@ -71,13 +71,13 @@ String checkOutLocation(int location){
   }else if (location ==1){
     return '가벽';
   }else if(location==2){
-    return 'BA';
+    return 'A존';
   }else if(location==3){
-    return 'BB';
+    return 'B존';
   }else if(location==4){
-    return 'BC';
-  }else if(location==5){
     return 'B2';
+  }else if(location==5){
+    return '외부';
   }
   return '';
 }

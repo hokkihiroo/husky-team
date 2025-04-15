@@ -422,7 +422,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              'C존',
+              'B2',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -435,7 +435,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              'B2',
+              '외부',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

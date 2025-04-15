@@ -44,6 +44,8 @@ class _Team2CarScheduleModelState extends State<Team2CarScheduleModel> {
     "16:30",
     "17:00",
     "17:30",
+    "18:00",
+    "18:30",
   ];
   List<Map<String, String>> alphaItems = [];
 
