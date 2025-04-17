@@ -684,7 +684,7 @@ class _CarStateState extends State<CarState> {
                     child: Text(
                       '브랜드넣기',
                       style: TextStyle(
-                        fontSize: 15, // 텍스트 크기 증가
+                        fontSize: 14, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
