@@ -29,7 +29,13 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
-  final Map<String, List<String>> brandModels = {}; // 새로 추가할 변수
+  String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
+  int selectedTabIndex = 0;
+
+
+  Map<String, List<String>> domesticBrands = {};
+  Map<String, List<String>> importedFamousBrands = {};
+  Map<String, List<String>> otherBrands = {};
 
   @override
   void initState() {
@@ -38,31 +44,41 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   }
 
   Future<void> _loadBrandModels() async {
-    final data = await fetchBrandsWithModels();
-    print('🔥 불러온 브랜드+차종 데이터: $brandModels'); // 여기서 확인 가능
+    final result = await fetchBrandsWithModels();
+    print('🔥 국내: $domesticBrands');
+    print('🔥 수입유명: $importedFamousBrands');
+    print('🔥 잡브랜드: $otherBrands');
   }
 
-  Future<Map<String, List<String>>> fetchBrandsWithModels() async {
+
+  Future<void> fetchBrandsWithModels() async {
     final brandCollection = FirebaseFirestore.instance.collection(BRANDMANAGE);
     final brandSnapshots = await brandCollection.get();
 
     for (var brandDoc in brandSnapshots.docs) {
-      final category = brandDoc['category'] ?? '미지정'; // 문서 필드에서 브랜드 이름 추출
-      final brand = brandDoc.id;
+      final category = brandDoc['category'] ?? '미지정'; // 브랜드명
+      final brandType = brandDoc['brandType'] ?? 0;
+      final brandId = brandDoc.id;
+
       final modelSnapshots = await brandCollection
-          .doc(brand)
+          .doc(brandId)
           .collection('LIST')
-          .orderBy('createdAt', descending: false) // 정렬 필요시
+          .orderBy('createdAt')
           .get();
 
       final models = modelSnapshots.docs
           .map((modelDoc) => modelDoc['carModel'] as String)
           .toList();
 
-      brandModels[category] = models;
+      // brandType 기준으로 분류
+      if (brandType == 1) {
+        domesticBrands[category] = models;
+      } else if (brandType == 2) {
+        importedFamousBrands[category] = models;
+      } else if (brandType == 3) {
+        otherBrands[category] = models;
+      }
     }
-
-    return brandModels;
   }
 
   @override
@@ -105,6 +121,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 dataId = document.id;
                 name = filteredDocs[index]['name'];
                 carNumber = filteredDocs[index]['carNumber'];
+                carModelFrom = filteredDocs[index]['carModel'];
                 location = filteredDocs[index]['location'];
                 color = filteredDocs[index]['color'];
                 etc = filteredDocs[index]['etc'];
@@ -135,7 +152,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       wigetName,
                       movingTime,
                       getMovingTime,
-                      brandModels,
+                      carModelFrom,
                     );
                   },
                 );
@@ -169,11 +186,9 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String wigetName,
     String movingTime,
     String getMovingTime,
-    Map<String, List<String>> brandModels,
+    String carModelFrom,
   ) {
     print(name);
-    print(brandModels);
-
     return AlertDialog(
       title: Row(
         children: [
@@ -181,14 +196,22 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '차량번호: $carNumber',
+                '차종: $carModelFrom',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700],
                 ),
               ),
-              SizedBox(height: 5), // 간격을 더 좁혀서 일관된 디자인
+              Text(
+                '차량번호: $carNumber',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700],
+
+                ),
+              ),
               Text(
                 '경과시간: $remainTime',
                 style: TextStyle(
@@ -544,73 +567,101 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             builder: (context, setState) {
                               String? selectedBrand;
 
+                              // 탭 인덱스에 따른 맵 선택 함수
+                              Map<String, List<String>> getSelectedBrandMap() {
+                                if (selectedTabIndex == 0) return domesticBrands;
+                                if (selectedTabIndex == 1) return importedFamousBrands;
+                                return otherBrands;
+                              }
+
                               return AlertDialog(
                                 title: Text('브랜드를 선택하세요',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                    style: TextStyle(fontWeight: FontWeight.bold)),
                                 content: SizedBox(
                                   width: double.maxFinite,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      ToggleButtons(
+                                        isSelected: [
+                                          selectedTabIndex == 0,
+                                          selectedTabIndex == 1,
+                                          selectedTabIndex == 2,
+                                        ],
+                                        onPressed: (index) {
+                                          setState(() {
+                                            selectedTabIndex = index;
+                                          });
+                                        },
+                                        borderRadius: BorderRadius.circular(8),
+                                        selectedColor: Colors.white,
+                                        fillColor: Colors.blue,
+                                        color: Colors.black,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('국내'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('수입유명'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('잡브랜드'),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
                                       Container(
-                                        height: 300, // 브랜드 리스트 높이 제한
+                                        height: 300,
                                         decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey.shade300),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          border: Border.all(color: Colors.grey.shade300),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Scrollbar(
                                           child: ListView.builder(
-                                            itemCount: brandModels.keys.length,
+                                            itemCount: getSelectedBrandMap().keys.length,
                                             itemBuilder: (context, index) {
-                                              String brand = brandModels.keys
-                                                  .elementAt(index);
+                                              final brand =
+                                              getSelectedBrandMap().keys.elementAt(index);
                                               return Card(
-                                                color: selectedBrand == brand
-                                                    ? Colors.grey.shade200
-                                                    : Colors.white,
+                                                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                color: selectedBrand == brand ? Colors.grey.shade200 : Colors.white,
                                                 shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                child: ListTile(
-                                                  title: Text(
-                                                    brand,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  onTap: () async {
-                                                    Navigator.pop(
-                                                        context); // 기존 팝
-
+                                                  borderRadius: BorderRadius.circular(6),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
                                                     showDialog(
                                                       context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return carModel(
-                                                          brand,
-                                                          brandModels,
-                                                        );
+                                                      builder: (BuildContext context) {
+                                                        return carModel(brand, getSelectedBrandMap());
                                                       },
                                                     );
                                                   },
+                                                  child: Container(
+                                                    height: 45, // 여기서 카드 높이를 직접 조정
+                                                    alignment: Alignment.centerLeft,
+                                                    padding: EdgeInsets.symmetric(horizontal: 12),
+                                                    child: Text(
+                                                      brand,
+                                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                                    ),
+                                                  ),
                                                 ),
                                               );
                                             },
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 16),
                                     ],
                                   ),
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
+                                    onPressed: () => Navigator.of(context).pop(),
                                     child: Text('닫기'),
                                   ),
                                 ],
@@ -620,6 +671,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         },
                       );
                     },
+
                     child: Text(
                       '브랜드넣기',
                       style: TextStyle(

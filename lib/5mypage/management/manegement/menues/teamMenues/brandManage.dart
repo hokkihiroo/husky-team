@@ -26,58 +26,116 @@ class _BrandManageState extends State<BrandManage> {
   late String gangnamCarList; // 전역 변수로 선언
   String? documentID = '';
 
-
   void _showDialog() {
     final TextEditingController _textFieldController = TextEditingController();
+    String selectedCategory = '국내'; // 기본 선택값
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            '브랜드이름',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-          ),
-          content: TextField(
-            controller: _textFieldController,
-            decoration: InputDecoration(hintText: "입력"),
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(10),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    String inputText = _textFieldController.text;
-                    String documentId = FirebaseFirestore.instance
-                        .collection(gangnamCarList)
-                        .doc()
-                        .id;
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection(gangnamCarList)
-                          .doc(documentId)
-                          .set({
-                        'category': inputText,
-                        'createdAt': FieldValue.serverTimestamp(),
-                      });
-                    } catch (e) {}
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('확인'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('취소'),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(
+                '브랜드이름',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: _textFieldController,
+                    decoration: InputDecoration(hintText: "브랜드명 입력"),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Text(
+                        '카테고리: ',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(width: 10),
+                      DropdownButton<String>(
+                        value: selectedCategory,
+                        items: ['국내', '수입유명', '잡브랜드']
+                            .map((label) => DropdownMenuItem(
+                                  value: label,
+                                  child: Text(label),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              selectedCategory = value;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        String inputText = _textFieldController.text;
+
+                        // 카테고리 숫자 변환
+                        int brandTypeValue;
+                        switch (selectedCategory) {
+                          case '국내':
+                            brandTypeValue = 1;
+                            break;
+                          case '수입유명':
+                            brandTypeValue = 2;
+                            break;
+                          case '잡브랜드':
+                            brandTypeValue = 3;
+                            break;
+                          default:
+                            brandTypeValue = 0; // 예외처리용
+                        }
+
+                        String documentId = FirebaseFirestore.instance
+                            .collection(gangnamCarList)
+                            .doc()
+                            .id;
+
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection(gangnamCarList)
+                              .doc(documentId)
+                              .set({
+                            'category': inputText,
+                            'brandType': brandTypeValue, // 숫자로 저장
+                            'createdAt': FieldValue.serverTimestamp(),
+                          });
+                        } catch (e) {
+                          print('저장 에러: $e');
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('확인'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('취소'),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
+            );
+          },
         );
       },
     );
@@ -134,7 +192,6 @@ class _BrandManageState extends State<BrandManage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BrandMansgeList(
-
                               teamId: widget.teamDocId,
                               category: data['category'],
                               documentID: '$documentID',
