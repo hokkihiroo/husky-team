@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'team2_adress_const.dart';
 import 'team2_car_card.dart';
@@ -54,6 +55,37 @@ class _CarListState extends State<CarList> {
     });
   }
 
+  // 텍스트 만드는 함수 추가
+  Future<String> createClipboardText(String address) async {
+    final query = await FirebaseFirestore.instance
+        .collection(CARLIST + address)
+        .orderBy('enter')
+        .get();
+
+    final buffer = StringBuffer();
+    buffer.writeln('📅 날짜: $address');
+    buffer.writeln('-----------------------------');
+
+    for (int i = 0; i < query.docs.length; i++) {
+      final doc = query.docs[i];
+      final carNum = doc['carNumber'];
+      final brand = doc['carBrand'];
+      final model = doc['carModel'];
+      final enter = getInTime(doc['enter']);
+      final out = doc['out'] is Timestamp
+          ? getOutTime((doc['out'] as Timestamp).toDate())
+          : '---';
+
+      buffer.writeln('[$i]');
+      buffer.writeln('브랜드: $brand');
+      buffer.writeln('차종: $model');
+      buffer.writeln('차량번호: $carNum');
+      buffer.writeln('입차: $enter / 출차: $out');
+      buffer.writeln('');
+    }
+
+    return buffer.toString();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +100,21 @@ class _CarListState extends State<CarList> {
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
+
+        actions: [
+          IconButton(
+            icon: Icon(Icons.copy),
+            onPressed: () async {
+              final text = await createClipboardText(DBAdress);
+              Clipboard.setData(ClipboardData(text: text));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('텍스트가 복사되었습니다!')),
+              );
+            },
+          )
+        ],
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
