@@ -221,7 +221,7 @@ class _CarStateState extends State<CarState> {
                 ),
               ),
               Text(
-                '경과시간: $remainTime',
+                '경과: $remainTime',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,

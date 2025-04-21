@@ -210,7 +210,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 ),
               ),
               Text(
-                '경과시간: $remainTime',
+                '경과: $remainTime',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
