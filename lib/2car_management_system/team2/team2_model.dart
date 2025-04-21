@@ -1056,7 +1056,7 @@ class _CarStateState extends State<CarState> {
               ),
               SizedBox(height: 5), // 간격을 더 좁혀서 일관된 디자인
               Text(
-                '경과시간: $remainTime',
+                '경과: $remainTime',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
