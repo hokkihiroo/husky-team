@@ -63,7 +63,7 @@ class _CarListState extends State<CarList> {
         .get();
 
     final buffer = StringBuffer();
-    buffer.writeln('📅 날짜: $address');
+    buffer.writeln('날짜: $address');
     buffer.writeln('-----------------------------');
 
     for (int i = 0; i < query.docs.length; i++) {
@@ -71,6 +71,7 @@ class _CarListState extends State<CarList> {
       final carNum = doc['carNumber'];
       final brand = doc['carBrand'];
       final model = doc['carModel'];
+      final etc = doc['etc'];
       final enter = getInTime(doc['enter']);
       final out = doc['out'] is Timestamp
           ? getOutTime((doc['out'] as Timestamp).toDate())
@@ -81,6 +82,7 @@ class _CarListState extends State<CarList> {
       buffer.writeln('차종: $model');
       buffer.writeln('차량번호: $carNum');
       buffer.writeln('입차: $enter / 출차: $out');
+      buffer.writeln('etc: $etc ');
       buffer.writeln('');
     }
 

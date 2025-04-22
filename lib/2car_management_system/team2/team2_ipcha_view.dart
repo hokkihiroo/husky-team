@@ -927,6 +927,21 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                       } catch (e) {
                                                         print(e);
                                                       }
+
+                                                      try {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                            CarListAdress)
+                                                            .doc(dataId)
+                                                            .update({
+                                                          'etc': etc,
+                                                        });
+                                                      } catch (e) {
+                                                        print(e);
+                                                      }
+
+
                                                     },
                                                     child: Text('등록'))),
                                             SizedBox(
@@ -1138,6 +1153,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     'movedLocation': '$movedLocation',
                     'wigetName': wigetName,
                     'movingTime': movingTime,
+                    'etc': etc,
                   });
                 } catch (e) {
                   print(e);

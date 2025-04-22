@@ -932,6 +932,20 @@ class _CarStateState extends State<CarState> {
                                                 } catch (e) {
                                                   print(e);
                                                 }
+                                                try {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                      CarListAdress)
+                                                      .doc(dataId)
+                                                      .update({
+                                                    'etc': etc,
+                                                  });
+                                                } catch (e) {
+                                                  print(e);
+                                                }
+
+
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
@@ -1099,6 +1113,8 @@ class _CarStateState extends State<CarState> {
                     'movedLocation': '$movedLocation',
                     'wigetName': wigetName,
                     'movingTime': movingTime,
+                    'etc': etc,
+
                   });
                 } catch (e) {
                   print(e);

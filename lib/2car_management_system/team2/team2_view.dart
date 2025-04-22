@@ -5,6 +5,7 @@ import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart'
 import 'package:team_husky/2car_management_system/team2/team2_carschedule.dart';
 import 'package:team_husky/2car_management_system/team2/team2_carschedule_view.dart';
 import 'package:team_husky/2car_management_system/team2/team2_ipcha_view.dart';
+import 'package:team_husky/2car_management_system/team2/team2_oil_view.dart';
 
 import 'team2_car_list.dart';
 import 'team2_model.dart';
@@ -55,16 +56,15 @@ class _Team2ViewState extends State<Team2View> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => Team2CarSchedule()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OilView(name: widget.name,)),
+                  );
                 },
                 child: Text(
-                  '인도',
+                  '주유',
                   style: TextStyle(
                     color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
-                    decoration: TextDecoration.lineThrough, // 줄 긋기 설정
                     decorationColor: Colors.white,
                     // 줄 색상
                     decorationThickness: 2, // 줄 두께

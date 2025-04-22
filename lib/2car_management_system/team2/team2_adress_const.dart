@@ -93,3 +93,5 @@ String getDayOfWeek(DateTime date) {
   List<String> days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
   return days[date.weekday - 1];
 }
+
+final TEAM2GANGNAMCAR ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar';
