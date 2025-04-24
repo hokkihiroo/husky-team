@@ -65,6 +65,7 @@ class _CarListState extends State<CarList> {
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address');
     buffer.writeln('-----------------------------');
+    buffer.writeln('번호 브랜드 차종 차번호 입차 출차 특이사항');
 
     for (int i = 0; i < query.docs.length; i++) {
       final doc = query.docs[i];
@@ -77,7 +78,7 @@ class _CarListState extends State<CarList> {
           ? getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
-      buffer.writeln('(${i + 1})$brand $model $carNum $enter $out $etc');
+      buffer.writeln('(${i + 1}) $brand $model $carNum $enter $out $etc');
      // buffer.writeln('브랜드: $brand');
      //  buffer.writeln('차종: $model');
      //  buffer.writeln('차량번호: $carNum');
