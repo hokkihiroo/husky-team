@@ -13,7 +13,6 @@ class CarList extends StatefulWidget {
 }
 
 class _CarListState extends State<CarList> {
-
   DateTime selectedDate = DateTime.now();
   String DBAdress = formatTodayDate();
 
@@ -77,17 +76,18 @@ class _CarListState extends State<CarList> {
           ? getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
-      buffer.writeln('(${i + 1}) $brand $model $carNum $enter $out $etc');
-     // buffer.writeln('브랜드: $brand');
-     //  buffer.writeln('차종: $model');
-     //  buffer.writeln('차량번호: $carNum');
-     //  buffer.writeln('입차: $enter / 출차: $out');
-     //  buffer.writeln('특이사항: $etc ');
+      buffer.writeln('[${i + 1}]');
+      buffer.writeln('브랜드: $brand');
+      buffer.writeln('차종: $model');
+      buffer.writeln('차량번호: $carNum');
+      buffer.writeln('입차: $enter / 출차: $out');
+      buffer.writeln('특이사항: $etc ');
       buffer.writeln('');
     }
 
     return buffer.toString();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +102,6 @@ class _CarListState extends State<CarList> {
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
-
         actions: [
           IconButton(
             icon: Icon(Icons.copy),
@@ -116,7 +115,6 @@ class _CarListState extends State<CarList> {
           )
         ],
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -135,8 +133,8 @@ class _CarListState extends State<CarList> {
       ),
     );
   }
-
 }
+
 class _DateControl extends StatelessWidget {
   final VoidCallback onPressLeft;
   final VoidCallback onPressRight;
@@ -145,10 +143,10 @@ class _DateControl extends StatelessWidget {
 
   const _DateControl(
       {super.key,
-        required this.onPressLeft,
-        required this.onPressRight,
-        required this.onPressGoToday,
-        required this.selectedDate});
+      required this.onPressLeft,
+      required this.onPressRight,
+      required this.onPressGoToday,
+      required this.selectedDate});
 
   @override
   Widget build(BuildContext context) {
@@ -167,9 +165,13 @@ class _DateControl extends StatelessWidget {
           "${selectedDate.toLocal()}".split(' ')[0],
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
-        SizedBox(width: 2,),
-        Text(getWeeks(selectedDate.weekday),
-          style: TextStyle(color: Colors.white, fontSize: 20),),
+        SizedBox(
+          width: 2,
+        ),
+        Text(
+          getWeeks(selectedDate.weekday),
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
         IconButton(
           icon: Icon(
             Icons.chevron_right_outlined,
@@ -234,7 +236,6 @@ class _ListState extends StatelessWidget {
     );
   }
 }
-
 
 class ListModel extends StatelessWidget {
   final String adress;
@@ -332,8 +333,8 @@ class ListModel extends StatelessWidget {
                     outTime: docs[index]['out'] is Timestamp
                         ? (docs[index]['out'] as Timestamp).toDate()
                         : null,
-                      carBrand:docs[index]['carBrand'],
-                    carModel:docs[index]['carModel'],
+                    carBrand: docs[index]['carBrand'],
+                    carModel: docs[index]['carModel'],
                   ),
                 ),
               ),
@@ -414,7 +415,7 @@ class ListModel extends StatelessWidget {
                                   .replaceAll('=', '\n')
                                   .split('\n')
                                   .sublist(
-                                  0, movedLocation.split('=').length - 1)
+                                      0, movedLocation.split('=').length - 1)
                                   .join('\n'),
                             ),
                             SizedBox(
