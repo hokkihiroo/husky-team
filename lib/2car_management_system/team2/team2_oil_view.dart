@@ -56,7 +56,7 @@ class _Team3ViewState extends State<OilView> {
             ),
 
             Text(
-              '주유상태관리',
+              '시승차 주유관리',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
@@ -64,7 +64,8 @@ class _Team3ViewState extends State<OilView> {
                 color: Colors.white,
               ),
             ),
-             SizedBox(height: 20,),
+
+             SizedBox(height: 10,),
             TeamOilList(
             ),
           ],

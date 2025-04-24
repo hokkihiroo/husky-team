@@ -150,7 +150,7 @@ class _Team3HyundaeState extends State<TeamOilList> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // 2열 구성
             mainAxisSpacing: 10.0, // 세로 간격
-            crossAxisSpacing: 60.0, // 가로 간격
+            crossAxisSpacing: 30.0, // 가로 간격
             childAspectRatio: 6, // 카드의 가로:세로 비율 조정 가능
           ),
           itemCount: docs.length,
