@@ -617,7 +617,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                       ),
                                       const SizedBox(height: 12),
                                       Container(
-                                        height: 300,
+                                        height: 350,
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Colors.grey.shade300),

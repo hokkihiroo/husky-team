@@ -622,7 +622,7 @@ class _CarStateState extends State<CarState> {
                                       ),
                                       const SizedBox(height: 12),
                                       Container(
-                                        height: 300,
+                                        height: 350,
                                         decoration: BoxDecoration(
                                           border: Border.all(color: Colors.grey.shade300),
                                           borderRadius: BorderRadius.circular(8),
