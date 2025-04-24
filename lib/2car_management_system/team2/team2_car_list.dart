@@ -65,7 +65,7 @@ class _CarListState extends State<CarList> {
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address');
     buffer.writeln('-----------------------------');
-    buffer.writeln('번호 브랜드 차종 차번호 입차 출차 특이사항');
+    buffer.writeln('브랜드 차종 차번호 입차 출차 특이사항');
 
     for (int i = 0; i < query.docs.length; i++) {
       final doc = query.docs[i];
