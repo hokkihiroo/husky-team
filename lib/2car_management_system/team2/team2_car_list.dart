@@ -76,13 +76,16 @@ class _CarListState extends State<CarList> {
           ? getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
-      buffer.writeln('[${i + 1}]');
-      buffer.writeln('브랜드: $brand');
-      buffer.writeln('차종: $model');
-      buffer.writeln('차량번호: $carNum');
-      buffer.writeln('입차: $enter / 출차: $out');
-      buffer.writeln('특이사항: $etc ');
-      buffer.writeln('');
+      buffer.writeln('(${i + 1}) $brand $model $carNum $enter $out');
+
+      //
+      // buffer.writeln('(${i + 1})');
+      // buffer.writeln('브랜드: $brand');
+      // buffer.writeln('차종: $model');
+      // buffer.writeln('차량번호: $carNum');
+      // buffer.writeln('입차: $enter / 출차: $out');
+      // buffer.writeln('특이사항: $etc ');
+      // buffer.writeln('');
     }
 
     return buffer.toString();
