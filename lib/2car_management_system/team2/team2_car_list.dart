@@ -306,26 +306,19 @@ class ListModel extends StatelessWidget {
                   wigetName = docs[index]['wigetName']; //출차한위치 이름
 
                   showCarInfoBottomSheet(
-                      context,
-                      dataId,
-                      carNumber,
-                      enterTime,
-                      enterName,
-                      outName,
-                      outTime,
-                      outLocation,
-                      movedLocation,
-                      wigetName,
-                      movingTime);
-
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialog(
-                  //       title: Text('차정보'),
-                  //     );
-                  //   },
-                  // );
+                    context,
+                    dataId,
+                    carNumber,
+                    enterTime,
+                    enterName,
+                    outName,
+                    outTime,
+                    outLocation,
+                    movedLocation,
+                    wigetName,
+                    movingTime,
+                    adress,
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
@@ -348,8 +341,19 @@ class ListModel extends StatelessWidget {
     );
   }
 
-  void showCarInfoBottomSheet(context, id, carNumber, enterTime, enterName,
-      outName, outTime, outLocation, movedLocation, wigetName, movingTime) {
+  void showCarInfoBottomSheet(
+      context,
+      id,
+      carNumber,
+      enterTime,
+      enterName,
+      outName,
+      outTime,
+      outLocation,
+      movedLocation,
+      wigetName,
+      movingTime,
+      adress) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -361,7 +365,7 @@ class ListModel extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
                         '차번호:$carNumber',
@@ -370,6 +374,65 @@ class ListModel extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // 다이얼로그 닫기
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("삭제 확인"),
+                                content: Text("정말로 삭제하시겠습니까?"),
+                                actions: [
+                                  TextButton(
+                                    child: Text("취소"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // 다이얼로그 닫기
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("삭제"),
+                                    onPressed: () async {
+                                      try {
+                                        // 삭제할 문서의 참조를 가져와
+                                        await FirebaseFirestore.instance
+                                            .collection(
+                                                CARLIST + adress) // 예: 'users'
+                                            .doc(id) // 예: 'abc123'
+                                            .delete();
+
+                                        Navigator.of(context).pop(); // 다이얼로그 닫기
+                                        print('삭제 확인됨');
+                                        // 여기에 삭제 완료 후 처리 추가 (예: 스낵바 등)
+                                      } catch (e) {
+                                        print('삭제 중 오류 발생: $e');
+                                        // 오류 처리 로직 추가 가능
+                                      }
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          backgroundColor: Colors.red.withOpacity(0.1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          '삭제',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red, // 삭제는 빨간색이 직관적
+                          ),
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(
