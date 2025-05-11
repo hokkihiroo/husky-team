@@ -61,11 +61,13 @@ class _CarListState extends State<CarList> {
         .orderBy('enter')
         .get();
 
+    final count = query.docs.length;
+
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address');
     buffer.writeln('-----------------------------');
 
-    for (int i = 0; i < query.docs.length; i++) {
+    for (int i = 0; i < count; i++) {
       final doc = query.docs[i];
       final carNum = doc['carNumber'];
       final brand = doc['carBrand'];
