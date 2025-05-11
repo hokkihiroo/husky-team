@@ -64,7 +64,7 @@ class _CarListState extends State<CarList> {
     final count = query.docs.length;
 
     final buffer = StringBuffer();
-    buffer.writeln('날짜: $address');
+    buffer.writeln('날짜: $address (총 $count대)');
     buffer.writeln('-----------------------------');
 
     for (int i = 0; i < count; i++) {
