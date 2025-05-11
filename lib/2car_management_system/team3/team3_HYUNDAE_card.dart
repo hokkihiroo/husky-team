@@ -27,7 +27,7 @@ class Team3HyundaeCard extends StatelessWidget {
                     name,
                     style: const TextStyle(
                       color: Colors.yellow,
-                      fontSize: 13,
+                      fontSize: 10,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -46,7 +46,7 @@ class Team3HyundaeCard extends StatelessWidget {
                         : '$oilCount ${brandNum == 3 ? '' : 'km'}',
                     style: const TextStyle(
                       color: Colors.yellow,
-                      fontSize: 13,
+                      fontSize: 10,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
