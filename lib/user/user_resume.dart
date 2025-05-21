@@ -322,7 +322,7 @@ class _UserResumeState extends State<UserResume> {
                           //돌아가기
                           ElevatedButton(
                             style:
-                                ElevatedButton.styleFrom(primary: Colors.brown),
+                                ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -336,7 +336,7 @@ class _UserResumeState extends State<UserResume> {
                           //이력서 제출
                           ElevatedButton(
                             style:
-                                ElevatedButton.styleFrom(primary: Colors.brown),
+                                ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                             onPressed: () async {
                               _tryValidation();
 

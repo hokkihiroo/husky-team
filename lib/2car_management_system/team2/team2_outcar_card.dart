@@ -52,7 +52,7 @@ class OutCarCard extends StatelessWidget {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              primary: Colors.white, // 버튼 색상
+              backgroundColor: Colors.white, // 버튼 색상
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // 버튼 둥글게
               ),

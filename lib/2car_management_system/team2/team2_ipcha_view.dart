@@ -249,7 +249,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                primary: Colors.red, // 버튼 색상
+                backgroundColor: Colors.red, // 버튼 색상
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                 ),
@@ -271,7 +271,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.grey, // 버튼 색상
+                      backgroundColor: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -308,7 +308,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.blue, // 버튼 색상
+                      backgroundColor: Colors.blue, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -365,7 +365,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            primary: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -400,7 +400,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            primary: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -435,7 +435,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            primary: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -474,7 +474,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            primary: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -509,7 +509,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            primary: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -549,7 +549,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 60),
-                      primary: Colors.blueGrey, // 버튼 색상
+                      backgroundColor: Colors.blueGrey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -833,8 +833,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    primary: Colors.brown, // 버튼 색상
+                    padding: EdgeInsets.symmetric(horizontal: 20), backgroundColor: Colors.brown, // 버튼 색상
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                     ),
@@ -881,7 +880,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 Expanded(
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        backgroundColor: Colors.black,
                         textStyle: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 17),
                       ),
@@ -1185,7 +1184,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                primary: Colors.red, // 버튼 색상
+                backgroundColor: Colors.red, // 버튼 색상
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                 ),
@@ -1206,7 +1205,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.grey, // 버튼 색상
+                      backgroundColor: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -1242,7 +1241,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.grey, // 버튼 색상
+                      backgroundColor: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -1278,7 +1277,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.grey, // 버튼 색상
+                      backgroundColor: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -1314,7 +1313,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      primary: Colors.grey, // 버튼 색상
+                      backgroundColor: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),

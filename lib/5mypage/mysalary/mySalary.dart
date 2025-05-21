@@ -294,9 +294,9 @@ class _MySalaryState extends State<MySalary> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 // 버튼 배경색
-                onPrimary: Colors.yellow,
+                foregroundColor: Colors.yellow,
                 // 텍스트 및 버튼 효과 색상
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8), // 모서리 둥글기 조정
@@ -334,9 +334,9 @@ class _MySalaryState extends State<MySalary> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black,
+                  backgroundColor: Colors.black,
                   // 버튼 배경색
-                  onPrimary: Colors.yellow,
+                  foregroundColor: Colors.yellow,
                   // 텍스트 및 버튼 효과 색상
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // 모서리 둥글기

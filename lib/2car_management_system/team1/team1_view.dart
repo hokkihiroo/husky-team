@@ -9,9 +9,7 @@ import 'package:team_husky/2car_management_system/team1/team1_carschedule.dart';
 import 'package:team_husky/2car_management_system/team1/team1_carschedule_view.dart';
 import 'package:team_husky/2car_management_system/team1/team1_model.dart';
 import 'package:team_husky/2car_management_system/team1/team1_outcar.dart';
-import 'package:telephony/telephony.dart';
-import 'package:vibration/vibration.dart';
-
+import 'package:another_telephony/telephony.dart';
 class Team1View extends StatefulWidget {
   const Team1View({super.key, required this.name});
 
@@ -439,15 +437,6 @@ class _Team1ViewState extends State<Team1View> {
   }
 }
 
-Future<void> _handleBackgroundMessage(SmsMessage message) async {
-  String? phoneNumber = message.address;
-  String? messageBody = message.body;
-
-  // *여기서 phoneNumber와 messageBody를 이용하여 작업을 수행
-  // *예: Firestore에 저장하거나 특정 동작 실행 등
-  print('Received SMS in background from $phoneNumber: $messageBody');
-  Vibration.vibrate(duration: 500);
-}
 
 class _LocationName extends StatelessWidget {
   const _LocationName({super.key});

@@ -107,7 +107,7 @@ class _UserScreenState extends State<UserScreen> {
                             Expanded(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.blue,
+                                  backgroundColor: Colors.blue,
                                 ),
                                 onPressed: () async {
                                   try {
@@ -143,7 +143,7 @@ class _UserScreenState extends State<UserScreen> {
                             Expanded(
                               child: ElevatedButton(
                                 style:
-                                ElevatedButton.styleFrom(primary: Colors.black),
+                                ElevatedButton.styleFrom(backgroundColor: Colors.black),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -174,7 +174,7 @@ class _UserScreenState extends State<UserScreen> {
                             Expanded(
                               child: ElevatedButton(
                                 style:
-                                    ElevatedButton.styleFrom(primary: Colors.black),
+                                    ElevatedButton.styleFrom(backgroundColor: Colors.black),
                                 onPressed: () {
                                   Navigator.push(
                                     context,

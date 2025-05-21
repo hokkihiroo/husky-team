@@ -225,9 +225,9 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                   }
                                 },
                                 style: TextButton.styleFrom(
-                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.red,
                                   // 배경색을 빨간색으로 설정
-                                  primary: Colors.white,
+                                  backgroundColor: Colors.white,
                                   // 텍스트 색상을 흰색으로 설정
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 30, vertical: 12),
@@ -256,7 +256,7 @@ class _ScheduleConfigState extends State<ScheduleConfig> {
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.grey,
                                   // 배경색을 회색으로 설정
-                                  primary: Colors.black,
+                                  foregroundColor: Colors.black,
                                   // 텍스트 색상을 검정색으로 설정
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 30, vertical: 12),

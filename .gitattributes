@@ -1,0 +1,32 @@
+# 모든 텍스트 파일은 자동 줄바꿈 처리 (OS에 따라 자동 변환)
+* text=auto
+
+# Dart, YAML, JSON 등 코드/설정 파일은 LF 고정 (줄바꿈 일관성 유지)
+*.dart text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.sh text eol=lf
+
+# Windows 전용 배치파일은 CRLF 유지
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 이미지, 폰트, 바이너리 등은 줄바꿈 처리 금지
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ttf binary
+*.otf binary
+*.ico binary
+*.mp4 binary
+*.mp3 binary
+
+# IDE 및 툴 설정 파일 (선택적으로 추가)
+*.iml text eol=lf
+*.xml text eol=lf

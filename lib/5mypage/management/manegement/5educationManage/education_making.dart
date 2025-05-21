@@ -460,7 +460,7 @@ class _EducationMakingState extends State<EducationMaking> {
                       children: [
                         ElevatedButton(
                           style:
-                              ElevatedButton.styleFrom(primary: Colors.brown),
+                              ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -473,7 +473,7 @@ class _EducationMakingState extends State<EducationMaking> {
                         ),
                         ElevatedButton(
                           style:
-                              ElevatedButton.styleFrom(primary: Colors.black),
+                              ElevatedButton.styleFrom(backgroundColor: Colors.black),
                           onPressed: () async {
                             _tryValidation();
 

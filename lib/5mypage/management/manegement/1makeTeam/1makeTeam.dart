@@ -76,7 +76,7 @@ class _MakeTeamState extends State<MakeTeam> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Colors.brown),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -88,7 +88,7 @@ class _MakeTeamState extends State<MakeTeam> {
                       ),
                     ),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Colors.black),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                       onPressed: () async {
                         _tryValidation();
                         String documentId = FirebaseFirestore.instance

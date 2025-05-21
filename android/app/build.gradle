@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.hokki.team_husky"
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {

@@ -746,7 +746,7 @@ class _RotaryListState extends State<RotaryList> {
                   flex: 3,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        backgroundColor: Colors.black,
                         textStyle: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 17),
                       ),
@@ -822,7 +822,7 @@ class _RotaryListState extends State<RotaryList> {
                   flex: 1,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
+                      backgroundColor: Colors.black,
                       textStyle:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
                     ),
