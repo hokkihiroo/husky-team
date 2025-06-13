@@ -1,0 +1,2 @@
+C:/Users/82104/Desktop/team_husky/android/app/.cxx/RelWithDebInfo/76525376/x86/CMakeFiles/edit_cache.dir
+C:/Users/82104/Desktop/team_husky/android/app/.cxx/RelWithDebInfo/76525376/x86/CMakeFiles/rebuild_cache.dir

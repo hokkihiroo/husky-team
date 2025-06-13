@@ -78,7 +78,7 @@ class _MyPictureState extends State<MyPicture> {
           ),
           const SizedBox(height: 20),
           const Text(
-            '* 악세사리 금지 *\n* 근무복장 착용 필수 *',
+            '얼굴이 60% 이상 보이는 사진',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.redAccent,

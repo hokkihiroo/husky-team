@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/user/birthDay.dart';
@@ -45,11 +48,25 @@ class _UserResumeState extends State<UserResume> {
   String picUrl = ''; // 사진저장소주소
   int levelNumber = 0; //
 
+  File? pickedImage;
+
   @override
   void dispose() {
     _phoneController.dispose(); // 메모리 누수를 방지하기 위해 dispose 호출
     _birthDayController.dispose(); // 생년월일 컨트롤러 해제
     super.dispose();
+  }
+
+  void _pickImage() async {
+    final imagePicker = ImagePicker();
+    final pickedImageFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      if (pickedImageFile != null) {
+        pickedImage = File(pickedImageFile.path);
+      }
+    });
   }
 
   @override
@@ -63,7 +80,7 @@ class _UserResumeState extends State<UserResume> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: 1600.0,
+              height: 2000.0,
               width: MediaQuery.of(context).size.width - 20,
               margin: EdgeInsets.only(top: 10, left: 10, right: 10),
               decoration: BoxDecoration(
@@ -83,6 +100,66 @@ class _UserResumeState extends State<UserResume> {
                     children: [
                       SizedBox(
                         height: 40,
+                      ),
+                      Text('양식을 꼭 지켜주세요'),
+                      Text('중복 가입은 예고없이 삭제됩니다.'),
+                      Text('-우덕균 대표-'),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // 프로필 이미지 (왼쪽)
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.grey[200],
+                              backgroundImage: pickedImage != null ? FileImage(pickedImage!) : null,
+                              child: pickedImage == null
+                                  ? const Icon(Icons.person, size: 40, color: Colors.grey)
+                                  : null,
+                            ),
+                            const SizedBox(width: 20),
+
+                            // 버튼 (오른쪽)
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: _pickImage,
+                                icon: const Icon(Icons.image, color: Colors.blueAccent),
+                                label: const Text(
+                                  '이미지 선택',
+                                  style: TextStyle(color: Colors.blueAccent),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  side: const BorderSide(color: Colors.blueAccent),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  textStyle: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 20,
                       ),
                       CustomTextForm(
                         key: ValueKey(1),
@@ -155,12 +232,6 @@ class _UserResumeState extends State<UserResume> {
                       ),
                       SizedBox(
                         height: 25,
-                      ),
-                      Text('양식을 꼭 지켜주세요'),
-                      Text('중복 가입은 예고없이 삭제됩니다.'),
-                      Text('-우덕균-'),
-                      SizedBox(
-                        height: 20,
                       ),
                       PhoneNumberInput(
                         phoneController: _phoneController,
@@ -321,8 +392,8 @@ class _UserResumeState extends State<UserResume> {
                         children: [
                           //돌아가기
                           ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.brown),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -335,8 +406,8 @@ class _UserResumeState extends State<UserResume> {
                           ),
                           //이력서 제출
                           ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.brown),
                             onPressed: () async {
                               _tryValidation();
 
@@ -404,7 +475,7 @@ class _UserResumeState extends State<UserResume> {
                                   'cm': cm,
                                   'kg': kg,
                                   'grade': 0,
-                                  'teamId':BOSNA,
+                                  'teamId': BOSNA,
                                   //등급
                                   'enterDay': FieldValue.serverTimestamp(),
                                   //입사일

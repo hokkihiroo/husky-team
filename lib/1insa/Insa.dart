@@ -228,18 +228,7 @@ class _OrganizationState extends State<Organization> {
                 children: [
                   _infoRow('연락처', data['phoneNumber']),
                   Divider(thickness: 1, color: Colors.grey[300]),
-                  _infoRow('차량번호', data['carNumber']),
-                  Divider(thickness: 1, color: Colors.grey[300]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(child: _infoRow('경력', data['career'])),
-                      SizedBox(width: 16),
-                      Expanded(child: _infoRow('취미', data['hobby'])),
-                    ],
-                  ),
-                  Divider(thickness: 1, color: Colors.grey[300]),
-                  _infoRow('입사일', formattedDate),
+                  _infoRow('등록일', formattedDate),
                   Divider(thickness: 1, color: Colors.grey[300]),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
