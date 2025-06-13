@@ -361,7 +361,7 @@ class _MyPageState extends State<MyPage> {
 
               },
               child: const Text(
-                '<개인정보 처리방침>',
+                '개인정보 처리방침',
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.white,

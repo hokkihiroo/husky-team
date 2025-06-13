@@ -65,8 +65,19 @@ class _OrganizationState extends State<Organization> {
                         GestureDetector(
                           onTap: () {
 
-                            const siteUrl = 'https://www.naver.com'; // 원하는 사이트 URL
+                           final schedule = docs[index]['schedule'];
+
+                            if (schedule != null && schedule.toString().trim().isNotEmpty) {
+                            final siteUrl = schedule.toString();
                             _launchWebsite(siteUrl);
+                            } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('사이트 주소가 없습니다')),
+                            );
+                            }
+
+
+
 
 
 
