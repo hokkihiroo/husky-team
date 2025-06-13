@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:team_husky/1insa/Address.dart';
@@ -45,7 +46,6 @@ class _UserResumeState extends State<UserResume> {
   String pantsSize = ''; //하의
   String cm = ''; //키
   String kg = ''; //몸무게
-  String picUrl = ''; // 사진저장소주소
   int levelNumber = 0; //
 
   File? pickedImage;
@@ -62,12 +62,19 @@ class _UserResumeState extends State<UserResume> {
     final pickedImageFile = await imagePicker.pickImage(
       source: ImageSource.gallery,
     );
-    setState(() {
-      if (pickedImageFile != null) {
+
+    if (pickedImageFile != null) {
+      setState(() {
         pickedImage = File(pickedImageFile.path);
-      }
-    });
+      });
+    } else {
+      // 이미지 선택 실패 시 SnackBar 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(' "사진 등록 실패" 다시 시도하세요')),
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +110,9 @@ class _UserResumeState extends State<UserResume> {
                       ),
                       Text('양식을 꼭 지켜주세요'),
                       Text('중복 가입은 예고없이 삭제됩니다.'),
-                      Text('-우덕균 대표-'),
+                      Text(''),
+
+                      Text('-우덕균-'),
                       SizedBox(
                         height: 20,
                       ),
@@ -164,11 +173,11 @@ class _UserResumeState extends State<UserResume> {
 
 
                                   const Text(
-                                    '얼굴이 60% 이상 보이는 사진으로 올릴것',
+                                    '얼굴이 60% 이상 \n 보이는 사진으로 올릴것',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.redAccent,
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -178,6 +187,10 @@ class _UserResumeState extends State<UserResume> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text('사진필수!!!'),
 
                       SizedBox(
                         height: 20,
@@ -471,14 +484,27 @@ class _UserResumeState extends State<UserResume> {
                                 print(e);
                               }
 
+
+
                               try {
                                 final newUser =
                                     await AUTH.createUserWithEmailAndPassword(
                                         email: email, password: password);
 
+                                final newUid = newUser.user!.uid ;
+
+                                final refImage = FirebaseStorage.instance
+                                    .ref()
+                                    .child('mypicture')
+                                    .child('$newUid.png');
+
+
+                                  await refImage.putFile(pickedImage!);
+                                  final picUrl = await refImage.getDownloadURL();
+
                                 await FirebaseFirestore.instance
                                     .collection(USER)
-                                    .doc(newUser.user!.uid)
+                                    .doc(newUid)
                                     .set({
                                   'image': image,
                                   'picUrl': picUrl,
@@ -506,7 +532,7 @@ class _UserResumeState extends State<UserResume> {
                                     .collection(INSA)
                                     .doc(BOSNA)
                                     .collection(LIST)
-                                    .doc(newUser.user!.uid)
+                                    .doc(newUid)
                                     .set({
                                   'image': image,
                                   'name': name, //이름
