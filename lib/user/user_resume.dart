@@ -125,33 +125,54 @@ class _UserResumeState extends State<UserResume> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             // 프로필 이미지 (왼쪽)
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: Colors.grey[200],
-                              backgroundImage: pickedImage != null ? FileImage(pickedImage!) : null,
-                              child: pickedImage == null
-                                  ? const Icon(Icons.person, size: 40, color: Colors.grey)
-                                  : null,
+                            Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: Colors.grey[200],
+                                  backgroundImage: pickedImage != null ? FileImage(pickedImage!) : null,
+                                  child: pickedImage == null
+                                      ? const Icon(Icons.person, size: 40, color: Colors.grey)
+                                      : null,
+                                ),
+                                SizedBox(height: 10,),
+                                Text('사진'),
+                              ],
                             ),
                             const SizedBox(width: 20),
 
                             // 버튼 (오른쪽)
                             Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: _pickImage,
-                                icon: const Icon(Icons.image, color: Colors.blueAccent),
-                                label: const Text(
-                                  '이미지 선택',
-                                  style: TextStyle(color: Colors.blueAccent),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  side: const BorderSide(color: Colors.blueAccent),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                              child: Column(
+                                children: [
+                                  OutlinedButton.icon(
+                                    onPressed: _pickImage,
+                                    icon: const Icon(Icons.image, color: Colors.blueAccent),
+                                    label: const Text(
+                                      '이미지 선택',
+                                      style: TextStyle(color: Colors.blueAccent),
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // 여백 설정
+                                      side: const BorderSide(color: Colors.blueAccent),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      textStyle: const TextStyle(fontSize: 16),
+                                    ),
                                   ),
-                                  textStyle: const TextStyle(fontSize: 16),
-                                ),
+
+
+                                  const Text(
+                                    '얼굴이 60% 이상 보이는 사진으로 올릴것',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.redAccent,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
