@@ -5,6 +5,7 @@ import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/1insa/InsaCard.dart';
 import 'package:team_husky/1insa/newSchedule/newSchedule.dart';
 import 'package:team_husky/1insa/teamcard.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Organization extends StatefulWidget {
   const Organization({super.key, required this.grade});
@@ -21,6 +22,15 @@ class _OrganizationState extends State<Organization> {
   String mansID = ''; // 팀원문서아이디
   String formattedDate = '';
   String? picUrl = '';
+
+  void _launchWebsite(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication); // 외부 브라우저로 열기
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +64,24 @@ class _OrganizationState extends State<Organization> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            teamId = docs[index].id;
-                            print(teamId);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SchedulePage(
-                                  teamId: teamId,
-                                ),
-                              ),
-                            );
+
+                            const siteUrl = 'https://www.naver.com'; // 원하는 사이트 URL
+                            _launchWebsite(siteUrl);
+
+
+
+
+
+                            // teamId = docs[index].id;
+                            // print(teamId);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => SchedulePage(
+                            //       teamId: teamId,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: BuildingCard(
                             image: Image.asset(docs[index]['image']),

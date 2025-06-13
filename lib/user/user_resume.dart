@@ -331,6 +331,10 @@ class _UserResumeState extends State<UserResume> {
                         hintText: '주소 예) 강남구 대치동 43번지 101호',
                       ),
                       SizedBox(
+                        height: 10,
+                      ),
+                      Text('주소는 실거주로 입력바랍니다.'),
+                      SizedBox(
                         height: 25,
                       ),
                       CustomTextForm(
