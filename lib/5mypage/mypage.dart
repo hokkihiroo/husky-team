@@ -5,6 +5,8 @@ import 'package:team_husky/5mypage/management/management.dart';
 import 'package:team_husky/5mypage/mylicense/myLicenseUpdate.dart';
 import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 import 'mysalary/mySalary.dart';
 import 'updatePicture/mypicture.dart';
@@ -34,6 +36,16 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  void _launchWebsite(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication); // 외부 브라우저로 열기
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -319,19 +331,48 @@ class _MyPageState extends State<MyPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
+      bottomNavigationBar: Container(
+        height: 80, // 약 2cm
+        color: Colors.indigo[500],
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('(주) 팀허스키', style: TextStyle(fontSize: 14)),
-            SizedBox(
-              width: 10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  '(주) 팀허스키',
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Copyright © Team.HUSKY 2018',
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+              ],
             ),
-            Text('Copyright © Team.HUSKY 2018', style: TextStyle(fontSize: 14)),
+            const SizedBox(height: 4),
+            GestureDetector(
+              onTap: () {
+                const siteUrl ='https://sites.google.com/view/teamhusky-privacy?usp=sharing'; // 원하는 사이트 URL
+                _launchWebsite(siteUrl);
+
+              },
+              child: const Text(
+                '<개인정보 처리방침>',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
           ],
         ),
       ),
+
     );
   }
 
