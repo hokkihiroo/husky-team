@@ -73,7 +73,7 @@ class _CarListState extends State<CarList> {
                       Text("이동할 날짜를 선택하세요."),
                       SizedBox(height: 12),
                       SizedBox(
-                        height: 380, // ✅ 고정 높이로 설정 (이게 핵심!)
+                        height: 400, // ✅ 고정 높이로 설정 (이게 핵심!)
                         child: TableCalendar(
                           firstDay: DateTime.utc(2000, 1, 1),
                           lastDay: DateTime.utc(2100, 12, 31),
