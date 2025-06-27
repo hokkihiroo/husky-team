@@ -17,8 +17,8 @@ class _CarListState extends State<CarList> {
   DateTime selectedDate = DateTime.now();
   String DBAdress = formatTodayDate();
 // -------------------------------------------------------------
-  DateTime _focusedDay = DateTime.now(); // 클래스 위로 올리기
-  DateTime? _selectedDay;                // 클래스 위로 올리기
+  DateTime _focusedDay = DateTime.now(); // 이부분은 날짜 선택에 대한 변수라 손대지말자
+  DateTime? _selectedDay;
 
   //어제로 이동
   void _previousDay() {
@@ -52,11 +52,6 @@ class _CarListState extends State<CarList> {
 
   //오늘로 이동
   void goToday() {
-
-    // setState(() {
-    //   selectedDate = DateTime.now();
-    //   DBAdress = formatTodayDate();
-    // });
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -75,6 +70,7 @@ class _CarListState extends State<CarList> {
                       SizedBox(
                         height: 400, // ✅ 고정 높이로 설정 (이게 핵심!)
                         child: TableCalendar(
+                          locale: 'ko_KR',
                           firstDay: DateTime.utc(2000, 1, 1),
                           lastDay: DateTime.utc(2100, 12, 31),
                           focusedDay: _focusedDay,
@@ -84,6 +80,8 @@ class _CarListState extends State<CarList> {
                             setState(() {
                               _selectedDay = selectedDay;
                               _focusedDay = focusedDay;
+                              print(selectedDate);
+                              print(focusedDay);
                             });
                           },
                           calendarStyle: CalendarStyle(
@@ -116,7 +114,18 @@ class _CarListState extends State<CarList> {
                 TextButton(
                   child: Text("선택한 날짜로 이동"),
                   onPressed: () {
-                    Navigator.of(context).pop();
+
+                    if (selectedDate != null) {
+                      setState(() {
+                       selectedDate = _selectedDay!;
+                        final year = selectedDate.year.toString();
+                        final month = selectedDate.month.toString().padLeft(2, '0');
+                        final day = selectedDate.day.toString().padLeft(2, '0');
+                        DBAdress = year + month + day;
+                        Navigator.of(context).pop();
+
+                      });
+                    }
                   },
                 ),
                 TextButton(

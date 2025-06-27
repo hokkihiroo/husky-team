@@ -9,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:team_husky/firebase_options.dart';
 import 'package:team_husky/notification.dart';
 import 'package:team_husky/view/splash_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -97,6 +98,16 @@ void main() async {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: const Locale('ko', 'KR'), // 한글 설정
+      supportedLocales: const [
+        Locale('ko', 'KR'),
+        Locale('en', 'US'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: SplashScreen(),
     ),
   );
