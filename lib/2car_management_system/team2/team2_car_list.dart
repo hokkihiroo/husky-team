@@ -80,8 +80,6 @@ class _CarListState extends State<CarList> {
                             setState(() {
                               _selectedDay = selectedDay;
                               _focusedDay = focusedDay;
-                              print(selectedDate);
-                              print(focusedDay);
                             });
                           },
                           calendarStyle: CalendarStyle(
