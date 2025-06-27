@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'team2_adress_const.dart';
 import 'team2_car_card.dart';
@@ -15,6 +16,9 @@ class CarList extends StatefulWidget {
 class _CarListState extends State<CarList> {
   DateTime selectedDate = DateTime.now();
   String DBAdress = formatTodayDate();
+// -------------------------------------------------------------
+  DateTime _focusedDay = DateTime.now(); // 클래스 위로 올리기
+  DateTime? _selectedDay;                // 클래스 위로 올리기
 
   //어제로 이동
   void _previousDay() {
@@ -48,11 +52,90 @@ class _CarListState extends State<CarList> {
 
   //오늘로 이동
   void goToday() {
-    setState(() {
-      selectedDate = DateTime.now();
-      DBAdress = formatTodayDate();
-    });
+
+    // setState(() {
+    //   selectedDate = DateTime.now();
+    //   DBAdress = formatTodayDate();
+    // });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("날짜 선택"),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: Container(
+                  width: double.maxFinite,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("이동할 날짜를 선택하세요."),
+                      SizedBox(height: 12),
+                      SizedBox(
+                        height: 350, // ✅ 고정 높이로 설정 (이게 핵심!)
+                        child: TableCalendar(
+                          firstDay: DateTime.utc(2000, 1, 1),
+                          lastDay: DateTime.utc(2100, 12, 31),
+                          focusedDay: _focusedDay,
+                          selectedDayPredicate: (day) =>
+                              isSameDay(_selectedDay, day),
+                          onDaySelected: (selectedDay, focusedDay) {
+                            setState(() {
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
+                            });
+                          },
+                          calendarStyle: CalendarStyle(
+                            todayDecoration: BoxDecoration(
+                              color: Colors.orange,
+                              shape: BoxShape.circle,
+                            ),
+                            selectedDecoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            weekendTextStyle: TextStyle(color: Colors.red),
+                          ),
+                          headerStyle: HeaderStyle(
+                            formatButtonVisible: false,
+                            titleCentered: true,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  child: Text("선택한 날짜로 이동"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text("취소"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+
+          ],
+        );
+      },
+    );
   }
+
+
+
 
   // 텍스트 만드는 함수 추가
   Future<String> createClipboardText(String address) async {
@@ -190,7 +273,7 @@ class _DateControl extends StatelessWidget {
         GestureDetector(
           onTap: onPressGoToday,
           child: Text(
-            'TODAY',
+            '날짜선택',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
