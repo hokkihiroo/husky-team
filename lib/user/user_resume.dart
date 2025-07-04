@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/layout/default_layout.dart';
@@ -25,13 +27,6 @@ class _UserResumeState extends State<UserResume> {
   final TextEditingController _birthDayController =
       TextEditingController(); // 생년월일을 위한 컨트롤러 추가
 
-  void _tryValidation() {
-    final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-    }
-  }
-
   String email = '';
   String password = '';
   String name = '';
@@ -49,6 +44,19 @@ class _UserResumeState extends State<UserResume> {
   int levelNumber = 0; //
 
   File? pickedImage;
+// -------------------주소 API관련 변수---------------------
+  final TextEditingController _controller = TextEditingController();
+  List<String> _results = [];
+  bool _isLoading = false;
+  String? _error;
+
+
+  void _tryValidation() {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      _formKey.currentState!.save();
+    }
+  }
 
   @override
   void dispose() {
@@ -73,6 +81,57 @@ class _UserResumeState extends State<UserResume> {
         const SnackBar(content: Text(' "사진 등록 실패" 다시 시도하세요')),
       );
     }
+  }
+// -------------------------------- 주소검색 API -----------------------------------//
+  Future<List<String>> searchAddress(String keyword) async {
+    final apiKey = "chUPnGaH35uZE47eEOTI3u42w4U%2FgzktzoW0UFrQy%2BLc3Gv1Jt31n5AAHgjnx6w8swiNoHGbEj618UegooGtGA%3D%3D"; // 인증키 (이미 URL 인코딩됨)
+
+    final uri = Uri.parse(
+      'https://www.juso.go.kr/addrlink/addrLinkApi.do'
+          '?confmKey=$apiKey'
+          '&currentPage=1'
+          '&countPerPage=10'
+          '&keyword=${Uri.encodeQueryComponent(keyword)}'
+          '&resultType=json',
+    );
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      if (data['results'] != null && data['results']['juso'] != null) {
+        final List<dynamic> jusoList = data['results']['juso'];
+        return jusoList.map((e) => e['roadAddr'] as String).toList();
+      } else {
+        return [];
+      }
+    } else {
+      throw Exception('주소 검색 실패: ${response.statusCode}');
+    }
+  }
+
+  void _search() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+      _results = [];
+    });
+
+    try {
+      final results = await searchAddress(_controller.text);
+      setState(() {
+        _results = results;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+      });
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
 
@@ -321,6 +380,18 @@ class _UserResumeState extends State<UserResume> {
                       SizedBox(
                         height: 25,
                       ),
+                      TextField(
+                        controller: _controller,
+                        decoration: const InputDecoration(
+                          labelText: '검색할 주소를 입력하세요',
+                          border: OutlineInputBorder(),
+                        ),
+                        onSubmitted: (_) => _search(),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+
                       CustomTextForm(
                         key: ValueKey(7),
                         onSaved: (val) {
