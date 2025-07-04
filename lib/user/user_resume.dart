@@ -388,6 +388,25 @@ class _UserResumeState extends State<UserResume> {
                         ),
                         onSubmitted: (_) => _search(),
                       ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _isLoading ? null : _search,
+                        child: const Text('검색'),
+                      ),
+                      const SizedBox(height: 20),
+                      if (_isLoading) const CircularProgressIndicator(),
+                      if (_error != null) Text('에러 발생: $_error', style: const TextStyle(color: Colors.red)),
+                      if (_results.isNotEmpty)
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: _results.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(_results[index]),
+                              );
+                            },
+                          ),
+                        ),
                       SizedBox(
                         height: 25,
                       ),
