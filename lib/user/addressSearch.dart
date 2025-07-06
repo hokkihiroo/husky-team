@@ -3,6 +3,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class AddressSearchPage extends StatefulWidget {
   final void Function(String) onAddressSelected;
+
   const AddressSearchPage({required this.onAddressSelected});
 
   @override
@@ -17,31 +18,36 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
     return Scaffold(
       appBar: AppBar(title: Text('주소 검색')),
       body: InAppWebView(
-        initialFile: "asset/address_search.html",
-        initialSettings: InAppWebViewSettings(
-          javaScriptEnabled: true,
-          javaScriptCanOpenWindowsAutomatically: true, // 팝업 허용
-          supportMultipleWindows: true,                 // 다중 윈도우 지원
+        initialFile: 'asset/address_search.html',
+        initialOptions: InAppWebViewGroupOptions(
+          crossPlatform: InAppWebViewOptions(
+            supportZoom: true,
+            javaScriptEnabled: true,
+          ),
+          android: AndroidInAppWebViewOptions(
+            supportMultipleWindows: true,
+          ),
         ),
-        onWebViewCreated: (controller) {
-          webView = controller;
-          controller.addJavaScriptHandler(
-            handlerName: 'onAddressSelected',
-            callback: (args) {
-              String address = args.first;
-              widget.onAddressSelected(address);
-              Navigator.pop(context);
+        onCreateWindow: (controller, createWindowRequest) async {
+          showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: InAppWebView(
+                    initialUrlRequest: URLRequest(url: createWindowRequest.request.url),
+                    // 팝업 안에서 추가 팝업이 필요하면 여기서도 onCreateWindow 처리 가능
+                  ),
+                ),
+              );
             },
           );
+          return true; // 새 창 생성 완료 알림
         },
-        onCreateWindow: (controller, createWindowRequest) async {
-          // 팝업이 새 창으로 열릴 때 여기를 통해 처리 가능
-          // 예: 팝업 URL을 같은 WebView에 로드하거나 새 WebView를 띄울 수 있음
-          // 간단히 팝업 허용만 하고 닫을 경우 true 반환
-          return true;
-        },
-      ),
 
+      ),
     );
   }
 }
