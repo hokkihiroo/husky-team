@@ -59,8 +59,6 @@ dependencies:
   url_launcher_ios: ^6.3.1
   url_launcher: ^6.3.1
   flutter_localization: ^0.3.2
-  flutter_inappwebview: ^6.1.5
-  remedi_kopo: ^0.0.2
 
 
 dev_dependencies:
@@ -109,7 +107,6 @@ flutter:
   assets:
     - asset/img/
     - asset/data/
-    - asset/address_search.html  # ← ✅ 수정됨
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

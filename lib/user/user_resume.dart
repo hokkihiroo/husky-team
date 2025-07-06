@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/user/birthDay.dart';
@@ -13,8 +12,6 @@ import 'package:team_husky/user/custom_text_form.dart';
 import 'package:team_husky/user/phoneInput.dart';
 import 'package:team_husky/user/user_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'addressSearch.dart';
 
 class UserResume extends StatefulWidget {
   const UserResume({super.key});
@@ -36,9 +33,6 @@ class _UserResumeState extends State<UserResume> {
       _formKey.currentState!.save();
     }
   }
-// 주소검색에 필요한 변수---------------------------------------------------
-  TextEditingController _AddressController = TextEditingController();
-//-----------------------------------------------------------------------
 
   String email = '';
   String password = '';
@@ -84,14 +78,6 @@ class _UserResumeState extends State<UserResume> {
   }
 
 
-  Future<void> launchAddressSearch() async {
-    final url = Uri.parse('https://your-hosted-address-page.com');
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -338,25 +324,7 @@ class _UserResumeState extends State<UserResume> {
                       SizedBox(
                         height: 25,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          launchAddressSearch();
-                        },
-                        child: Text('주소 검색'),
-                      ),
-                      Text('주소', style: TextStyle(fontSize: 15, color: Colors.blueGrey)),
-                      TextFormField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                          isDense: false,
-                        ),
-                        controller: _AddressController,
-                        style: TextStyle(fontSize: 20),
-                      ),
 
-                      SizedBox(
-                        height: 25,
-                      ),
                       CustomTextForm(
                         key: ValueKey(7),
                         onSaved: (val) {
