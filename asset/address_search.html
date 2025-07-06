@@ -10,8 +10,8 @@
         new daum.Postcode({
           oncomplete: function(data) {
             var address = data.roadAddress || data.jibunAddress;
-            // Flutter로 주소 전달
-            window.flutter_inappwebview.callHandler('onAddressSelected', address);
+            // 주소를 Flutter 앱에 전달 (딥링크)
+            window.location.href = 'myapp://address-selected?addr=' + encodeURIComponent(address);
           }
         }).open();
       }

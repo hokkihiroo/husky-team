@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/user/birthDay.dart';
 import 'package:team_husky/user/custom_text_form.dart';
 import 'package:team_husky/user/phoneInput.dart';
 import 'package:team_husky/user/user_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'addressSearch.dart';
 
@@ -34,7 +37,7 @@ class _UserResumeState extends State<UserResume> {
     }
   }
 // 주소검색에 필요한 변수---------------------------------------------------
-  TextEditingController addressController = TextEditingController();
+  TextEditingController _AddressController = TextEditingController();
 //-----------------------------------------------------------------------
 
   String email = '';
@@ -77,6 +80,16 @@ class _UserResumeState extends State<UserResume> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text(' "사진 등록 실패" 다시 시도하세요')),
       );
+    }
+  }
+
+
+  Future<void> launchAddressSearch() async {
+    final url = Uri.parse('https://your-hosted-address-page.com');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -327,27 +340,20 @@ class _UserResumeState extends State<UserResume> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => AddressSearchPage(
-                                onAddressSelected: (address) {
-                                  addressController.text = address;
-                                },
-                              ),
-                            ),
-                          );
+                          launchAddressSearch();
                         },
                         child: Text('주소 검색'),
                       ),
-                      SizedBox(
-                        height: 25,
-                      ),
+                      Text('주소', style: TextStyle(fontSize: 15, color: Colors.blueGrey)),
                       TextFormField(
-                        controller: addressController,
-                        readOnly: true,
-                        decoration: InputDecoration(labelText: '주소'),
+                        enabled: false,
+                        decoration: InputDecoration(
+                          isDense: false,
+                        ),
+                        controller: _AddressController,
+                        style: TextStyle(fontSize: 20),
                       ),
+
                       SizedBox(
                         height: 25,
                       ),
