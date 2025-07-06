@@ -18,6 +18,11 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
       appBar: AppBar(title: Text('주소 검색')),
       body: InAppWebView(
         initialFile: "asset/address_search.html",
+        initialSettings: InAppWebViewSettings(
+          javaScriptEnabled: true,
+          javaScriptCanOpenWindowsAutomatically: true, // 팝업 허용
+          supportMultipleWindows: true,                 // 다중 윈도우 지원
+        ),
         onWebViewCreated: (controller) {
           webView = controller;
           controller.addJavaScriptHandler(
@@ -29,7 +34,14 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
             },
           );
         },
+        onCreateWindow: (controller, createWindowRequest) async {
+          // 팝업이 새 창으로 열릴 때 여기를 통해 처리 가능
+          // 예: 팝업 URL을 같은 WebView에 로드하거나 새 WebView를 띄울 수 있음
+          // 간단히 팝업 허용만 하고 닫을 경우 true 반환
+          return true;
+        },
       ),
+
     );
   }
 }
