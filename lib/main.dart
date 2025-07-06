@@ -95,6 +95,7 @@ void main() async {
     await setupFlutterNotifications();
   }
   FirebaseMessaging.onMessage.listen(showFlutterNotification);
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,

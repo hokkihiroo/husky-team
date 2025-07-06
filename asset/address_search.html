@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<body>
+<script>
+      function execDaumPostcode() {
+        new daum.Postcode({
+          oncomplete: function(data) {
+            var address = data.roadAddress || data.jibunAddress;
+            // Flutter로 주소 전달
+            window.flutter_inappwebview.callHandler('onAddressSelected', address);
+          }
+        }).open();
+      }
+      window.onload = execDaumPostcode;
+    </script>
+</body>
+</html>

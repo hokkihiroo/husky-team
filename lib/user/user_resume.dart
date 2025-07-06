@@ -11,6 +11,8 @@ import 'package:team_husky/user/custom_text_form.dart';
 import 'package:team_husky/user/phoneInput.dart';
 import 'package:team_husky/user/user_auth.dart';
 
+import 'addressSearch.dart';
+
 class UserResume extends StatefulWidget {
   const UserResume({super.key});
 
@@ -31,6 +33,9 @@ class _UserResumeState extends State<UserResume> {
       _formKey.currentState!.save();
     }
   }
+// 주소검색에 필요한 변수---------------------------------------------------
+  TextEditingController addressController = TextEditingController();
+//-----------------------------------------------------------------------
 
   String email = '';
   String password = '';
@@ -316,6 +321,32 @@ class _UserResumeState extends State<UserResume> {
                           });
                         },
                         hintText: '차량번호 예) 12가3456 or 없음',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AddressSearchPage(
+                                onAddressSelected: (address) {
+                                  addressController.text = address;
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text('주소 검색'),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      TextFormField(
+                        controller: addressController,
+                        readOnly: true,
+                        decoration: InputDecoration(labelText: '주소'),
                       ),
                       SizedBox(
                         height: 25,
