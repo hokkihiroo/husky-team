@@ -23,10 +23,14 @@ class _SearchPageState extends State<SearchPage> {
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _addressController,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0), // 좌우 여백 12
+                  child: TextField(
+                    controller: _addressController,
+                  ),
                 ),
               ),
+
               ElevatedButton(
                   onPressed: () {
                     //   도로망 주소요청 키
