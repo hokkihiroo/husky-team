@@ -56,13 +56,13 @@ class _Team2ViewState extends State<Team2View> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OilView(name: widget.name,)),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => OilView(name: widget.name,)),
+                  // );
                 },
                 child: Text(
-                  '주유',
+                  '전기차',
                   style: TextStyle(
                     color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
                     decorationColor: Colors.white,
