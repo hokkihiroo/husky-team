@@ -375,7 +375,10 @@ class _UserResumeState extends State<UserResume> {
                                   '(주소는 실거주로 입력바랍니다.)',
                                   style: TextStyle(color: Colors.grey),
                                 ),
-
+                                // 벨류키 7번 날렸음 행여나 나중에 밸류키 쓸때 7번쓰면됨
+                                // 벨류키 7번 날렸음 행여나 나중에 밸류키 쓸때 7번쓰면됨
+                                // 벨류키 7번 날렸음 행여나 나중에 밸류키 쓸때 7번쓰면됨
+                                // 벨류키 7번 날렸음 행여나 나중에 밸류키 쓸때 7번쓰면됨
                               ],
                             ),
                             SizedBox(
