@@ -10,6 +10,7 @@ import 'package:team_husky/layout/default_layout.dart';
 import 'package:team_husky/user/birthDay.dart';
 import 'package:team_husky/user/custom_text_form.dart';
 import 'package:team_husky/user/phoneInput.dart';
+import 'package:team_husky/user/address_SearchPage.dart';
 import 'package:team_husky/user/user_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,6 +27,7 @@ class _UserResumeState extends State<UserResume> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _birthDayController =
       TextEditingController(); // 생년월일을 위한 컨트롤러 추가
+  final TextEditingController _addressController = TextEditingController();
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -77,8 +79,6 @@ class _UserResumeState extends State<UserResume> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -114,7 +114,6 @@ class _UserResumeState extends State<UserResume> {
                       Text('양식을 꼭 지켜주세요'),
                       Text('중복 가입은 예고없이 삭제됩니다.'),
                       Text(''),
-
                       Text('-우덕균-'),
                       SizedBox(
                         height: 20,
@@ -142,12 +141,17 @@ class _UserResumeState extends State<UserResume> {
                                 CircleAvatar(
                                   radius: 40,
                                   backgroundColor: Colors.grey[200],
-                                  backgroundImage: pickedImage != null ? FileImage(pickedImage!) : null,
+                                  backgroundImage: pickedImage != null
+                                      ? FileImage(pickedImage!)
+                                      : null,
                                   child: pickedImage == null
-                                      ? const Icon(Icons.person, size: 40, color: Colors.grey)
+                                      ? const Icon(Icons.person,
+                                          size: 40, color: Colors.grey)
                                       : null,
                                 ),
-                                SizedBox(height: 10,),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Text('사진'),
                               ],
                             ),
@@ -159,22 +163,25 @@ class _UserResumeState extends State<UserResume> {
                                 children: [
                                   OutlinedButton.icon(
                                     onPressed: _pickImage,
-                                    icon: const Icon(Icons.image, color: Colors.blueAccent),
+                                    icon: const Icon(Icons.image,
+                                        color: Colors.blueAccent),
                                     label: const Text(
                                       '이미지 선택',
-                                      style: TextStyle(color: Colors.blueAccent),
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
                                     ),
                                     style: OutlinedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // 여백 설정
-                                      side: const BorderSide(color: Colors.blueAccent),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 10),
+                                      // 여백 설정
+                                      side: const BorderSide(
+                                          color: Colors.blueAccent),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
                                   ),
-
-
                                   const Text(
                                     '얼굴이 60% 이상 \n 보이는 사진으로 올릴것',
                                     textAlign: TextAlign.center,
@@ -194,7 +201,6 @@ class _UserResumeState extends State<UserResume> {
                         height: 20,
                       ),
                       Text('사진필수!!!'),
-
                       SizedBox(
                         height: 20,
                       ),
@@ -312,6 +318,66 @@ class _UserResumeState extends State<UserResume> {
                       SizedBox(
                         height: 25,
                       ),
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  '주소 검색',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(width: 8),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => SearchPage()),
+                                    );
+                                    if (result != null && result is String) {
+                                      setState(() {
+                                        address = result;
+                                      });
+                                    }
+                                  },
+                                  child: Text('검색'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              address,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text('주소는 실거주로 입력바랍니다.'),
+                      SizedBox(
+                        height: 10,
+                      ),
                       CustomTextForm(
                         key: ValueKey(6),
                         onSaved: (val) {
@@ -321,23 +387,6 @@ class _UserResumeState extends State<UserResume> {
                         },
                         hintText: '차량번호 예) 12가3456 or 없음',
                       ),
-                      SizedBox(
-                        height: 25,
-                      ),
-
-                      CustomTextForm(
-                        key: ValueKey(7),
-                        onSaved: (val) {
-                          setState(() {
-                            address = val!;
-                          });
-                        },
-                        hintText: '주소 예) 강남구 대치동 43번지 101호',
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('주소는 실거주로 입력바랍니다.'),
                       SizedBox(
                         height: 25,
                       ),
@@ -492,23 +541,20 @@ class _UserResumeState extends State<UserResume> {
                                 print(e);
                               }
 
-
-
                               try {
                                 final newUser =
                                     await AUTH.createUserWithEmailAndPassword(
                                         email: email, password: password);
 
-                                final newUid = newUser.user!.uid ;
+                                final newUid = newUser.user!.uid;
 
                                 final refImage = FirebaseStorage.instance
                                     .ref()
                                     .child('mypicture')
                                     .child('$newUid.png');
 
-
-                                  await refImage.putFile(pickedImage!);
-                                  final picUrl = await refImage.getDownloadURL();
+                                await refImage.putFile(pickedImage!);
+                                final picUrl = await refImage.getDownloadURL();
 
                                 await FirebaseFirestore.instance
                                     .collection(USER)
