@@ -368,15 +368,24 @@ class _UserResumeState extends State<UserResume> {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '(주소는 실거주로 입력바랍니다.)',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                           ],
                         ),
                       ),
                       SizedBox(
                         height: 25,
-                      ),
-                      Text('주소는 실거주로 입력바랍니다.'),
-                      SizedBox(
-                        height: 10,
                       ),
                       CustomTextForm(
                         key: ValueKey(6),
