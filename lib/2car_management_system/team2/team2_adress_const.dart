@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team_husky/2car_management_system/team2/team2_electric.dart';
 
 final FIELD ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field';
 
@@ -10,6 +11,11 @@ final CHUNGJUCARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gan
 final BRANDMANAGE ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
 
 final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/LXhg3awh7ikVeUqVarsP/';
+
+// 전기차 리스트 주소
+final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/team2/pNHnni1uB4xc61VODmx9/';
+
+
 
 String getRemainTime(createdAtDateTime){
 
@@ -38,6 +44,13 @@ String formatTodayDate() {
   final month = now.month.toString().padLeft(2, '0');
   final day = now.day.toString().padLeft(2, '0');
   return year + month + day;
+}
+//전기차 리스트용
+String elecToDate() {
+  final now = DateTime.now();
+  final year = now.year.toString();
+  final month = now.month.toString().padLeft(2, '0');
+  return year + month ;
 }
 
 String getWeeks(int dayOfWeek){
@@ -95,3 +108,19 @@ String getDayOfWeek(DateTime date) {
 }
 
 final TEAM2GANGNAMCAR ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar';
+
+String electricDate() {
+  final now = DateTime.now();
+  final year = now.year.toString();
+  final month = now.month.toString().padLeft(2, '0');
+  return year + month;
+}
+
+String electricDay() {
+  final now = DateTime.now();
+  final month = now.month.toString().padLeft(2, '0');
+  final day = now.day.toString().padLeft(2, '0');
+  return '$month/$day';
+}
+// 장소표기 전기차 관련
+

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/2car_management_system/team2/team2_electric_selector.dart';
 import 'package:team_husky/2car_management_system/team2/team2_numbercard.dart';
 
 class Team2IpchaView extends StatefulWidget {
@@ -685,16 +686,18 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-
-
                                       // 직접입력 버튼 (크고 예쁜 스타일)
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                                          backgroundColor: Colors.black, // 검정 배경
-                                          foregroundColor: Colors.yellow, // 노란 글씨
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 24, vertical: 14),
+                                          backgroundColor: Colors.black,
+                                          // 검정 배경
+                                          foregroundColor: Colors.yellow,
+                                          // 노란 글씨
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           textStyle: TextStyle(
                                             fontSize: 16,
@@ -833,7 +836,9 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20), backgroundColor: Colors.brown, // 버튼 색상
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.brown,
+                    // 버튼 색상
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                     ),
@@ -857,6 +862,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           wigetName,
                           movingTime,
                           getMovingTime,
+                          carModelFrom,
                         );
                       },
                     );
@@ -931,7 +937,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                         await FirebaseFirestore
                                                             .instance
                                                             .collection(
-                                                            CarListAdress)
+                                                                CarListAdress)
                                                             .doc(dataId)
                                                             .update({
                                                           'etc': etc,
@@ -939,8 +945,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                       } catch (e) {
                                                         print(e);
                                                       }
-
-
                                                     },
                                                     child: Text('등록'))),
                                             SizedBox(
@@ -1098,6 +1102,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String wigetName,
     String movingTime,
     String getMovingTime,
+    String carModelFrom,
   ) {
     return AlertDialog(
       title: Row(
@@ -1195,10 +1200,116 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width,
-        height: 200,
+        height: 260,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.blue, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context); // 첫 번째 Dialog 닫기
+
+                      if (carModelFrom == null || carModelFrom.trim().isEmpty) {
+                        await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                              contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                              actionsPadding: const EdgeInsets.only(right: 12, bottom: 12),
+                              title: Row(
+                                children: [
+                                  Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '안내',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              content: Text(
+                                '차종을 넣어주세요.',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    '닫기',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        return;
+                      }
+
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ElectricButtonDialog(
+                            carNumber: carNumber,
+                            name: name,
+                            color: color,
+                            location: location,
+                            dateTime: dateTime,
+                            dataId: dataId,
+                            etc: etc,
+                            remainTime: remainTime,
+                            movedLocation: movedLocation,
+                            wigetName: wigetName,
+                            movingTime: movingTime,
+                            getMovingTime: getMovingTime,
+                            carModelFrom: carModelFrom,
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '전기차 등록',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Row(
               children: [
                 Expanded(
@@ -1338,6 +1449,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
       ),
     );
   }
+
+
 
   Widget carModel(
     brand,

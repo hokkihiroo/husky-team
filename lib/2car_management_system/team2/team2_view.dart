@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
 import 'package:team_husky/2car_management_system/team2/team2_carschedule.dart';
 import 'package:team_husky/2car_management_system/team2/team2_carschedule_view.dart';
+import 'package:team_husky/2car_management_system/team2/team2_electric.dart';
 import 'package:team_husky/2car_management_system/team2/team2_ipcha_view.dart';
 import 'package:team_husky/2car_management_system/team2/team2_oil_view.dart';
 
@@ -60,6 +61,11 @@ class _Team2ViewState extends State<Team2View> {
                   //   context,
                   //   MaterialPageRoute(builder: (context) => OilView(name: widget.name,)),
                   // );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Electric()),
+                  );
                 },
                 child: Text(
                   '전기차',
@@ -225,8 +231,8 @@ class _Team2ViewState extends State<Team2View> {
                       TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
                 ),
                 onPressed: () {
-                  // CarListAdress = CARLIST + formatTodayDate();
-                  // print(CarListAdress);
+                  CarListAdress = CARLIST + formatTodayDate();
+                  print(CarListAdress);
                   carNumber = '0000';
                   showDialog(
                     context: context,

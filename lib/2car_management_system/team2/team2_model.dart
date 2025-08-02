@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/2car_management_system/team2/team2_electric_selector.dart';
 
 import 'team2_numbercard.dart';
 
@@ -41,6 +42,8 @@ class _CarStateState extends State<CarState> {
   String carModelFrom = ''; // 번호눌럿을때 차종 뽑아서 넣는 전연변수
   int selectedTabIndex = 0;
 
+  int selectedNumber = 0; // 선택된 버튼 번호를 저장할 변수 이건 전기차 관련된 변수임
+
   Map<String, List<String>> domesticBrands = {};
   Map<String, List<String>> importedFamousBrands = {};
   Map<String, List<String>> otherBrands = {};
@@ -57,7 +60,6 @@ class _CarStateState extends State<CarState> {
     print('🔥 수입유명: $importedFamousBrands');
     print('🔥 잡브랜드: $otherBrands');
   }
-
 
   Future<void> fetchBrandsWithModels() async {
     final brandCollection = FirebaseFirestore.instance.collection(BRANDMANAGE);
@@ -88,6 +90,7 @@ class _CarStateState extends State<CarState> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -217,7 +220,6 @@ class _CarStateState extends State<CarState> {
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[700],
-
                 ),
               ),
               Text(
@@ -577,14 +579,17 @@ class _CarStateState extends State<CarState> {
 
                               // 탭 인덱스에 따른 맵 선택 함수
                               Map<String, List<String>> getSelectedBrandMap() {
-                                if (selectedTabIndex == 0) return domesticBrands;
-                                if (selectedTabIndex == 1) return importedFamousBrands;
+                                if (selectedTabIndex == 0)
+                                  return domesticBrands;
+                                if (selectedTabIndex == 1)
+                                  return importedFamousBrands;
                                 return otherBrands;
                               }
 
                               return AlertDialog(
                                 title: Text('브랜드를 선택하세요',
-                                    style: TextStyle(fontWeight: FontWeight.bold)),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                                 content: SizedBox(
                                   width: double.maxFinite,
                                   child: Column(
@@ -607,15 +612,18 @@ class _CarStateState extends State<CarState> {
                                         color: Colors.black,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
                                             child: Text('국산'),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
                                             child: Text('수입'),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
                                             child: Text('기타'),
                                           ),
                                         ],
@@ -624,8 +632,10 @@ class _CarStateState extends State<CarState> {
                                       Container(
                                         height: 350,
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey.shade300),
-                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                              color: Colors.grey.shade300),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Scrollbar(
                                           child: GridView.count(
@@ -645,7 +655,7 @@ class _CarStateState extends State<CarState> {
                                                     : Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(6),
+                                                      BorderRadius.circular(6),
                                                 ),
                                                 child: InkWell(
                                                   onTap: () {
@@ -653,7 +663,7 @@ class _CarStateState extends State<CarState> {
                                                     showDialog(
                                                       context: context,
                                                       builder: (BuildContext
-                                                      context) {
+                                                          context) {
                                                         return carModel(brand,
                                                             getSelectedBrandMap());
                                                       },
@@ -662,16 +672,16 @@ class _CarStateState extends State<CarState> {
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     padding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 8),
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8),
                                                     child: Text(
                                                       brand,
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.w600,
+                                                              FontWeight.w600,
                                                           fontSize: 14),
                                                       textAlign:
-                                                      TextAlign.center,
+                                                          TextAlign.center,
                                                     ),
                                                   ),
                                                 ),
@@ -686,16 +696,20 @@ class _CarStateState extends State<CarState> {
                                 actions: [
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       // 직접입력 버튼 (크고 예쁜 스타일)
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                                          backgroundColor: Colors.black, // 검정 배경
-                                          foregroundColor: Colors.yellow, // 노란 글씨
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 24, vertical: 14),
+                                          backgroundColor: Colors.black,
+                                          // 검정 배경
+                                          foregroundColor: Colors.yellow,
+                                          // 노란 글씨
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           textStyle: TextStyle(
                                             fontSize: 16,
@@ -710,42 +724,42 @@ class _CarStateState extends State<CarState> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               TextEditingController
-                                              brandController =
-                                              TextEditingController();
+                                                  brandController =
+                                                  TextEditingController();
                                               TextEditingController
-                                              modelController =
-                                              TextEditingController();
+                                                  modelController =
+                                                  TextEditingController();
 
                                               return AlertDialog(
                                                 title: Text(
                                                   '직접입력',
                                                   style: TextStyle(
                                                       fontWeight:
-                                                      FontWeight.bold),
+                                                          FontWeight.bold),
                                                 ),
                                                 content: Column(
                                                   mainAxisSize:
-                                                  MainAxisSize.min,
+                                                      MainAxisSize.min,
                                                   children: [
                                                     TextField(
                                                       controller:
-                                                      brandController,
+                                                          brandController,
                                                       decoration:
-                                                      InputDecoration(
+                                                          InputDecoration(
                                                         labelText: '브랜드',
                                                         border:
-                                                        OutlineInputBorder(),
+                                                            OutlineInputBorder(),
                                                       ),
                                                     ),
                                                     SizedBox(height: 12),
                                                     TextField(
                                                       controller:
-                                                      modelController,
+                                                          modelController,
                                                       decoration:
-                                                      InputDecoration(
+                                                          InputDecoration(
                                                         labelText: '차종',
                                                         border:
-                                                        OutlineInputBorder(),
+                                                            OutlineInputBorder(),
                                                       ),
                                                     ),
                                                   ],
@@ -760,11 +774,11 @@ class _CarStateState extends State<CarState> {
                                                   ElevatedButton(
                                                     onPressed: () async {
                                                       String brand =
-                                                      brandController.text
-                                                          .trim();
+                                                          brandController.text
+                                                              .trim();
                                                       String model =
-                                                      modelController.text
-                                                          .trim();
+                                                          modelController.text
+                                                              .trim();
 
                                                       try {
                                                         await FirebaseFirestore
@@ -782,7 +796,7 @@ class _CarStateState extends State<CarState> {
                                                         await FirebaseFirestore
                                                             .instance
                                                             .collection(
-                                                            CarListAdress)
+                                                                CarListAdress)
                                                             .doc(dataId)
                                                             .update({
                                                           'carBrand': brand,
@@ -810,7 +824,6 @@ class _CarStateState extends State<CarState> {
                                             Navigator.of(context).pop(),
                                         child: Text('닫기'),
                                       ),
-
                                     ],
                                   ),
                                 ],
@@ -860,6 +873,7 @@ class _CarStateState extends State<CarState> {
                           wigetName,
                           movingTime,
                           getMovingTime,
+                          carModelFrom,
                         );
                       },
                     );
@@ -935,8 +949,7 @@ class _CarStateState extends State<CarState> {
                                                 try {
                                                   await FirebaseFirestore
                                                       .instance
-                                                      .collection(
-                                                      CarListAdress)
+                                                      .collection(CarListAdress)
                                                       .doc(dataId)
                                                       .update({
                                                     'etc': etc,
@@ -944,8 +957,6 @@ class _CarStateState extends State<CarState> {
                                                 } catch (e) {
                                                   print(e);
                                                 }
-
-
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
@@ -1052,6 +1063,7 @@ class _CarStateState extends State<CarState> {
     String wigetName,
     String movingTime,
     String getMovingTime,
+    String carModelFrom,
   ) {
     return AlertDialog(
       title: Row(
@@ -1114,7 +1126,6 @@ class _CarStateState extends State<CarState> {
                     'wigetName': wigetName,
                     'movingTime': movingTime,
                     'etc': etc,
-
                   });
                 } catch (e) {
                   print(e);
@@ -1157,10 +1168,117 @@ class _CarStateState extends State<CarState> {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width,
-        height: 200,
+        height: 260,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.blue, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context); // 첫 번째 Dialog 닫기
+
+                      if (carModelFrom == null || carModelFrom.trim().isEmpty) {
+                        await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                              contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                              actionsPadding: const EdgeInsets.only(right: 12, bottom: 12),
+                              title: Row(
+                                children: [
+                                  Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '안내',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              content: Text(
+                                '차종을 넣어주세요.',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    '닫기',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        return;
+                      }
+
+
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ElectricButtonDialog(
+                            carNumber: carNumber,
+                            name: name,
+                            color: color,
+                            location: location,
+                            dateTime: dateTime,
+                            dataId: dataId,
+                            etc: etc,
+                            remainTime: remainTime,
+                            movedLocation: movedLocation,
+                            wigetName: wigetName,
+                            movingTime: movingTime,
+                            getMovingTime: getMovingTime,
+                            carModelFrom: carModelFrom,
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '전기차 등록',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Row(
               children: [
                 Expanded(
@@ -1301,6 +1419,7 @@ class _CarStateState extends State<CarState> {
     );
   }
 
+
   Widget carModel(
     brand,
     brandModels,
@@ -1351,7 +1470,6 @@ class _CarStateState extends State<CarState> {
                 } catch (e) {
                   print('업데이트 에러: $e');
                 }
-
               },
             );
           },
