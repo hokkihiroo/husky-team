@@ -191,7 +191,7 @@ class _ListState extends StatelessWidget {
 class ListModel extends StatelessWidget {
   final String adress;
   String dataId = '';
-  String carNumber = '';
+  String carModel = '';
   String enterTime = '';
   String enterName = '';
   DateTime? outTime;
@@ -228,10 +228,10 @@ class ListModel extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: GestureDetector(
                 onTap: () async {
-                  // var document = docs[index];
-                  // print(document.id);
-                  // dataId = document.id;
-                  // carNumber = docs[index]['carNumber'];
+                  var document = docs[index];
+                  print(document.id);
+                  dataId = document.id;
+                  carModel = docs[index]['carModel'];
                   // Timestamp sam = docs[index]['enter']; //입차시각
                   // enterTime = getInTime(sam); //입차시각 변환코드
                   // enterName = docs[index]['enterName']; //입차한사람 이름
@@ -253,20 +253,14 @@ class ListModel extends StatelessWidget {
                   // movingTime = docs[index]['movingTime']; //출차한위치 이름
                   // wigetName = docs[index]['wigetName']; //출차한위치 이름
                   //
-                  // showCarInfoBottomSheet(
-                  //   context,
-                  //   dataId,
-                  //   carNumber,
-                  //   enterTime,
-                  //   enterName,
-                  //   outName,
-                  //   outTime,
-                  //   outLocation,
-                  //   movedLocation,
-                  //   wigetName,
-                  //   movingTime,
-                  //   adress,
-                  // );
+                  CarInfoDialog(
+                    context,
+                    dataId,
+                    carModel,
+                    adress,
+                  );
+
+
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
@@ -290,197 +284,145 @@ class ListModel extends StatelessWidget {
     );
   }
 
-  void showCarInfoBottomSheet(
-      context,
-      id,
-      carNumber,
-      enterTime,
-      enterName,
-      outName,
-      outTime,
-      outLocation,
-      movedLocation,
-      wigetName,
-      movingTime,
-      adress,
+  void CarInfoDialog(
+      BuildContext context,
+      String id,
+      String carNumber,
+      String adress,
       ) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: 400,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        '차번호:$carNumber',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            constraints: BoxConstraints(maxHeight: 260),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 차량 번호 및 삭제 버튼
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '차종: $carModel',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // 첫 번째 다이얼로그 닫기
+
+                        // 삭제 확인 다이얼로그
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              title: Text("삭제 확인"),
+                              content: Text("정말로 삭제하시겠습니까?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("취소"),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(ELECTRICLIST + adress)
+                                          .doc(id)
+                                          .delete();
+
+                                      Navigator.of(context).pop(); // AlertDialog 닫기
+                                      print('삭제 완료');
+                                    } catch (e) {
+                                      print('삭제 오류: $e');
+                                    }
+                                  },
+                                  child: Text(
+                                    "삭제",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // 다이얼로그 닫기
+                      child: Text(
+                        '삭제',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
 
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("삭제 확인"),
-                                content: Text("정말로 삭제하시겠습니까?"),
-                                actions: [
-                                  TextButton(
-                                    child: Text("취소"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); // 다이얼로그 닫기
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text("삭제"),
-                                    onPressed: () async {
-                                      try {
-                                        // 삭제할 문서의 참조를 가져와
-                                        await FirebaseFirestore.instance
-                                            .collection(
-                                            CARLIST + adress) // 예: 'users'
-                                            .doc(id) // 예: 'abc123'
-                                            .delete();
+                SizedBox(height: 16),
 
-                                        Navigator.of(context).pop(); // 다이얼로그 닫기
-                                        print('삭제 확인됨');
-                                        // 여기에 삭제 완료 후 처리 추가 (예: 스낵바 등)
-                                      } catch (e) {
-                                        print('삭제 중 오류 발생: $e');
-                                        // 오류 처리 로직 추가 가능
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          backgroundColor: Colors.red.withOpacity(0.1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          '삭제',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.red, // 삭제는 빨간색이 직관적
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '입차',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text('시각 : $enterTime분'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('이름 : $enterName'),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '이동',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              movedLocation
-                                  .replaceAll('=', '\n')
-                                  .split('\n')
-                                  .sublist(
-                                  0, movedLocation.split('=').length - 1)
-                                  .join('\n'),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              wigetName.replaceAll('=', '\n'),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              movingTime.replaceAll('=', '\n'),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '출차',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                '시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('이름 : ${outName ?? ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('위치 : ${outLocation ?? ''}'),
-                          ],
-                        ),
-                      ],
+
+                // ✅ 충전완료 버튼
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      // 여기에 충전 완료 로직 추가 가능
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(ELECTRICLIST + adress)
+                            .doc(id)
+                            .update({
+                          'out': FieldValue.serverTimestamp(),
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      '충전완료',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
       },
     );
   }
+
+
 }
