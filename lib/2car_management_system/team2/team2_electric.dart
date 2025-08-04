@@ -65,7 +65,7 @@ class _ElectricState extends State<Electric> {
     String month = address.substring(4, 6); // '08'
 
     final buffer = StringBuffer();
-    buffer.writeln('$year년 $month월 전기차 고객 충전리스트');
+    buffer.writeln('$year년 $month월 전기차 충전리스트');
     buffer.writeln('-------------------총 $count대');
 
 
