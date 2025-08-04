@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
 import 'package:team_husky/2car_management_system/team2/team2_electric_card.dart';
 
@@ -50,6 +51,57 @@ class _ElectricState extends State<Electric> {
     });
   }
 
+
+  // 텍스트 만드는 함수 추가
+  Future<String> createClipboardText2(String address) async {
+    final query = await FirebaseFirestore.instance
+        .collection(ELECTRICLIST + address)
+        .orderBy('enter')
+        .get();
+
+    final count = query.docs.length;
+
+    final buffer = StringBuffer();
+    buffer.writeln('$address월 전기차 고객 충전리스트');
+    buffer.writeln('-------------------총 $count대');
+
+
+
+    for (int i = 0; i < count; i++) {
+
+
+      String _getLocationText(int location) {
+        switch (location) {
+          case 1:
+            return '차량내';
+          case 2:
+            return '거점내';
+          case 3:
+            return '기타';
+          default:
+            return '-';
+        }
+      }
+      final doc = query.docs[i];
+      final theDay = doc['theDay'];
+      final chargeNumber = doc['chargeNumber'];
+      final carModel = doc['carModel'];
+      final etc = doc['etc'];
+      final enter = getInTime(doc['enter']);
+      final out = doc['out'] is Timestamp
+          ? getOutTime((doc['out'] as Timestamp).toDate())
+          : '---';
+      final ex = doc['selectedLocation'];
+      final selectedLocation = _getLocationText(ex);
+
+
+      buffer.writeln('$theDay $chargeNumber $carModel $enter $out $selectedLocation');
+
+    }
+
+    return buffer.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,11 +120,11 @@ class _ElectricState extends State<Electric> {
           IconButton(
             icon: Icon(Icons.copy),
             onPressed: () async {
-              // final text = await createClipboardText(DBAdress);
-              // Clipboard.setData(ClipboardData(text: text));
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(content: Text('텍스트가 복사되었습니다!')),
-              // );
+              final text = await createClipboardText2(DBAdress);
+              Clipboard.setData(ClipboardData(text: text));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('텍스트가 복사되었습니다!')),
+              );
             },
           )
         ],
@@ -195,7 +247,7 @@ class ListModel extends StatelessWidget {
   String enterTime = '';
   String enterName = '';
   DateTime? outTime;
-  String outName = '';
+  String theDay = '';
   String outLocation = '';
   String movedLocation = '';
   String wigetName = '';
@@ -232,9 +284,10 @@ class ListModel extends StatelessWidget {
                   print(document.id);
                   dataId = document.id;
                   carModel = docs[index]['carModel'];
-                  // Timestamp sam = docs[index]['enter']; //입차시각
-                  // enterTime = getInTime(sam); //입차시각 변환코드
-                  // enterName = docs[index]['enterName']; //입차한사람 이름
+                  Timestamp sam = docs[index]['enter']; //입차시각
+                  enterTime = getInTime(sam); //입차시각 변환코드
+                  print(enterTime);
+                  theDay = docs[index]['theDay'];
                   //
                   // outTime = docs[index]['out'] is Timestamp
                   //     ? (docs[index]['out'] as Timestamp).toDate()
@@ -258,6 +311,8 @@ class ListModel extends StatelessWidget {
                     dataId,
                     carModel,
                     adress,
+                    enterTime,
+                      theDay,
                   );
 
 
@@ -289,6 +344,8 @@ class ListModel extends StatelessWidget {
       String id,
       String carNumber,
       String adress,
+      String enterTime,
+      String theDay,
       ) {
     showDialog(
       context: context,
@@ -306,9 +363,16 @@ class ListModel extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
+                      '$theDay',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
                       '차종: $carModel',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -384,6 +448,42 @@ class ListModel extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async{
                       // 여기에 충전 완료 로직 추가 가능
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+                      FixTime(
+                        context,
+                        dataId,
+                        carModel,
+                        adress,
+                          enterTime,
+
+                      );
+
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      '(완료시간수정)',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15,),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      // 여기에 충전 완료 로직 추가 가능
 
                       try {
                         await FirebaseFirestore.instance
@@ -424,5 +524,200 @@ class ListModel extends StatelessWidget {
     );
   }
 
+
+  void FixTime(
+      BuildContext context,
+      String id,
+      String carNumber,
+      String adress,
+      String enterTime,
+      ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            constraints: BoxConstraints(maxHeight: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 차량 번호 및 삭제 버튼
+                Center(
+                  child: Text(
+                    '차종: $carModel',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 16),
+
+
+                // ✅ 충전완료 버튼
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      // 여기에 충전 완료 로직 추가 가능
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(ELECTRICLIST + adress)
+                            .doc(id)
+                            .update({
+                          'out':convertStringTimeToTimestamp(enterTime,addMinutes: 10),
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      '충전시작부터 10분뒤',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15,),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      // 여기에 충전 완료 로직 추가 가능
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(ELECTRICLIST + adress)
+                            .doc(id)
+                            .update({
+                          'out':convertStringTimeToTimestamp(enterTime,addMinutes:15),
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      '충전시작부터 15분뒤',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15,),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      // 여기에 충전 완료 로직 추가 가능
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(ELECTRICLIST + adress)
+                            .doc(id)
+                            .update({
+                          'out':convertStringTimeToTimestamp(enterTime,addMinutes:20),
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      '충전시작부터 20분뒤',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15,),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      // 여기에 충전 완료 로직 추가 가능
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(ELECTRICLIST + adress)
+                            .doc(id)
+                            .update({
+                          'out':convertStringTimeToTimestamp(enterTime,addMinutes:25),
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.of(context).pop(); // 다이얼로그 닫기
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      '충전시작부터 25분뒤',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
 }

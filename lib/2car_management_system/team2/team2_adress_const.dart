@@ -124,3 +124,17 @@ String electricDay() {
 }
 // 장소표기 전기차 관련
 
+Timestamp convertStringTimeToTimestamp(String timeStr, {int addMinutes = 0}) {
+  final parts = timeStr.split(':');
+  int hour = int.parse(parts[0]);
+  int minute = int.parse(parts[1]);
+
+  // 오늘 날짜 기준으로 DateTime 객체 만들기
+  final now = DateTime.now();
+  final baseTime = DateTime(now.year, now.month, now.day, hour, minute);
+
+  // 분 추가
+  final updatedTime = baseTime.add(Duration(minutes: addMinutes));
+
+  return Timestamp.fromDate(updatedTime);
+}
