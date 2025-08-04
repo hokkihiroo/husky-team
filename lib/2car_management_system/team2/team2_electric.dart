@@ -61,8 +61,11 @@ class _ElectricState extends State<Electric> {
 
     final count = query.docs.length;
 
+    String year = address.substring(0, 4); // '2025'
+    String month = address.substring(4, 6); // '08'
+
     final buffer = StringBuffer();
-    buffer.writeln('$address월 전기차 고객 충전리스트');
+    buffer.writeln('$year년 $month월 전기차 고객 충전리스트');
     buffer.writeln('-------------------총 $count대');
 
 
