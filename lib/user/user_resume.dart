@@ -41,7 +41,7 @@ class _UserResumeState extends State<UserResume> {
   String name = '';
   String birthDay = '';
   String phoneNumber = '';
-  String carNumber = ''; //자차번호
+  String detailAdress = ''; //자차번호
   String address = ''; //주소
   String career = ''; //운전경력
   String hobby = ''; //취미
@@ -90,7 +90,7 @@ class _UserResumeState extends State<UserResume> {
           },
           child: SingleChildScrollView(
             child: Container(
-              height: 2000.0,
+              height: 2500.0,
               width: MediaQuery.of(context).size.width - 20,
               margin: EdgeInsets.only(top: 10, left: 10, right: 10),
               decoration: BoxDecoration(
@@ -367,7 +367,17 @@ class _UserResumeState extends State<UserResume> {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(height: 20),
+                            CustomTextForm(
+                              key: ValueKey(6),
+                              onSaved: (val) {
+                                setState(() {
+                                  detailAdress = val!;
+                                });
+                              },
+                              hintText: '상세주소',
+                            ),
+                            SizedBox(height: 20,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -387,18 +397,7 @@ class _UserResumeState extends State<UserResume> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      CustomTextForm(
-                        key: ValueKey(6),
-                        onSaved: (val) {
-                          setState(() {
-                            carNumber = val!;
-                          });
-                        },
-                        hintText: '차량번호 예) 12가3456 or 없음',
-                      ),
+
                       SizedBox(
                         height: 25,
                       ),
@@ -486,6 +485,86 @@ class _UserResumeState extends State<UserResume> {
                           });
                         },
                         hintText: '몸무게 예) 70',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text('* 중요정보 * '),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('절대 양식을 지켜주세요'),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(15),
+                        onSaved: (val) {
+                          setState(() {
+                            final bank = val!;
+                          });
+                        },
+                        hintText: '은행명 예) 신한은행 or 하나증권 등등',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(16),
+                        onSaved: (val) {
+                          setState(() {
+                            final bankNum = val!;
+                          });
+                        },
+                        hintText: '계좌번호',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(17),
+                        onSaved: (val) {
+                          setState(() {
+                            final personNum = val!;
+                          });
+                        },
+                        hintText: '주민번호 - (하이픈)포함해주세요',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(18),
+                        onSaved: (val) {
+                          setState(() {
+                            final school = val!;
+                          });
+                        },
+                        hintText: '최종학력 예) 대학중퇴, 대학휴학 등등',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(19),
+                        onSaved: (val) {
+                          setState(() {
+                            final mom = val!;
+                          });
+                        },
+                        hintText: '비상연락망',
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      CustomTextForm(
+                        key: ValueKey(20),
+                        onSaved: (val) {
+                          setState(() {
+                            final relation = val!;
+                          });
+                        },
+                        hintText: '관계 예) 아버지 or 형 기타등등',
                       ),
                       SizedBox(
                         height: 25,
@@ -578,7 +657,7 @@ class _UserResumeState extends State<UserResume> {
                                   'name': name,
                                   'birthDay': birthDay,
                                   'phoneNumber': phoneNumber,
-                                  'carNumber': carNumber,
+                                  'carNumber': detailAdress,
                                   'address': address,
                                   'career': career,
                                   'hobby': hobby,
