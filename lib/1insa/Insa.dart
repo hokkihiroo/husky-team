@@ -272,11 +272,15 @@ class _OrganizationState extends State<Organization> {
                       IconButton(
                         icon: Icon(Icons.phone, color: Colors.green),
                         onPressed: () {
-                          _makePhoneCall('01012345678');
+                          final phone = data['phoneNumber']?.toString() ?? '';
+                          if (phone.isNotEmpty) {
+                            _makePhoneCall(phone);
+                          }
                         },
                       ),
                     ],
                   ),
+
                   Divider(thickness: 1, color: Colors.grey[300]),
                   _infoRow('등록일', formattedDate),
                   Divider(thickness: 1, color: Colors.grey[300]),
