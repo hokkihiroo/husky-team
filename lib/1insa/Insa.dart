@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:team_husky/1insa/Address.dart';
 import 'package:team_husky/1insa/InsaCard.dart';
-import 'package:team_husky/1insa/newSchedule/newSchedule.dart';
 import 'package:team_husky/1insa/teamcard.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class Organization extends StatefulWidget {
   const Organization({super.key, required this.grade});
@@ -27,6 +27,16 @@ class _OrganizationState extends State<Organization> {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication); // 외부 브라우저로 열기
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri url = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -255,7 +265,18 @@ class _OrganizationState extends State<Organization> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _infoRow('연락처', data['phoneNumber']),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _infoRow('연락처', data['phoneNumber'])),
+                      IconButton(
+                        icon: Icon(Icons.phone, color: Colors.green),
+                        onPressed: () {
+                          _makePhoneCall('01012345678');
+                        },
+                      ),
+                    ],
+                  ),
                   Divider(thickness: 1, color: Colors.grey[300]),
                   _infoRow('등록일', formattedDate),
                   Divider(thickness: 1, color: Colors.grey[300]),
