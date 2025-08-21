@@ -41,7 +41,7 @@ class _UserResumeState extends State<UserResume> {
   String name = '';
   String birthDay = '';
   String phoneNumber = '';
-  String detailAdress = ''; //자차번호
+  String detailAddress = ''; //자차번호
   String address = ''; //주소
   String career = ''; //운전경력
   String hobby = ''; //취미
@@ -56,11 +56,24 @@ class _UserResumeState extends State<UserResume> {
   String bank =''; //은행명
   String bankNum ='';  //은행계좌번호
   String personNum ='';  //주민번호
-  String school ='';  //학력
+  String? school;  //학력
   String mom ='';  //비상연락망
   String relation ='';  // 연락망관계
 
   File? pickedImage;
+
+
+  final List<String> schoolOptions = [
+    '고등학교 졸업',
+    '전문대 졸업',
+    '전문대 휴학',
+    '전문대 자퇴',
+    '전문대 재학',
+    '4년제 졸업',
+    '4년제 휴학',
+    '4년제 자퇴',
+    '4년제 재학',
+  ];
 
   @override
   void dispose() {
@@ -380,7 +393,7 @@ class _UserResumeState extends State<UserResume> {
                               key: ValueKey(6),
                               onSaved: (val) {
                                 setState(() {
-                                  detailAdress = val!;
+                                  detailAddress = val!;
                                 });
                               },
                               hintText: '상세주소',
@@ -541,15 +554,31 @@ class _UserResumeState extends State<UserResume> {
                       SizedBox(
                         height: 25,
                       ),
-                      CustomTextForm(
-                        key: ValueKey(18),
-                        onSaved: (val) {
-                          setState(() {
-                             school = val!;
-                          });
-                        },
-                        hintText: '학력 예) 대학중퇴,대학휴학,재학중,등등',
-                      ),
+                  DropdownButtonFormField<String>(
+                    key: ValueKey(18),
+                    value: school,
+                    decoration: const InputDecoration(
+                      hintText: '학력 선택',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                    items: schoolOptions.map((option) {
+                      return DropdownMenuItem(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        school = val!;
+                      });
+                    },
+                    onSaved: (val) {
+                      setState(() {
+                        school = val!;
+                      });
+                    },
+                  ),
                       SizedBox(
                         height: 25,
                       ),
@@ -665,7 +694,7 @@ class _UserResumeState extends State<UserResume> {
                                   'name': name,
                                   'birthDay': birthDay,
                                   'phoneNumber': phoneNumber,
-                                  'carNumber': detailAdress,
+                                  'detailAddress': detailAddress,
                                   'address': address,
                                   'career': career,
                                   'hobby': hobby,
