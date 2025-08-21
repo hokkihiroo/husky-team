@@ -52,6 +52,14 @@ class _UserResumeState extends State<UserResume> {
   String kg = ''; //몸무게
   int levelNumber = 0; //
 
+
+  String bank =''; //은행명
+  String bankNum ='';  //은행계좌번호
+  String personNum ='';  //주민번호
+  String school ='';  //학력
+  String mom ='';  //비상연락망
+  String relation ='';  // 연락망관계
+
   File? pickedImage;
 
   @override
@@ -501,7 +509,7 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(15),
                         onSaved: (val) {
                           setState(() {
-                            final bank = val!;
+                             bank = val!;
                           });
                         },
                         hintText: '은행명 예) 신한은행 or 하나증권 등등',
@@ -513,10 +521,10 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(16),
                         onSaved: (val) {
                           setState(() {
-                            final bankNum = val!;
+                             bankNum = val!;
                           });
                         },
-                        hintText: '계좌번호',
+                        hintText: '계좌번호 예) 61512214217',
                       ),
                       SizedBox(
                         height: 25,
@@ -525,10 +533,10 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(17),
                         onSaved: (val) {
                           setState(() {
-                            final personNum = val!;
+                             personNum = val!;
                           });
                         },
-                        hintText: '주민번호 - (하이픈)포함해주세요',
+                        hintText: '주민번호 예) 881214-1234567',
                       ),
                       SizedBox(
                         height: 25,
@@ -537,10 +545,10 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(18),
                         onSaved: (val) {
                           setState(() {
-                            final school = val!;
+                             school = val!;
                           });
                         },
-                        hintText: '최종학력 예) 대학중퇴, 대학휴학 등등',
+                        hintText: '학력 예) 대학중퇴,대학휴학,재학중,등등',
                       ),
                       SizedBox(
                         height: 25,
@@ -549,10 +557,10 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(19),
                         onSaved: (val) {
                           setState(() {
-                            final mom = val!;
+                             mom = val!;
                           });
                         },
-                        hintText: '비상연락망',
+                        hintText: '비상연락망 예) 010-1234-1234',
                       ),
                       SizedBox(
                         height: 25,
@@ -561,10 +569,10 @@ class _UserResumeState extends State<UserResume> {
                         key: ValueKey(20),
                         onSaved: (val) {
                           setState(() {
-                            final relation = val!;
+                             relation = val!;
                           });
                         },
-                        hintText: '관계 예) 아버지 or 형 기타등등',
+                        hintText: '관계 예) 아버지 or 어머니 기타등등',
                       ),
                       SizedBox(
                         height: 25,
@@ -666,6 +674,13 @@ class _UserResumeState extends State<UserResume> {
                                   'pantsSize': pantsSize,
                                   'cm': cm,
                                   'kg': kg,
+                                  'bank': bank,
+                                  'bankNum': bankNum,
+                                  'personNum': personNum,
+                                  'school': school,
+                                  'mom': mom,
+                                  'relation': relation,
+
                                   'grade': 0,
                                   'teamId': BOSNA,
                                   //등급
