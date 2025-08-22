@@ -277,7 +277,7 @@ class _MySalaryState extends State<MySalary> {
 
                         final data = snapshot.data!.data();
 
-                        if (data == null || data['licenseUrl1'] == null) {
+                        if (data == null || data['licenseUrl2'] == null) {
                           return Container(
                             height: 350, // 원하는 높이 설정
                             width: 320,
@@ -312,14 +312,14 @@ class _MySalaryState extends State<MySalary> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => FullImageView(
-                                      imageUrl: data['licenseUrl1']),
+                                      imageUrl: data['licenseUrl2']),
                                 ),
                               );
                             },
                             child: Hero(
                               tag: 'fullImage', // Hero 태그 설정
                               child: Image.network(
-                                data['licenseUrl1'], // 이미지 URL 사용
+                                data['licenseUrl2'], // 이미지 URL 사용
                                 fit: BoxFit.cover, // 이미지를 가득 채움
                                 width: double.infinity,
                                 height: double.infinity,
