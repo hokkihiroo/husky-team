@@ -135,7 +135,7 @@ class _MySalaryState extends State<MySalary> {
       body: Container(
         child: Center(
           child: Container(
-            color: Colors.blue,
+            color: Colors.white,
             height: 1000,
             width: 360,
             child: SingleChildScrollView(
@@ -150,6 +150,8 @@ class _MySalaryState extends State<MySalary> {
                   SizedBox(
                     height: 10,
                   ),
+
+                  // 라이센스1번 이미지 보기
                   StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('user')
@@ -179,7 +181,7 @@ class _MySalaryState extends State<MySalary> {
 
                         final data = snapshot.data!.data();
 
-                        if (data == null || data['licenseUrl'] == null) {
+                        if (data == null || data['licenseUrl1'] == null) {
                           return Container(
                             height: 350, // 원하는 높이 설정
                             width: 320,
@@ -214,14 +216,14 @@ class _MySalaryState extends State<MySalary> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => FullImageView(
-                                      imageUrl: data['licenseUrl']),
+                                      imageUrl: data['licenseUrl1']),
                                 ),
                               );
                             },
                             child: Hero(
                               tag: 'fullImage', // Hero 태그 설정
                               child: Image.network(
-                                data['licenseUrl'], // 이미지 URL 사용
+                                data['licenseUrl1'], // 이미지 URL 사용
                                 fit: BoxFit.cover, // 이미지를 가득 채움
                                 width: double.infinity,
                                 height: double.infinity,
@@ -245,6 +247,104 @@ class _MySalaryState extends State<MySalary> {
                         );
                       }),
                   const SizedBox(height: 20),
+                  //라이센스2번 이미지보기
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(widget.uid)
+                          .collection('salary')
+                          .doc('SJLmYrEd97eR6EaPX67b')
+                          .collection(insertAddress)
+                          .doc(widget.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+
+                        if (snapshot.hasError) {
+                          return const Center(
+                            child: Text('데이터를 불러오는 중 오류가 발생했습니다.'),
+                          );
+                        }
+
+                        if (!snapshot.hasData || snapshot.data == null) {
+                          return const Center(
+                            child: Text('해당 문서를 찾을 수 없습니다.'),
+                          );
+                        }
+
+                        final data = snapshot.data!.data();
+
+                        if (data == null || data['licenseUrl1'] == null) {
+                          return Container(
+                            height: 350, // 원하는 높이 설정
+                            width: 320,
+                            color: Colors.grey[200], // 회색 배경색
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.photo,
+                                    size: 50, color: Colors.grey), // 사진 아이콘
+                                const SizedBox(height: 8),
+
+                                Center(
+                                  child: Text(
+                                    '${getMonthLabel()} 급여명세서가  없습니다.',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        return Container(
+                          constraints: BoxConstraints(
+                            maxWidth:
+                            MediaQuery.of(context).size.width, // 화면 너비 제한
+                          ),
+                          height: 350, // 원하는 높이 설정
+                          color: Colors.grey[200], // 회색 배경색
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FullImageView(
+                                      imageUrl: data['licenseUrl1']),
+                                ),
+                              );
+                            },
+                            child: Hero(
+                              tag: 'fullImage', // Hero 태그 설정
+                              child: Image.network(
+                                data['licenseUrl1'], // 이미지 URL 사용
+                                fit: BoxFit.cover, // 이미지를 가득 채움
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.broken_image,
+                                            size: 50, color: Colors.grey),
+                                        const SizedBox(height: 8),
+                                        const Text(
+                                          '이미지를 불러올 수 없습니다',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                  const SizedBox(height: 20),
+
+
                   Text(
                     '눌러서 확대하세요',
                     style: TextStyle(

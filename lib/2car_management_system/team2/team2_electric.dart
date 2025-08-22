@@ -98,7 +98,7 @@ class _ElectricState extends State<Electric> {
       final selectedLocation = _getLocationText(ex);
 
 
-      buffer.writeln('$theDay $chargeNumber번 $carModel $enter $out $selectedLocation');
+      buffer.writeln('$theDay $chargeNumber $carModel $enter $out $selectedLocation');
 
     }
 
