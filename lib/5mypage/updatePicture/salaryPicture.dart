@@ -146,52 +146,63 @@ class _SalaryPictureState extends State<SalaryPicture> {
             children: [
               ElevatedButton.icon(
                 onPressed: () async {
-                  // if (pickedImage != null) {
-                  //   // 로딩 인디케이터 표시
-                  //   showDialog(
-                  //     context: context,
-                  //     barrierDismissible: false,
-                  //     builder: (BuildContext context) {
-                  //       return const Center(
-                  //         child: CircularProgressIndicator(),
-                  //       );
-                  //     },
-                  //   );
-                  //
-                  //   final refImage = FirebaseStorage.instance
-                  //       .ref()
-                  //       .child('mySalaryPicture')
-                  //       .child(widget.date)
-                  //       .child('${widget.uid}.png');
-                  //
-                  //   try {
-                  //     await refImage.putFile(pickedImage!);
-                  //     final url = await refImage.getDownloadURL();
-                  //
-                  //     await FirebaseFirestore.instance
-                  //         .collection('user')
-                  //         .doc(widget.uid)
-                  //         .collection('salary')
-                  //         .doc('SJLmYrEd97eR6EaPX67b')
-                  //         .collection(widget.date)
-                  //         .doc(widget.uid)
-                  //         .set({
-                  //       'licenseUrl': url,
-                  //
-                  //     });
-                  //
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       const SnackBar(content: Text('사진등록 완료')),
-                  //     );
-                  //   } catch (e) {
-                  //     print(e);
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       const SnackBar(content: Text('사진 등록 실패')),
-                  //     );
-                  //   }
-                  //   Navigator.of(context).pop(); // 로딩 닫기
-                  // }
-                  // Navigator.of(context).pop(); // 다이얼로그 닫기
+                  if (pickedImage1 != null || pickedImage2 != null) {
+                    // 로딩 인디케이터 표시
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+                    final storageRef = FirebaseStorage.instance
+                        .ref()
+                        .child('mySalaryPicture')
+                        .child(widget.date)
+                        .child(widget.uid); // 수정됨: uid 폴더 추가
+
+                    Map<String, dynamic> dataToSave = {}; // 수정됨: Firestore에 저장할 Map
+
+                    try {
+                      if (pickedImage1 != null) { // 수정됨
+                        final ref1 = storageRef.child('1.png');
+                        await ref1.putFile(pickedImage1!);
+                        final url1 = await ref1.getDownloadURL();
+                        dataToSave['licenseUrl1'] = url1; // 수정됨
+                      }
+
+                      if (pickedImage2 != null) { // 수정됨
+                        final ref2 = storageRef.child('2.png');
+                        await ref2.putFile(pickedImage2!);
+                        final url2 = await ref2.getDownloadURL();
+                        dataToSave['licenseUrl2'] = url2; // 수정됨
+                      }
+
+                      if (dataToSave.isNotEmpty) { // 수정됨
+                        await FirebaseFirestore.instance
+                            .collection('user')
+                            .doc(widget.uid)
+                            .collection('salary')
+                            .doc('SJLmYrEd97eR6EaPX67b') // 필요하면 동적 변경 권장
+                            .collection(widget.date)
+                            .doc(widget.uid)
+                            .set(dataToSave, SetOptions(merge: true)); // 수정됨: merge true
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('사진등록 완료')),
+                      );
+                    } catch (e) {
+                      print(e);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('사진 등록 실패')),
+                      );
+                    }
+                    Navigator.of(context).pop(); // 로딩 닫기
+                  }
+                  Navigator.of(context).pop(); // 다이얼로그 닫기
                 },
                 icon: const Icon(Icons.check_circle, color: Colors.white),
                 label: const Text(
