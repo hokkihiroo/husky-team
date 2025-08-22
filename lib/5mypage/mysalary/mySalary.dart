@@ -135,8 +135,8 @@ class _MySalaryState extends State<MySalary> {
       body: Container(
         child: Center(
           child: Container(
-            color: Colors.white,
-            height: 600,
+            color: Colors.blue,
+            height: 1000,
             width: 360,
             child: SingleChildScrollView(
               child: Column(

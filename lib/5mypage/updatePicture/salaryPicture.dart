@@ -23,18 +23,22 @@ class SalaryPicture extends StatefulWidget {
 }
 
 class _SalaryPictureState extends State<SalaryPicture> {
-  File? pickedImage;
+  File? pickedImage1;
+  File? pickedImage2;
 
-  void _pickImage() async {
-    final imagePicker = ImagePicker();
-    final pickedImageFile = await imagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    setState(() {
-      if (pickedImageFile != null) {
-        pickedImage = File(pickedImageFile.path);
-      }
-    });
+  Future<void> _pickImage(int index) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        if (index == 1) {
+          pickedImage1 = File(pickedFile.path);
+        } else {
+          pickedImage2 = File(pickedFile.path);
+        }
+      });
+    }
   }
 
   @override
@@ -56,70 +60,75 @@ class _SalaryPictureState extends State<SalaryPicture> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 100, // 가로 크기
-            height: 100, // 세로 크기
-            decoration: BoxDecoration(
-              color: Colors.grey[200], // 배경색
-              borderRadius: BorderRadius.circular(8), // 네모난 형태 (둥글기 조정 가능)
-              border: Border.all(color: Colors.grey, width: 1), // 테두리 설정
-            ),
-            child: pickedImage != null
-                ? ClipRRect(
-              borderRadius: BorderRadius.circular(8), // 사진도 둥글게 클립
-              child: Image.file(
-                pickedImage!,
-                fit: BoxFit.cover, // 이미지를 꽉 채우기
-              ),
-            )
-                : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.photo, // 사진첩 모양의 아이콘
-                  size: 40,
-                  color: Colors.grey,
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '사진 없음', // 기본 텍스트
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
+          // 수정됨: 사진1, 사진2 두 개 선택 가능 & 박스를 클릭하면 이미지 선택
+          Row( // 수정됨
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 수정됨
+            children: [
+              GestureDetector( // 수정됨
+                onTap: () => _pickImage(1), // 수정됨
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey, width: 1),
+                  ),
+                  child: pickedImage1 != null // 수정됨
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      pickedImage1!,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                      : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.photo, size: 40, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text(
+                        '사진1 선택',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              GestureDetector( // 수정됨
+                onTap: () => _pickImage(2), // 수정됨
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey, width: 1),
+                  ),
+                  child: pickedImage2 != null // 수정됨
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      pickedImage2!,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                      : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.photo, size: 40, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text(
+                        '사진2 선택',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          OutlinedButton.icon(
-            onPressed: _pickImage,
-            icon: const Icon(
-              Icons.image,
-              color: Colors.white, // 아이콘 색상
-            ),
-            label: const Text(
-              '이미지 선택',
-              style: TextStyle(
-                color: Colors.white, // 텍스트 색상
-                fontWeight: FontWeight.bold, // 텍스트 굵기
-                fontSize: 16, // 텍스트 크기
-              ),
-            ),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // 버튼 내부 여백
-              backgroundColor: Colors.blueAccent, // 버튼 배경색
-              side: BorderSide(
-                color: Colors.blueAccent.shade700, // 테두리 색상
-                width: 2, // 테두리 두께
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16), // 더 둥근 모서리
-              ),
-              shadowColor: Colors.blueAccent.shade200, // 그림자 색상
-              elevation: 4, // 그림자 깊이
-            ),
-          ),
+
 
           const SizedBox(height: 20),
           const Text(
@@ -137,52 +146,52 @@ class _SalaryPictureState extends State<SalaryPicture> {
             children: [
               ElevatedButton.icon(
                 onPressed: () async {
-                  if (pickedImage != null) {
-                    // 로딩 인디케이터 표시
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                    );
-
-                    final refImage = FirebaseStorage.instance
-                        .ref()
-                        .child('mySalaryPicture')
-                        .child(widget.date)
-                        .child('${widget.uid}.png');
-
-                    try {
-                      await refImage.putFile(pickedImage!);
-                      final url = await refImage.getDownloadURL();
-
-                      await FirebaseFirestore.instance
-                          .collection('user')
-                          .doc(widget.uid)
-                          .collection('salary')
-                          .doc('SJLmYrEd97eR6EaPX67b')
-                          .collection(widget.date)
-                          .doc(widget.uid)
-                          .set({
-                        'licenseUrl': url,
-
-                      });
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('사진등록 완료')),
-                      );
-                    } catch (e) {
-                      print(e);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('사진 등록 실패')),
-                      );
-                    }
-                    Navigator.of(context).pop(); // 로딩 닫기
-                  }
-                  Navigator.of(context).pop(); // 다이얼로그 닫기
+                  // if (pickedImage != null) {
+                  //   // 로딩 인디케이터 표시
+                  //   showDialog(
+                  //     context: context,
+                  //     barrierDismissible: false,
+                  //     builder: (BuildContext context) {
+                  //       return const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       );
+                  //     },
+                  //   );
+                  //
+                  //   final refImage = FirebaseStorage.instance
+                  //       .ref()
+                  //       .child('mySalaryPicture')
+                  //       .child(widget.date)
+                  //       .child('${widget.uid}.png');
+                  //
+                  //   try {
+                  //     await refImage.putFile(pickedImage!);
+                  //     final url = await refImage.getDownloadURL();
+                  //
+                  //     await FirebaseFirestore.instance
+                  //         .collection('user')
+                  //         .doc(widget.uid)
+                  //         .collection('salary')
+                  //         .doc('SJLmYrEd97eR6EaPX67b')
+                  //         .collection(widget.date)
+                  //         .doc(widget.uid)
+                  //         .set({
+                  //       'licenseUrl': url,
+                  //
+                  //     });
+                  //
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(content: Text('사진등록 완료')),
+                  //     );
+                  //   } catch (e) {
+                  //     print(e);
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(content: Text('사진 등록 실패')),
+                  //     );
+                  //   }
+                  //   Navigator.of(context).pop(); // 로딩 닫기
+                  // }
+                  // Navigator.of(context).pop(); // 다이얼로그 닫기
                 },
                 icon: const Icon(Icons.check_circle, color: Colors.white),
                 label: const Text(
