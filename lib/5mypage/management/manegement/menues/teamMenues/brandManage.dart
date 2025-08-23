@@ -26,6 +26,12 @@ class _BrandManageState extends State<BrandManage> {
   late String gangnamCarList; // 전역 변수로 선언
   String? documentID = '';
 
+
+  // 버튼 상태 (3개니까 false 3개로 초기화)
+  String selectedCategory = '국산'; // ✅ 선택된 값 저장
+  final List<String> categories = ['국산', '수입', '기타'];
+  int selectedCategoryNum = 1;
+
   void _showDialog() {
     final TextEditingController _textFieldController = TextEditingController();
     String selectedCategory = '국내'; // 기본 선택값
@@ -51,33 +57,7 @@ class _BrandManageState extends State<BrandManage> {
                       LengthLimitingTextInputFormatter(10),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(
-                        '카테고리: ',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(width: 10),
-                      DropdownButton<String>(
-                        value: selectedCategory,
-                        items: ['국내', '수입유명', '잡브랜드']
-                            .map((label) => DropdownMenuItem(
-                                  value: label,
-                                  child: Text(label),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              selectedCategory = value;
-                            });
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+
                 ],
               ),
               actions: [
@@ -88,21 +68,6 @@ class _BrandManageState extends State<BrandManage> {
                       onPressed: () async {
                         String inputText = _textFieldController.text;
 
-                        // 카테고리 숫자 변환
-                        int brandTypeValue;
-                        switch (selectedCategory) {
-                          case '국내':
-                            brandTypeValue = 1;
-                            break;
-                          case '수입유명':
-                            brandTypeValue = 2;
-                            break;
-                          case '잡브랜드':
-                            brandTypeValue = 3;
-                            break;
-                          default:
-                            brandTypeValue = 0; // 예외처리용
-                        }
 
                         String documentId = FirebaseFirestore.instance
                             .collection(gangnamCarList)
@@ -115,7 +80,7 @@ class _BrandManageState extends State<BrandManage> {
                               .doc(documentId)
                               .set({
                             'category': inputText,
-                            'brandType': brandTypeValue, // 숫자로 저장
+                            'brandType': selectedCategoryNum, // 숫자로 저장
                             'createdAt': FieldValue.serverTimestamp(),
                           });
                         } catch (e) {
@@ -148,11 +113,6 @@ class _BrandManageState extends State<BrandManage> {
 
     gangnamCarList = getBrandNameList(widget.teamDocId);
   }
-
-  // 버튼 상태 (3개니까 false 3개로 초기화)
-  String selectedCategory = '국산'; // ✅ 선택된 값 저장
-  final List<String> categories = ['국산', '수입', '기타'];
-  int selectedCategoryNum = 1;
 
   @override
   Widget build(BuildContext context) {
