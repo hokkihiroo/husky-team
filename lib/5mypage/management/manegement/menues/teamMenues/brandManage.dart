@@ -152,6 +152,7 @@ class _BrandManageState extends State<BrandManage> {
   // 버튼 상태 (3개니까 false 3개로 초기화)
   String selectedCategory = '국산'; // ✅ 선택된 값 저장
   final List<String> categories = ['국산', '수입', '기타'];
+  int selectedCategoryNum = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +198,20 @@ class _BrandManageState extends State<BrandManage> {
                       onSelected: (bool selected) {
                         setState(() {
                           selectedCategory = category; // ✅ 선택값 업데이트
+                          print("선택된 카테고리: $selectedCategory");
+
+                          // ✅ 선택된 카테고리에 따라 번호 매핑
+                          if (selectedCategory == '국산') {
+                            selectedCategoryNum = 1;
+                          } else if (selectedCategory == '수입') {
+                            selectedCategoryNum = 2;
+                          } else if (selectedCategory == '기타') {
+                            selectedCategoryNum = 3;
+                          }
+
+                          print("카테고리 번호: $selectedCategoryNum");
                         });
+
                       },
                     );
                   }).toList(),
@@ -210,12 +224,17 @@ class _BrandManageState extends State<BrandManage> {
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection(gangnamCarList)
+                  .where('brandType', isEqualTo: selectedCategoryNum)
                   .orderBy('createdAt')
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
+                }
+                // ✅ 데이터가 없는 경우 처리
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return Center(child: Text("데이터가 없습니다."));
                 }
                 final subDocs = snapshot.data!.docs;
 

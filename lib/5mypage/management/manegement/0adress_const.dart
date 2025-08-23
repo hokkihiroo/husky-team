@@ -18,6 +18,8 @@ String getGangnamCarList(String teamDocId) {
   }
 }
 
+// 이게 헷갈릴수 있어서 적어놓음 강남팀은 강남전용이라 강남전용 주소적어놓은거고
+// 청주도 그렇게 적었다가 3번째부터는 중간에 팀을 넣어서 알아서 각각찾아갈수있게 만든거임
 
 String getBrandNameList(String teamDocId) {
   if (teamDocId == 'PJcc0iQSHShpJvONGBC7') {
