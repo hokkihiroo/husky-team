@@ -95,8 +95,8 @@ class TeamOnly extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 15, // 텍스트 크기 조정
+              fontWeight: FontWeight.w600,
+              fontSize: 12, // 텍스트 크기 조정
             ),
           ),
           Text(
