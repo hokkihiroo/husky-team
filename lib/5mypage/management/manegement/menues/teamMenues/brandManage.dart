@@ -149,6 +149,10 @@ class _BrandManageState extends State<BrandManage> {
     gangnamCarList = getBrandNameList(widget.teamDocId);
   }
 
+  // 버튼 상태 (3개니까 false 3개로 초기화)
+  String selectedCategory = '국산'; // ✅ 선택된 값 저장
+  final List<String> categories = ['국산', '수입', '기타'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,6 +171,42 @@ class _BrandManageState extends State<BrandManage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Wrap(
+                  // ✅ 가로로 배치, 공간 부족하면 자동 줄바꿈
+                  spacing: 8, // ✅ 칩 간격
+                  children: categories.map((category) {
+                    return ChoiceChip(
+                      label: Text(category),
+                      // ✅ 칩 이름
+                      labelStyle: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: selectedCategory == category
+                            ? Colors.white // ✅ 선택된 칩 글씨색
+                            : Colors.grey.shade700, // ✅ 기본 글씨색
+                      ),
+                      selected: selectedCategory == category,
+                      // ✅ 선택 상태 반영
+                      selectedColor: Colors.green.shade400,
+                      // ✅ 선택된 칩 배경
+                      backgroundColor: Colors.grey.shade200,
+                      // ✅ 기본 배경
+                      onSelected: (bool selected) {
+                        setState(() {
+                          selectedCategory = category; // ✅ 선택값 업데이트
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection(gangnamCarList)
