@@ -8,14 +8,10 @@ import 'brandManage_card.dart';
 import 'brandManage_list.dart';
 
 class BrandManage extends StatefulWidget {
-  final String teamName;
-  final String position;
   final String teamDocId;
 
   const BrandManage(
       {super.key,
-      required this.teamName,
-      required this.position,
       required this.teamDocId});
 
   @override
@@ -119,7 +115,7 @@ class _BrandManageState extends State<BrandManage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.teamName} ${widget.position} 브랜드',
+          '차량 브랜드',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -214,7 +210,6 @@ class _BrandManageState extends State<BrandManage> {
                               teamId: widget.teamDocId,
                               category: data['category'],
                               documentID: '$documentID',
-                              position: widget.position,
                             ),
                           ),
                         );

@@ -8,14 +8,12 @@ import 'brandManage_list_card.dart';
 class BrandMansgeList extends StatefulWidget {
   String category;
   String documentID;
-  String position;
   String teamId;
 
   BrandMansgeList({
     super.key,
     required this.category,
     required this.documentID,
-    required this.position,
     required this.teamId,
   });
 
@@ -102,51 +100,31 @@ class _BrandMansgeListState extends State<BrandMansgeList> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              '${widget.position} ${widget.category} 차종',
+              widget.category,
               style: TextStyle(
                 color: Colors.black,
               ),
             ),
             GestureDetector(
-              onTap: ()async{
-
-
-
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('삭제 확인'),
-                      content: Text('해당 브랜드와 모든 차종을 삭제하시겠습니까?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); // 취소
-                          },
-                          child: Text('취소'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection(gangnamCarList)
-                                .doc(widget.documentID)
-                                .delete();
-
-                            Navigator.pop(context); // 확인 후 다이얼로그 닫기
-
-                            print('삭제해요');
-                            Navigator.pop(context); // 확인 후 다이얼로그 닫기
-
-                          },
-                          child: Text('삭제', style: TextStyle(color: Colors.red)),
-                        ),
-                      ],
-                    );
-                  },
-                );
-
-
-              },
+                onTap: () async {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('확인사항'),
+                        content: Text('브랜드 밖으로 빼면서\n해당시스템 위험하여 폐기함'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); // 취소
+                            },
+                            child: Text('확인'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 child: Text('일괄삭제')),
           ],
         ),
@@ -183,26 +161,17 @@ class _BrandMansgeListState extends State<BrandMansgeList> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text('삭제 확인'),
-                              content: Text('${data['carModel']} 차종을 삭제하시겠습니까?'),
+                              content: Text('브랜드 밖으로 빼면서\삭제시스템 폐기함 \n 팀장님께 삭제 문의하세요'),
                               actions: [
+
                                 TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // 취소
-                                  },
-                                  child: Text('취소'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await FirebaseFirestore.instance
-                                        .collection(gangnamCarList)
-                                        .doc(widget.documentID)
-                                        .collection('LIST')
-                                        .doc(subDoc.id)
-                                        .delete();
+                                  onPressed: ()  {
+
 
                                     Navigator.pop(context); // 확인 후 다이얼로그 닫기
                                   },
-                                  child: Text('삭제', style: TextStyle(color: Colors.red)),
+                                  child: Text('확인',
+                                      style: TextStyle(color: Colors.red)),
                                 ),
                               ],
                             );

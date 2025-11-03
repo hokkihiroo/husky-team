@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team1/team1_view.dart';
 import 'package:team_husky/2car_management_system/team2/team2_view.dart';
 import 'package:team_husky/2car_management_system/team3/team3_view.dart';
+import 'package:team_husky/2car_management_system/team4/team4_view.dart';
 
 class CarManagementSystem extends StatelessWidget {
   const CarManagementSystem({
@@ -409,6 +410,142 @@ class CarManagementSystem extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        GestureDetector(
+          onTap: () {
+            if (team == 'B71qHzRliuN9iQeTygTe' ||
+                team == 'e46miKLAbe8CjR1RsQkR') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Team4View(name: name)),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('입장 불가'),
+                    content: Text('해당 팀만 접근가능합니다.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('확인'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          },
+          child: Container(
+            width: 300.0,
+            height: 100.0,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF0D1B2A), // 거의 검정에 가까운 남색
+                  Color(0xFF1B263B), // 중간톤 네이비
+                  Color(0xFF415A77), // 청회색 포인트
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.teal.withOpacity(0.3), // 부드러운 하단 그림자
+                  offset: Offset(4, 4),
+                  blurRadius: 10.0,
+                ),
+                BoxShadow(
+                  color: Colors.white.withOpacity(0.8), // 상단 밝은 반사광
+                  offset: Offset(-3, -3),
+                  blurRadius: 6.0,
+                ),
+              ],
+              border: Border.all(
+                color: Color(0xFF76C7C0), // 민트빛 테두리
+                width: 1.5,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 산뜻한 원형 아이콘
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF0F2027), // 어두운 남색-청록
+                          Color(0xFF203A43), // 중간 톤 딥블루
+                          Color(0xFF2C5364), // 약간 밝은 청회색
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.tealAccent.withOpacity(0.4),
+                          offset: Offset(2, 2),
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.wb_sunny_outlined,
+                      size: 35,
+                      color: Color(0xFFFFC107), // 앰버톤 노랑 (머스타드 느낌)
+                    ),
+                  ),
+                  SizedBox(width: 15.0),
+                  // 텍스트 정보
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '수지 [GENESIS]',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Color(0xFFFFC107), // 앰버톤 노랑 (머스타드 느낌)
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5,
+                            shadows: [
+                              Shadow(
+                                color: Colors.white.withOpacity(0.5),
+                                offset: Offset(0.5, 0.5),
+                                blurRadius: 1.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Text(
+                          '차량관리 시스템',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFFFFC107), // 앰버톤 노랑 (머스타드 느낌)
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
         ),
       ],
     );

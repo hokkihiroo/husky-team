@@ -2,20 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
+import 'package:team_husky/2car_management_system/team4/team4_carlist_card.dart';
 
-import 'team2_adress_const.dart';
-import 'team2_car_card.dart';
-
-class CarList extends StatefulWidget {
-  const CarList({super.key});
+class Team4Carlist extends StatefulWidget {
+  const Team4Carlist({super.key});
 
   @override
-  State<CarList> createState() => _CarListState();
+  State<Team4Carlist> createState() => _Team4CarlistState();
 }
 
-class _CarListState extends State<CarList> {
+class _Team4CarlistState extends State<Team4Carlist> {
   DateTime selectedDate = DateTime.now();
-  String DBAdress = formatTodayDate();
+  String DBAdress = Team4formatTodayDate();
+
 // -------------------------------------------------------------
   DateTime _focusedDay = DateTime.now(); // 이부분은 날짜 선택에 대한 변수라 손대지말자
   DateTime? _selectedDay;
@@ -112,16 +112,15 @@ class _CarListState extends State<CarList> {
                 TextButton(
                   child: Text("선택한 날짜로 이동"),
                   onPressed: () {
-
                     if (selectedDate != null) {
                       setState(() {
-                       selectedDate = _selectedDay!;
+                        selectedDate = _selectedDay!;
                         final year = selectedDate.year.toString();
-                        final month = selectedDate.month.toString().padLeft(2, '0');
+                        final month =
+                            selectedDate.month.toString().padLeft(2, '0');
                         final day = selectedDate.day.toString().padLeft(2, '0');
                         DBAdress = year + month + day;
                         Navigator.of(context).pop();
-
                       });
                     }
                   },
@@ -134,20 +133,16 @@ class _CarListState extends State<CarList> {
                 ),
               ],
             ),
-
           ],
         );
       },
     );
   }
 
-
-
-
   // 텍스트 만드는 함수 추가
   Future<String> createClipboardText(String address) async {
     final query = await FirebaseFirestore.instance
-        .collection(CARLIST + address)
+        .collection(TEAM4CARLIST + address)
         .orderBy('enter')
         .get();
 
@@ -163,21 +158,12 @@ class _CarListState extends State<CarList> {
       final brand = doc['carBrand'];
       final model = doc['carModel'];
       final etc = doc['etc'];
-      final enter = getInTime(doc['enter']);
+      final enter = Team4getInTime(doc['enter']);
       final out = doc['out'] is Timestamp
-          ? getOutTime((doc['out'] as Timestamp).toDate())
+          ? Team4getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
       buffer.writeln('(${i + 1}) $brand $model $carNum $enter $out');
-
-      //
-      // buffer.writeln('(${i + 1})');
-      // buffer.writeln('브랜드: $brand');
-      // buffer.writeln('차종: $model');
-      // buffer.writeln('차량번호: $carNum');
-      // buffer.writeln('입차: $enter / 출차: $out');
-      // buffer.writeln('특이사항: $etc ');
-      // buffer.writeln('');
     }
 
     return buffer.toString();
@@ -351,7 +337,7 @@ class ListModel extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(CARLIST + adress)
+          .collection(TEAM4CARLIST + adress)
           .orderBy('enter')
           .snapshots(),
       builder: (BuildContext context,
@@ -377,7 +363,7 @@ class ListModel extends StatelessWidget {
                   dataId = document.id;
                   carNumber = docs[index]['carNumber'];
                   Timestamp sam = docs[index]['enter']; //입차시각
-                  enterTime = getInTime(sam); //입차시각 변환코드
+                  enterTime = Team4getInTime(sam); //입차시각 변환코드
                   enterName = docs[index]['wigetName']; //입차한사람 이름
                   etc = docs[index]['etc']; //특이사항
 
@@ -414,7 +400,7 @@ class ListModel extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
-                  child: CarListCard(
+                  child: Team4CarListCard(
                     index: index + 1,
                     carNum: docs[index]['carNumber'],
                     inTime: docs[index]['enter'],
@@ -434,18 +420,19 @@ class ListModel extends StatelessWidget {
   }
 
   void showCarInfoBottomSheet(
-      context,
-      id,
-      carNumber,
-      enterTime,
-      enterName,
-      etc,
-      outName,
-      outTime,
-      outLocation,
-      movedLocation,
-      movingTime,
-      adress,) {
+    context,
+    id,
+    carNumber,
+    enterTime,
+    enterName,
+    etc,
+    outName,
+    outTime,
+    outLocation,
+    movedLocation,
+    movingTime,
+    adress,
+  ) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -489,8 +476,8 @@ class ListModel extends StatelessWidget {
                                       try {
                                         // 삭제할 문서의 참조를 가져와
                                         await FirebaseFirestore.instance
-                                            .collection(
-                                                CARLIST + adress) // 예: 'users'
+                                            .collection(TEAM4CARLIST +
+                                                adress) // 예: 'users'
                                             .doc(id) // 예: 'abc123'
                                             .delete();
 
@@ -554,8 +541,6 @@ class ListModel extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-
-
                         Text(
                           '출차',
                           style: TextStyle(
@@ -566,7 +551,7 @@ class ListModel extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                                '시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
+                                '시각 : ${outTime != null ? Team4getOutTime(outTime!) : ''}'),
                             SizedBox(
                               width: 10,
                             ),
@@ -589,7 +574,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                          Text(etc),
+                            Text(etc),
                           ],
                         )
                       ],

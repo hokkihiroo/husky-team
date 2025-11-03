@@ -390,6 +390,7 @@ class _CarStateState extends State<CarState> {
                                   .doc(dataId)
                                   .update({
                                 'location': 2,
+                                'wigetName' : widget.name, //이게 입차한사람임
                               });
                             } catch (e) {
                               print(e);
@@ -425,6 +426,8 @@ class _CarStateState extends State<CarState> {
                                   .doc(dataId)
                                   .update({
                                 'location': 3,
+                                'wigetName' : widget.name,   //이게 입차한사람임
+
                               });
                             } catch (e) {
                               print(e);
@@ -460,6 +463,8 @@ class _CarStateState extends State<CarState> {
                                   .doc(dataId)
                                   .update({
                                 'location': 4,
+                                'wigetName' : widget.name,
+
                               });
                             } catch (e) {
                               print(e);
@@ -499,6 +504,8 @@ class _CarStateState extends State<CarState> {
                                   .doc(dataId)
                                   .update({
                                 'location': 1,
+                                'wigetName' : widget.name,
+
                               });
                             } catch (e) {
                               print(e);
@@ -534,6 +541,8 @@ class _CarStateState extends State<CarState> {
                                   .doc(dataId)
                                   .update({
                                 'location': 5,
+                                'wigetName' : widget.name,
+
                               });
                             } catch (e) {
                               print(e);
@@ -849,37 +858,26 @@ class _CarStateState extends State<CarState> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    backgroundColor: Colors.brown, // 버튼 색상
+                    backgroundColor: Colors.green, // 버튼 색상
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update({
+                        'color': 4,
+                      });
+                    } catch (e) {
+                      print(e);
+                    }
                     Navigator.pop(context);
-
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return bottomEtc(
-                          carNumber,
-                          name,
-                          color,
-                          location,
-                          dateTime,
-                          dataId,
-                          etc,
-                          remainTime,
-                          movedLocation,
-                          wigetName,
-                          movingTime,
-                          getMovingTime,
-                          carModelFrom,
-                        );
-                      },
-                    );
                   },
                   child: Text(
-                    '기타',
+                    '회차',
                     style: TextStyle(
                       fontSize: 14, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1035,6 +1033,52 @@ class _CarStateState extends State<CarState> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.brown, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return bottomEtc(
+                          carNumber,
+                          name,
+                          color,
+                          location,
+                          dateTime,
+                          dataId,
+                          etc,
+                          remainTime,
+                          movedLocation,
+                          wigetName,
+                          movingTime,
+                          getMovingTime,
+                          carModelFrom,
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    '기타',
+                    style: TextStyle(
+                      fontSize: 14, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
               ],
             ),
             Text(
@@ -1102,7 +1146,7 @@ class _CarStateState extends State<CarState> {
                 ); //outName
                 print(location); //outLocation
                 print(movedLocation); //movedLocation
-                print(wigetName); //wigetName
+                print('이게 위젯네임$wigetName'); //wigetName
                 print(movingTime); //movingTime
                 try {
                   await FirebaseFirestore.instance

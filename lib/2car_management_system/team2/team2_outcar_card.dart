@@ -8,6 +8,7 @@ class OutCarCard extends StatelessWidget {
   final String name;
   final String dataAdress;
   final int location;
+  final int color;
   final String dataId;
   final String movedLocation;
   final String wigetName;
@@ -19,7 +20,7 @@ class OutCarCard extends StatelessWidget {
   OutCarCard({
     super.key,
     required this.carNumber,
-    required this.name, required this.location, required this.dataId, required this.myName, required this.dataAdress, required this.movedLocation, required this.wigetName, required this.movingTime
+    required this.name, required this.location, required this.dataId, required this.myName, required this.dataAdress, required this.movedLocation, required this.wigetName, required this.movingTime, required this.color
   });
 
   @override
@@ -35,21 +36,60 @@ class OutCarCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color:
-                  name != null && name.isNotEmpty ? Colors.yellow : Colors.red,
+              color: color == 4
+                  ? Colors.green
+                  : (name != null && name.isNotEmpty
+                  ? Colors.yellow
+                  : Colors.red),
             ),
           ),
           Text(
-            name != null && name.isNotEmpty ? name : '비었음',
+            (name != null && name.isNotEmpty)
+                ? (color == 4 ? '회차중' : name)
+                : '비었음',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: name != null && name.isNotEmpty
-                  ? Colors.yellow
+              color: (name != null && name.isNotEmpty)
+                  ? (color == 4 ? Colors.green : Colors.yellow)
                   : Colors.black,
             ),
           ),
-          ElevatedButton(
+
+
+
+          color == 4
+              ? ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: () async {
+              try {
+                await FirebaseFirestore.instance
+                    .collection(FIELD)
+                    .doc(dataId)
+                    .update({
+                  'color': 1,
+                  'name':'',
+                });
+              } catch (e) {
+                print(e);
+              }
+            },
+            child: Text(
+              '회차완료',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          )
+              : ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 20),
               backgroundColor: Colors.white, // 버튼 색상
@@ -58,56 +98,55 @@ class OutCarCard extends StatelessWidget {
               ),
             ),
             onPressed: () async {
-              // CarListAdress = CARLIST + formatTodayDate();
-              // print(CarListAdress);
-
               try {
                 await FirebaseFirestore.instance
-                    .collection(FIELD) // 컬렉션 이름을 지정하세요
-                    .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                    .collection(FIELD)
+                    .doc(dataId)
                     .delete();
                 print('문서 삭제 완료');
               } catch (e) {
                 print('문서 삭제 오류: $e');
               }
+
               try {
                 await FirebaseFirestore.instance
                     .collection(CarListAdress)
                     .doc(dataId)
                     .update({
                   'out': FieldValue.serverTimestamp(),
-                  'outName':name,
+                  'outName': name,
                   'outLocation': location,
                   'movedLocation': movedLocation,
                   'wigetName': wigetName,
                   'movingTime': movingTime,
                 });
+                print('출차완료 업데이트 완료');
               } catch (e) {
-                print(e);
                 print('데이터가 존재하지 않아 업데이트 할게 없습니당');
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('하루 지난 데이터 입니다 '),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('확인'),
-                          ),
-                        ],
-                      );
-                    });
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('하루 지난 데이터 입니다 '),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('확인'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             },
             child: Text(
               '출차완료',
               style: TextStyle(
-                fontSize: 16, // 텍스트 크기 증가
-                fontWeight: FontWeight.bold, // 텍스트를 굵게
-                color: Colors.black, // 텍스트 색상
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
           ),

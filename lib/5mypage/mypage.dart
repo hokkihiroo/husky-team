@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
+import 'package:team_husky/5mypage/management/manegement/menues/teamMenues/brandManage.dart';
 import 'package:team_husky/5mypage/mylicense/myLicenseUpdate.dart';
 import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
@@ -262,7 +263,14 @@ class _MyPageState extends State<MyPage> {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        showContentDialog(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BrandManage(
+                              teamDocId: 'zSvgctyCZUnOx8rYMioF',
+                            ),
+                          ),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -270,7 +278,7 @@ class _MyPageState extends State<MyPage> {
                         children: const [
                           Icon(Icons.edit), // 아이콘
                           SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('근로계약서'), // 텍스트
+                          Text('브랜드관리'), // 텍스트
                         ],
                       ),
                     ),

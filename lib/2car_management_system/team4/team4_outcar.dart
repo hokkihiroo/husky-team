@@ -1,28 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
+import 'package:team_husky/2car_management_system/team4/team4_outcar_card.dart';
 
-import 'team2_outcar_card.dart';
-
-class OutCar extends StatefulWidget {
+class Team4OutCar extends StatefulWidget {
   final String name;
 
-  const OutCar({super.key, required this.name});
+  const Team4OutCar({super.key, required this.name});
 
   @override
-  State<OutCar> createState() => _OutCarState();
+  State<Team4OutCar> createState() => _Team4OutCarState();
 }
 
-class _OutCarState extends State<OutCar> {
+class _Team4OutCarState extends State<Team4OutCar> {
   int location = 0; //차번호 클릭시 그차번호 위치
   String dataAdress = ''; // 차번호 클릭시 나오는 위치 주소값
   String movedLocation = ''; //과거 이동위치
+
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(FIELD)
+          .collection(TEAM4FIELD)
           .orderBy('createdAt')
           .snapshots(),
       builder: (BuildContext context,
@@ -47,13 +47,13 @@ class _OutCarState extends State<OutCar> {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: OutCarCard(
+                child: Team4OutcarCard(
                   carNumber: filteredDocs[index]['carNumber'],
                   name: filteredDocs[index]['name'],
                   dataId: filteredDocs[index].id,
                   location:  filteredDocs[index]['location'],
                   myName: widget.name,
-                  dataAdress: CARLIST,
+                  dataAdress: TEAM4CARLIST,
                   movedLocation: filteredDocs[index]['movedLocation'],
                   wigetName: filteredDocs[index]['wigetName'],
                   movingTime: filteredDocs[index]['movingTime'],

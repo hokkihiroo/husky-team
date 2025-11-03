@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2_electric_selector.dart';
-import 'package:team_husky/2car_management_system/team2/team2_numbercard.dart';
+import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
+import 'package:team_husky/2car_management_system/team4/team4_electric_selector.dart';
+import 'package:team_husky/2car_management_system/team4/team4_numbercard.dart';
 
-class Team2IpchaView extends StatefulWidget {
+class Team4IpchaView extends StatefulWidget {
   final String name;
 
-  const Team2IpchaView({
+  const Team4IpchaView({
     super.key,
     required this.name,
   });
 
   @override
-  State<Team2IpchaView> createState() => _Team2IpchaViewState();
+  State<Team4IpchaView> createState() => _Team4IpchaViewState();
 }
 
-class _Team2IpchaViewState extends State<Team2IpchaView> {
+class _Team4IpchaViewState extends State<Team4IpchaView> {
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
   String carNumber = ''; // 차번호 클릭시 차번호 추출
   int location = 0; //차번호 클릭시 그차번호 위치
@@ -26,7 +26,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String name = ''; //픽업 하는 사람 이름
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
-  String CarListAdress = CARLIST + formatTodayDate();
+  String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
@@ -84,7 +84,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(FIELD)
+          .collection(TEAM4FIELD)
           .orderBy('createdAt')
           .snapshots(),
       builder: (BuildContext context,
@@ -105,17 +105,17 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4, // 가로 아이템 개수
+            crossAxisCount: 5, // 가로 아이템 개수
             crossAxisSpacing: 10.0, // 가로 간격
             mainAxisSpacing: 18.0, // 세로 간격
-            childAspectRatio: 1.6, // 아이템의 가로세로 비율
+            childAspectRatio: 1.4, // 아이템의 가로세로 비율
           ),
           itemCount: filteredDocs.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () async {
                 //  활성화 시키면 bar 가 바뀜 데이터 클릭시마다
-                CarListAdress = CARLIST + formatTodayDate();
+                CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
                 var document = filteredDocs[index];
                 dataId = document.id;
                 name = filteredDocs[index]['name'];
@@ -143,7 +143,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       color,
                       location,
                       dateTime,
-                      //  dataAdress,
                       dataId,
                       etc,
                       remainTime,
@@ -156,7 +155,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   },
                 );
               },
-              child: Team2NumberCard(
+              child: Team4NumberCard(
                 carNumber: filteredDocs[index]['carNumber'],
                 name: filteredDocs[index]['name'],
                 color: filteredDocs[index]['color'],
@@ -177,7 +176,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     int color,
     int location,
     DateTime dateTime,
-    //   String dataAdress,
     String dataId,
     String etc,
     String remainTime,
@@ -187,7 +185,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String getMovingTime,
     String carModelFrom,
   ) {
-    print(name);
     return AlertDialog(
       title: Row(
         children: [
@@ -230,7 +227,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               onPressed: () async {
                 try {
                   await FirebaseFirestore.instance
-                      .collection(FIELD)
+                      .collection(TEAM4FIELD)
                       .doc(dataId)
                       .update({
                     'color': 2,
@@ -281,7 +278,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM4FIELD)
                             .doc(dataId)
                             .update({
                           'name':
@@ -319,7 +316,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM4FIELD)
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
@@ -353,7 +350,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               child: Column(
                 children: [
                   Text(
-                    '이동',
+                    '기타',
                     style: TextStyle(
                       fontSize: 15, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -366,7 +363,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.black12, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -374,12 +371,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM4FIELD)
                                   .doc(dataId)
                                   .update({
-                                'location': 2,
-                                'wigetName' : widget.name,   //이게 나중에 리스트에서 입차한사람임
-
+                                'color': 1,
                               });
                             } catch (e) {
                               print(e);
@@ -387,10 +382,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'A존',
+                            '출차취소',
                             style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
+                              fontSize: 13, // 텍스트 크기 증가
+                              fontWeight: FontWeight.w400, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
                           ),
@@ -403,7 +398,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.black12, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -411,12 +406,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM4FIELD)
                                   .doc(dataId)
                                   .update({
-                                'location': 3,
-                                'wigetName' : widget.name,
-
+                                'color': 4,
                               });
                             } catch (e) {
                               print(e);
@@ -424,47 +417,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B존',
+                            '회차',
                             style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
-                              color: Colors.black87, // 텍스트 색상
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                            ),
-                          ),
-                          onPressed: () async {
-                            try {
-                              await FirebaseFirestore.instance
-                                  .collection(FIELD)
-                                  .doc(dataId)
-                                  .update({
-                                'location': 4,
-                                'wigetName' : widget.name,
-
-                              });
-                            } catch (e) {
-                              print(e);
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'B2',
-                            style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
+                              fontSize: 13, // 텍스트 크기 증가
+                              fontWeight: FontWeight.w400, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
                           ),
@@ -481,7 +437,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.black12, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -489,12 +445,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM4FIELD)
                                   .doc(dataId)
                                   .update({
-                                'location': 1,
-                                'wigetName' : widget.name,
-
+                                'etc': '',
                               });
                             } catch (e) {
                               print(e);
@@ -502,10 +456,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '가벽',
+                            '특이사항 삭제',
                             style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
+                              fontSize: 13, // 텍스트 크기 증가
+                              fontWeight: FontWeight.w400, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
                           ),
@@ -518,31 +472,104 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.black12, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
                           ),
                           onPressed: () async {
-                            try {
-                              await FirebaseFirestore.instance
-                                  .collection(FIELD)
-                                  .doc(dataId)
-                                  .update({
-                                'location': 5,
-                                'wigetName' : widget.name,
+                            Navigator.pop(context); // 첫 번째 Dialog 닫기
 
-                              });
-                            } catch (e) {
-                              print(e);
+                            if (carModelFrom == null || carModelFrom.trim().isEmpty) {
+                              await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    titlePadding:
+                                        const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                                    contentPadding:
+                                        const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                                    actionsPadding:
+                                        const EdgeInsets.only(right: 12, bottom: 12),
+                                    title: Row(
+                                      children: [
+                                        Icon(Icons.warning_amber_rounded,
+                                            color: Colors.orange, size: 28),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          '안내',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    content: Text(
+                                      '차종을 넣어주세요.',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Colors.blue,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          '닫기',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              return;
                             }
-                            Navigator.pop(context);
+
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Team4ElectricSelector(
+                                  carNumber: carNumber,
+                                  name: name,
+                                  color: color,
+                                  location: location,
+                                  dateTime: dateTime,
+                                  dataId: dataId,
+                                  etc: etc,
+                                  remainTime: remainTime,
+                                  movedLocation: movedLocation,
+                                  wigetName: wigetName,
+                                  movingTime: movingTime,
+                                  getMovingTime: getMovingTime,
+                                  carModelFrom: carModelFrom,
+                                );
+                              },
+                            );
                           },
                           child: Text(
-                            '외부',
+                            '전기차',
                             style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
+                              fontSize: 13, // 텍스트 크기 증가
+                              fontWeight: FontWeight.w400, // 텍스트를 굵게
                               color: Colors.black87, // 텍스트 색상
                             ),
                           ),
@@ -781,7 +808,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                       try {
                                                         await FirebaseFirestore
                                                             .instance
-                                                            .collection(FIELD)
+                                                            .collection(
+                                                                TEAM4FIELD)
                                                             .doc(dataId)
                                                             .update({
                                                           'carBrand': brand,
@@ -842,39 +870,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    backgroundColor: Colors.green, // 버튼 색상
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                    ),
-                  ),
-                  onPressed: () async {
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection(FIELD)
-                          .doc(dataId)
-                          .update({
-                        'color': 4,
-                      });
-                    } catch (e) {
-                      print(e);
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    '회차',
-                    style: TextStyle(
-                      fontSize: 14, // 텍스트 크기 증가
-                      fontWeight: FontWeight.bold, // 텍스트를 굵게
-                      color: Colors.black87, // 텍스트 색상
-                    ),
-                  ),
-                ),
-                SizedBox(
                   width: 5,
                 ),
               ],
@@ -922,7 +917,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                       try {
                                                         await FirebaseFirestore
                                                             .instance
-                                                            .collection(FIELD)
+                                                            .collection(
+                                                                TEAM4FIELD)
                                                             .doc(dataId)
                                                             .update({
                                                           'etc': etc,
@@ -966,50 +962,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       child: Text('특이사항 입력')),
                 ),
                 SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    backgroundColor: Colors.brown, // 버튼 색상
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return bottomEtc(
-                          carNumber,
-                          name,
-                          color,
-                          location,
-                          dateTime,
-                          dataId,
-                          etc,
-                          remainTime,
-                          movedLocation,
-                          wigetName,
-                          movingTime,
-                          getMovingTime,
-                          carModelFrom,
-                        );
-                      },
-                    );
-                  },
-                  child: Text(
-                    '기타',
-                    style: TextStyle(
-                      fontSize: 14, // 텍스트 크기 증가
-                      fontWeight: FontWeight.bold, // 텍스트를 굵게
-                      color: Colors.black87, // 텍스트 색상
-                    ),
-                  ),
-                ),
-                SizedBox(
                   width: 5,
                 ),
               ],
@@ -1021,457 +973,11 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            // Row(
-            //   children: [
-            //     SizedBox(
-            //       width: 5,
-            //     ),
-            //     Expanded(
-            //       flex: 2,
-            //       child: ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //           textStyle:
-            //               TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            //         ),
-            //         onPressed: () async {
-            //           Navigator.pop(context);
-            //
-            //           // try {
-            //           //   await FirebaseFirestore.instance
-            //           //       .collection(dataAdress)
-            //           //       .doc(dataId)
-            //           //       .update({
-            //           //     'color': 1,
-            //           //   });
-            //           // } catch (e) {
-            //           //   print(e);
-            //           // }
-            //         },
-            //         child: Text('출차취소'),
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: ElevatedButton(
-            //           style: ElevatedButton.styleFrom(
-            //             textStyle: TextStyle(
-            //                 fontWeight: FontWeight.w500, fontSize: 18),
-            //           ),
-            //           onPressed: () async {
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(dataAdress) // 컬렉션 이름을 지정하세요
-            //             //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-            //             //       .delete();
-            //             //   print('문서 삭제 완료');
-            //             // } catch (e) {
-            //             //   print('문서 삭제 오류: $e');
-            //             // }
-            //             // Navigator.pop(context);
-            //             //
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(CarListAdress)
-            //             //       .doc(dataId)
-            //             //       .update({
-            //             //     'out': FieldValue.serverTimestamp(),
-            //             //     'outName': widget.name,
-            //             //     'outLocation': location,
-            //             //     'movedLocation': '$movedLocation',
-            //             //     'wigetName': wigetName,
-            //             //     'movingTime': movingTime,
-            //             //   });
-            //             // } catch (e) {
-            //             //   print(e);
-            //             //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-            //             //   showDialog(
-            //             //       context: context,
-            //             //       builder: (BuildContext context) {
-            //             //         return AlertDialog(
-            //             //           title: Text('하루 지난 데이터 입니다 '),
-            //             //           actions: [
-            //             //             ElevatedButton(
-            //             //               onPressed: () {
-            //             //                 Navigator.pop(context);
-            //             //               },
-            //             //               child: Text('확인'),
-            //             //             ),
-            //             //           ],
-            //             //         );
-            //             //       });
-            //             // }
-            //           },
-            //           child: Text('출차완료')),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),
     );
   }
-
-  Widget bottomEtc(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-  ) {
-    return AlertDialog(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 공간을 나누기 위해 사용
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '차량번호: $carNumber',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 5), // 간격을 더 좁혀서 일관된 디자인
-              Text(
-                '경과: $remainTime',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
-                ),
-              ),
-            ],
-          ),
-          Container(
-            height: 60,
-            width: 120,
-            child: ElevatedButton(
-              onPressed: () async {
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(FIELD) // 컬렉션 이름을 지정하세요
-                      .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                      .delete();
-                  print('문서 삭제 완료');
-                } catch (e) {
-                  print('문서 삭제 오류: $e');
-                }
-                Navigator.pop(context);
-
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(CarListAdress)
-                      .doc(dataId)
-                      .update({
-                    'out': FieldValue.serverTimestamp(),
-                    'outName': name,
-                    'outLocation': location,
-                    'movedLocation': '$movedLocation',
-                    'wigetName': wigetName,
-                    'movingTime': movingTime,
-                    'etc': etc,
-                  });
-                } catch (e) {
-                  print(e);
-                  print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('하루 지난 데이터 입니다 '),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('확인'),
-                            ),
-                          ],
-                        );
-                      });
-                }
-              },
-              child: Text(
-                '출차완료',
-                style: TextStyle(
-                  fontSize: 17, // 텍스트 크기 증가
-                  fontWeight: FontWeight.bold, // 텍스트를 굵게
-                  color: Colors.black87, // 텍스트 색상
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                backgroundColor: Colors.red, // 버튼 색상
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      content: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 260,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.blue, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context); // 첫 번째 Dialog 닫기
-
-                      if (carModelFrom == null || carModelFrom.trim().isEmpty) {
-                        await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
-                              contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                              actionsPadding: const EdgeInsets.only(right: 12, bottom: 12),
-                              title: Row(
-                                children: [
-                                  Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    '안내',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              content: Text(
-                                '차종을 넣어주세요.',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    '닫기',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        return;
-                      }
-
-                      await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ElectricButtonDialog(
-                            carNumber: carNumber,
-                            name: name,
-                            color: color,
-                            location: location,
-                            dateTime: dateTime,
-                            dataId: dataId,
-                            etc: etc,
-                            remainTime: remainTime,
-                            movedLocation: movedLocation,
-                            wigetName: wigetName,
-                            movingTime: movingTime,
-                            getMovingTime: getMovingTime,
-                            carModelFrom: carModelFrom,
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      '전기차 등록',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'location': 0,
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '입차대기로이동',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'etc': '',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '특이사항삭제',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'color': 1,
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '출차취소',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '돌아가기',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
 
   Widget carModel(
     brand,
@@ -1502,7 +1008,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
                 try {
                   await FirebaseFirestore.instance
-                      .collection(FIELD)
+                      .collection(TEAM4FIELD)
                       .doc(dataId)
                       .update({
                     'carBrand': brand,

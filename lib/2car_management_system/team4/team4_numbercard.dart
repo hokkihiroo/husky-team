@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Team2NumberCard extends StatelessWidget {
+class Team4NumberCard extends StatelessWidget {
   final String carNumber;
   final String? name;
   final int color;
@@ -8,7 +8,7 @@ class Team2NumberCard extends StatelessWidget {
   final String? carBrand;
   final String? carModel;
 
-  const Team2NumberCard({
+  const Team4NumberCard({
     super.key,
     required this.carNumber,
     this.name,
@@ -31,6 +31,7 @@ class Team2NumberCard extends StatelessWidget {
       return "에러";
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

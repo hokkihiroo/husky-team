@@ -1,41 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2_carschedule.dart';
-import 'package:team_husky/2car_management_system/team2/team2_carschedule_view.dart';
-import 'package:team_husky/2car_management_system/team2/team2_electric.dart';
-import 'package:team_husky/2car_management_system/team2/team2_ipcha_view.dart';
-import 'package:team_husky/2car_management_system/team2/team2_oil_view.dart';
+import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
+import 'package:team_husky/2car_management_system/team4/team4_car_list.dart';
+import 'package:team_husky/2car_management_system/team4/team4_electric.dart';
+import 'package:team_husky/2car_management_system/team4/team4_outcar.dart';
+import 'package:team_husky/2car_management_system/team4/tema4_ipcha_view.dart';
 
-import 'team2_car_list.dart';
-import 'team2_model.dart';
-import 'team2_outcar.dart';
-
-class Team2View extends StatefulWidget {
-  const Team2View({super.key, required this.name});
+class Team4View extends StatefulWidget {
+  const Team4View({super.key, required this.name});
 
   final String name;
 
   @override
-  State<Team2View> createState() => _Team2ViewState();
+  State<Team4View> createState() => _Team4ViewState();
 }
 
-class _Team2ViewState extends State<Team2View> {
+class _Team4ViewState extends State<Team4View> {
   String carNumber = '';
-  String CarListAdress = CARLIST + formatTodayDate();
-  String CarScheduleAdress = formatTodayDate();
-  String dayOfWeek = '';
-
-  @override
-  void initState() {
-    super.initState();
-    DateTime now = DateTime.now();
-    dayOfWeek = getDayOfWeek(now);
-
-  }
-
-
+  String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
 
   @override
   Widget build(BuildContext context) {
@@ -48,56 +31,31 @@ class _Team2ViewState extends State<Team2View> {
               Expanded(
                 child: Center(
                   child: Text(
-                    '제네시스 청주',
+                    '제네시스 수지',
                     style: TextStyle(
-                      color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
+                      color: Color(0xFFFFC107), // 앰버톤 노랑 (머스타드 느낌)
                     ),
                   ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => OilView(name: widget.name,)),
-                  // );
-
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Electric()),
+                    MaterialPageRoute(builder: (context) => Team4Electric()),
                   );
                 },
                 child: Text(
                   '전기차',
                   style: TextStyle(
-                    color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
+                    color: Color(0xFFFFC107), // 앰버톤 노랑 (머스타드 느낌)
+
                     decorationColor: Colors.white,
                     // 줄 색상
                     decorationThickness: 2, // 줄 두께
                   ),
                 ),
               ),
-              // SizedBox(
-              //   width: 15,
-              // ),
-              // GestureDetector(
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => Team2CarSchedule()),
-              //     );
-              //   },
-              //   child: Text(
-              //     '시승',
-              //     style: TextStyle(
-              //       color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
-              //       // 줄긋기 설정
-              //       decorationColor: Colors.white,
-              //       // 줄 색상
-              //       decorationThickness: 2, // 줄 두께
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           iconTheme: IconThemeData(color: Colors.white),
@@ -111,37 +69,6 @@ class _Team2ViewState extends State<Team2View> {
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     IconButton(
-              //       icon: Icon(Icons.refresh), // 새로고침 아이콘
-              //       color: Colors.green,
-              //       onPressed: () {
-              //         setState(() {
-              //           CarScheduleAdress = formatTodayDate();
-              //           DateTime now = DateTime.now();
-              //           dayOfWeek = getDayOfWeek(now);
-              //         });
-              //       },
-              //     ),
-              //     Text(
-              //       '시승차 현황 ($CarScheduleAdress) $dayOfWeek',
-              //       style: TextStyle(
-              //         fontSize: 15,
-              //         fontWeight: FontWeight.bold,
-              //         color: Colors.white,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Team2CarSchduleView(
-              //   CarScheduleAdress: CarScheduleAdress,
-              // ),
-              // Divider(
-              //   color: Colors.white, // 선 색상
-              //   thickness: 2.0, // 선 두께
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -149,7 +76,7 @@ class _Team2ViewState extends State<Team2View> {
                     width: 40,
                   ),
                   Text(
-                    '입차 대기',
+                    '고객 입차 차량',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -161,23 +88,14 @@ class _Team2ViewState extends State<Team2View> {
               SizedBox(
                 height: 10,
               ),
-              Team2IpchaView(
+              Team4IpchaView(
                 name: widget.name,
               ),
+
               SizedBox(
                 height: 10,
               ),
-              Divider(
-                color: Colors.white, // 선 색상
-                thickness: 2.0, // 선 두께
-              ),
-              _LocationName(),
-              SizedBox(
-                height: 10,
-              ),
-              _Lists(
-                name: widget.name,
-              ),
+
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
@@ -201,7 +119,7 @@ class _Team2ViewState extends State<Team2View> {
               SizedBox(
                 height: 10,
               ),
-              OutCar(
+              Team4OutCar(
                 name: widget.name,
               ),
               SizedBox(
@@ -231,7 +149,7 @@ class _Team2ViewState extends State<Team2View> {
                       TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
                 ),
                 onPressed: () {
-                  CarListAdress = CARLIST + formatTodayDate();
+                  CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
                   print(CarListAdress);
                   carNumber = '0000';
                   showDialog(
@@ -271,12 +189,12 @@ class _Team2ViewState extends State<Team2View> {
                                   onPressed: () async {
                                     String documentId = FirebaseFirestore
                                         .instance
-                                        .collection(FIELD)
+                                        .collection(TEAM4FIELD)
                                         .doc()
                                         .id;
                                     try {
                                       await FirebaseFirestore.instance
-                                          .collection(FIELD)
+                                          .collection(TEAM4FIELD)
                                           .doc(documentId)
                                           .set({
                                         'carNumber': carNumber,
@@ -360,7 +278,7 @@ class _Team2ViewState extends State<Team2View> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CarList(),
+                      builder: (context) => Team4Carlist(),
                     ),
                   );
                 },
@@ -376,164 +294,6 @@ class _Team2ViewState extends State<Team2View> {
         ],
       ),
       color: Colors.black,
-    );
-  }
-}
-
-class _LocationName extends StatelessWidget {
-  const _LocationName({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            child: Text(
-              '가벽',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              'A존',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              'B존',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              'B2',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              '외부',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Lists extends StatelessWidget {
-  final String name;
-
-  _Lists({
-    super.key,
-    required this.name,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              CarState(
-                name: name,
-                location: FIELD,
-                reverse: 1,
-                check: () {},
-                fieldLocation: 1,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              CarState(
-                name: name,
-                location: FIELD,
-                reverse: 1,
-                check: () {},
-                fieldLocation: 2,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              CarState(
-                name: name,
-                location: FIELD,
-                reverse: 1,
-                check: () {},
-                fieldLocation: 3,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              CarState(
-                name: name,
-                location: FIELD,
-                reverse: 1,
-                check: () {},
-                fieldLocation: 4,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              CarState(
-                name: name,
-                location: FIELD,
-                reverse: 1,
-                check: () {},
-                fieldLocation: 5,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
