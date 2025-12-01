@@ -183,20 +183,59 @@ class _CarListState extends State<CarList> {
     return buffer.toString();
   }
 
+  int selectedTab = 0; // 0=고객차, 1=시승차
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(
-          '입차리스트',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
+
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // 고객차 버튼
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedTab = 0;
+                });
+              },
+              child: Text(
+                '고객차',
+                style: TextStyle(
+                  color: selectedTab == 0 ? Colors.white : Colors.grey,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            SizedBox(width: 20),
+
+            // 시승차 버튼
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedTab = 1;
+                });
+              },
+              child: Text(
+                '시승차',
+                style: TextStyle(
+                  color: selectedTab == 1 ? Colors.white : Colors.grey,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+
         actions: [
           IconButton(
             icon: Icon(Icons.copy),
