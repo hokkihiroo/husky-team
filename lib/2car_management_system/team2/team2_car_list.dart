@@ -16,6 +16,7 @@ class CarList extends StatefulWidget {
 class _CarListState extends State<CarList> {
   DateTime selectedDate = DateTime.now();
   String DBAdress = formatTodayDate();
+
 // -------------------------------------------------------------
   DateTime _focusedDay = DateTime.now(); // 이부분은 날짜 선택에 대한 변수라 손대지말자
   DateTime? _selectedDay;
@@ -112,16 +113,15 @@ class _CarListState extends State<CarList> {
                 TextButton(
                   child: Text("선택한 날짜로 이동"),
                   onPressed: () {
-
                     if (selectedDate != null) {
                       setState(() {
-                       selectedDate = _selectedDay!;
+                        selectedDate = _selectedDay!;
                         final year = selectedDate.year.toString();
-                        final month = selectedDate.month.toString().padLeft(2, '0');
+                        final month =
+                            selectedDate.month.toString().padLeft(2, '0');
                         final day = selectedDate.day.toString().padLeft(2, '0');
                         DBAdress = year + month + day;
                         Navigator.of(context).pop();
-
                       });
                     }
                   },
@@ -134,15 +134,11 @@ class _CarListState extends State<CarList> {
                 ),
               ],
             ),
-
           ],
         );
       },
     );
   }
-
-
-
 
   // 텍스트 만드는 함수 추가
   Future<String> createClipboardText(String address) async {
@@ -185,7 +181,6 @@ class _CarListState extends State<CarList> {
 
   int selectedTab = 0; // 0=고객차, 1=시승차
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,7 +189,6 @@ class _CarListState extends State<CarList> {
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
-
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -235,7 +229,6 @@ class _CarListState extends State<CarList> {
             ),
           ],
         ),
-
         actions: [
           IconButton(
             icon: Icon(Icons.copy),
@@ -243,7 +236,7 @@ class _CarListState extends State<CarList> {
               final text = await createClipboardText(DBAdress);
               Clipboard.setData(ClipboardData(text: text));
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('텍스트가 복사되었습니다!')),
+                SnackBar(content: Text('고객차 텍스트만 복사되었습니다!')),
               );
             },
           )
@@ -261,6 +254,7 @@ class _CarListState extends State<CarList> {
             _ListState(),
             ListModel(
               adress: DBAdress,
+              selectedTab: selectedTab,
             ),
           ],
         ),
@@ -373,6 +367,7 @@ class _ListState extends StatelessWidget {
 
 class ListModel extends StatelessWidget {
   final String adress;
+  final int selectedTab;
   String dataId = '';
   String carNumber = '';
   String enterTime = '';
@@ -384,13 +379,17 @@ class ListModel extends StatelessWidget {
   String movedLocation = '';
   String movingTime = '';
 
-  ListModel({super.key, required this.adress});
+
+
+  ListModel({super.key, required this.adress, required this.selectedTab});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(CARLIST + adress)
+          .collection(
+          (selectedTab == 0 ? CARLIST : COLOR5) + adress
+      )
           .orderBy('enter')
           .snapshots(),
       builder: (BuildContext context,
@@ -473,18 +472,19 @@ class ListModel extends StatelessWidget {
   }
 
   void showCarInfoBottomSheet(
-      context,
-      id,
-      carNumber,
-      enterTime,
-      enterName,
-      etc,
-      outName,
-      outTime,
-      outLocation,
-      movedLocation,
-      movingTime,
-      adress,) {
+    context,
+    id,
+    carNumber,
+    enterTime,
+    enterName,
+    etc,
+    outName,
+    outTime,
+    outLocation,
+    movedLocation,
+    movingTime,
+    adress,
+  ) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -593,8 +593,6 @@ class ListModel extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-
-
                         Text(
                           '출차',
                           style: TextStyle(
@@ -628,7 +626,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                          Text(etc),
+                            Text(etc),
                           ],
                         )
                       ],
