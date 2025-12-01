@@ -55,12 +55,15 @@ class Team2NumberCard extends StatelessWidget {
                         ? Colors.blue
                         : color == 4
                         ? Colors.green
+                        : color == 5
+                        ? Colors.purple
                         : Colors.yellow,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

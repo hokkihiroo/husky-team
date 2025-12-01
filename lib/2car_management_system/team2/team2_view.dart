@@ -24,8 +24,10 @@ class Team2View extends StatefulWidget {
 class _Team2ViewState extends State<Team2View> {
   String carNumber = '';
   String CarListAdress = CARLIST + formatTodayDate();
+  String Color5List = COLOR5 + formatTodayDate();
   String CarScheduleAdress = formatTodayDate();
   String dayOfWeek = '';
+  int bottomAction = 0;
 
   @override
   void initState() {
@@ -143,11 +145,9 @@ class _Team2ViewState extends State<Team2View> {
               //   thickness: 2.0, // 선 두께
               // ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
-                    width: 40,
-                  ),
+
                   Text(
                     '입차 대기',
                     style: TextStyle(
@@ -156,6 +156,25 @@ class _Team2ViewState extends State<Team2View> {
                       color: Colors.white,
                     ),
                   ),
+                  GestureDetector(
+
+                    onTap: () {
+                      String topic = '시승차입니다';
+                      String hint = '시승차번호를 입력해주세요';
+                      int color = 5;
+
+                      doEnterAction(topic,hint,color);
+                    },
+                    child: Text(
+                      '시승차',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple,
+                      ),
+                    ),
+                  )
+
                 ],
               ),
               SizedBox(
@@ -230,116 +249,7 @@ class _Team2ViewState extends State<Team2View> {
                   textStyle:
                       TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
                 ),
-                onPressed: () {
-                  CarListAdress = CARLIST + formatTodayDate();
-                  print(CarListAdress);
-                  carNumber = '0000';
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          '입차번호',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 30),
-                        ),
-                        actions: [
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            autofocus: true,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[0-9]')),
-                            ],
-                            maxLength: 4,
-                            decoration: InputDecoration(
-                              hintText: '입차번호를 입력해주세요',
-                            ),
-                            onChanged: (value) {
-                              carNumber = value;
-                            },
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.0), // 버튼의 위아래 패딩 조정
-                                  ),
-                                  onPressed: () async {
-                                    String documentId = FirebaseFirestore
-                                        .instance
-                                        .collection(FIELD)
-                                        .doc()
-                                        .id;
-                                    try {
-                                      await FirebaseFirestore.instance
-                                          .collection(FIELD)
-                                          .doc(documentId)
-                                          .set({
-                                        'carNumber': carNumber,
-                                        'name': '',
-                                        'createdAt':
-                                            FieldValue.serverTimestamp(),
-                                        'location': 0,
-                                        'color': 1,
-                                        'etc': '',
-                                        'movedLocation': '입차',
-                                        'wigetName': '',
-                                        'movingTime': '',
-                                        'carBrand': '',
-                                        'carModel': '',
-                                      });
-                                    } catch (e) {}
-
-                                    try {
-                                      await FirebaseFirestore.instance
-                                          .collection(CarListAdress)
-                                          .doc(documentId)
-                                          .set({
-                                        'carNumber': carNumber,
-                                        'enterName': widget.name,
-                                        'enter': FieldValue.serverTimestamp(),
-                                        'out': '',
-                                        'outName': '',
-                                        'outLocation': 10,
-                                        'etc': '',
-                                        'movedLocation': '',
-                                        'wigetName': '',
-                                        'movingTime': '',
-                                        'carBrand': '',
-                                        'carModel': '',
-                                      });
-                                    } catch (e) {}
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('입력'),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.0), // 버튼의 위아래 패딩 조정
-                                  ),
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('취소'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                onPressed: () => doEnterAction('고객차입니다','번호를 입력해주세요', 1),
                 child: Text('ENTER'),
               ),
             ),
@@ -377,6 +287,132 @@ class _Team2ViewState extends State<Team2View> {
       ),
       color: Colors.black,
     );
+  }
+
+  void doEnterAction(topic,hint,color) {
+
+
+
+
+    CarListAdress = CARLIST + formatTodayDate();
+    Color5List = COLOR5 + formatTodayDate();
+    carNumber = '0000';
+    final targetCollection = (color == 5) ? Color5List : CarListAdress;
+
+    print(targetCollection); // 어떤 컬렉션으로 들어가는지 확인
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            topic,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+              color: color == 5 ? Colors.purple : Colors.black, // 기본색은 원하는 색으로 변경
+            ),
+          ),
+          actions: [
+            TextField(
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[0-9]')),
+              ],
+              maxLength: 4,
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: TextStyle(
+                  color: color == 5 ? Colors.purple : Colors.grey, // 기본 힌트 색은 회색
+                ),
+              ),
+              onChanged: (value) {
+                carNumber = value;
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 20.0), // 버튼의 위아래 패딩 조정
+                    ),
+                    onPressed: () async {
+                      String documentId = FirebaseFirestore
+                          .instance
+                          .collection(FIELD)
+                          .doc()
+                          .id;
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(documentId)
+                            .set({
+                          'carNumber': carNumber,
+                          'name': '',
+                          'createdAt':
+                          FieldValue.serverTimestamp(),
+                          'location': 0,
+                          'color': color,
+                          'etc': '',
+                          'movedLocation': '입차',
+                          'wigetName': '',
+                          'movingTime': '',
+                          'carBrand': '',
+                          'carModel': '',
+                        });
+                      } catch (e) {}
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(targetCollection)
+                            .doc(documentId)
+                            .set({
+                          'carNumber': carNumber,
+                          'enterName': widget.name,
+                          'enter': FieldValue.serverTimestamp(),
+                          'out': '',
+                          'outName': '',
+                          'outLocation': 10,
+                          'etc': '',
+                          'movedLocation': '',
+                          'wigetName': '',
+                          'movingTime': '',
+                          'carBrand': '',
+                          'carModel': '',
+                        });
+                      } catch (e) {}
+                      Navigator.pop(context);
+                    },
+                    child: Text('입력'),
+                  ),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 20.0), // 버튼의 위아래 패딩 조정
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: Text('취소'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+
   }
 }
 

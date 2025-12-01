@@ -137,22 +137,39 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return bottomTwo(
-                      carNumber,
-                      name,
-                      color,
-                      location,
-                      dateTime,
-                      //  dataAdress,
-                      dataId,
-                      etc,
-                      remainTime,
-                      movedLocation,
-                      wigetName,
-                      movingTime,
-                      getMovingTime,
-                      carModelFrom,
-                    );
+                    if (color == 5) {
+                      return bottomColor5(
+                        carNumber,
+                        name,
+                        color,
+                        location,
+                        dateTime,
+                        dataId,
+                        etc,
+                        remainTime,
+                        movedLocation,
+                        wigetName,
+                        movingTime,
+                        getMovingTime,
+                        carModelFrom,
+                      );
+                    } else {
+                      return bottomTwo(
+                        carNumber,
+                        name,
+                        color,
+                        location,
+                        dateTime,
+                        dataId,
+                        etc,
+                        remainTime,
+                        movedLocation,
+                        wigetName,
+                        movingTime,
+                        getMovingTime,
+                        carModelFrom,
+                      );
+                    }
                   },
                 );
               },
@@ -1014,6 +1031,748 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 ),
               ],
             ),
+            Text(
+              '$etc',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            // Row(
+            //   children: [
+            //     SizedBox(
+            //       width: 5,
+            //     ),
+            //     Expanded(
+            //       flex: 2,
+            //       child: ElevatedButton(
+            //         style: ElevatedButton.styleFrom(
+            //           textStyle:
+            //               TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            //         ),
+            //         onPressed: () async {
+            //           Navigator.pop(context);
+            //
+            //           // try {
+            //           //   await FirebaseFirestore.instance
+            //           //       .collection(dataAdress)
+            //           //       .doc(dataId)
+            //           //       .update({
+            //           //     'color': 1,
+            //           //   });
+            //           // } catch (e) {
+            //           //   print(e);
+            //           // }
+            //         },
+            //         child: Text('출차취소'),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: ElevatedButton(
+            //           style: ElevatedButton.styleFrom(
+            //             textStyle: TextStyle(
+            //                 fontWeight: FontWeight.w500, fontSize: 18),
+            //           ),
+            //           onPressed: () async {
+            //             // try {
+            //             //   await FirebaseFirestore.instance
+            //             //       .collection(dataAdress) // 컬렉션 이름을 지정하세요
+            //             //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+            //             //       .delete();
+            //             //   print('문서 삭제 완료');
+            //             // } catch (e) {
+            //             //   print('문서 삭제 오류: $e');
+            //             // }
+            //             // Navigator.pop(context);
+            //             //
+            //             // try {
+            //             //   await FirebaseFirestore.instance
+            //             //       .collection(CarListAdress)
+            //             //       .doc(dataId)
+            //             //       .update({
+            //             //     'out': FieldValue.serverTimestamp(),
+            //             //     'outName': widget.name,
+            //             //     'outLocation': location,
+            //             //     'movedLocation': '$movedLocation',
+            //             //     'wigetName': wigetName,
+            //             //     'movingTime': movingTime,
+            //             //   });
+            //             // } catch (e) {
+            //             //   print(e);
+            //             //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+            //             //   showDialog(
+            //             //       context: context,
+            //             //       builder: (BuildContext context) {
+            //             //         return AlertDialog(
+            //             //           title: Text('하루 지난 데이터 입니다 '),
+            //             //           actions: [
+            //             //             ElevatedButton(
+            //             //               onPressed: () {
+            //             //                 Navigator.pop(context);
+            //             //               },
+            //             //               child: Text('확인'),
+            //             //             ),
+            //             //           ],
+            //             //         );
+            //             //       });
+            //             // }
+            //           },
+            //           child: Text('출차완료')),
+            //     ),
+            //   ],
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget bottomColor5(
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      ) {
+    print(name);
+    return AlertDialog(
+      title: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '차종: $carModelFrom',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700],
+                ),
+              ),
+              Text(
+                '차량번호: $carNumber',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700],
+                ),
+              ),
+              Text(
+                '경과: $remainTime',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Container(
+            height: 60,
+            width: 110,
+            child: ElevatedButton(
+              onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance
+                      .collection(FIELD)
+                      .doc(dataId)
+                      .update({
+                    'location': 5,
+                  });
+                } catch (e) {
+                  print(e);
+                }
+                Navigator.pop(context);
+              },
+              child: Text(
+                '시승출발',
+                style: TextStyle(
+                  fontSize: 18, // 텍스트 크기 증가
+                  fontWeight: FontWeight.bold, // 텍스트를 굵게
+                  color: Colors.black87, // 텍스트 색상
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                backgroundColor: Colors.purple, // 버튼 색상
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      content: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 320,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 60),
+                      backgroundColor: Colors.blueGrey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context); // 기존 팝
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              String? selectedBrand;
+
+                              // 탭 인덱스에 따른 맵 선택 함수
+                              Map<String, List<String>> getSelectedBrandMap() {
+                                if (selectedTabIndex == 0)
+                                  return domesticBrands;
+                                if (selectedTabIndex == 1)
+                                  return importedFamousBrands;
+                                return otherBrands;
+                              }
+
+                              return AlertDialog(
+                                title: Text('브랜드를 선택하세요',
+                                    style:
+                                    TextStyle(fontWeight: FontWeight.bold)),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ToggleButtons(
+                                        isSelected: [
+                                          selectedTabIndex == 0,
+                                          selectedTabIndex == 1,
+                                          selectedTabIndex == 2,
+                                        ],
+                                        onPressed: (index) {
+                                          setState(() {
+                                            selectedTabIndex = index;
+                                          });
+                                        },
+                                        borderRadius: BorderRadius.circular(8),
+                                        selectedColor: Colors.white,
+                                        fillColor: Colors.blue,
+                                        color: Colors.black,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            child: Text('국산'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            child: Text('수입'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            child: Text('기타'),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Container(
+                                        height: 350,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.grey.shade300),
+                                          borderRadius:
+                                          BorderRadius.circular(8),
+                                        ),
+                                        child: Scrollbar(
+                                          child: GridView.count(
+                                            crossAxisCount: 3,
+                                            // 한 줄에 3개
+                                            crossAxisSpacing: 8,
+                                            mainAxisSpacing: 8,
+                                            shrinkWrap: true,
+                                            childAspectRatio: 1,
+                                            // 카드 비율 (가로:세로)
+                                            children: getSelectedBrandMap()
+                                                .keys
+                                                .map((brand) {
+                                              return Card(
+                                                color: selectedBrand == brand
+                                                    ? Colors.grey.shade200
+                                                    : Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(6),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                      context) {
+                                                        return carModel(brand,
+                                                            getSelectedBrandMap());
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                    child: Text(
+                                                      brand,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.w600,
+                                                          fontSize: 14),
+                                                      textAlign:
+                                                      TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text('닫기'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '브랜드넣기',
+                      style: TextStyle(
+                        fontSize: 14, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '대면',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '대면시승',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '비대',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '비대면시승',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '현동',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '현장동승',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '현비',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '현장비동승',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '주유',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '주유',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '인도',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '인도',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.brown, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () {
+                      // Navigator.pop(context);
+
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (BuildContext context) {
+                      //     return bottomEtc(
+                      //       carNumber,
+                      //       name,
+                      //       color,
+                      //       location,
+                      //       dateTime,
+                      //       dataId,
+                      //       etc,
+                      //       remainTime,
+                      //       movedLocation,
+                      //       wigetName,
+                      //       movingTime,
+                      //       getMovingTime,
+                      //       carModelFrom,
+                      //     );
+                      //   },
+                      // );
+                    },
+                    child: Text(
+                      '기타',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 60),
+                      backgroundColor: Colors.red, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+
+                    },
+                    child: Text(
+                      '시승종료',
+                      style: TextStyle(
+                        fontSize: 14, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        textStyle: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 17),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+
+                        setState(() {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('특이사항'),
+                                  content: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 150,
+                                    child: Column(
+                                      children: [
+                                        TextField(
+                                          inputFormatters: [],
+                                          maxLength: 15,
+                                          decoration: InputDecoration(
+                                            hintText: '특이사항 15자까지가능',
+                                          ),
+                                          onChanged: (value) {
+                                            etc = value;
+                                          },
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+
+                                                      try {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(FIELD)
+                                                            .doc(dataId)
+                                                            .update({
+                                                          'etc': etc,
+                                                        });
+                                                      } catch (e) {
+                                                        print(e);
+                                                      }
+
+                                                      try {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                            CarListAdress)
+                                                            .doc(dataId)
+                                                            .update({
+                                                          'etc': etc,
+                                                        });
+                                                      } catch (e) {
+                                                        print(e);
+                                                      }
+                                                    },
+                                                    child: Text('등록'))),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Expanded(
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text('취소'))),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        });
+                      },
+                      child: Text('특이사항 입력')),
+                ),
+              ],
+            ),
+
             Text(
               '$etc',
               style: TextStyle(

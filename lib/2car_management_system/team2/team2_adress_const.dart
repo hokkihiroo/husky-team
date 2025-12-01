@@ -10,7 +10,9 @@ final CHUNGJUCARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gan
 
 final BRANDMANAGE ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
 
-final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/LXhg3awh7ikVeUqVarsP/';
+final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/LXhg3awh7ikVeUqVarsP/'; //입차리스트 주소
+
+final COLOR5 ='local/q0LRMbznxA2yPca1DKNw/team2/yJ82irnxnFs2Pe2JlMAA/';  //시승차 리스트 주소
 
 // 전기차 리스트 주소
 final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/team2/pNHnni1uB4xc61VODmx9/';
