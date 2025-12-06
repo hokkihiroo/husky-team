@@ -27,6 +27,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
   String CarListAdress = CARLIST + formatTodayDate();
+  String Color5List = COLOR5 + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
@@ -116,6 +117,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               onTap: () async {
                 //  활성화 시키면 bar 가 바뀜 데이터 클릭시마다
                 CarListAdress = CARLIST + formatTodayDate();
+                Color5List = COLOR5 + formatTodayDate();
                 var document = filteredDocs[index];
                 dataId = document.id;
                 name = filteredDocs[index]['name'];
@@ -395,8 +397,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   .doc(dataId)
                                   .update({
                                 'location': 2,
-                                'wigetName' : widget.name,   //이게 나중에 리스트에서 입차한사람임
-
+                                'wigetName': widget.name, //이게 나중에 리스트에서 입차한사람임
                               });
                             } catch (e) {
                               print(e);
@@ -432,8 +433,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   .doc(dataId)
                                   .update({
                                 'location': 3,
-                                'wigetName' : widget.name,
-
+                                'wigetName': widget.name,
                               });
                             } catch (e) {
                               print(e);
@@ -469,8 +469,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   .doc(dataId)
                                   .update({
                                 'location': 4,
-                                'wigetName' : widget.name,
-
+                                'wigetName': widget.name,
                               });
                             } catch (e) {
                               print(e);
@@ -510,8 +509,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   .doc(dataId)
                                   .update({
                                 'location': 1,
-                                'wigetName' : widget.name,
-
+                                'wigetName': widget.name,
                               });
                             } catch (e) {
                               print(e);
@@ -547,8 +545,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   .doc(dataId)
                                   .update({
                                 'location': 5,
-                                'wigetName' : widget.name,
-
+                                'wigetName': widget.name,
                               });
                             } catch (e) {
                               print(e);
@@ -679,7 +676,9 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return carModel(brand,
+                                                        return carModel(
+                                                            color,
+                                                            brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -710,8 +709,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                 ),
                                 actions: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       // 직접입력 버튼 (크고 예쁜 스타일)
                                       // ElevatedButton(
@@ -1128,20 +1126,20 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   }
 
   Widget bottomColor5(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+  ) {
     print(name);
     return AlertDialog(
       title: Row(
@@ -1189,6 +1187,17 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       .doc(dataId)
                       .update({
                     'location': 5,
+                  });
+                } catch (e) {
+                  print(e);
+                }
+
+                try {
+                  await FirebaseFirestore.instance
+                      .collection(Color5List)
+                      .doc(dataId)
+                      .update({
+                    'movingTime': FieldValue.serverTimestamp(),
                   });
                 } catch (e) {
                   print(e);
@@ -1253,7 +1262,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                               return AlertDialog(
                                 title: Text('브랜드를 선택하세요',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.bold)),
+                                        TextStyle(fontWeight: FontWeight.bold)),
                                 content: SizedBox(
                                   width: double.maxFinite,
                                   child: Column(
@@ -1299,7 +1308,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                           border: Border.all(
                                               color: Colors.grey.shade300),
                                           borderRadius:
-                                          BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Scrollbar(
                                           child: GridView.count(
@@ -1319,7 +1328,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                     : Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(6),
+                                                      BorderRadius.circular(6),
                                                 ),
                                                 child: InkWell(
                                                   onTap: () {
@@ -1327,8 +1336,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                     showDialog(
                                                       context: context,
                                                       builder: (BuildContext
-                                                      context) {
-                                                        return carModel(brand,
+                                                          context) {
+                                                        return carModel(
+                                                            color,
+                                                            brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -1336,16 +1347,16 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     padding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 8),
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8),
                                                     child: Text(
                                                       brand,
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.w600,
+                                                              FontWeight.w600,
                                                           fontSize: 14),
                                                       textAlign:
-                                                      TextAlign.center,
+                                                          TextAlign.center,
                                                     ),
                                                   ),
                                                 ),
@@ -1361,7 +1372,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
@@ -1670,7 +1680,48 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       ),
                     ),
                     onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD) // 컬렉션 이름을 지정하세요
+                            .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                            .delete();
+                        print('문서 삭제 완료');
+                      } catch (e) {
+                        print('문서 삭제 오류: $e');
+                      }
+                      Navigator.pop(context);
 
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(Color5List)
+                            .doc(dataId)
+                            .update({
+                          'out': FieldValue.serverTimestamp(),
+                          'outName': name,
+                          'outLocation': location,
+                          'wigetName': wigetName,
+                          'movingTime': movingTime,
+                          'etc': etc,
+                        });
+                      } catch (e) {
+                        print(e);
+                        print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('하루 지난 데이터 입니다 '),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            });
+                      }
                     },
                     child: Text(
                       '시승종료',
@@ -1740,7 +1791,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                         await FirebaseFirestore
                                                             .instance
                                                             .collection(
-                                                            CarListAdress)
+                                                                CarListAdress)
                                                             .doc(dataId)
                                                             .update({
                                                           'etc': etc,
@@ -2006,12 +2057,16 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
-                              contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                              actionsPadding: const EdgeInsets.only(right: 12, bottom: 12),
+                              titlePadding:
+                                  const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                              actionsPadding:
+                                  const EdgeInsets.only(right: 12, bottom: 12),
                               title: Row(
                                 children: [
-                                  Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+                                  Icon(Icons.warning_amber_rounded,
+                                      color: Colors.orange, size: 28),
                                   SizedBox(width: 8),
                                   Text(
                                     '안내',
@@ -2037,7 +2092,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
                                   ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
@@ -2230,9 +2286,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     );
   }
 
-
-
   Widget carModel(
+    color,
     brand,
     brandModels,
   ) {
@@ -2273,7 +2328,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
                 try {
                   await FirebaseFirestore.instance
-                      .collection(CarListAdress)
+                      .collection((color == 5 ? Color5List : CarListAdress))
                       .doc(dataId)
                       .update({
                     'carBrand': brand,

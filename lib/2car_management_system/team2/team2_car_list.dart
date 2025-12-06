@@ -251,7 +251,10 @@ class _CarListState extends State<CarList> {
               onPressGoToday: goToday,
               selectedDate: selectedDate,
             ),
-            _ListState(),
+            // 🔥 selectedTab 값에 따라 다른 위젯 적용
+            selectedTab == 0 ? _ListState() : _Color5State(),
+
+// 기존 ListModel 유지
             ListModel(
               adress: DBAdress,
               selectedTab: selectedTab,
@@ -365,6 +368,46 @@ class _ListState extends StatelessWidget {
   }
 }
 
+class _Color5State extends StatelessWidget {
+  const _Color5State({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        height: 40,
+        color: Colors.grey.shade800,
+        child: Row(
+          children: [
+            _buildHeaderCell(width: 40, label: '번호'),
+            _buildHeaderCell(width: 60, label: '차종'),
+            _buildHeaderCell(width: 70, label: '차량번호'),
+            _buildHeaderCell(width: 60, label: '스탠바이'),
+            _buildHeaderCell(width: 60, label: '시승출발'),
+            _buildHeaderCell(width: 60, label: '시승종료'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderCell({required double width, required String label}) {
+    return Container(
+      width: width,
+      alignment: Alignment.center,
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
 class ListModel extends StatelessWidget {
   final String adress;
   final int selectedTab;
@@ -377,9 +420,8 @@ class ListModel extends StatelessWidget {
   String outName = '';
   String outLocation = '';
   String movedLocation = '';
-  String movingTime = '';
-
-
+  DateTime? movingTime;
+  String movingTimeForTabOne = '';
 
   ListModel({super.key, required this.adress, required this.selectedTab});
 
@@ -387,9 +429,7 @@ class ListModel extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(
-          (selectedTab == 0 ? CARLIST : COLOR5) + adress
-      )
+          .collection((selectedTab == 0 ? CARLIST : COLOR5) + adress)
           .orderBy('enter')
           .snapshots(),
       builder: (BuildContext context,
@@ -433,22 +473,46 @@ class ListModel extends StatelessWidget {
                   outLocation = checkOutLocation(location);
 
                   movedLocation = docs[index]['movedLocation']; //출차한위치 이름
-                  movingTime = docs[index]['movingTime']; //출차한위치 이름
 
-                  showCarInfoBottomSheet(
-                    context,
-                    dataId,
-                    carNumber,
-                    enterTime,
-                    enterName,
-                    etc,
-                    outName,
-                    outTime,
-                    outLocation,
-                    movedLocation,
-                    movingTime,
-                    adress,
-                  );
+                  movingTime = docs[index]['movingTime'] is Timestamp
+                      ? (docs[index]['movingTime'] as Timestamp).toDate()
+                      : null;
+
+
+                  if (selectedTab == 0) {
+                    showCarInfoBottomSheet(
+                      context,
+                      dataId,
+                      carNumber,
+                      enterTime,
+                      enterName,
+                      etc,
+                      outName,
+                      outTime,
+                      outLocation,
+                      movedLocation,
+                      movingTime,
+                      adress,
+                    );
+                  } else {
+                    showCarInfoBottomSheet2(
+                      context,
+                      dataId,
+                      carNumber,
+                      enterTime,
+                      enterName,
+                      etc,
+                      outName,
+                      outTime,
+                      outLocation,
+                      movedLocation,
+                      movingTime,
+                      adress,
+                    );
+                  }
+
+
+
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
@@ -461,6 +525,10 @@ class ListModel extends StatelessWidget {
                         : null,
                     carBrand: docs[index]['carBrand'],
                     carModel: docs[index]['carModel'],
+                    selectedTab: selectedTab,
+                    movingTime: docs[index]['movingTime'] is Timestamp
+                        ? (docs[index]['movingTime'] as Timestamp).toDate()
+                        : null,
                   ),
                 ),
               ),
@@ -612,6 +680,180 @@ class ListModel extends StatelessWidget {
                               width: 10,
                             ),
                             Text('위치 : ${outLocation ?? ''}'),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '특이사항',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(etc),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showCarInfoBottomSheet2(
+      context,
+      id,
+      carNumber,
+      enterTime,
+      enterName,
+      etc,
+      outName,
+      outTime,
+      outLocation,
+      movedLocation,
+      movingTime,
+      adress,
+      ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 400,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        '시승차번호:$carNumber',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // 다이얼로그 닫기
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("삭제 확인"),
+                                content: Text("정말로 삭제하시겠습니까?"),
+                                actions: [
+                                  TextButton(
+                                    child: Text("취소"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // 다이얼로그 닫기
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("삭제"),
+                                    onPressed: () async {
+                                      try {
+                                        // 삭제할 문서의 참조를 가져와
+                                        await FirebaseFirestore.instance
+                                            .collection(
+                                            COLOR5 + adress) // 예: 'users'
+                                            .doc(id) // 예: 'abc123'
+                                            .delete();
+
+                                        Navigator.of(context).pop(); // 다이얼로그 닫기
+                                        print('삭제 확인됨');
+                                        // 여기에 삭제 완료 후 처리 추가 (예: 스낵바 등)
+                                      } catch (e) {
+                                        print('삭제 중 오류 발생: $e');
+                                        // 오류 처리 로직 추가 가능
+                                      }
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          backgroundColor: Colors.red.withOpacity(0.1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          '삭제',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red, // 삭제는 빨간색이 직관적
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '스탠바이',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text('시각 : $enterTime분'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '시승출발',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                '시각 : ${movingTime != null ? getOutTime(movingTime!) : ''}분'),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '시승종료(복귀시각)',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                '시각 : ${outTime != null ? getOutTime(outTime!) : ''}분'),
                           ],
                         ),
                         SizedBox(

@@ -36,6 +36,7 @@ class _CarStateState extends State<CarState> {
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
   String CarListAdress = CARLIST + formatTodayDate();
+  String Color5List = COLOR5 + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
@@ -686,7 +687,7 @@ class _CarStateState extends State<CarState> {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return carModel(brand,
+                                                        return carModel(color,brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -1307,7 +1308,7 @@ class _CarStateState extends State<CarState> {
                                                       context: context,
                                                       builder: (BuildContext
                                                       context) {
-                                                        return carModel(brand,
+                                                        return carModel(color,brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -1649,7 +1650,47 @@ class _CarStateState extends State<CarState> {
                       ),
                     ),
                     onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD) // 컬렉션 이름을 지정하세요
+                            .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                            .delete();
+                        print('문서 삭제 완료');
+                      } catch (e) {
+                        print('문서 삭제 오류: $e');
+                      }
+                      Navigator.pop(context);
 
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(Color5List)
+                            .doc(dataId)
+                            .update({
+                          'out': FieldValue.serverTimestamp(),
+                          'outName': name,
+                          'outLocation': location,
+                          'wigetName': wigetName,
+                          'etc': etc,
+                        });
+                      } catch (e) {
+                        print(e);
+                        print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('하루 지난 데이터 입니다 '),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            });
+                      }
                     },
                     child: Text(
                       '시승종료',
@@ -2222,6 +2263,7 @@ class _CarStateState extends State<CarState> {
   }
 
   Widget carModel(
+      color,
     brand,
     brandModels,
   ) {
@@ -2262,7 +2304,7 @@ class _CarStateState extends State<CarState> {
 
                 try {
                   await FirebaseFirestore.instance
-                      .collection(CarListAdress)
+                      .collection((color == 5 ? Color5List : CarListAdress))
                       .doc(dataId)
                       .update({
                     'carBrand': brand,
