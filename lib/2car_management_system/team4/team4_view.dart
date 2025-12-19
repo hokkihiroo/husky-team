@@ -34,41 +34,26 @@ class _Team4ViewState extends State<Team4View> {
             children: [
               Expanded(
                 child: Center(
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: '제네시스 ',
-                          style: TextStyle(
-                            color: Color(0xFFFFC107),
-                            fontSize: 20,
-                          ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WorkerList(),
                         ),
-                        WidgetSpan(
-                          child: GestureDetector(
-                            onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>  WorkerList(),
-                              //   ),
-                              // );
-                            },
-                            child: const Text(
-                              '수지',
-                              style: TextStyle(
-                                color: Color(0xFFFFC107),
-                                fontSize: 20,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      );
+                    },
+                    child: const Text(
+                      '제네시스 수지',
+                      style: TextStyle(
+                        color: Color(0xFFFFC107),
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ),
               ),
+
 
               GestureDetector(
                 onTap: () {
