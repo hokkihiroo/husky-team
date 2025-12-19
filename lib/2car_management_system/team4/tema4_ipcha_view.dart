@@ -6,10 +6,12 @@ import 'package:team_husky/2car_management_system/team4/team4_numbercard.dart';
 
 class Team4IpchaView extends StatefulWidget {
   final String name;
+  final int location;
 
   const Team4IpchaView({
     super.key,
     required this.name,
+    required this.location,
   });
 
   @override
@@ -97,8 +99,9 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
 
         final docs = snapshot.data!.docs;
 
-        // location이 0인 항목만 필터링
-        final filteredDocs = docs.where((doc) => doc['location'] == 0).toList();
+        // location이 위젯의 위치값이랑 같은 항목만 필터링
+        final filteredDocs =
+            docs.where((doc) => doc['location'] == widget.location).toList();
 
         return GridView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -265,6 +268,179 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
             Row(
               children: [
                 Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 60,
+                        vertical: 14,
+                      ),
+                      backgroundColor: Colors.blueGrey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context); // 기존 팝
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              String? selectedBrand;
+
+                              // 탭 인덱스에 따른 맵 선택 함수
+                              Map<String, List<String>> getSelectedBrandMap() {
+                                if (selectedTabIndex == 0)
+                                  return domesticBrands;
+                                if (selectedTabIndex == 1)
+                                  return importedFamousBrands;
+                                return otherBrands;
+                              }
+
+                              return AlertDialog(
+                                title: Text('브랜드를 선택하세요',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ToggleButtons(
+                                        isSelected: [
+                                          selectedTabIndex == 0,
+                                          selectedTabIndex == 1,
+                                          selectedTabIndex == 2,
+                                        ],
+                                        onPressed: (index) {
+                                          setState(() {
+                                            selectedTabIndex = index;
+                                          });
+                                        },
+                                        borderRadius: BorderRadius.circular(8),
+                                        selectedColor: Colors.white,
+                                        fillColor: Colors.blue,
+                                        color: Colors.black,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            child: Text('국산'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            child: Text('수입'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            child: Text('기타'),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Container(
+                                        height: 350,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.grey.shade300),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Scrollbar(
+                                          child: GridView.count(
+                                            crossAxisCount: 3,
+                                            // 한 줄에 3개
+                                            crossAxisSpacing: 8,
+                                            mainAxisSpacing: 8,
+                                            shrinkWrap: true,
+                                            childAspectRatio: 1,
+                                            // 카드 비율 (가로:세로)
+                                            children: getSelectedBrandMap()
+                                                .keys
+                                                .map((brand) {
+                                              return Card(
+                                                color: selectedBrand == brand
+                                                    ? Colors.grey.shade200
+                                                    : Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return carModel(brand,
+                                                            getSelectedBrandMap());
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8),
+                                                    child: Text(
+                                                      brand,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 14),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      // 직접입력 버튼 (크고 예쁜 스타일)
+                                      // 닫기 버튼 (작고 기본 스타일)
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text('닫기'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '브랜드넣기',
+                      style: TextStyle(
+                        fontSize: 20, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ), // 브랜드 넣기 메뉴
+
+            Row(
+              children: [
+                Expanded(
                   flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -275,21 +451,21 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
                             .collection(TEAM4FIELD)
                             .doc(dataId)
                             .update({
-                          'name':
-                              (name == null || name.isEmpty) ? widget.name : '',
+                          'location': location == 0 ? 1 : 0,
                         });
                       } catch (e) {
                         print(e);
                       }
+
+                      Navigator.pop(context);
                     },
                     child: Text(
-                      '차량픽업',
+                      location == 0 ? '본관으로' : '별관으로',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -480,7 +656,8 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                           onPressed: () async {
                             Navigator.pop(context); // 첫 번째 Dialog 닫기
 
-                            if (carModelFrom == null || carModelFrom.trim().isEmpty) {
+                            if (carModelFrom == null ||
+                                carModelFrom.trim().isEmpty) {
                               await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -488,12 +665,12 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    titlePadding:
-                                        const EdgeInsets.fromLTRB(24, 24, 24, 8),
-                                    contentPadding:
-                                        const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                                    actionsPadding:
-                                        const EdgeInsets.only(right: 12, bottom: 12),
+                                    titlePadding: const EdgeInsets.fromLTRB(
+                                        24, 24, 24, 8),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        24, 0, 24, 16),
+                                    actionsPadding: const EdgeInsets.only(
+                                        right: 12, bottom: 12),
                                     title: Row(
                                       children: [
                                         Icon(Icons.warning_amber_rounded,
@@ -521,7 +698,8 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                                           foregroundColor: Colors.white,
                                           backgroundColor: Colors.blue,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 10),
@@ -581,268 +759,102 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 60),
-                      backgroundColor: Colors.blueGrey, // 버튼 색상
+                      backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
+                      textStyle:
+                      TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
                     ),
-                    onPressed: () async {
-                      Navigator.pop(context); // 기존 팝
+                    onPressed: () {
+                      Navigator.pop(context);
 
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              String? selectedBrand;
-
-                              // 탭 인덱스에 따른 맵 선택 함수
-                              Map<String, List<String>> getSelectedBrandMap() {
-                                if (selectedTabIndex == 0)
-                                  return domesticBrands;
-                                if (selectedTabIndex == 1)
-                                  return importedFamousBrands;
-                                return otherBrands;
-                              }
-
+                      setState(() {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('브랜드를 선택하세요',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                content: SizedBox(
-                                  width: double.maxFinite,
+                                title: Text('특이사항'),
+                                content: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 150,
                                   child: Column(
-                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      ToggleButtons(
-                                        isSelected: [
-                                          selectedTabIndex == 0,
-                                          selectedTabIndex == 1,
-                                          selectedTabIndex == 2,
-                                        ],
-                                        onPressed: (index) {
-                                          setState(() {
-                                            selectedTabIndex = index;
-                                          });
+                                      TextField(
+                                        inputFormatters: [],
+                                        maxLength: 15,
+                                        decoration: InputDecoration(
+                                          hintText: '특이사항 15자까지가능',
+                                        ),
+                                        onChanged: (value) {
+                                          etc = value;
                                         },
-                                        borderRadius: BorderRadius.circular(8),
-                                        selectedColor: Colors.white,
-                                        fillColor: Colors.blue,
-                                        color: Colors.black,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Text('국산'),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Text('수입'),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Text('기타'),
-                                          ),
-                                        ],
                                       ),
-                                      const SizedBox(height: 12),
-                                      Container(
-                                        height: 350,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey.shade300),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Scrollbar(
-                                          child: GridView.count(
-                                            crossAxisCount: 3,
-                                            // 한 줄에 3개
-                                            crossAxisSpacing: 8,
-                                            mainAxisSpacing: 8,
-                                            shrinkWrap: true,
-                                            childAspectRatio: 1,
-                                            // 카드 비율 (가로:세로)
-                                            children: getSelectedBrandMap()
-                                                .keys
-                                                .map((brand) {
-                                              return Card(
-                                                color: selectedBrand == brand
-                                                    ? Colors.grey.shade200
-                                                    : Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                                child: InkWell(
-                                                  onTap: () {
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
                                                     Navigator.pop(context);
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return carModel(brand,
-                                                            getSelectedBrandMap());
-                                                      },
-                                                    );
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              TEAM4FIELD)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              CarListAdress)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
                                                   },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8),
-                                                    child: Text(
-                                                      brand,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 14),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }).toList(),
+                                                  child: Text('등록'))),
+                                          SizedBox(
+                                            width: 20,
                                           ),
-                                        ),
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text('취소'))),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                actions: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.end,
-                                    children: [
-                                      // 직접입력 버튼 (크고 예쁜 스타일)
-                                      // 닫기 버튼 (작고 기본 스타일)
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child: Text('닫기'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
                               );
-                            },
-                          );
-                        },
-                      );
+                            });
+                      });
                     },
                     child: Text(
-                      '브랜드넣기',
+                      '특이사항입력하기',
                       style: TextStyle(
-                        fontSize: 14, // 텍스트 크기 증가
+                        fontSize: 15, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
+                        color: Colors.yellow, // 텍스트 색상
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 17),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-
-                        setState(() {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('특이사항'),
-                                  content: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 150,
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          inputFormatters: [],
-                                          maxLength: 15,
-                                          decoration: InputDecoration(
-                                            hintText: '특이사항 15자까지가능',
-                                          ),
-                                          onChanged: (value) {
-                                            etc = value;
-                                          },
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                TEAM4FIELD)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                CarListAdress)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-                                                    },
-                                                    child: Text('등록'))),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('취소'))),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              });
-                        });
-                      },
-                      child: Text('특이사항 입력')),
-                ),
-                SizedBox(
-                  width: 5,
                 ),
               ],
             ),

@@ -102,7 +102,9 @@ class _Team2ViewState extends State<Team2View> {
               // ),
             ],
           ),
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(
+            color: Color(0xFFC6A667), // 골드 컬러
+          ),
           backgroundColor: Colors.black,
           centerTitle: true,
         ),

@@ -5,6 +5,8 @@ final BRANDMANAGE ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandN
 
 final TEAM4FIELD ='local/q0LRMbznxA2yPca1DKNw/B71qHzRliuN9iQeTygTe/fL35GKC4jObRZpSPmSQ8/field';
 
+final TEAM4MEMBER ='local/q0LRMbznxA2yPca1DKNw/B71qHzRliuN9iQeTygTe/fL35GKC4jObRZpSPmSQ8/member';
+
 final TEAM4CARLIST ='local/q0LRMbznxA2yPca1DKNw/B71qHzRliuN9iQeTygTe/LXhg3awh7ikVeUqVarsP/';
 
 final TEAM4ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/B71qHzRliuN9iQeTygTe/pNHnni1uB4xc61VODmx9/';

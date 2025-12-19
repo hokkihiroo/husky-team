@@ -5,6 +5,7 @@ import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
 import 'package:team_husky/2car_management_system/team4/team4_car_list.dart';
 import 'package:team_husky/2car_management_system/team4/team4_electric.dart';
 import 'package:team_husky/2car_management_system/team4/team4_outcar.dart';
+import 'package:team_husky/2car_management_system/team4/team4_worker_list.dart';
 import 'package:team_husky/2car_management_system/team4/tema4_ipcha_view.dart';
 
 class Team4View extends StatefulWidget {
@@ -25,19 +26,50 @@ class _Team4ViewState extends State<Team4View> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.amber, // ← 뒤로가기 버튼 색상
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Center(
-                  child: Text(
-                    '제네시스 수지',
-                    style: TextStyle(
-                      color: Color(0xFFFFC107), // 앰버톤 노랑 (머스타드 느낌)
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: '제네시스 ',
+                          style: TextStyle(
+                            color: Color(0xFFFFC107),
+                            fontSize: 20,
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: GestureDetector(
+                            onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) =>  WorkerList(),
+                              //   ),
+                              // );
+                            },
+                            child: const Text(
+                              '수지',
+                              style: TextStyle(
+                                color: Color(0xFFFFC107),
+                                fontSize: 20,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
+
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -58,7 +90,6 @@ class _Team4ViewState extends State<Team4View> {
               ),
             ],
           ),
-          iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.black,
           centerTitle: true,
         ),
@@ -76,7 +107,7 @@ class _Team4ViewState extends State<Team4View> {
                     width: 40,
                   ),
                   Text(
-                    '고객 입차 차량',
+                    '별관',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -90,12 +121,45 @@ class _Team4ViewState extends State<Team4View> {
               ),
               Team4IpchaView(
                 name: widget.name,
+                location: 0,
               ),
-
               SizedBox(
                 height: 10,
               ),
+              Divider(
+                color: Colors.white, // 선 색상
+                thickness: 2.0, // 선 두께
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 40,
+                  ),
+                  Text(
+                    '본관',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Team4IpchaView(
+                name: widget.name,
+                location: 1,
 
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 10,
+              ),
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께

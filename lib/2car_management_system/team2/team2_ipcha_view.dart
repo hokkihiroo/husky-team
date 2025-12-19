@@ -898,87 +898,98 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 17),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
 
-                        setState(() {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('특이사항'),
-                                  content: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 150,
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          inputFormatters: [],
-                                          maxLength: 15,
-                                          decoration: InputDecoration(
-                                            hintText: '특이사항 15자까지가능',
+                      setState(() {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('특이사항'),
+                                content: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      TextField(
+                                        inputFormatters: [],
+                                        maxLength: 15,
+                                        decoration: InputDecoration(
+                                          hintText: '특이사항 15자까지가능',
+                                        ),
+                                        onChanged: (value) {
+                                          etc = value;
+                                        },
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(FIELD)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              CarListAdress)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+                                                  },
+                                                  child: Text('등록'))),
+                                          SizedBox(
+                                            width: 20,
                                           ),
-                                          onChanged: (value) {
-                                            etc = value;
-                                          },
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(FIELD)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                CarListAdress)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-                                                    },
-                                                    child: Text('등록'))),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('취소'))),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text('취소'))),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              });
-                        });
-                      },
-                      child: Text('특이사항 입력')),
+                                ),
+                              );
+                            });
+                      });
+                    },
+                    child: Text(
+                      '특이사항입력하기',
+                      style: TextStyle(
+                        fontSize: 15, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.yellow, // 텍스트 색상
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 10,
@@ -1739,87 +1750,98 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 17),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
+                      textStyle:
+                      TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
 
-                        setState(() {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('특이사항'),
-                                  content: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 150,
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          inputFormatters: [],
-                                          maxLength: 15,
-                                          decoration: InputDecoration(
-                                            hintText: '특이사항 15자까지가능',
+                      setState(() {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('특이사항'),
+                                content: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      TextField(
+                                        inputFormatters: [],
+                                        maxLength: 15,
+                                        decoration: InputDecoration(
+                                          hintText: '특이사항 15자까지가능',
+                                        ),
+                                        onChanged: (value) {
+                                          etc = value;
+                                        },
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(FIELD)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              CarListAdress)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+                                                  },
+                                                  child: Text('등록'))),
+                                          SizedBox(
+                                            width: 20,
                                           ),
-                                          onChanged: (value) {
-                                            etc = value;
-                                          },
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(FIELD)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                CarListAdress)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-                                                    },
-                                                    child: Text('등록'))),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('취소'))),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text('취소'))),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              });
-                        });
-                      },
-                      child: Text('특이사항 입력')),
+                                ),
+                              );
+                            });
+                      });
+                    },
+                    child: Text(
+                      '특이사항입력하기',
+                      style: TextStyle(
+                        fontSize: 15, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.yellow, // 텍스트 색상
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

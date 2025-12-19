@@ -79,7 +79,7 @@ class _Team1ViewState extends State<Team1View> {
               ),
             ],
           ),
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.blue),
           backgroundColor: Colors.black,
           centerTitle: true,
         ),

@@ -687,7 +687,9 @@ class _CarStateState extends State<CarState> {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return carModel(color,brand,
+                                                        return carModel(
+                                                            color,
+                                                            brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -1233,7 +1235,7 @@ class _CarStateState extends State<CarState> {
                               return AlertDialog(
                                 title: Text('브랜드를 선택하세요',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.bold)),
+                                        TextStyle(fontWeight: FontWeight.bold)),
                                 content: SizedBox(
                                   width: double.maxFinite,
                                   child: Column(
@@ -1279,7 +1281,7 @@ class _CarStateState extends State<CarState> {
                                           border: Border.all(
                                               color: Colors.grey.shade300),
                                           borderRadius:
-                                          BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Scrollbar(
                                           child: GridView.count(
@@ -1299,7 +1301,7 @@ class _CarStateState extends State<CarState> {
                                                     : Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(6),
+                                                      BorderRadius.circular(6),
                                                 ),
                                                 child: InkWell(
                                                   onTap: () {
@@ -1307,8 +1309,10 @@ class _CarStateState extends State<CarState> {
                                                     showDialog(
                                                       context: context,
                                                       builder: (BuildContext
-                                                      context) {
-                                                        return carModel(color,brand,
+                                                          context) {
+                                                        return carModel(
+                                                            color,
+                                                            brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -1316,16 +1320,16 @@ class _CarStateState extends State<CarState> {
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     padding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 8),
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8),
                                                     child: Text(
                                                       brand,
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.w600,
+                                                              FontWeight.w600,
                                                           fontSize: 14),
                                                       textAlign:
-                                                      TextAlign.center,
+                                                          TextAlign.center,
                                                     ),
                                                   ),
                                                 ),
@@ -1341,7 +1345,6 @@ class _CarStateState extends State<CarState> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
@@ -1708,87 +1711,98 @@ class _CarStateState extends State<CarState> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 17),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
 
-                        setState(() {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('특이사항'),
-                                  content: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 150,
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          inputFormatters: [],
-                                          maxLength: 15,
-                                          decoration: InputDecoration(
-                                            hintText: '특이사항 15자까지가능',
+                      setState(() {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('특이사항'),
+                                content: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      TextField(
+                                        inputFormatters: [],
+                                        maxLength: 15,
+                                        decoration: InputDecoration(
+                                          hintText: '특이사항 15자까지가능',
+                                        ),
+                                        onChanged: (value) {
+                                          etc = value;
+                                        },
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(FIELD)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+
+                                                    try {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              CarListAdress)
+                                                          .doc(dataId)
+                                                          .update({
+                                                        'etc': etc,
+                                                      });
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+                                                  },
+                                                  child: Text('등록'))),
+                                          SizedBox(
+                                            width: 20,
                                           ),
-                                          onChanged: (value) {
-                                            etc = value;
-                                          },
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(FIELD)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-
-                                                      try {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                CarListAdress)
-                                                            .doc(dataId)
-                                                            .update({
-                                                          'etc': etc,
-                                                        });
-                                                      } catch (e) {
-                                                        print(e);
-                                                      }
-                                                    },
-                                                    child: Text('등록'))),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('취소'))),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          Expanded(
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text('취소'))),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              });
-                        });
-                      },
-                      child: Text('특이사항 입력')),
+                                ),
+                              );
+                            });
+                      });
+                    },
+                    child: Text(
+                      '특이사항입력하기',
+                      style: TextStyle(
+                        fontSize: 15, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.yellow, // 텍스트 색상
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -2263,7 +2277,7 @@ class _CarStateState extends State<CarState> {
   }
 
   Widget carModel(
-      color,
+    color,
     brand,
     brandModels,
   ) {
