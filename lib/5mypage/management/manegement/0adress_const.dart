@@ -21,13 +21,16 @@ String getGangnamCarList(String teamDocId) {
 // 이게 헷갈릴수 있어서 적어놓음 강남팀은 강남전용이라 강남전용 주소적어놓은거고
 // 청주도 그렇게 적었다가 3번째부터는 중간에 팀을 넣어서 알아서 각각찾아갈수있게 만든거임
 
-String getBrandNameList(String teamDocId) {
-  if (teamDocId == 'PJcc0iQSHShpJvONGBC7') {
-    return 'local/q0LRMbznxA2yPca1DKNw/team1/SBMhSMQHzp4A0pnveh5L/brandName/';
-  } else if (teamDocId == 'zSvgctyCZUnOx8rYMioF') {
+String getBrandNameList() {
     return 'local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
-  } else {
-    return 'local/q0LRMbznxA2yPca1DKNw/$teamDocId/SBMhSMQHzp4A0pnveh5L/brandName/'; // 기본 경로 설정
-  }
 }
 
+String getForGenesis(String teamDocId) {
+  if (teamDocId == 'PJcc0iQSHShpJvONGBC7') {
+    return 'local/q0LRMbznxA2yPca1DKNw/team1/SBMhSMQHzp4A0pnveh5L/forGenesis/';
+  } else if (teamDocId == 'zSvgctyCZUnOx8rYMioF') {
+    return 'local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/forGenesis/';
+  } else {
+    return 'local/q0LRMbznxA2yPca1DKNw/$teamDocId/SBMhSMQHzp4A0pnveh5L/forGenesis/'; // 기본 경로 설정
+  }
+}

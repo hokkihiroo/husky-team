@@ -6,9 +6,13 @@ final FIELD ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field';
 
 final TEAM2CARSCHEDULE ='local/q0LRMbznxA2yPca1DKNw/team2/TxPOvECdU2W8gOh7bkPZ/';
 
+final TEAM2GANGNAMCAR ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar';
+
 final CHUNGJUCARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar/';
 
 final BRANDMANAGE ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
+
+final FORGENESIS ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/forGenesis/';
 
 final CARLIST ='local/q0LRMbznxA2yPca1DKNw/team2/LXhg3awh7ikVeUqVarsP/'; //입차리스트 주소
 
@@ -109,7 +113,6 @@ String getDayOfWeek(DateTime date) {
   return days[date.weekday - 1];
 }
 
-final TEAM2GANGNAMCAR ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar';
 
 String electricDate() {
   final now = DateTime.now();
@@ -139,4 +142,9 @@ Timestamp convertStringTimeToTimestamp(String timeStr, {int addMinutes = 0}) {
   final updatedTime = baseTime.add(Duration(minutes: addMinutes));
 
   return Timestamp.fromDate(updatedTime);
+}
+//시승차 선택시 다이어로그만들때 각각의 시승차가 브랜드별 길이가 다를때 6자리까지는 보이고 나머지 2자리는 아래로 깔리게 하는 코드
+String formatCarNumber(String value) {
+  if (value.length <= 6) return value;
+  return value.substring(0, 6) + '\n' + value.substring(6);
 }

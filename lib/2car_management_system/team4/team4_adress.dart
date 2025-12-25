@@ -74,17 +74,9 @@ String getWeeks(int dayOfWeek){
 
 String checkOutLocation(int location){
   if(location ==0){
-    return '입차대기';
+    return '별관';
   }else if (location ==1){
-    return '가벽';
-  }else if(location==2){
-    return 'A존';
-  }else if(location==3){
-    return 'B존';
-  }else if(location==4){
-    return 'B2';
-  }else if(location==5){
-    return '외부';
+    return '본관';
   }
   return '';
 }

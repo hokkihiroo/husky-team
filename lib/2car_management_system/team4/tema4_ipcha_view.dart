@@ -8,10 +8,22 @@ class Team4IpchaView extends StatefulWidget {
   final String name;
   final int location;
 
+  final Map<String, List<String>> domesticBrands;
+  final Map<String, List<String>> importedFamousBrands;
+  final Map<String, List<String>> otherBrands;
+
+  final List<Map<String, dynamic>> memberList;
+
+
+
   const Team4IpchaView({
     super.key,
     required this.name,
     required this.location,
+    required this.domesticBrands,
+    required this.importedFamousBrands,
+    required this.otherBrands,
+    required this.memberList,
   });
 
   @override
@@ -34,53 +46,6 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
   int selectedTabIndex = 0;
-
-  Map<String, List<String>> domesticBrands = {};
-  Map<String, List<String>> importedFamousBrands = {};
-  Map<String, List<String>> otherBrands = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBrandModels();
-  }
-
-  Future<void> _loadBrandModels() async {
-    final result = await fetchBrandsWithModels();
-    print('🔥 국내: $domesticBrands');
-    print('🔥 수입유명: $importedFamousBrands');
-    print('🔥 잡브랜드: $otherBrands');
-  }
-
-  Future<void> fetchBrandsWithModels() async {
-    final brandCollection = FirebaseFirestore.instance.collection(BRANDMANAGE);
-    final brandSnapshots = await brandCollection.get();
-
-    for (var brandDoc in brandSnapshots.docs) {
-      final category = brandDoc['category'] ?? '미지정'; // 브랜드명
-      final brandType = brandDoc['brandType'] ?? 0;
-      final brandId = brandDoc.id;
-
-      final modelSnapshots = await brandCollection
-          .doc(brandId)
-          .collection('LIST')
-          .orderBy('createdAt')
-          .get();
-
-      final models = modelSnapshots.docs
-          .map((modelDoc) => modelDoc['carModel'] as String)
-          .toList();
-
-      // brandType 기준으로 분류
-      if (brandType == 1) {
-        domesticBrands[category] = models;
-      } else if (brandType == 2) {
-        importedFamousBrands[category] = models;
-      } else if (brandType == 3) {
-        otherBrands[category] = models;
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,73 +155,145 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
   ) {
     return AlertDialog(
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '차종: $carModelFrom',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '차종: $carModelFrom',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-              Text(
-                '차량번호: $carNumber',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+                Text(
+                  '차량번호: $carNumber',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-              Text(
-                '경과: $remainTime',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+                Text(
+                  '경과: $remainTime',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Container(
-            height: 60,
-            width: 110,
-            child: ElevatedButton(
-              onPressed: () async {
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(TEAM4FIELD)
-                      .doc(dataId)
-                      .update({
-                    'color': 2,
-                  });
-                } catch (e) {
-                  print(e);
-                }
-                Navigator.pop(context);
-              },
-              child: Text(
-                '출차하기',
-                style: TextStyle(
-                  fontSize: 18, // 텍스트 크기 증가
-                  fontWeight: FontWeight.bold, // 텍스트를 굵게
-                  color: Colors.black87, // 텍스트 색상
+          if (color != 3 && color != 6)
+          Expanded(
+            child: Container(
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(TEAM4FIELD)
+                        .doc(dataId)
+                        .update({
+                      'color': 2,
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  '출차하기',
+                  style: TextStyle(
+                    fontSize: 18, // 텍스트 크기 증가
+                    fontWeight: FontWeight.bold, // 텍스트를 굵게
+                    color: Colors.black87, // 텍스트 색상
+                  ),
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                backgroundColor: Colors.red, // 버튼 색상
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  backgroundColor: Colors.red, // 버튼 색상
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                  ),
                 ),
               ),
             ),
           ),
+
+          if (color == 3 || color == 6)
+            Expanded(
+              child: Container(
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(TEAM4FIELD) // 컬렉션 이름을 지정하세요
+                          .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                          .delete();
+                      print('문서 삭제 완료');
+                    } catch (e) {
+                      print('문서 삭제 오류: $e');
+                    }
+                    Navigator.pop(context);
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(CarListAdress)
+                          .doc(dataId)
+                          .update({
+                        'out': FieldValue.serverTimestamp(),
+                        'outName': name,
+                        'outLocation': location,
+                        'movedLocation': '$movedLocation',
+                        'wigetName': wigetName,
+                        'movingTime': movingTime,   //자가주차한사람 자가주차라고뜸
+                        'etc': '$etc/자가출차',
+                      });
+                    } catch (e) {
+                      print(e);
+                      print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('하루 지난 데이터 입니다 '),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          });
+                    }
+                  },
+                  child: Text(
+                    '자가출차',
+                    style: TextStyle(
+                      fontSize: 18, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.blue, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+
         ],
       ),
       content: Container(
@@ -292,10 +329,10 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                               // 탭 인덱스에 따른 맵 선택 함수
                               Map<String, List<String>> getSelectedBrandMap() {
                                 if (selectedTabIndex == 0)
-                                  return domesticBrands;
+                                  return widget.domesticBrands;
                                 if (selectedTabIndex == 1)
-                                  return importedFamousBrands;
-                                return otherBrands;
+                                  return widget.importedFamousBrands;
+                                return widget.otherBrands;
                               }
 
                               return AlertDialog(
@@ -376,7 +413,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return carModel(brand,
+                                                        return carModel(context,brand,
                                                             getSelectedBrandMap());
                                                       },
                                                     );
@@ -496,6 +533,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
+                          'movingTime': (color == 3) ? '' : '자가주차',
                         });
                       } catch (e) {
                         print(e);
@@ -871,10 +909,15 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
     );
   }
 
+
+
   Widget carModel(
-    brand,
-    brandModels,
-  ) {
+      BuildContext context,
+      brand,
+      brandModels,
+      ) {
+    final rootContext = context; // ✅ 반드시 필요
+
     return AlertDialog(
       title: Text(
         '$brand 차종 선택',
@@ -896,7 +939,6 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
               leading: Icon(Icons.directions_car, color: Colors.blueAccent),
               title: Text(model),
               onTap: () async {
-                Navigator.pop(context); // 다이얼로그 닫기
 
                 try {
                   await FirebaseFirestore.instance
@@ -921,6 +963,19 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                 } catch (e) {
                   print('업데이트 에러: $e');
                 }
+
+
+
+                Navigator.pop(context);
+
+                Future.microtask(() {
+                  showDialog(
+                    context: rootContext, // ✅ 살아있는 context
+                    builder: (dialogContext) =>
+                        memberListDialog(dialogContext, widget.memberList),
+                  );
+                });
+
               },
             );
           },
@@ -934,4 +989,96 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
       ],
     );
   }
+
+  Widget memberListDialog(
+      BuildContext dialogContext, // ✅ 이름 변경
+      List<Map<String, dynamic>> members,
+      )
+  {
+    return AlertDialog(
+      title: const Text(
+        '직원 선택',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 350,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: members.isEmpty
+                  ? const Center(child: Text('멤버가 없습니다'))
+                  : Scrollbar(
+                child: GridView.count(
+                  crossAxisCount: 3, // ⭐ 3열
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  padding: const EdgeInsets.all(8),
+                  childAspectRatio: 1.5,
+                  // 가로:세로 비율 (이 값으로 카드 높이 조절)
+                  children: members.map((member) {
+                    return Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(6),
+                        onTap: () async{
+                          Navigator.of(dialogContext).pop();
+                          try {
+                            await FirebaseFirestore.instance
+                                .collection(CarListAdress)
+                                .doc(dataId)
+                                .update({
+                              'wigetName': member['workerName'],
+                            });
+                          } catch (e) {
+                            print('업데이트 에러: $e');
+                          }
+
+
+                          print(
+                              '선택된 멤버: ${member['workerName']}');
+                        },
+                        child: Center(
+                          child: Padding(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 6),
+                            child: Text(
+                              member['workerName'] ?? '이름없음',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('닫기'),
+        ),
+      ],
+    );
+  }
+
+
+
 }

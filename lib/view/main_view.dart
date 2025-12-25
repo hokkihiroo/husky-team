@@ -32,16 +32,16 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView>
     with SingleTickerProviderStateMixin {
-  String title = '조직도';
+  String title = '시설';
   late TabController controller;
-  int index = 0;
+  int index = 1;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    controller = TabController(length: 5, vsync: this);
+    controller = TabController(length: 5, vsync: this,initialIndex: 1,);
     controller.addListener(tabListner);
   }
 
@@ -54,6 +54,17 @@ class _MainViewState extends State<MainView>
   void tabListner() {
     setState(() {
       index = controller.index;
+      if (index == 0) {
+        title = '조직도';
+      } else if (index == 1) {
+        title = '시설';
+      } else if (index == 2) {
+        title = '공지사항';
+      } else if (index == 3) {
+        title = '교육';
+      } else if (index == 4) {
+        title = 'MyPage';
+      }
     });
   }
 
@@ -92,17 +103,6 @@ class _MainViewState extends State<MainView>
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           controller.animateTo(index);
-          if (index == 0) {
-            title = '조직도';
-          } else if (index == 1) {
-            title = '시설';
-          } else if (index == 2) {
-            title = '공지사항';
-          } else if (index == 3) {
-            title = '교육';
-          } else if (index == 4) {
-            title = 'MyPage';
-          }
         },
         currentIndex: index,
         items: [

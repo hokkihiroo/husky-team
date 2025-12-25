@@ -381,7 +381,7 @@ class ListModel extends StatelessWidget {
                   outLocation = checkOutLocation(location);
 
                   movedLocation = docs[index]['movedLocation']; //출차한위치 이름
-                  movingTime = docs[index]['movingTime']; //출차한위치 이름
+                  movingTime =  docs[index]['movingTime'];  //변수는 시각으로 되어있는데 자가주차가들어감
 
                   showCarInfoBottomSheet(
                     context,
@@ -555,10 +555,7 @@ class ListModel extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text('이름 : ${outName ?? ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
+
                             Text('위치 : ${outLocation ?? ''}'),
                           ],
                         ),
@@ -574,6 +571,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
+                            Text(movingTime),
                             Text(etc),
                           ],
                         )

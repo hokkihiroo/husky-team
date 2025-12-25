@@ -6,15 +6,17 @@ import '../../0adress_const.dart';
 import 'brandManage_list_card.dart';
 
 class BrandMansgeList extends StatefulWidget {
-  String category;
-  String documentID;
-  String teamId;
+ final String category;
+ final String documentID;
+ final String teamId;
+ final int grade;
 
   BrandMansgeList({
     super.key,
     required this.category,
     required this.documentID,
     required this.teamId,
+    required this.grade,
   });
 
   @override
@@ -23,6 +25,8 @@ class BrandMansgeList extends StatefulWidget {
 
 class _BrandMansgeListState extends State<BrandMansgeList> {
   late String gangnamCarList;
+  final String documentID='';
+
 
   void _showDialog() {
     final TextEditingController _textFieldController = TextEditingController();
@@ -89,7 +93,7 @@ class _BrandMansgeListState extends State<BrandMansgeList> {
     super.initState();
     print('initState 호출됨');
 
-    gangnamCarList = getBrandNameList(widget.teamId);
+    gangnamCarList = getBrandNameList();
   }
 
   @override
@@ -156,27 +160,60 @@ class _BrandMansgeListState extends State<BrandMansgeList> {
                     var data = subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
                     return GestureDetector(
                       onTap: () async {
+
+                        var document = subDoc.id;
+
+
+
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('삭제 확인'),
-                              content: Text('브랜드 밖으로 빼면서\삭제시스템 폐기함 \n 팀장님께 삭제 문의하세요'),
+                              title: const Text('삭제 확인'),
+                              content: Text(
+                                widget.grade == 1
+                                    ? '해당차종을 삭제하시겠습니까?'
+                                    : '브랜드 밖으로 빼면서\n삭제시스템 폐기함\n팀장님께 삭제 문의하세요',
+                              ),
                               actions: [
+                                // ✅ grade == 1 일 때만 확인 버튼 표시
+                                if (widget.grade == 1)
+                                  TextButton(
+                                    onPressed: () async {
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(gangnamCarList)
+                                            .doc(widget.documentID)
+                                            .collection('LIST')
+                                            .doc(document)
+                                            .delete();
 
+                                        Navigator.pop(context); // 다이얼로그 닫기
+                                      } catch (e) {
+                                        print('❌ 삭제 에러: $e');
+                                      }
+                                    },
+                                    child: const Text(
+                                      '확인',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+
+                                // 취소 버튼 (항상 존재)
                                 TextButton(
-                                  onPressed: ()  {
-
-
-                                    Navigator.pop(context); // 확인 후 다이얼로그 닫기
+                                  onPressed: () {
+                                    Navigator.pop(context);
                                   },
-                                  child: Text('확인',
-                                      style: TextStyle(color: Colors.red)),
+                                  child: const Text(
+                                    '취소',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
                                 ),
                               ],
                             );
                           },
                         );
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

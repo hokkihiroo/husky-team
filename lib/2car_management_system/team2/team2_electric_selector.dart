@@ -291,20 +291,26 @@ class _ElectricButtonDialogState extends State<ElectricButtonDialog> {
                     );
                     return;
                   }
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(FIELD)
+                        .doc(widget.dataId)
+                        .update({
+                      'color': 6,
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+
 
                   ElectricList = ELECTRICLIST + electricDate();
                   ElectricDay =  electricDay(); //전기차 입차 날짜 업데이트
 
-                  String documentId = FirebaseFirestore
-                      .instance
-                      .collection(ElectricList)
-                      .doc()
-                      .id;
 
                   try {
                     await FirebaseFirestore.instance
                         .collection(ElectricList)
-                        .doc(documentId)
+                        .doc(widget.dataId)
                         .set({
                       'carNumber': widget.carNumber,
                       'enterName': widget.name,
@@ -317,6 +323,11 @@ class _ElectricButtonDialogState extends State<ElectricButtonDialog> {
                       'selectedLocation': selectedLocation,
                     });
                   } catch (e) {}
+
+
+
+
+
                 },
                 child: Text(
                   '전기차 등록',

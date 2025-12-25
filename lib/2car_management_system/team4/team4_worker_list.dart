@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
 import 'package:team_husky/2car_management_system/team4/team4_worker_memberCard.dart';
 
@@ -58,7 +59,7 @@ class _WorkerListState extends State<WorkerList> {
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection(TEAM4MEMBER)
-              .orderBy('createdAt')
+              .orderBy('order')
               .snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -81,21 +82,19 @@ class _WorkerListState extends State<WorkerList> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        // carName = docs[index]['carName'];
-                        // carNumber = docs[index]['carNumber'];
-                        // var document = docs[index];
-                        // dataId = document.id;
-                        //
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return butto(
-                        //       carName,
-                        //       carNumber,
-                        //       dataId,
-                        //     );
-                        //   },
-                        // );
+                        workerName = docs[index]['workerName'];
+                        var document = docs[index];
+                        dataId = document.id;
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return butto(
+                              workerName,
+                              dataId,
+                            );
+                          },
+                        );
                       },
                       child: WorkerMemberCard(
                         workerName: docs[index]['workerName'],
@@ -114,14 +113,15 @@ class _WorkerListState extends State<WorkerList> {
   Widget addWorker() {
     return AlertDialog(
       title: Text(
-        '직원추가',
+        '직원추가후 시설밖으로 \n 나갔다가 다시 입장하세요',
         textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
       actions: [
         TextField(
           autofocus: true,
-          decoration: InputDecoration(
+          maxLength: 4, // 2️⃣ 최대 4글자
+          decoration: const InputDecoration(
             hintText: '직원이름',
           ),
           onChanged: (value) {
@@ -142,6 +142,9 @@ class _WorkerListState extends State<WorkerList> {
                   EdgeInsets.symmetric(vertical: 20.0), // 버튼의 위아래 패딩 조정
                 ),
                 onPressed: () async {
+                  if (workerName.trim().isEmpty) {
+                    return;
+                  }
                   String documentId = FirebaseFirestore.instance
                       .collection(TEAM4MEMBER)
                       .doc()
@@ -153,6 +156,9 @@ class _WorkerListState extends State<WorkerList> {
                         .set({
                       'workerName': workerName,
                       'createdAt': FieldValue.serverTimestamp(),
+                      'order': DateTime.now().millisecondsSinceEpoch,
+
+
                     });
                   } catch (e) {}
 
@@ -179,6 +185,45 @@ class _WorkerListState extends State<WorkerList> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget butto(
+      workerName,
+      dataId,
+      ) {
+    return AlertDialog(
+      title: Column(
+        children: [
+          Text('직원이름: $workerName'),
+        ],
+      ),
+      content: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(TEAM4MEMBER) // 컬렉션 이름을 지정하세요
+                        .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                        .delete();
+                    print('문서 삭제 완료');
+                    Navigator.pop(context);
+                  } catch (e) {
+                    print('문서 삭제 오류: $e');
+                  }
+                },
+                child: Text('삭제')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('취소 ')),
+          ],
+        ),
+      ),
     );
   }
 

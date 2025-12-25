@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'teamMenues/teamMenu.dart';
 
 class TeamOnly extends StatelessWidget {
-  const TeamOnly({super.key});
+
+  const TeamOnly({super.key,
+    });
 
   @override
   Widget build(BuildContext context) {

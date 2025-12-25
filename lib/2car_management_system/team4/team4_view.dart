@@ -20,6 +20,93 @@ class Team4View extends StatefulWidget {
 class _Team4ViewState extends State<Team4View> {
   String carNumber = '';
   String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ차량데이터 불러오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+  Map<String, List<String>> domesticBrands = {};
+  Map<String, List<String>> importedFamousBrands = {};
+  Map<String, List<String>> otherBrands = {};
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ차량데이터 불러오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+
+  List<Map<String, dynamic>> memberList = [];  //멤버리스트 불러오기
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBrandModels();
+    _loadMember();
+  }
+
+  Future<void> _loadBrandModels() async {
+    final result = await fetchBrandsWithModels();
+    print('🔥메인뷰 국내: $domesticBrands');
+    print('🔥메인뷰 수입유명: $importedFamousBrands');
+    print('🔥메인뷰 잡브랜드: $otherBrands');
+  }
+
+  Future<void> fetchBrandsWithModels() async {
+    final brandCollection = FirebaseFirestore.instance.collection(BRANDMANAGE);
+    final brandSnapshots = await brandCollection.get();
+
+    for (var brandDoc in brandSnapshots.docs) {
+      final category = brandDoc['category'] ?? '미지정'; // 브랜드명
+      final brandType = brandDoc['brandType'] ?? 0;
+      final brandId = brandDoc.id;
+
+      final modelSnapshots = await brandCollection
+          .doc(brandId)
+          .collection('LIST')
+          .orderBy('createdAt')
+          .get();
+
+      final models = modelSnapshots.docs
+          .map((modelDoc) => modelDoc['carModel'] as String)
+          .toList();
+
+      // brandType 기준으로 분류
+      if (brandType == 1) {
+        domesticBrands[category] = models;
+      } else if (brandType == 2) {
+        importedFamousBrands[category] = models;
+      } else if (brandType == 3) {
+        otherBrands[category] = models;
+      }
+    }
+  }
+
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ멤버불러오는함수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+  Future<void> _loadMember() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection(TEAM4MEMBER)
+          .orderBy('order') // ⭐ 추가
+          .get();
+
+      print('🔥 member 문서 개수: ${snapshot.docs.length}');
+
+      // 🔥 여기서 snapshot → List<Map> 변환
+      final loadedMembers = snapshot.docs.map((doc) {
+        return {
+          'id': doc.id,
+          ...doc.data(),
+        };
+      }).toList();
+
+      // 상태에 저장
+      setState(() {
+        memberList = loadedMembers;
+      });
+
+      // 디버그 출력
+      for (final m in memberList) {
+        print('📄 member: $m');
+      }
+    } catch (e, s) {
+      print('❌ Firestore 에러: $e');
+      print(s);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +194,11 @@ class _Team4ViewState extends State<Team4View> {
               Team4IpchaView(
                 name: widget.name,
                 location: 0,
+                domesticBrands: domesticBrands,
+                importedFamousBrands:importedFamousBrands,
+                otherBrands: otherBrands,
+                memberList: memberList,
+
               ),
               SizedBox(
                 height: 10,
@@ -137,6 +229,10 @@ class _Team4ViewState extends State<Team4View> {
               Team4IpchaView(
                 name: widget.name,
                 location: 1,
+                domesticBrands: domesticBrands,
+                importedFamousBrands:importedFamousBrands,
+                otherBrands: otherBrands,
+                memberList: memberList,
 
               ),
               SizedBox(

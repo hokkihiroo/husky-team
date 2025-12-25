@@ -7,9 +7,16 @@ import 'package:team_husky/2car_management_system/team2/team2_numbercard.dart';
 class Team2IpchaView extends StatefulWidget {
   final String name;
 
+  final Map<String, List<String>> domesticBrands;
+  final Map<String, List<String>> importedFamousBrands;
+  final Map<String, List<String>> otherBrands;
+
   const Team2IpchaView({
     super.key,
     required this.name,
+    required this.domesticBrands,
+    required this.importedFamousBrands,
+    required this.otherBrands,
   });
 
   @override
@@ -34,52 +41,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
   int selectedTabIndex = 0;
 
-  Map<String, List<String>> domesticBrands = {};
-  Map<String, List<String>> importedFamousBrands = {};
-  Map<String, List<String>> otherBrands = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBrandModels();
-  }
-
-  Future<void> _loadBrandModels() async {
-    final result = await fetchBrandsWithModels();
-    print('🔥 국내: $domesticBrands');
-    print('🔥 수입유명: $importedFamousBrands');
-    print('🔥 잡브랜드: $otherBrands');
-  }
-
-  Future<void> fetchBrandsWithModels() async {
-    final brandCollection = FirebaseFirestore.instance.collection(BRANDMANAGE);
-    final brandSnapshots = await brandCollection.get();
-
-    for (var brandDoc in brandSnapshots.docs) {
-      final category = brandDoc['category'] ?? '미지정'; // 브랜드명
-      final brandType = brandDoc['brandType'] ?? 0;
-      final brandId = brandDoc.id;
-
-      final modelSnapshots = await brandCollection
-          .doc(brandId)
-          .collection('LIST')
-          .orderBy('createdAt')
-          .get();
-
-      final models = modelSnapshots.docs
-          .map((modelDoc) => modelDoc['carModel'] as String)
-          .toList();
-
-      // brandType 기준으로 분류
-      if (brandType == 1) {
-        domesticBrands[category] = models;
-      } else if (brandType == 2) {
-        importedFamousBrands[category] = models;
-      } else if (brandType == 3) {
-        otherBrands[category] = models;
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +157,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     int color,
     int location,
     DateTime dateTime,
-    //   String dataAdress,
     String dataId,
     String etc,
     String remainTime,
@@ -209,73 +169,145 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     print(name);
     return AlertDialog(
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '차종: $carModelFrom',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '차종: $carModelFrom',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-              Text(
-                '차량번호: $carNumber',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+                Text(
+                  '차량번호: $carNumber',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-              Text(
-                '경과: $remainTime',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+                Text(
+                  '경과: $remainTime',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Container(
-            height: 60,
-            width: 110,
-            child: ElevatedButton(
-              onPressed: () async {
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(FIELD)
-                      .doc(dataId)
-                      .update({
-                    'color': 2,
-                  });
-                } catch (e) {
-                  print(e);
-                }
-                Navigator.pop(context);
-              },
-              child: Text(
-                '출차하기',
-                style: TextStyle(
-                  fontSize: 18, // 텍스트 크기 증가
-                  fontWeight: FontWeight.bold, // 텍스트를 굵게
-                  color: Colors.black87, // 텍스트 색상
+
+          if (color != 3 && color != 6)
+          Expanded(
+            child: Container(
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(FIELD)
+                        .doc(dataId)
+                        .update({
+                      'color': 2,
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  '출차하기',
+                  style: TextStyle(
+                    fontSize: 18, // 텍스트 크기 증가
+                    fontWeight: FontWeight.bold, // 텍스트를 굵게
+                    color: Colors.black87, // 텍스트 색상
+                  ),
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                backgroundColor: Colors.red, // 버튼 색상
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  backgroundColor: Colors.red, // 버튼 색상
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                  ),
                 ),
               ),
             ),
           ),
+
+          if (color == 3 || color == 6)
+            Expanded(
+              child: Container(
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD) // 컬렉션 이름을 지정하세요
+                          .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                          .delete();
+                      print('문서 삭제 완료');
+                    } catch (e) {
+                      print('문서 삭제 오류: $e');
+                    }
+                    Navigator.pop(context);
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(CarListAdress)
+                          .doc(dataId)
+                          .update({
+                        'out': FieldValue.serverTimestamp(),
+                        'outName': name,
+                        'outLocation': location,
+                        'movedLocation': '$movedLocation',
+                        'wigetName': wigetName,
+                        'movingTime': movingTime,  //자가주차한사람 자가주차라고 저장
+                        'etc': '$etc/자가출차',
+                      });
+                    } catch (e) {
+                      print(e);
+                      print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('하루 지난 데이터 입니다 '),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          });
+                    }
+                  },
+                  child: Text(
+                    '자가출차',
+                    style: TextStyle(
+                      fontSize: 18, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.blue, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
         ],
       ),
       content: Container(
@@ -342,6 +374,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
+                          'movingTime': (color == 3) ? '' : '자가주차',
                         });
                       } catch (e) {
                         print(e);
@@ -592,10 +625,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                               // 탭 인덱스에 따른 맵 선택 함수
                               Map<String, List<String>> getSelectedBrandMap() {
                                 if (selectedTabIndex == 0)
-                                  return domesticBrands;
+                                  return widget.domesticBrands;
                                 if (selectedTabIndex == 1)
-                                  return importedFamousBrands;
-                                return otherBrands;
+                                  return widget.importedFamousBrands;
+                                return widget.otherBrands;
                               }
 
                               return AlertDialog(
@@ -1154,80 +1187,81 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     print(name);
     return AlertDialog(
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '차종: $carModelFrom',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '차종: $carModelFrom',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-              Text(
-                '차량번호: $carNumber',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+                Text(
+                  '차량번호: $carNumber',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-              Text(
-                '경과: $remainTime',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
+                Text(
+                  '경과: $remainTime',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Container(
-            height: 60,
-            width: 110,
-            child: ElevatedButton(
-              onPressed: () async {
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(FIELD)
-                      .doc(dataId)
-                      .update({
-                    'location': 5,
-                  });
-                } catch (e) {
-                  print(e);
-                }
+          Expanded(
+            child: Container(
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(FIELD)
+                        .doc(dataId)
+                        .update({
+                      'location': 5,
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
 
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(Color5List)
-                      .doc(dataId)
-                      .update({
-                    'movingTime': FieldValue.serverTimestamp(),
-                  });
-                } catch (e) {
-                  print(e);
-                }
-                Navigator.pop(context);
-              },
-              child: Text(
-                '시승출발',
-                style: TextStyle(
-                  fontSize: 18, // 텍스트 크기 증가
-                  fontWeight: FontWeight.bold, // 텍스트를 굵게
-                  color: Colors.black87, // 텍스트 색상
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(Color5List)
+                        .doc(dataId)
+                        .update({
+                      'movingTime': FieldValue.serverTimestamp(),
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  '시승출발',
+                  style: TextStyle(
+                    fontSize: 18, // 텍스트 크기 증가
+                    fontWeight: FontWeight.bold, // 텍스트를 굵게
+                    color: Colors.black87, // 텍스트 색상
+                  ),
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                backgroundColor: Colors.purple, // 버튼 색상
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  backgroundColor: Colors.purple, // 버튼 색상
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                  ),
                 ),
               ),
             ),
@@ -1264,10 +1298,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                               // 탭 인덱스에 따른 맵 선택 함수
                               Map<String, List<String>> getSelectedBrandMap() {
                                 if (selectedTabIndex == 0)
-                                  return domesticBrands;
+                                  return widget.domesticBrands;
                                 if (selectedTabIndex == 1)
-                                  return importedFamousBrands;
-                                return otherBrands;
+                                  return widget.importedFamousBrands;
+                                return widget.otherBrands;
                               }
 
                               return AlertDialog(

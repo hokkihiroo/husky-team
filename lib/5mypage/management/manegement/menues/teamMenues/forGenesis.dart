@@ -1,37 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/5mypage/management/manegement/menues/teamMenues/forGenesis_card.dart';
 
 import '../../0adress_const.dart';
-import 'brandManage_card.dart';
-import 'brandManage_list.dart';
 
-class BrandManage extends StatefulWidget {
+class ForGenesis extends StatefulWidget {
   final String teamDocId;
-  final int grade;
 
-  const BrandManage(
-      {super.key,
-      required this.teamDocId, required this.grade});
+
+  const ForGenesis({super.key,
+    required this.teamDocId});
 
   @override
-  State<BrandManage> createState() => _BrandManageState();
+  State<ForGenesis> createState() => _ForGenesisState();
 }
 
-class _BrandManageState extends State<BrandManage> {
-  late String gangnamCarList; // 전역 변수로 선언
-  String? documentID = '';
+class _ForGenesisState extends State<ForGenesis> {
+  late String forGenesis; // 전역 변수로 선언
+  final List<String> categories = ['60','70','80','90',];
+  String selectedCategory = '80'; // ✅ 선택된 값 저장
+  int selectedCategoryNum = 3;
+
+  final TextEditingController carBrandController  = TextEditingController();
+  final TextEditingController carNumberController  = TextEditingController();
 
 
-  // 버튼 상태 (3개니까 false 3개로 초기화)
-  String selectedCategory = '국산'; // ✅ 선택된 값 저장
-  final List<String> categories = ['국산', '수입', '기타'];
-  int selectedCategoryNum = 1;
 
+  @override
+  void dispose() {
+    carBrandController.dispose();
+    carNumberController.dispose();
+    super.dispose();
+  }
+//시승차 추가 코드
   void _showDialog() {
-    final TextEditingController _textFieldController = TextEditingController();
-    String selectedCategory = '국내'; // 기본 선택값
+
+    String selectedCategory = '80'; // 기본 선택값
 
     showDialog(
       context: context,
@@ -40,7 +45,7 @@ class _BrandManageState extends State<BrandManage> {
           builder: (context, setState) {
             return AlertDialog(
               title: Text(
-                '브랜드이름',
+                '시승차종',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
               content: Column(
@@ -48,12 +53,28 @@ class _BrandManageState extends State<BrandManage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
-                    controller: _textFieldController,
-                    decoration: InputDecoration(hintText: "브랜드명 입력"),
+                    controller: carBrandController,
+                    maxLength: 8,
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
+                      LengthLimitingTextInputFormatter(8),
                     ],
+                    decoration: const InputDecoration(
+                      hintText: "시승차종",
+                      counterStyle: TextStyle(color: Colors.grey),
+                    ),
                   ),
+
+                  TextField(
+                    controller: carNumberController,
+                    maxLength: 4,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(4),
+                    ],
+                    decoration: const InputDecoration(
+                      hintText: "시승차번호",
+                      counterStyle: TextStyle(color: Colors.grey),
+                    ),
+                  )
 
                 ],
               ),
@@ -63,27 +84,34 @@ class _BrandManageState extends State<BrandManage> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        String inputText = _textFieldController.text;
+                        String carBrand = carBrandController.text;
+                        String carNumber = carNumberController.text;
 
 
                         String documentId = FirebaseFirestore.instance
-                            .collection(gangnamCarList)
+                            .collection(forGenesis)
                             .doc()
                             .id;
 
                         try {
                           await FirebaseFirestore.instance
-                              .collection(gangnamCarList)
+                              .collection(forGenesis)
                               .doc(documentId)
                               .set({
-                            'category': inputText,
+                            'carBrand': carBrand,
+                            'carNumber': carNumber,
                             'brandType': selectedCategoryNum, // 숫자로 저장
                             'createdAt': FieldValue.serverTimestamp(),
+                            'order': DateTime.now().millisecondsSinceEpoch,
                           });
                         } catch (e) {
                           print('저장 에러: $e');
                         }
                         Navigator.of(context).pop();
+                        setState(() {
+                          carBrandController.clear();
+                          carNumberController.clear();
+                        });
                       },
                       child: Text('확인'),
                     ),
@@ -102,21 +130,22 @@ class _BrandManageState extends State<BrandManage> {
       },
     );
   }
-
   @override
   void initState() {
     super.initState();
     print('initState 호출됨');
 
-    gangnamCarList = getBrandNameList();
+    forGenesis = getForGenesis(widget.teamDocId);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '차량 브랜드',
+          '시승차관리(제네시스전용)',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -158,12 +187,14 @@ class _BrandManageState extends State<BrandManage> {
                           print("선택된 카테고리: $selectedCategory");
 
                           // ✅ 선택된 카테고리에 따라 번호 매핑
-                          if (selectedCategory == '국산') {
+                          if (selectedCategory == '60') {
                             selectedCategoryNum = 1;
-                          } else if (selectedCategory == '수입') {
+                          } else if (selectedCategory == '70') {
                             selectedCategoryNum = 2;
-                          } else if (selectedCategory == '기타') {
+                          } else if (selectedCategory == '80') {
                             selectedCategoryNum = 3;
+                          }else if (selectedCategory == '90') {
+                            selectedCategoryNum = 4;
                           }
 
                           print("카테고리 번호: $selectedCategoryNum");
@@ -180,7 +211,7 @@ class _BrandManageState extends State<BrandManage> {
             ),
             StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection(gangnamCarList)
+                  .collection(forGenesis)
                   .where('brandType', isEqualTo: selectedCategoryNum)
                   .orderBy('createdAt')
                   .snapshots(),
@@ -201,26 +232,62 @@ class _BrandManageState extends State<BrandManage> {
                     var data = subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
                     return GestureDetector(
                       onTap: () async {
-                        var document = subDoc;
-                        documentID = document.id;
-                        print(documentID);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrandMansgeList(
-                              teamId: widget.teamDocId,
-                              category: data['category'],
-                              documentID: '$documentID',
-                              grade: widget.grade,
-                            ),
-                          ),
+
+                        var document = subDoc.id;
+
+
+
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('삭제 확인'),
+                              content: Text(
+                                    '해당차종을 삭제하시겠습니까?'
+                              ),
+                              actions: [
+                                // ✅ grade == 1 일 때만 확인 버튼 표시
+                                  TextButton(
+                                    onPressed: () async {
+                                      try {
+                                        await FirebaseFirestore.instance
+                                            .collection(forGenesis)
+                                            .doc(document)
+                                            .delete();
+
+                                        Navigator.pop(context); // 다이얼로그 닫기
+                                      } catch (e) {
+                                        print('❌ 삭제 에러: $e');
+                                      }
+                                    },
+                                    child: const Text(
+                                      '확인',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+
+                                // 취소 버튼 (항상 존재)
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    '취소',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         );
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 5.0),
-                        child: BrandManageCard(
-                          category: data['category'],
+                        child: ForgenesisCard(
+                          carBrand:data['carBrand'],
+                          carNumber:data['carNumber'],
                         ),
                       ),
                     );
@@ -228,15 +295,13 @@ class _BrandManageState extends State<BrandManage> {
                 );
               },
             ),
-
-            // ScheduleList(),
           ],
         ),
       ),
       bottomNavigationBar: bottomOne(),
     );
-  }
 
+  }
   Widget bottomOne() {
     return BottomAppBar(
       child: Row(
@@ -253,7 +318,7 @@ class _BrandManageState extends State<BrandManage> {
               onPressed: () {
                 _showDialog();
               },
-              child: Text('브랜드추가'),
+              child: Text('시승차 추가'),
             ),
           ),
         ],
@@ -261,4 +326,5 @@ class _BrandManageState extends State<BrandManage> {
       color: Colors.white,
     );
   }
+
 }

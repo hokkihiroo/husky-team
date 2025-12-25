@@ -51,7 +51,7 @@ class Team2NumberCard extends StatelessWidget {
                         ? Colors.white
                         : (color == 2 && name == '')
                         ? Colors.red
-                        : color == 3
+                        : (color == 3 || color == 6)
                         ? Colors.blue
                         : color == 4
                         ? Colors.green
@@ -62,6 +62,7 @@ class Team2NumberCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
               ),
 
 
@@ -100,6 +101,20 @@ class Team2NumberCard extends StatelessWidget {
               size: 12,
             ),
           ),
+        // ⭐ 브랜드가 있을 때만 별 아이콘 추가
+
+        if (color==6)
+          Positioned(
+            top: 20, // 위로 살짝 올리기
+            left: 20,
+            right: 0,
+            child: Icon(
+            Icons.bolt_outlined,
+              color: Colors.red,
+              size: 13,
+            ),
+          ),
+
       ],
     );
   }

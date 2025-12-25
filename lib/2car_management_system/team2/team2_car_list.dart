@@ -420,7 +420,7 @@ class ListModel extends StatelessWidget {
   String outName = '';
   String outLocation = '';
   String movedLocation = '';
-  DateTime? movingTime;
+  String movingTime = '';
   String movingTimeForTabOne = '';
 
   ListModel({super.key, required this.adress, required this.selectedTab});
@@ -474,9 +474,7 @@ class ListModel extends StatelessWidget {
 
                   movedLocation = docs[index]['movedLocation']; //출차한위치 이름
 
-                  movingTime = docs[index]['movingTime'] is Timestamp
-                      ? (docs[index]['movingTime'] as Timestamp).toDate()
-                      : null;
+                  movingTime =  docs[index]['movingTime'];  //변수는 시각으로 되어있는데 자가주차가들어감
 
 
                   if (selectedTab == 0) {
@@ -694,6 +692,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
+                            Text(movingTime),
                             Text(etc),
                           ],
                         )

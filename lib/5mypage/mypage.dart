@@ -37,6 +37,8 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+  final String cjAdress='zSvgctyCZUnOx8rYMioF'; //브랜드관리는 청주 주소에있어서 청주 문서 아이디를 담아 바깥에서 브랜드관리 들어갈때 사용
+
 
   void _launchWebsite(String url) async {
     final Uri uri = Uri.parse(url);
@@ -267,7 +269,8 @@ class _MyPageState extends State<MyPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BrandManage(
-                              teamDocId: 'zSvgctyCZUnOx8rYMioF',
+                              teamDocId: cjAdress,
+                              grade: 0,
                             ),
                           ),
                         );
@@ -308,7 +311,9 @@ class _MyPageState extends State<MyPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Management(name: widget.name),
+                                    Management(
+                                      name: widget.name,
+                                   ),
                               ),
                             );
                           },

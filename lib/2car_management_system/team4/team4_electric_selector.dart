@@ -112,7 +112,7 @@ class _Team4ElectricSelectorState extends State<Team4ElectricSelector> {
                   SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(4, (index) {
+                    children: List.generate(2, (index) {
                       final number = index + 1;
                       final isSelected = selectedNumber == number;
 
@@ -292,19 +292,26 @@ class _Team4ElectricSelectorState extends State<Team4ElectricSelector> {
                     return;
                   }
 
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(TEAM4FIELD)
+                        .doc(widget.dataId)
+                        .update({
+                      'color': 6,
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+
+
                   ElectricList = TEAM4ELECTRICLIST + electricDate();
                   ElectricDay =  electricDay(); //전기차 입차 날짜 업데이트
 
-                  String documentId = FirebaseFirestore
-                      .instance
-                      .collection(ElectricList)
-                      .doc()
-                      .id;
 
                   try {
                     await FirebaseFirestore.instance
                         .collection(ElectricList)
-                        .doc(documentId)
+                        .doc(widget.dataId)
                         .set({
                       'carNumber': widget.carNumber,
                       'enterName': widget.name,

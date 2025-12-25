@@ -13,7 +13,9 @@ import 'manegement/7salaryManage/salaryManage.dart';
 class Management extends StatefulWidget {
   final String name;
 
-  Management({super.key, required this.name});
+  Management({super.key,
+    required this.name,
+  });
 
   @override
   State<Management> createState() => _ManagementState();
