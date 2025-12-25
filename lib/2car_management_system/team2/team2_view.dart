@@ -355,7 +355,7 @@ class _Team2ViewState extends State<Team2View> {
                                                           fontSize: 14,
                                                         ),
                                                       ),
-                                                      const SizedBox(height: 8),
+                                                      const SizedBox(height: 4),
 
                                                       /// 브랜드
                                                       Text(
