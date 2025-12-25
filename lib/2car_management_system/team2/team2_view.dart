@@ -266,8 +266,8 @@ class _Team2ViewState extends State<Team2View> {
                                         fillColor: Colors.purple,
                                         color: Colors.black,
                                         constraints: const BoxConstraints(
-                                          minHeight: 48,   // ⭐ 높이 키우기
-                                          minWidth: 64,    // ⭐ 폭 키우기
+                                          minHeight: 48, // ⭐ 높이 키우기
+                                          minWidth: 64, // ⭐ 폭 키우기
                                         ),
                                         children: const [
                                           Padding(
@@ -333,10 +333,57 @@ class _Team2ViewState extends State<Team2View> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                                 onTap: () async {
-                                                 print(doc['carBrand']);
-                                                 print(doc['carNumber']);
-                                                 print(doc['carBrand']);
-                                                 print(doc['carNumber']);
+                                                  Color5List = COLOR5 + formatTodayDate();
+
+                                                  String documentId =
+                                                      FirebaseFirestore.instance
+                                                          .collection(FIELD)
+                                                          .doc()
+                                                          .id;
+                                                  try {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection(FIELD)
+                                                        .doc(documentId)
+                                                        .set({
+                                                      'carNumber': doc['carNumber'],
+                                                      'name': '',
+                                                      'createdAt': FieldValue
+                                                          .serverTimestamp(),
+                                                      'location': 0,
+                                                      'color': 5,
+                                                      'etc': '',
+                                                      'movedLocation': '',
+                                                      'wigetName': '',
+                                                      'movingTime': '',
+                                                      'carBrand': '제네시스',
+                                                      'carModel': doc['carBrand'],
+                                                    });
+                                                  } catch (e) {}
+
+                                                  try {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection(
+                                                        Color5List)
+                                                        .doc(documentId)
+                                                        .set({
+                                                      'carNumber': doc['carNumber'],
+                                                      'enterName': '', //자가주차하면 여기에 자가라고 들어가게함
+                                                      'enter': FieldValue.serverTimestamp(),
+                                                      'out': '',
+                                                      'outName': '',
+                                                      'outLocation': 10,
+                                                      'etc': '',
+                                                      'movedLocation': '',
+                                                      'wigetName': '',
+                                                      'movingTime': '',
+                                                      'carBrand': '제네시스',
+                                                      'carModel': doc['carBrand'],
+
+                                                    });
+                                                  } catch (e) {}
+
                                                   Navigator.pop(
                                                       context); // 필요하면
                                                 },
@@ -537,9 +584,6 @@ class _Team2ViewState extends State<Team2View> {
     CarListAdress = CARLIST + formatTodayDate();
     Color5List = COLOR5 + formatTodayDate();
     carNumber = '0000';
-    final targetCollection = (color == 5) ? Color5List : CarListAdress;
-
-    print(targetCollection); // 어떤 컬렉션으로 들어가는지 확인
 
     showDialog(
       context: context,
@@ -606,7 +650,7 @@ class _Team2ViewState extends State<Team2View> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(targetCollection)
+                            .collection(CarListAdress)
                             .doc(documentId)
                             .set({
                           'carNumber': carNumber,
