@@ -243,8 +243,10 @@ class _Team2ViewState extends State<Team2View> {
                                   '시승차 선택',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                content: SizedBox(
-                                  width: double.maxFinite,
+                                content: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 300, // ⭐ Dialog 전체 폭 제한
+                                  ),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -291,6 +293,7 @@ class _Team2ViewState extends State<Team2View> {
                                       /// 🔹 Grid 영역
                                       Container(
                                         height: 350,
+                                        width: 300,
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Colors.grey.shade300),
@@ -355,7 +358,7 @@ class _Team2ViewState extends State<Team2View> {
                                                           fontSize: 14,
                                                         ),
                                                       ),
-                                                      const SizedBox(height: 4),
+                                                      const SizedBox(height: 3),
 
                                                       /// 브랜드
                                                       Text(
