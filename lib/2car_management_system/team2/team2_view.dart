@@ -265,10 +265,14 @@ class _Team2ViewState extends State<Team2View> {
                                         selectedColor: Colors.white,
                                         fillColor: Colors.purple,
                                         color: Colors.black,
+                                        constraints: const BoxConstraints(
+                                          minHeight: 48,   // ⭐ 높이 키우기
+                                          minWidth: 64,    // ⭐ 폭 키우기
+                                        ),
                                         children: const [
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 14),
+                                                horizontal: 16),
                                             child: Text('60'),
                                           ),
                                           Padding(
