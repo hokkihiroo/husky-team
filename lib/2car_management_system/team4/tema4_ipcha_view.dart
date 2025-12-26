@@ -45,7 +45,18 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
   String wigetName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
-  int selectedTabIndex = 0;
+  int selectedTabIndex = 0; // 이건 브랜드 선택시 탭 번호 0이 국산1이 수입 2가 기타
+
+  late TextEditingController etcController;
+
+  @override
+  void initState() {
+    super.initState();
+    etcController = TextEditingController(text: etc ?? '');
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -810,7 +821,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-
+                      etcController.text = etc;
                       setState(() {
                         showDialog(
                             context: context,
@@ -823,13 +834,13 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                                   child: Column(
                                     children: [
                                       TextField(
-                                        inputFormatters: [],
-                                        maxLength: 15,
+                                        controller: etcController,
+                                        maxLength: 20,
                                         decoration: InputDecoration(
                                           hintText: '특이사항 15자까지가능',
                                         ),
                                         onChanged: (value) {
-                                          etc = value;
+                                          etc = value; // ⭐ 기존 + 신규가 이미 합쳐진 값
                                         },
                                       ),
                                       Row(

@@ -53,6 +53,15 @@ class _CarStateState extends State<CarState> {
   int selectedNumber = 0; // 선택된 버튼 번호를 저장할 변수 이건 전기차 관련된 변수임
 
 
+  late TextEditingController etcController;
+
+  @override
+  void initState() {
+    super.initState();
+    etcController = TextEditingController(text: etc ?? '');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -952,7 +961,7 @@ class _CarStateState extends State<CarState> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-
+                      etcController.text = etc;
                       setState(() {
                         showDialog(
                             context: context,
@@ -965,8 +974,8 @@ class _CarStateState extends State<CarState> {
                                   child: Column(
                                     children: [
                                       TextField(
-                                        inputFormatters: [],
-                                        maxLength: 15,
+                                        controller: etcController,
+                                        maxLength: 20,
                                         decoration: InputDecoration(
                                           hintText: '특이사항 15자까지가능',
                                         ),

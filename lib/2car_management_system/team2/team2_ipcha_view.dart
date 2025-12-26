@@ -41,6 +41,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
   int selectedTabIndex = 0;
 
+  late TextEditingController etcController;
+
+  @override
+  void initState() {
+    super.initState();
+    etcController = TextEditingController(text: etc ?? '');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -941,6 +949,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
+                      etcController.text = etc;
 
                       setState(() {
                         showDialog(
@@ -954,8 +963,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                   child: Column(
                                     children: [
                                       TextField(
-                                        inputFormatters: [],
-                                        maxLength: 15,
+                                        controller: etcController,
+                                        maxLength: 20,
                                         decoration: InputDecoration(
                                           hintText: '특이사항 15자까지가능',
                                         ),
