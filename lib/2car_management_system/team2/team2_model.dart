@@ -176,7 +176,6 @@ class _CarStateState extends State<CarState> {
     int color,
     int location,
     DateTime dateTime,
-    //   String dataAdress,
     String dataId,
     String etc,
     String remainTime,
@@ -186,7 +185,6 @@ class _CarStateState extends State<CarState> {
     String getMovingTime,
     String carModelFrom,
   ) {
-    print(name);
 
     return AlertDialog(
       title: Row(
@@ -235,7 +233,7 @@ class _CarStateState extends State<CarState> {
                         .collection(FIELD)
                         .doc(dataId)
                         .update({
-                      'color': 2,
+                      'color': color == 2 ? 1 : 2,
                     });
                   } catch (e) {
                     print(e);
@@ -243,7 +241,7 @@ class _CarStateState extends State<CarState> {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  '출차하기',
+                  color == 2 ? '출차취소' : '출차하기',
                   style: TextStyle(
                     fontSize: 18, // 텍스트 크기 증가
                     fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -252,7 +250,7 @@ class _CarStateState extends State<CarState> {
                 ),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20),
-                  backgroundColor: Colors.red, // 버튼 색상
+                  backgroundColor: color == 2 ? Colors.orange : Colors.red,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                   ),
@@ -331,7 +329,7 @@ class _CarStateState extends State<CarState> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width.clamp(0, 300),
         height: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -394,7 +392,7 @@ class _CarStateState extends State<CarState> {
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
-                          'movingTime': (color == 3) ? '' : '자가주차',
+                          'movingTime': (color == 3) ? '' : '/자가주차/',
                         });
                       } catch (e) {
                         print(e);
@@ -656,7 +654,7 @@ class _CarStateState extends State<CarState> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
                                 content: SizedBox(
-                                  width: double.maxFinite,
+                                  width: MediaQuery.of(context).size.width.clamp(0, 290),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -678,17 +676,17 @@ class _CarStateState extends State<CarState> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
+                                                horizontal: 30),
                                             child: Text('국산'),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
+                                                horizontal: 30),
                                             child: Text('수입'),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
+                                                horizontal: 30),
                                             child: Text('기타'),
                                           ),
                                         ],
@@ -977,7 +975,7 @@ class _CarStateState extends State<CarState> {
                                         controller: etcController,
                                         maxLength: 20,
                                         decoration: InputDecoration(
-                                          hintText: '특이사항 15자까지가능',
+                                          hintText: '특이사항 20자까지가능',
                                         ),
                                         onChanged: (value) {
                                           etc = value;
@@ -2325,8 +2323,8 @@ class _CarStateState extends State<CarState> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
       content: Container(
-        height: 250,
-        width: double.maxFinite,
+        height: 350,
+        width: MediaQuery.of(context).size.width.clamp(0, 320),
         decoration: BoxDecoration(
           color: Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),

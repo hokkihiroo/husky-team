@@ -41,6 +41,7 @@ class Team4ElectricSelector extends StatefulWidget {
 class _Team4ElectricSelectorState extends State<Team4ElectricSelector> {
   int selectedNumber = 0; //전기차 충전 기기 번호
   int selectedLocation = 0; // 전기차 충전시 체류장소 인트화 시킴
+  String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
 
   String ElectricList = TEAM4ELECTRICLIST + electricDate(); //전기차 컬렉션주소 업데이트
   String ElectricDay =  electricDay(); //전기차 매일날짜 업데이트
@@ -303,6 +304,17 @@ class _Team4ElectricSelectorState extends State<Team4ElectricSelector> {
                     print(e);
                   }
 
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(CarListAdress)
+                        .doc(widget.dataId)
+                        .update({
+                      'etc': '${widget.etc}/충전/',
+
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
 
                   ElectricList = TEAM4ELECTRICLIST + electricDate();
                   ElectricDay =  electricDay(); //전기차 입차 날짜 업데이트
