@@ -37,6 +37,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String Color5List = COLOR5 + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
+  String enterName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
   int selectedTabIndex = 0;
@@ -89,6 +90,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 var document = filteredDocs[index];
                 dataId = document.id;
                 name = filteredDocs[index]['name'];
+                enterName = filteredDocs[index]['enterName'];
                 carNumber = filteredDocs[index]['carNumber'];
                 carModelFrom = filteredDocs[index]['carModel'];
                 location = filteredDocs[index]['location'];
@@ -137,6 +139,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         movingTime,
                         getMovingTime,
                         carModelFrom,
+                          enterName,
                       );
                     }
                   },
@@ -171,6 +174,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String movingTime,
     String getMovingTime,
     String carModelFrom,
+    String enterName,
   ) {
     return AlertDialog(
       title: Row(
@@ -269,6 +273,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
+                        'enterName': enterName,
                         'etc': etc,
                       });
                     } catch (e) {
