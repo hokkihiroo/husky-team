@@ -688,16 +688,25 @@ class ListModel extends StatelessWidget {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(selfParking),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          '특이사항',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              '특이사항',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(width: 15,),
+                            Text(
+                              selfParking,
+                              style: const TextStyle(
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+
+
+                          ],
                         ),
                         Row(
                           children: [
