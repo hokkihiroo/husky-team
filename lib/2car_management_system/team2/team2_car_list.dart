@@ -682,10 +682,15 @@ class ListModel extends StatelessWidget {
                               width: 10,
                             ),
                             Text('위치 : ${outLocation ?? ''}'),
+                            // Text(selfParking),
                           ],
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
+                        ),
+                        Text(selfParking),
+                        SizedBox(
+                          height: 5,
                         ),
                         Text(
                           '특이사항',
@@ -696,10 +701,9 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(selfParking),
                             Text(etc),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
