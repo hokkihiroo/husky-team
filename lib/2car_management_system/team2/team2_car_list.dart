@@ -822,7 +822,7 @@ class ListModel extends StatelessWidget {
                             fontSize: 20,
                           ),
                         ),
-                        Text('시각 : ${movingTime ?? '-'}분'),
+                        Text('시각 : ${enterTime ?? '-'}분'),
                         SizedBox(
                           width: 10,
                         ),

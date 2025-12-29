@@ -94,6 +94,7 @@ class _CarStateState extends State<CarState> {
                 onTap: () async {
                   //  활성화 시키면 bar 가 바뀜 데이터 클릭시마다
                   CarListAdress = CARLIST + formatTodayDate();
+                  Color5List = COLOR5 + formatTodayDate();
                   var document = filteredDocs[index];
                   dataId = document.id;
                   name = filteredDocs[index]['name'];
@@ -104,18 +105,14 @@ class _CarStateState extends State<CarState> {
                   etc = filteredDocs[index]['etc'];
                   wigetName = filteredDocs[index]['wigetName'];
                   movedLocation = filteredDocs[index]['movedLocation'];
-
                   final raw = filteredDocs[index]['movingTime'];
                    movingTime = raw is Timestamp
                       ? movingTimeGet(raw.toDate())
                       : '';
-
                   Timestamp createdAt = filteredDocs[index]['createdAt'];
                   dateTime = createdAt.toDate();
                   remainTime = getRemainTime(dateTime);
-
                   String getMovingTime = getTodayTime();
-                  print(location);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -1167,7 +1164,6 @@ class _CarStateState extends State<CarState> {
     String getMovingTime,
     String carModelFrom,
   ) {
-    print(name);
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1208,8 +1204,6 @@ class _CarStateState extends State<CarState> {
               height: 60,
               child: ElevatedButton(
                 onPressed: () async {
-                  Color5List = COLOR5 + formatTodayDate();
-
                   try {
 
                     await FirebaseFirestore.instance
@@ -1220,7 +1214,6 @@ class _CarStateState extends State<CarState> {
                   } catch (e) {
                     print('문서 삭제 오류: $e');
                   }
-                  Navigator.pop(context);
 
                   try {
                     await FirebaseFirestore.instance
@@ -1231,7 +1224,6 @@ class _CarStateState extends State<CarState> {
                       'outName': name,
                       'outLocation': location,
                       'wigetName': wigetName,
-                      'movingTime': movingTimeToTimestamp(movingTime),
                       'etc': etc,
                     });
                   } catch (e) {
@@ -1253,6 +1245,8 @@ class _CarStateState extends State<CarState> {
                           );
                         });
                   }
+                  Navigator.pop(context);
+
                 },
                 child: Text(
                   '시승종료',
