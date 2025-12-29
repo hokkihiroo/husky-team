@@ -346,6 +346,7 @@ class _Team2ViewState extends State<Team2View> {
                                                         .doc(documentId)
                                                         .set({
                                                       'carNumber': doc['carNumber'],
+                                                      'enterName': '',
                                                       'name': '',
                                                       'createdAt': FieldValue
                                                           .serverTimestamp(),
@@ -634,6 +635,7 @@ class _Team2ViewState extends State<Team2View> {
                             .doc(documentId)
                             .set({
                           'carNumber': carNumber,
+                          'enterName': '', //자가주차하면 여기에 자가라고 들어가게함
                           'name': '',
                           'createdAt': FieldValue.serverTimestamp(),
                           'location': 0,
