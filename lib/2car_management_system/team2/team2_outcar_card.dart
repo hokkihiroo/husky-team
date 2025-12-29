@@ -12,7 +12,6 @@ class OutCarCard extends StatelessWidget {
   final String dataId;
   final String movedLocation;
   final String wigetName;
-  final String movingTime;
 
   String CarListAdress = CARLIST + formatTodayDate();
 
@@ -20,7 +19,7 @@ class OutCarCard extends StatelessWidget {
   OutCarCard({
     super.key,
     required this.carNumber,
-    required this.name, required this.location, required this.dataId, required this.myName, required this.dataAdress, required this.movedLocation, required this.wigetName, required this.movingTime, required this.color
+    required this.name, required this.location, required this.dataId, required this.myName, required this.dataAdress, required this.movedLocation, required this.wigetName,required this.color
   });
 
   @override
@@ -118,7 +117,6 @@ class OutCarCard extends StatelessWidget {
                   'outLocation': location,
                   'movedLocation': movedLocation,
                   'wigetName': wigetName,
-                  'movingTime': movingTime,
                 });
                 print('출차완료 업데이트 완료');
               } catch (e) {

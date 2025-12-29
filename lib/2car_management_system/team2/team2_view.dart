@@ -334,7 +334,6 @@ class _Team2ViewState extends State<Team2View> {
                                                     BorderRadius.circular(10),
                                                 onTap: () async {
                                                   Color5List = COLOR5 + formatTodayDate();
-
                                                   String documentId =
                                                       FirebaseFirestore.instance
                                                           .collection(FIELD)
@@ -369,7 +368,7 @@ class _Team2ViewState extends State<Team2View> {
                                                         .doc(documentId)
                                                         .set({
                                                       'carNumber': doc['carNumber'],
-                                                      'enterName': '', //자가주차하면 여기에 자가라고 들어가게함
+                                                      'enterName': widget.name, //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
                                                       'enter': FieldValue.serverTimestamp(),
                                                       'out': '',
                                                       'outName': '',
@@ -377,7 +376,7 @@ class _Team2ViewState extends State<Team2View> {
                                                       'etc': '',
                                                       'movedLocation': '',
                                                       'wigetName': '',
-                                                      'movingTime': '',
+                                                      'movingTime': FieldValue.serverTimestamp(),
                                                       'carBrand': '제네시스',
                                                       'carModel': doc['carBrand'],
 

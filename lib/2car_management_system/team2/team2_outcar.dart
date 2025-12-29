@@ -56,7 +56,6 @@ class _OutCarState extends State<OutCar> {
                   dataAdress: CARLIST,
                   movedLocation: filteredDocs[index]['movedLocation'],
                   wigetName: filteredDocs[index]['wigetName'],
-                  movingTime: filteredDocs[index]['movingTime'],
                   color:  filteredDocs[index]['color'],
                 ),
               ),

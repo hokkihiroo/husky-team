@@ -417,10 +417,12 @@ class ListModel extends StatelessWidget {
   String enterName = '';
   String etc = '';
   DateTime? outTime;
+  DateTime dateTime2 = DateTime.now(); //이동할 시각들 뽑음
   String outName = '';
   String outLocation = '';
   String movedLocation = '';
   String movingTime = '';
+  String selfParking = '';
   String movingTimeForTabOne = '';
 
   ListModel({super.key, required this.adress, required this.selectedTab});
@@ -457,6 +459,8 @@ class ListModel extends StatelessWidget {
                   Timestamp sam = docs[index]['enter']; //입차시각
                   enterTime = getInTime(sam); //입차시각 변환코드
                   enterName = docs[index]['wigetName']; //입차한사람 이름
+                  selfParking = docs[index]
+                      ['enterName']; // 자가주차하면 enterName으로 들어간데이터가 여기에 저장됨
                   etc = docs[index]['etc']; //특이사항
 
                   outTime = docs[index]['out'] is Timestamp
@@ -474,8 +478,11 @@ class ListModel extends StatelessWidget {
 
                   movedLocation = docs[index]['movedLocation']; //출차한위치 이름
 
-                  movingTime =  docs[index]['movingTime'];  //변수는 시각으로 되어있는데 자가주차가들어감
 
+                  final raw = docs[index]['movingTime'];
+                  movingTime = raw is Timestamp
+                      ? movingTimeGet(raw.toDate())
+                      : '';
 
                   if (selectedTab == 0) {
                     showCarInfoBottomSheet(
@@ -489,8 +496,8 @@ class ListModel extends StatelessWidget {
                       outTime,
                       outLocation,
                       movedLocation,
-                      movingTime,
                       adress,
+                      selfParking,
                     );
                   } else {
                     showCarInfoBottomSheet2(
@@ -508,9 +515,6 @@ class ListModel extends StatelessWidget {
                       adress,
                     );
                   }
-
-
-
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
@@ -548,8 +552,8 @@ class ListModel extends StatelessWidget {
     outTime,
     outLocation,
     movedLocation,
-    movingTime,
     adress,
+    selfParking,
   ) {
     showModalBottomSheet(
       context: context,
@@ -692,7 +696,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(movingTime),
+                            Text(selfParking),
                             Text(etc),
                           ],
                         )
@@ -709,19 +713,19 @@ class ListModel extends StatelessWidget {
   }
 
   void showCarInfoBottomSheet2(
-      context,
-      id,
-      carNumber,
-      enterTime,
-      enterName,
-      etc,
-      outName,
-      outTime,
-      outLocation,
-      movedLocation,
-      movingTime,
-      adress,
-      ) {
+    context,
+    id,
+    carNumber,
+    enterTime,
+    enterName,
+    etc,
+    outName,
+    outTime,
+    outLocation,
+    movedLocation,
+    movingTime,
+    adress,
+  ) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -742,7 +746,6 @@ class ListModel extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // 다이얼로그 닫기
@@ -767,7 +770,7 @@ class ListModel extends StatelessWidget {
                                         // 삭제할 문서의 참조를 가져와
                                         await FirebaseFirestore.instance
                                             .collection(
-                                            COLOR5 + adress) // 예: 'users'
+                                                COLOR5 + adress) // 예: 'users'
                                             .doc(id) // 예: 'abc123'
                                             .delete();
 
@@ -787,7 +790,7 @@ class ListModel extends StatelessWidget {
                         },
                         style: TextButton.styleFrom(
                           padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           backgroundColor: Colors.red.withOpacity(0.1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -819,7 +822,7 @@ class ListModel extends StatelessWidget {
                             fontSize: 20,
                           ),
                         ),
-                        Text('시각 : $enterTime분'),
+                        Text('시각 : ${movingTime ?? '-'}분'),
                         SizedBox(
                           width: 10,
                         ),
@@ -835,8 +838,7 @@ class ListModel extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(
-                                '시각 : ${movingTime != null ? getOutTime(movingTime!) : ''}분'),
+                            Text('시각 : $movingTime분'),
                           ],
                         ),
                         SizedBox(

@@ -256,7 +256,6 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
-                        'movingTime': movingTime, //자가주차한사람 자가주차라고뜸
                         'etc': '$etc/자가출차',
                       });
                     } catch (e) {
@@ -549,7 +548,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
-                          'movingTime': (color == 3) ? '' : '/자가주차/',
+                          'enterName': (color == 3) ? '' : '자가주차',
                         });
                       } catch (e) {
                         print(e);
@@ -864,6 +863,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                 ),
               ],
             ),
+            SizedBox(height: 5,),
             Text(
               '$etc',
               style: TextStyle(

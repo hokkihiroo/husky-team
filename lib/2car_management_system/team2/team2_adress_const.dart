@@ -22,6 +22,32 @@ final COLOR5 ='local/q0LRMbznxA2yPca1DKNw/team2/yJ82irnxnFs2Pe2JlMAA/';  //시�
 final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/team2/pNHnni1uB4xc61VODmx9/';
 
 
+// 시간과 분이 스트링으로 되어있는데 이함수를 통해 서버에 다시 DateTime 형태로 변환저장
+Timestamp movingTimeToTimestamp(String timeStr) {
+  final now = DateTime.now();
+
+  final parts = timeStr.split(':');
+  final hour = int.parse(parts[0]);
+  final minute = int.parse(parts[1]);
+
+  final dateTime = DateTime(
+    now.year,
+    now.month,
+    now.day,
+    hour,
+    minute,
+  );
+
+  return Timestamp.fromDate(dateTime);
+}
+//시승차에서 이동시간을 서버에서 불러와서 이코드로 시간 분을 구함
+String movingTimeGet(createdAtDateTime) {
+  final String a = createdAtDateTime.hour.toString().padLeft(2, '0');
+  final String b = createdAtDateTime.minute.toString().padLeft(2, '0');
+  final String c = '$a:$b';
+  return c;
+
+}
 
 String getRemainTime(createdAtDateTime){
 

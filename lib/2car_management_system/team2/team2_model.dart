@@ -39,6 +39,7 @@ class _CarStateState extends State<CarState> {
   String dataAdress = ''; // 차번호 클릭시 나오는 위치 주소값
   int color = 1; //출차누르면 값이 2로 바뀌고 1이아닌색생은 노랑으로 표시
   DateTime dateTime = DateTime.now();
+  DateTime dateTime2 = DateTime.now(); //이동할 시각들 뽑음
   String name = ''; //픽업 하는 사람 이름
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
@@ -46,12 +47,12 @@ class _CarStateState extends State<CarState> {
   String Color5List = COLOR5 + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
-  String movingTime = ''; //이동할 시각들 뽑음
+  String movingTime = ''; //움직인 시간 / 거의 시승차로 씀
+
   String carModelFrom = ''; // 번호눌럿을때 차종 뽑아서 넣는 전연변수
   int selectedTabIndex = 0;
 
   int selectedNumber = 0; // 선택된 버튼 번호를 저장할 변수 이건 전기차 관련된 변수임
-
 
   late TextEditingController etcController;
 
@@ -60,7 +61,6 @@ class _CarStateState extends State<CarState> {
     super.initState();
     etcController = TextEditingController(text: etc ?? '');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +104,15 @@ class _CarStateState extends State<CarState> {
                   etc = filteredDocs[index]['etc'];
                   wigetName = filteredDocs[index]['wigetName'];
                   movedLocation = filteredDocs[index]['movedLocation'];
-                  movingTime = filteredDocs[index]['movingTime'];
+
+                  final raw = filteredDocs[index]['movingTime'];
+                   movingTime = raw is Timestamp
+                      ? movingTimeGet(raw.toDate())
+                      : '';
+
                   Timestamp createdAt = filteredDocs[index]['createdAt'];
                   dateTime = createdAt.toDate();
                   remainTime = getRemainTime(dateTime);
-                  //     dataAdress = CheckLocation(location); //파이어베이스 데이터주소
 
                   String getMovingTime = getTodayTime();
                   print(location);
@@ -185,7 +189,6 @@ class _CarStateState extends State<CarState> {
     String getMovingTime,
     String carModelFrom,
   ) {
-
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,111 +224,108 @@ class _CarStateState extends State<CarState> {
               ],
             ),
           ),
-
           if (color != 3 && color != 6)
-          Expanded(
-            child: Container(
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(FIELD)
-                        .doc(dataId)
-                        .update({
-                      'color': color == 2 ? 1 : 2,
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  color == 2 ? '출차취소' : '출차하기',
-                  style: TextStyle(
-                    fontSize: 18, // 텍스트 크기 증가
-                    fontWeight: FontWeight.bold, // 텍스트를 굵게
-                    color: Colors.black87, // 텍스트 색상
+            Expanded(
+              child: Container(
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update({
+                        'color': color == 2 ? 1 : 2,
+                      });
+                    } catch (e) {
+                      print(e);
+                    }
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    color == 2 ? '출차취소' : '출차하기',
+                    style: TextStyle(
+                      fontSize: 18, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  backgroundColor: color == 2 ? Colors.orange : Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: color == 2 ? Colors.orange : Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
           if (color == 3 || color == 6)
-          Expanded(
-            child: Container(
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(FIELD) // 컬렉션 이름을 지정하세요
-                        .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                        .delete();
-                    print('문서 삭제 완료');
-                  } catch (e) {
-                    print('문서 삭제 오류: $e');
-                  }
-                  Navigator.pop(context);
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(CarListAdress)
-                        .doc(dataId)
-                        .update({
-                      'out': FieldValue.serverTimestamp(),
-                      'outName': name,
-                      'outLocation': location,
-                      'movedLocation': '$movedLocation',
-                      'wigetName': wigetName,
-                      'movingTime': movingTime,   //자가주차한사람 자가주차라고뜸
-                      'etc': '$etc/자가출차',
-                    });
-                  } catch (e) {
-                    print(e);
-                    print('데이터가 존재하지 않아 업데이트 할게 없습니다');
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('하루 지난 데이터 입니다 '),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('확인'),
-                              ),
-                            ],
-                          );
-                        });
-                  }
-                },
-                child: Text(
-                  '자가출차',
-                  style: TextStyle(
-                    fontSize: 18, // 텍스트 크기 증가
-                    fontWeight: FontWeight.bold, // 텍스트를 굵게
-                    color: Colors.black87, // 텍스트 색상
+            Expanded(
+              child: Container(
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD) // 컬렉션 이름을 지정하세요
+                          .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                          .delete();
+                      print('문서 삭제 완료');
+                    } catch (e) {
+                      print('문서 삭제 오류: $e');
+                    }
+                    Navigator.pop(context);
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(CarListAdress)
+                          .doc(dataId)
+                          .update({
+                        'out': FieldValue.serverTimestamp(),
+                        'outName': name,
+                        'outLocation': location,
+                        'movedLocation': '$movedLocation',
+                        'wigetName': wigetName,
+                        'etc': '$etc/자가출차',
+                      });
+                    } catch (e) {
+                      print(e);
+                      print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('하루 지난 데이터 입니다 '),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          });
+                    }
+                  },
+                  child: Text(
+                    '자가출차',
+                    style: TextStyle(
+                      fontSize: 18, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  backgroundColor: Colors.blue, // 버튼 색상
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.blue, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-
         ],
       ),
       content: Container(
@@ -392,7 +392,7 @@ class _CarStateState extends State<CarState> {
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
-                          'movingTime': (color == 3) ? '' : '/자가주차/',
+                          'enterName': (color == 3) ? '' : '자가주차', //자가주차누르면 기입됨
                         });
                       } catch (e) {
                         print(e);
@@ -654,7 +654,10 @@ class _CarStateState extends State<CarState> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
                                 content: SizedBox(
-                                  width: MediaQuery.of(context).size.width.clamp(0, 290),
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width
+                                      .clamp(0, 290),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -1205,20 +1208,54 @@ class _CarStateState extends State<CarState> {
               height: 60,
               child: ElevatedButton(
                 onPressed: () async {
+                  Color5List = COLOR5 + formatTodayDate();
+
+                  try {
+
+                    await FirebaseFirestore.instance
+                        .collection(FIELD) // 컬렉션 이름을 지정하세요
+                        .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                        .delete();
+                    print('문서 삭제 완료');
+                  } catch (e) {
+                    print('문서 삭제 오류: $e');
+                  }
+                  Navigator.pop(context);
+
                   try {
                     await FirebaseFirestore.instance
-                        .collection(FIELD)
+                        .collection(Color5List)
                         .doc(dataId)
                         .update({
-                      'location': 5,
+                      'out': FieldValue.serverTimestamp(),
+                      'outName': name,
+                      'outLocation': location,
+                      'wigetName': wigetName,
+                      'movingTime': movingTimeToTimestamp(movingTime),
+                      'etc': etc,
                     });
                   } catch (e) {
                     print(e);
+                    print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('하루 지난 데이터 입니다 '),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('확인'),
+                              ),
+                            ],
+                          );
+                        });
                   }
-                  Navigator.pop(context);
                 },
                 child: Text(
-                  '시승출발',
+                  '시승종료',
                   style: TextStyle(
                     fontSize: 18, // 텍스트 크기 증가
                     fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1227,7 +1264,7 @@ class _CarStateState extends State<CarState> {
                 ),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20),
-                  backgroundColor: Colors.purple, // 버튼 색상
+                  backgroundColor: Colors.red, // 버튼 색상
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                   ),
@@ -1241,178 +1278,7 @@ class _CarStateState extends State<CarState> {
         width: MediaQuery.of(context).size.width,
         height: 320,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 60),
-                      backgroundColor: Colors.blueGrey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context); // 기존 팝
-
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              String? selectedBrand;
-
-                              // 탭 인덱스에 따른 맵 선택 함수
-                              Map<String, List<String>> getSelectedBrandMap() {
-                                if (selectedTabIndex == 0)
-                                  return widget.domesticBrands;
-                                if (selectedTabIndex == 1)
-                                  return widget.importedFamousBrands;
-                                return widget.otherBrands;
-                              }
-
-                              return AlertDialog(
-                                title: Text('브랜드를 선택하세요',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                content: SizedBox(
-                                  width: double.maxFinite,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ToggleButtons(
-                                        isSelected: [
-                                          selectedTabIndex == 0,
-                                          selectedTabIndex == 1,
-                                          selectedTabIndex == 2,
-                                        ],
-                                        onPressed: (index) {
-                                          setState(() {
-                                            selectedTabIndex = index;
-                                          });
-                                        },
-                                        borderRadius: BorderRadius.circular(8),
-                                        selectedColor: Colors.white,
-                                        fillColor: Colors.blue,
-                                        color: Colors.black,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Text('국산'),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Text('수입'),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            child: Text('기타'),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Container(
-                                        height: 350,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey.shade300),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Scrollbar(
-                                          child: GridView.count(
-                                            crossAxisCount: 3,
-                                            // 한 줄에 3개
-                                            crossAxisSpacing: 8,
-                                            mainAxisSpacing: 8,
-                                            shrinkWrap: true,
-                                            childAspectRatio: 1,
-                                            // 카드 비율 (가로:세로)
-                                            children: getSelectedBrandMap()
-                                                .keys
-                                                .map((brand) {
-                                              return Card(
-                                                color: selectedBrand == brand
-                                                    ? Colors.grey.shade200
-                                                    : Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return carModel(
-                                                            color,
-                                                            brand,
-                                                            getSelectedBrandMap());
-                                                      },
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8),
-                                                    child: Text(
-                                                      brand,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 14),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child: Text('닫기'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      '브랜드넣기',
-                      style: TextStyle(
-                        fontSize: 14, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
             Row(
               children: [
                 Expanded(
@@ -1439,7 +1305,7 @@ class _CarStateState extends State<CarState> {
                       }
                     },
                     child: Text(
-                      '대면시승',
+                      '대면',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1476,7 +1342,7 @@ class _CarStateState extends State<CarState> {
                       }
                     },
                     child: Text(
-                      '비대면시승',
+                      '비대면',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1633,6 +1499,42 @@ class _CarStateState extends State<CarState> {
                     ),
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '컬러',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '컬러확인',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: 5,
                 ),
@@ -1640,37 +1542,27 @@ class _CarStateState extends State<CarState> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.brown, // 버튼 색상
+                      backgroundColor: Colors.grey, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
                     ),
-                    onPressed: () {
-                      // Navigator.pop(context);
+                    onPressed: () async {
+                      Navigator.pop(context);
 
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return bottomEtc(
-                      //       carNumber,
-                      //       name,
-                      //       color,
-                      //       location,
-                      //       dateTime,
-                      //       dataId,
-                      //       etc,
-                      //       remainTime,
-                      //       movedLocation,
-                      //       wigetName,
-                      //       movingTime,
-                      //       getMovingTime,
-                      //       carModelFrom,
-                      //     );
-                      //   },
-                      // );
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '교육',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                     child: Text(
-                      '기타',
+                      '교육용',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1681,88 +1573,30 @@ class _CarStateState extends State<CarState> {
                 ),
               ],
             ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 60),
-                      backgroundColor: Colors.red, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD) // 컬렉션 이름을 지정하세요
-                            .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                            .delete();
-                        print('문서 삭제 완료');
-                      } catch (e) {
-                        print('문서 삭제 오류: $e');
-                      }
-                      Navigator.pop(context);
-
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(Color5List)
-                            .doc(dataId)
-                            .update({
-                          'out': FieldValue.serverTimestamp(),
-                          'outName': name,
-                          'outLocation': location,
-                          'wigetName': wigetName,
-                          'etc': etc,
-                        });
-                      } catch (e) {
-                        print(e);
-                        print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('하루 지난 데이터 입니다 '),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('확인'),
-                                  ),
-                                ],
-                              );
-                            });
-                      }
-                    },
-                    child: Text(
-                      '시승종료',
-                      style: TextStyle(
-                        fontSize: 14, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 10,
             ),
+
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 18, // ⬅ 두께(높이) 증가
                       ),
-                      textStyle:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
+                        fontSize: 17,
+                      ),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-
+                      etcController.text = etc;
                       setState(() {
                         showDialog(
                             context: context,
@@ -1770,12 +1604,15 @@ class _CarStateState extends State<CarState> {
                               return AlertDialog(
                                 title: Text('특이사항'),
                                 content: Container(
-                                  width: MediaQuery.of(context).size.width,
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width
+                                      .clamp(0, 290),
                                   height: 150,
                                   child: Column(
                                     children: [
                                       TextField(
-                                        inputFormatters: [],
+                                        controller: etcController,
                                         maxLength: 15,
                                         decoration: InputDecoration(
                                           hintText: '특이사항 15자까지가능',
@@ -1991,49 +1828,49 @@ class _CarStateState extends State<CarState> {
             child: Container(
               height: 60,
               child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(FIELD) // 컬렉션 이름을 지정하세요
-                        .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                        .delete();
-                    print('문서 삭제 완료');
-                  } catch (e) {
-                    print('문서 삭제 오류: $e');
-                  }
-                  Navigator.pop(context);
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(CarListAdress)
-                        .doc(dataId)
-                        .update({
-                      'out': FieldValue.serverTimestamp(),
-                      'outName': name,
-                      'outLocation': location,
-                      'movedLocation': '$movedLocation',
-                      'wigetName': wigetName,
-                      'movingTime': movingTime,
-                      'etc': etc,
-                    });
-                  } catch (e) {
-                    print(e);
-                    print('데이터가 존재하지 않아 업데이트 할게 없습니다');
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('하루 지난 데이터 입니다 '),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('확인'),
-                              ),
-                            ],
-                          );
-                        });
-                  }
+                onPressed: () {
+                  // try {
+                  //   await FirebaseFirestore.instance
+                  //       .collection(FIELD) // 컬렉션 이름을 지정하세요
+                  //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                  //       .delete();
+                  //   print('문서 삭제 완료');
+                  // } catch (e) {
+                  //   print('문서 삭제 오류: $e');
+                  // }
+                  // Navigator.pop(context);
+                  // try {
+                  //   await FirebaseFirestore.instance
+                  //       .collection(CarListAdress)
+                  //       .doc(dataId)
+                  //       .update({
+                  //     'out': FieldValue.serverTimestamp(),
+                  //     'outName': name,
+                  //     'outLocation': location,
+                  //     'movedLocation': '$movedLocation',
+                  //     'wigetName': wigetName,
+                  //     'movingTime': movingTime,
+                  //     'etc': etc,
+                  //   });
+                  // } catch (e) {
+                  //   print(e);
+                  //   print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                  //   showDialog(
+                  //       context: context,
+                  //       builder: (BuildContext context) {
+                  //         return AlertDialog(
+                  //           title: Text('하루 지난 데이터 입니다 '),
+                  //           actions: [
+                  //             ElevatedButton(
+                  //               onPressed: () {
+                  //                 Navigator.pop(context);
+                  //               },
+                  //               child: Text('확인'),
+                  //             ),
+                  //           ],
+                  //         );
+                  //       });
+                  // }
                 },
                 child: Text(
                   '출차완료',
