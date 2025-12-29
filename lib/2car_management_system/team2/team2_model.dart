@@ -283,7 +283,7 @@ class _CarStateState extends State<CarState> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
-                        'etc': '$etc/자가출차',
+                        'etc': etc,
                       });
                     } catch (e) {
                       print(e);

@@ -269,7 +269,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
-                        'etc': '$etc/자가출차',
+                        'etc': etc,
                       });
                     } catch (e) {
                       print(e);
@@ -1229,8 +1229,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               height: 60,
               child: ElevatedButton(
                 onPressed: () async {
-                  Color5List = COLOR5 + formatTodayDate();
-
                   try {
                     await FirebaseFirestore.instance
                         .collection(FIELD)
