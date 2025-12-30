@@ -343,6 +343,7 @@ class _Team4ViewState extends State<Team4View> {
                                           .doc(documentId)
                                           .set({
                                         'carNumber': carNumber,
+                                        'enterName': '',
                                         'name': '',
                                         'createdAt':
                                             FieldValue.serverTimestamp(),
@@ -363,7 +364,7 @@ class _Team4ViewState extends State<Team4View> {
                                           .doc(documentId)
                                           .set({
                                         'carNumber': carNumber,
-                                        'enterName': widget.name,
+                                        'enterName': '',
                                         'enter': FieldValue.serverTimestamp(),
                                         'out': '',
                                         'outName': '',

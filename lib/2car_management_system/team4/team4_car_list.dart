@@ -150,20 +150,22 @@ class _Team4CarlistState extends State<Team4Carlist> {
 
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address (총 $count대)');
-    buffer.writeln('-----------------------------');
+    buffer.writeln('번호 브랜드 차종 차번호 입차 출차 특이사항');
 
     for (int i = 0; i < count; i++) {
       final doc = query.docs[i];
       final carNum = doc['carNumber'];
       final brand = doc['carBrand'];
       final model = doc['carModel'];
-      final etc = doc['etc'];
       final enter = Team4getInTime(doc['enter']);
       final out = doc['out'] is Timestamp
           ? Team4getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
+      final enterName = (doc['enterName'] as String).isEmpty ? 'X' : doc['enterName'];
 
-      buffer.writeln('(${i + 1}) $brand $model $carNum $enter $out');
+      final etc = doc['etc'];
+
+      buffer.writeln('${i + 1} $brand $model $carNum $enter $out $enterName $etc');
     }
 
     return buffer.toString();
@@ -324,6 +326,7 @@ class ListModel extends StatelessWidget {
   String carNumber = '';
   String enterTime = '';
   String enterName = '';
+  String selfParking = '';
   String etc = '';
   DateTime? outTime;
   String outName = '';
@@ -365,6 +368,8 @@ class ListModel extends StatelessWidget {
                   Timestamp sam = docs[index]['enter']; //입차시각
                   enterTime = Team4getInTime(sam); //입차시각 변환코드
                   enterName = docs[index]['wigetName']; //입차한사람 이름
+                  selfParking = docs[index]
+                  ['enterName']; // 자가주차하면 enterName으로 들어간데이터가 여기에 저장됨
                   etc = docs[index]['etc']; //특이사항
 
                   outTime = docs[index]['out'] is Timestamp
@@ -396,6 +401,7 @@ class ListModel extends StatelessWidget {
                     movedLocation,
                     movingTime,
                     adress,
+                      selfParking,
                   );
                 },
                 child: Padding(
@@ -432,6 +438,7 @@ class ListModel extends StatelessWidget {
     movedLocation,
     movingTime,
     adress,
+      selfParking,
   ) {
     showModalBottomSheet(
       context: context,
@@ -562,16 +569,30 @@ class ListModel extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          '특이사항',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              '특이사항',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(width: 15,),
+                            Text(
+                              selfParking,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: Colors.blue
+                              ),
+                            ),
+
+
+                          ],
                         ),
                         Row(
                           children: [
-                            Text(movingTime),
                             Text(etc),
                           ],
                         )

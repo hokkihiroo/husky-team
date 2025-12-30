@@ -1897,7 +1897,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width.clamp(0, 290),
         height: 260,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

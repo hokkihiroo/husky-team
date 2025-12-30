@@ -41,6 +41,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
   String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
+  String enterName = ''; //자가주차 내역
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
   int selectedTabIndex = 0; // 이건 브랜드 선택시 탭 번호 0이 국산1이 수입 2가 기타
@@ -93,6 +94,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                 var document = filteredDocs[index];
                 dataId = document.id;
                 name = filteredDocs[index]['name'];
+                enterName = filteredDocs[index]['enterName'];
                 carNumber = filteredDocs[index]['carNumber'];
                 carModelFrom = filteredDocs[index]['carModel'];
                 location = filteredDocs[index]['location'];
@@ -125,6 +127,8 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                       movingTime,
                       getMovingTime,
                       carModelFrom,
+                      enterName,
+
                     );
                   },
                 );
@@ -158,6 +162,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
     String movingTime,
     String getMovingTime,
     String carModelFrom,
+    String enterName,
   ) {
     return AlertDialog(
       title: Row(
@@ -256,7 +261,8 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
-                        'etc': '$etc/자가출차',
+                        'enterName': enterName,
+                        'etc': '$etc',
                       });
                     } catch (e) {
                       print(e);

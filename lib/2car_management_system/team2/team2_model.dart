@@ -47,7 +47,7 @@ class _CarStateState extends State<CarState> {
   String Color5List = COLOR5 + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
-  String enterName = ''; //추가할 이름들 뽑음
+  String enterName = ''; //자가주차 내역
   String movingTime = ''; //움직인 시간 / 거의 시승차로 씀
 
   String carModelFrom = ''; // 번호눌럿을때 차종 뽑아서 넣는 전연변수
@@ -1892,7 +1892,7 @@ class _CarStateState extends State<CarState> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width.clamp(0, 290),
         height: 260,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -151,7 +151,7 @@ class _CarListState extends State<CarList> {
 
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address (총 $count대)');
-    buffer.writeln('-----------------------------');
+    buffer.writeln('번호 브랜드 차종 차번호 입차 출차');
 
     for (int i = 0; i < count; i++) {
       final doc = query.docs[i];
@@ -164,7 +164,7 @@ class _CarListState extends State<CarList> {
           ? getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
-      buffer.writeln('(${i + 1}) $brand $model $carNum $enter $out');
+      buffer.writeln('${i + 1} $brand $model $carNum $enter $out');
 
       //
       // buffer.writeln('(${i + 1})');
@@ -700,8 +700,10 @@ class ListModel extends StatelessWidget {
                             SizedBox(width: 15,),
                             Text(
                               selfParking,
-                              style: const TextStyle(
-                                color: Colors.blueAccent,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: Colors.blue
                               ),
                             ),
 
