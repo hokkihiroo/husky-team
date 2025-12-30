@@ -9,10 +9,11 @@ String getCurrentYearAndMonth() {
 
   return '$year년 $month월';           // 연도와 월을 문자열로 반환
 }
-
+//이게 조직부터 마이페이지 접근금지 아이디
 List<String> restrictedEmails() {
   return [
-    'duaghrud11@naver.com',
+    'cj@teamhusky.co.kr',
+    'sj@teamhusky.co.kr',
     // 나중에 여기 계속 추가
   ];
 }
