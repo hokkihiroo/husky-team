@@ -12,6 +12,7 @@ String getCurrentYearAndMonth() {
 //이게 조직부터 마이페이지 접근금지 아이디
 List<String> restrictedEmails() {
   return [
+    'cj@teamhusky.co.kr',
     'sj@teamhusky.co.kr',
     // 나중에 여기 계속 추가
   ];
