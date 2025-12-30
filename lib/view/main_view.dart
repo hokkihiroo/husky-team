@@ -5,6 +5,7 @@ import 'package:team_husky/layout/default_layout.dart';
 import '../2car_management_system/car_mainview.dart';
 import '../4education/education.dart';
 import '../5mypage/mypage.dart';
+import 'adress.dart';
 
 class MainView extends StatefulWidget {
   const MainView({
@@ -35,6 +36,12 @@ class _MainViewState extends State<MainView>
   String title = '시설';
   late TabController controller;
   int index = 1;
+
+  bool isRestrictedUser() {
+    return restrictedEmails().contains(widget.email);
+  }
+
+
 
   @override
   void initState() {
@@ -67,6 +74,27 @@ class _MainViewState extends State<MainView>
       }
     });
   }
+
+  void showRestrictedDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('안내'),
+          content: const Text('해당 메뉴에 접근할 수 없습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +130,12 @@ class _MainViewState extends State<MainView>
         unselectedFontSize: 10,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
+          // 제한 사용자 + 시설(1) 제외 탭 클릭 시
+          if (isRestrictedUser() && index != 1) {
+            showRestrictedDialog();
+            return;
+          }
+          // 정상 사용자 or 시설 탭
           controller.animateTo(index);
         },
         currentIndex: index,

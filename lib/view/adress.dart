@@ -1,3 +1,5 @@
+
+
 String myInfoAdress ='user';
 
 String getCurrentYearAndMonth() {
@@ -6,4 +8,11 @@ String getCurrentYearAndMonth() {
   final int month = now.month;        // 현재 월
 
   return '$year년 $month월';           // 연도와 월을 문자열로 반환
+}
+
+List<String> restrictedEmails() {
+  return [
+    'duaghrud11@naver.com',
+    // 나중에 여기 계속 추가
+  ];
 }

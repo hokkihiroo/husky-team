@@ -150,7 +150,7 @@ class _Team4CarlistState extends State<Team4Carlist> {
 
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address (총 $count대)');
-    buffer.writeln('번호 브랜드 차종 차번호 입차 출차 특이사항');
+    buffer.writeln('번호 브랜드 차종 차번호 입차 출차 자가주차 특이사항');
 
     for (int i = 0; i < count; i++) {
       final doc = query.docs[i];
