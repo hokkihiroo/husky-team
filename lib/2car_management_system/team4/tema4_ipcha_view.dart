@@ -305,7 +305,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width.clamp(0, 300),
+        width: MediaQuery.of(context).size.width.clamp(0, 290),
         height: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -897,7 +897,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
       ),
       content: Container(
         height: 350,
-        width: MediaQuery.of(context).size.width.clamp(0, 320),
+        width: MediaQuery.of(context).size.width.clamp(0, 290),
         decoration: BoxDecoration(
           color: Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
@@ -968,7 +968,8 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       content: SizedBox(
-        width: double.maxFinite,
+        width: MediaQuery.of(context).size.width.clamp(0, 290),
+
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
