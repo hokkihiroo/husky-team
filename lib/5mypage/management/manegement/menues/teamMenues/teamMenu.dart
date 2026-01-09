@@ -53,7 +53,7 @@ class TeamMenu extends StatelessWidget {
               );
             },
             child: Text(
-              '시승차 관리',
+              '시승차관리(현대전용)',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),
@@ -107,7 +107,7 @@ class TeamMenu extends StatelessWidget {
               );
             },
             child: Text(
-              '브랜드관리(삭제가능)(공통)',
+              '브랜드관리(삭제가능)',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),
@@ -133,7 +133,7 @@ class TeamMenu extends StatelessWidget {
               );
             },
             child: Text(
-              '시승차관리(제네시스)',
+              '시승차관리(제네시스전용)',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),

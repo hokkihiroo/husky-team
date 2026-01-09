@@ -33,7 +33,7 @@ class _Team4ViewState extends State<Team4View> {
   void initState() {
     super.initState();
     _loadBrandModels();
-    _loadMember();
+   // _loadMember();
   }
 
   Future<void> _loadBrandModels() async {
@@ -74,37 +74,37 @@ class _Team4ViewState extends State<Team4View> {
   }
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ멤버불러오는함수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-  Future<void> _loadMember() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection(TEAM4MEMBER)
-          .orderBy('order') // ⭐ 추가
-          .get();
-
-      print('🔥 member 문서 개수: ${snapshot.docs.length}');
-
-      // 🔥 여기서 snapshot → List<Map> 변환
-      final loadedMembers = snapshot.docs.map((doc) {
-        return {
-          'id': doc.id,
-          ...doc.data(),
-        };
-      }).toList();
-
-      // 상태에 저장
-      setState(() {
-        memberList = loadedMembers;
-      });
-
-      // 디버그 출력
-      for (final m in memberList) {
-        print('📄 member: $m');
-      }
-    } catch (e, s) {
-      print('❌ Firestore 에러: $e');
-      print(s);
-    }
-  }
+//   Future<void> _loadMember() async {
+//     try {
+//       final snapshot = await FirebaseFirestore.instance
+//           .collection(TEAM4MEMBER)
+//           .orderBy('order') // ⭐ 추가
+//           .get();
+//
+//       print('🔥 member 문서 개수: ${snapshot.docs.length}');
+//
+//       // 🔥 여기서 snapshot → List<Map> 변환
+//       final loadedMembers = snapshot.docs.map((doc) {
+//         return {
+//           'id': doc.id,
+//           ...doc.data(),
+//         };
+//       }).toList();
+//
+//       // 상태에 저장
+//       setState(() {
+//         memberList = loadedMembers;
+//       });
+//
+//       // 디버그 출력
+//       for (final m in memberList) {
+//         print('📄 member: $m');
+//       }
+//     } catch (e, s) {
+//       print('❌ Firestore 에러: $e');
+//       print(s);
+//     }
+//   }
 
 
 
@@ -123,18 +123,17 @@ class _Team4ViewState extends State<Team4View> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WorkerList(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => WorkerList(),
+                      //   ),
+                      // );
                     },
                     child: const Text(
                       '제네시스 수지',
                       style: TextStyle(
                         color: Color(0xFFFFC107),
-                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
