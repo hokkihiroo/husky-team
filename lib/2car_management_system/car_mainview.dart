@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team1/team1_view.dart';
 import 'package:team_husky/2car_management_system/team2/team2_view.dart';
+import 'package:team_husky/2car_management_system/team2/team2_z1_view.dart';
 import 'package:team_husky/2car_management_system/team3/team3_view.dart';
 import 'package:team_husky/2car_management_system/team4/team4_view.dart';
 
@@ -216,136 +217,211 @@ class CarManagementSystem extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              GestureDetector(
-                onTap: () {
-                  if (team == 'zSvgctyCZUnOx8rYMioF' ||
-                      team == 'e46miKLAbe8CjR1RsQkR') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Team2View(name: name)),
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('입장 불가'),
-                          content: Text('해당 팀만 접근가능합니다.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('확인'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (team == 'zSvgctyCZUnOx8rYMioF' ||
+                          team == 'e46miKLAbe8CjR1RsQkR') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Team2View(name: name)),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('입장 불가'),
+                              content: Text('해당 팀만 접근가능합니다.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: 145.0,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF1E1E1E), Color(0xFF3A3A3A)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          // 깊은 그림자 (하단/오른쪽)
+                          BoxShadow(
+                            color: Colors.black87,
+                            offset: Offset(6, 6),
+                            blurRadius: 12.0,
+                          ),
+                          // 밝은 하이라이트 (상단/왼쪽)
+                          BoxShadow(
+                            color: Colors.white24,
+                            offset: Offset(-4, -4),
+                            blurRadius: 8.0,
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Color(0xFFC6A667), // 고급스러운 골드 테두리
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '청주 [GENESIS]',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color(0xFFC6A667),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2.0,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              '고객차 차량관리',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFFC6A667),
+                                // 골드 컬러
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.8,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  GestureDetector(
+                    onTap: () {
+                      if (team == 'zSvgctyCZUnOx8rYMioF' ||
+                          team == 'e46miKLAbe8CjR1RsQkR') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Team2Z1View(name: name)),
                         );
-                      },
-                    );
-                  }
-                },
-                child: Container(
-                  width: 300.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF1E1E1E), Color(0xFF3A3A3A)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20.0),
-                    boxShadow: [
-                      // 깊은 그림자 (하단/오른쪽)
-                      BoxShadow(
-                        color: Colors.black87,
-                        offset: Offset(6, 6),
-                        blurRadius: 12.0,
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('입장 불가'),
+                              content: Text('해당 팀만 접근가능합니다.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: 145.0,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF1E1E1E), Color(0xFF3A3A3A)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          // 깊은 그림자 (하단/오른쪽)
+                          BoxShadow(
+                            color: Colors.black87,
+                            offset: Offset(6, 6),
+                            blurRadius: 12.0,
+                          ),
+                          // 밝은 하이라이트 (상단/왼쪽)
+                          BoxShadow(
+                            color: Colors.white24,
+                            offset: Offset(-4, -4),
+                            blurRadius: 8.0,
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Color(0xFFC6A667), // 고급스러운 골드 테두리
+                          width: 1.5,
+                        ),
                       ),
-                      // 밝은 하이라이트 (상단/왼쪽)
-                      BoxShadow(
-                        color: Colors.white24,
-                        offset: Offset(-4, -4),
-                        blurRadius: 8.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '청주 [GENESIS]',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color(0xFFC6A667),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2.0,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              '시승차 상태관리',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFFC6A667),
+                                // 골드 컬러
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.8,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                    border: Border.all(
-                      color: Color(0xFFC6A667), // 고급스러운 골드 테두리
-                      width: 1.5,
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // 고급스러운 제네시스 로고 느낌의 아이콘
-                        // 고급스러운 자동차 아이콘
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFF2A2A2A),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black54,
-                                offset: Offset(3, 3),
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.directions_car, // 자동차 아이콘
-                            size: 35,
-                            color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
-                          ),
-                        ),
-                        SizedBox(width: 15.0),
-                        // 텍스트 정보
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '청주 [GENESIS]',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Color(0xFFC6A667),
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.black38,
-                                      offset: Offset(1, 1),
-                                      blurRadius: 2.0,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 5.0),
-                              Text(
-                                '차량관리 시스템',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFFC6A667),
-                                  // 골드 컬러
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1.8,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.black38,
-                                      offset: Offset(1, 1),
-                                      blurRadius: 2.0,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                ],
               ),
               SizedBox(
                 height: 30,
