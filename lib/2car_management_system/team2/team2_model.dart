@@ -149,6 +149,7 @@ class _CarStateState extends State<CarState> {
                           movingTime,
                           getMovingTime,
                           carModelFrom,
+                            option1,
 
                         );
                       } else {
@@ -923,6 +924,7 @@ class _CarStateState extends State<CarState> {
     String movingTime,
     String getMovingTime,
     String carModelFrom,
+    String option1,
   ) {
     return AlertDialog(
       title: Row(
@@ -971,6 +973,7 @@ class _CarStateState extends State<CarState> {
                         .update({
                       'location': 11,
                       'name':'',
+                      'option1':'',
                     });
                   } catch (e) {
                     print('문서 삭제 오류: $e');
@@ -979,7 +982,7 @@ class _CarStateState extends State<CarState> {
                   try {
                     await FirebaseFirestore.instance
                         .collection(Color5List)
-                        .doc(dataId)
+                        .doc(option1)
                         .update({
                       'out': FieldValue.serverTimestamp(),
                       'outName': name,
