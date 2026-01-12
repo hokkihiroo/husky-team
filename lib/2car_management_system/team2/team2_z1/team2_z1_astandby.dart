@@ -33,9 +33,10 @@ class _StandByState extends State<StandBy> {
   String enterName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
-  int selectedTabIndex = 0;
 
   late TextEditingController etcController;
+
+  String option1 ='';       // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
 
   @override
   void initState() {
@@ -103,6 +104,8 @@ class _StandByState extends State<StandBy> {
                 String getMovingTime = getTodayTime();
                 final BuildContext rootContext = context;
 
+                option1 = displayList[index]['option1'];   // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
+
                 showDialog(
                   context: rootContext,
                   builder: (BuildContext context) {
@@ -120,6 +123,7 @@ class _StandByState extends State<StandBy> {
                       movingTime,
                       getMovingTime,
                       carModelFrom,
+                        option1,
                     );
                   },
                 );
@@ -154,6 +158,7 @@ class _StandByState extends State<StandBy> {
       String movingTime,
       String getMovingTime,
       String carModelFrom,
+      String option1,
       ) {
     return AlertDialog(
       title: Row(
@@ -202,40 +207,21 @@ class _StandByState extends State<StandBy> {
                         .update({
                       'location': 11,
                       'name':'',
+                      'option1':'',
                     });
                   } catch (e) {
                     print(e);
                   }
                   Navigator.pop(context);
-                  // try {
-                  //   await FirebaseFirestore.instance
-                  //       .collection(Color5List)
-                  //       .doc(dataId)
-                  //       .update({
-                  //     'out': FieldValue.serverTimestamp(),
-                  //     'outName': name,
-                  //     'wigetName': wigetName,
-                  //     'etc': '$etc/시승취소',
-                  //   });
-                  // } catch (e) {
-                  //   print(e);
-                  //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                  //   showDialog(
-                  //       context: context,
-                  //       builder: (BuildContext context) {
-                  //         return AlertDialog(
-                  //           title: Text('하루 지난 데이터 입니다 '),
-                  //           actions: [
-                  //             ElevatedButton(
-                  //               onPressed: () {
-                  //                 Navigator.pop(context);
-                  //               },
-                  //               child: Text('확인'),
-                  //             ),
-                  //           ],
-                  //         );
-                  //       });
-                  // }
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(
+                        Color5List)
+                        .doc(option1)
+                        .delete();
+                  } catch (e) {
+                    print('데이터가 존재하지 않습니다');
+                  }
                 },
                 child: Text(
                   '시승취소',

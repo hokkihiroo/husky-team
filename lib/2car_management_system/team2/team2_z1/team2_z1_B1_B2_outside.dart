@@ -35,7 +35,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String enterName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
-  int selectedTabIndex = 0;
 
   String option1 ='';       // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
 
