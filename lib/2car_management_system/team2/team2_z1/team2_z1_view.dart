@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2_z1_standby.dart';
+import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_B1_B2_outside.dart';
+import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_astandby.dart';
 
 class Team2Z1View extends StatefulWidget {
   const Team2Z1View({super.key, required this.name});
@@ -52,11 +53,8 @@ class _Team2Z1ViewState extends State<Team2Z1View> {
             SizedBox(
               height: 10,
             ),
-            StandBy(
-              // name: widget.name,
-              // domesticBrands: domesticBrands,
-              // importedFamousBrands: importedFamousBrands,
-              // otherBrands: otherBrands,
+            StandBy(name: widget.name,
+
             ),
             SizedBox(
               height: 10,
@@ -77,6 +75,61 @@ class _Team2Z1ViewState extends State<Team2Z1View> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            B1B2Outside(name:widget.name, location: 11,    //b1 데이터 11
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Divider(
+              color: Colors.white, // 선 색상
+              thickness: 2.0, // 선 두께
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'B2',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            B1B2Outside(name:widget.name, location: 12,    //b2 데이터 12
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Divider(
+              color: Colors.white, // 선 색상
+              thickness: 2.0, // 선 두께
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '외부주차장',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            B1B2Outside(name:widget.name, location: 13,    //외부 데이터 13
             ),
           ],
         ),

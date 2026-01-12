@@ -951,10 +951,11 @@ class _CarStateState extends State<CarState> {
                 onPressed: () async {
                   try {
                     await FirebaseFirestore.instance
-                        .collection(FIELD) // 컬렉션 이름을 지정하세요
-                        .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                        .delete();
-                    print('문서 삭제 완료');
+                        .collection(FIELD)
+                        .doc(dataId)
+                        .update({
+                      'location': 11,
+                    });
                   } catch (e) {
                     print('문서 삭제 오류: $e');
                   }
