@@ -955,6 +955,7 @@ class _CarStateState extends State<CarState> {
                         .doc(dataId)
                         .update({
                       'location': 11,
+                      'name':'',
                     });
                   } catch (e) {
                     print('문서 삭제 오류: $e');
