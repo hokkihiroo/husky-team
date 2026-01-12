@@ -140,6 +140,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         movingTime,
                         getMovingTime,
                         carModelFrom,
+                          option1,
                       );
                     } else {
                       return bottomTwo(
@@ -865,6 +866,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String movingTime,
     String getMovingTime,
     String carModelFrom,
+    String option1,
   ) {
     return AlertDialog(
       title: Row(
@@ -921,7 +923,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   try {
                     await FirebaseFirestore.instance
                         .collection(Color5List)
-                        .doc(dataId)
+                        .doc(option1)
                         .update({
                       'movingTime': FieldValue.serverTimestamp(),
                     });

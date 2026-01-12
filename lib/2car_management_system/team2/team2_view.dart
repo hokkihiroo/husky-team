@@ -35,10 +35,10 @@ class _Team2ViewState extends State<Team2View> {
   Map<String, List<String>> otherBrands = {};
 
 // 이건 시승차 선택에 사용되는 리스트
-  List<DocumentSnapshot> type60 = [];
-  List<DocumentSnapshot> type70 = [];
-  List<DocumentSnapshot> type80 = [];
-  List<DocumentSnapshot> type90 = [];
+//   List<DocumentSnapshot> type60 = [];
+//   List<DocumentSnapshot> type70 = [];
+//   List<DocumentSnapshot> type80 = [];
+//   List<DocumentSnapshot> type90 = [];
 
   // 이건 시승차 60,70,80,90, 카드 선택 인덱스 값
   int selectedTabIndex = 0;
@@ -59,8 +59,8 @@ class _Team2ViewState extends State<Team2View> {
     print('🔥메인뷰 수입유명: $importedFamousBrands');
     print('🔥메인뷰 잡브랜드: $otherBrands');
 
-    await fetchBrandsByTypeWithLists();
-    printTypeLists();
+    // await fetchBrandsByTypeWithLists();    //시승차 불러오는 함수
+    // printTypeLists();
   }
 
   Future<void> fetchBrandsWithModels() async {
@@ -95,60 +95,60 @@ class _Team2ViewState extends State<Team2View> {
 
   // 시승차 데이터 불러오는 코드
 
-  Future<void> fetchBrandsByTypeWithLists() async {
-    final snapshots =
-        await FirebaseFirestore.instance.collection(FORGENESIS).get();
+  // Future<void> fetchBrandsByTypeWithLists() async {
+  //   final snapshots =
+  //       await FirebaseFirestore.instance.collection(FORGENESIS).get();
+  //
+  //   // 혹시 이전 데이터 남아있을 수 있으니 초기화
+  //   type60.clear();
+  //   type70.clear();
+  //   type80.clear();
+  //   type90.clear();
+  //
+  //   for (var doc in snapshots.docs) {
+  //     final int brandType = doc['brandType'] ?? 0;
+  //
+  //     switch (brandType) {
+  //       case 1:
+  //         type60.add(doc);
+  //         break;
+  //       case 2:
+  //         type70.add(doc);
+  //         break;
+  //       case 3:
+  //         type80.add(doc);
+  //         break;
+  //       case 4:
+  //         type90.add(doc);
+  //         break;
+  //       default:
+  //         print('⚠️ 알 수 없는 brandType: $brandType');
+  //     }
+  //   }
+  // }
 
-    // 혹시 이전 데이터 남아있을 수 있으니 초기화
-    type60.clear();
-    type70.clear();
-    type80.clear();
-    type90.clear();
-
-    for (var doc in snapshots.docs) {
-      final int brandType = doc['brandType'] ?? 0;
-
-      switch (brandType) {
-        case 1:
-          type60.add(doc);
-          break;
-        case 2:
-          type70.add(doc);
-          break;
-        case 3:
-          type80.add(doc);
-          break;
-        case 4:
-          type90.add(doc);
-          break;
-        default:
-          print('⚠️ 알 수 없는 brandType: $brandType');
-      }
-    }
-  }
-
-  //시승차 프린트코드
-  void printTypeLists() {
-    print('🔥 brandType 1');
-    for (var doc in type60) {
-      print(' - ${doc.data()}');
-    }
-
-    print('🔥 brandType 2');
-    for (var doc in type70) {
-      print(' - ${doc.data()}');
-    }
-
-    print('🔥 brandType 3');
-    for (var doc in type80) {
-      print(' - ${doc.data()}');
-    }
-
-    print('🔥 brandType 4');
-    for (var doc in type90) {
-      print(' - ${doc.data()}');
-    }
-  }
+  // //시승차 프린트코드
+  // void printTypeLists() {
+  //   print('🔥 brandType 1');
+  //   for (var doc in type60) {
+  //     print(' - ${doc.data()}');
+  //   }
+  //
+  //   print('🔥 brandType 2');
+  //   for (var doc in type70) {
+  //     print(' - ${doc.data()}');
+  //   }
+  //
+  //   print('🔥 brandType 3');
+  //   for (var doc in type80) {
+  //     print(' - ${doc.data()}');
+  //   }
+  //
+  //   print('🔥 brandType 4');
+  //   for (var doc in type90) {
+  //     print(' - ${doc.data()}');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
