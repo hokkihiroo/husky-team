@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_B1_B2_outside.dart';
 import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_astandby.dart';
+import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z2_carList.dart';
 
 class Team2Z1View extends StatefulWidget {
   const Team2Z1View({super.key, required this.name});
@@ -135,6 +136,44 @@ class _Team2Z1ViewState extends State<Team2Z1View> {
         ),
       ),
 
+        bottomNavigationBar: bottomOne());
+  }
+  Widget bottomOne() {
+    return BottomAppBar(
+      child: Row(
+        children: [
+          SizedBox(
+            width: 5,
+          ),
+
+          Expanded(
+            child: SizedBox(
+              height: 80,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  textStyle:
+                  TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CarListz1(),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.description_outlined,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+        ],
+      ),
+      color: Colors.black,
     );
   }
 }

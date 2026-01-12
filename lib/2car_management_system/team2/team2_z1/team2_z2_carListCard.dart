@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'team2_adress_const.dart';
+import '../team2_adress_const.dart';
 
-class CarListCard extends StatelessWidget {
+class ListCard extends StatelessWidget {
   final int index;
   final String carNum;
   final String carBrand;
@@ -12,16 +12,16 @@ class CarListCard extends StatelessWidget {
   final DateTime? outTime;
   final DateTime? movingTime;
 
-  const CarListCard(
+  const ListCard(
       {super.key,
-      required this.index,
-      required this.carNum,
-      required this.inTime,
-      required this.outTime,
-      required this.carBrand,
-      required this.carModel,
-      required this.movingTime,
-  });
+        required this.index,
+        required this.carNum,
+        required this.inTime,
+        required this.outTime,
+        required this.carBrand,
+        required this.carModel,
+        required this.movingTime,
+       });
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,13 @@ class CarListCard extends StatelessWidget {
       child: Row(
         children: [
           _buildCell(width: 45, text: index.toString().padLeft(2, '0')),
-          _buildCell(width: 60, text: carBrand),
-          _buildCell(width: 60, text: carModel),
+          _buildCell(width: 65, text: carModel),
           _buildCell(width: 60, text: carNum),
           _buildCell(width: 60, text: getInTime(inTime)),
+          _buildCell(   width: 55,
+            text: movingTime != null ? getOutTime(movingTime!) : '11:00',
+            textColor: movingTime == null ? Colors.black : Colors.white,
+          ),
           _buildCell(
             width: 55,
             text: outTime != null ? getOutTime(outTime!) : '11:00',
@@ -48,6 +51,8 @@ class CarListCard extends StatelessWidget {
         ],
       ),
     );
+
+    }
   }
 
   Widget _buildCell({
@@ -69,4 +74,4 @@ class CarListCard extends StatelessWidget {
       ),
     );
   }
-}
+
