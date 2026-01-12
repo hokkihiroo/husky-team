@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z2_carListCard.dart';
 
@@ -140,13 +141,53 @@ class _CarListState extends State<CarListz1> {
   }
 
 
+  // 텍스트 만드는 함수 추가
+  Future<String> createClipboardText(String address) async {
+    final query = await FirebaseFirestore.instance
+        .collection(CARLIST + address)
+        .orderBy('enter')
+        .get();
+
+    final count = query.docs.length;
+
+    final buffer = StringBuffer();
+    buffer.writeln('날짜: $address (총 $count대)');
+    buffer.writeln('번호 브랜드 차종 차번호 입차 출차');
+
+    for (int i = 0; i < count; i++) {
+      final doc = query.docs[i];
+      final carNum = doc['carNumber'];
+      final brand = doc['carBrand'];
+      final model = doc['carModel'];
+      final etc = doc['etc'];
+      final enter = getInTime(doc['enter']);
+      final out = doc['out'] is Timestamp
+          ? getOutTime((doc['out'] as Timestamp).toDate())
+          : '---';
+
+      buffer.writeln('${i + 1} $brand $model $carNum $enter $out');
+
+      //
+      // buffer.writeln('(${i + 1})');
+      // buffer.writeln('브랜드: $brand');
+      // buffer.writeln('차종: $model');
+      // buffer.writeln('차량번호: $carNum');
+      // buffer.writeln('입차: $enter / 출차: $out');
+      // buffer.writeln('특이사항: $etc ');
+      // buffer.writeln('');
+    }
+
+    return buffer.toString();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          '입차리스트',
+          '시승차 일일리스트',
           style: TextStyle(
             color: Colors.white,
           ),

@@ -37,6 +37,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
   int selectedTabIndex = 0;
 
+  String option1 ='';       // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
+
+
   late TextEditingController etcController;
 
   @override
@@ -103,6 +106,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 String getMovingTime = getTodayTime();
                 final BuildContext rootContext = context;
 
+                option1 = displayList[index]['option1'];   // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
+
+
+
                 showDialog(
                   context: rootContext,
                   builder: (BuildContext context) {
@@ -120,6 +127,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       movingTime,
                       getMovingTime,
                       carModelFrom,
+                        option1,
                     );
                   },
                 );
@@ -154,6 +162,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
     String movingTime,
     String getMovingTime,
     String carModelFrom,
+    String option1,
   ) {
     return AlertDialog(
       title: Row(
@@ -234,32 +243,56 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
+
+                      Color5List = COLOR5 + formatTodayDate();
+                      String documentId =
+                          FirebaseFirestore.instance
+                              .collection(Color5List)
+                              .doc()
+                              .id;
+
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
                           'location': 0,
+                          'option1': documentId,  //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나
+                                                  // 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로
+                                                  // 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아
+                                                   // 결국DB에 저장하는방법 선택
                         });
                       } catch (e) {
                         print(e);
                       }
                       Navigator.pop(context);
 
-                      // try {
-                      //   await FirebaseFirestore.instance
-                      //       .collection(Color5List)
-                      //       .doc(dataId)
-                      //       .update({
-                      //     'out': FieldValue.serverTimestamp(),
-                      //     'etc': etc,
-                      //   });
-                      // } catch (e) {
-                      //   print(e);
-                      // }
+
+
+                      try {
+                        await FirebaseFirestore
+                            .instance
+                            .collection(
+                            Color5List)
+                            .doc(documentId)
+                            .set({
+                          'carNumber':carNumber,
+                          'enterName': widget.name, //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
+                          'enter': FieldValue.serverTimestamp(),
+                          'out': '',
+                          'outName': '',
+                          'outLocation': 10,
+                          'etc': '',
+                          'movedLocation': '',
+                          'wigetName': '',
+                          'movingTime': FieldValue.serverTimestamp(),
+                          'carBrand': '제네시스',
+                          'carModel':carModelFrom,
+                        });
+                      } catch (e) {}
                     },
                     child: Text(
-                      '시승출발',
+                      '스탠바이',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

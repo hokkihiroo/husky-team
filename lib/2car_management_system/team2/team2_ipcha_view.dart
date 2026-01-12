@@ -44,6 +44,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
   late TextEditingController etcController;
 
+
+  String option1 ='';
+  String option2 ='';
+  String option3 ='';
+  String option4 ='';
+  String option5 ='';
+  String option6 ='';
+  String option7 ='';
   @override
   void initState() {
     super.initState();
@@ -102,6 +110,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 dateTime = createdAt.toDate();
                 remainTime = getRemainTime(dateTime);
                 //     dataAdress = CheckLocation(location); //파이어베이스 데이터주소
+                option1 = filteredDocs[index]['option1'];   //시승차 컬러5에 넣는 문서주소
+                // option2 = filteredDocs[index]['option2'];
+                // option3 = filteredDocs[index]['option3'];
+                // option4 = filteredDocs[index]['option4'];
+                // option5 = filteredDocs[index]['option5'];
+                // option6 = filteredDocs[index]['option6'];
+                // option7 = filteredDocs[index]['option7'];
+
 
                 String getMovingTime = getTodayTime();
                 final BuildContext rootContext = context;
@@ -829,89 +845,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            // Row(
-            //   children: [
-            //     SizedBox(
-            //       width: 5,
-            //     ),
-            //     Expanded(
-            //       flex: 2,
-            //       child: ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //           textStyle:
-            //               TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            //         ),
-            //         onPressed: () async {
-            //           Navigator.pop(context);
-            //
-            //           // try {
-            //           //   await FirebaseFirestore.instance
-            //           //       .collection(dataAdress)
-            //           //       .doc(dataId)
-            //           //       .update({
-            //           //     'color': 1,
-            //           //   });
-            //           // } catch (e) {
-            //           //   print(e);
-            //           // }
-            //         },
-            //         child: Text('출차취소'),
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: ElevatedButton(
-            //           style: ElevatedButton.styleFrom(
-            //             textStyle: TextStyle(
-            //                 fontWeight: FontWeight.w500, fontSize: 18),
-            //           ),
-            //           onPressed: () async {
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(dataAdress) // 컬렉션 이름을 지정하세요
-            //             //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-            //             //       .delete();
-            //             //   print('문서 삭제 완료');
-            //             // } catch (e) {
-            //             //   print('문서 삭제 오류: $e');
-            //             // }
-            //             // Navigator.pop(context);
-            //             //
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(CarListAdress)
-            //             //       .doc(dataId)
-            //             //       .update({
-            //             //     'out': FieldValue.serverTimestamp(),
-            //             //     'outName': widget.name,
-            //             //     'outLocation': location,
-            //             //     'movedLocation': '$movedLocation',
-            //             //     'wigetName': wigetName,
-            //             //     'movingTime': movingTime,
-            //             //   });
-            //             // } catch (e) {
-            //             //   print(e);
-            //             //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-            //             //   showDialog(
-            //             //       context: context,
-            //             //       builder: (BuildContext context) {
-            //             //         return AlertDialog(
-            //             //           title: Text('하루 지난 데이터 입니다 '),
-            //             //           actions: [
-            //             //             ElevatedButton(
-            //             //               onPressed: () {
-            //             //                 Navigator.pop(context);
-            //             //               },
-            //             //               child: Text('확인'),
-            //             //             ),
-            //             //           ],
-            //             //         );
-            //             //       });
-            //             // }
-            //           },
-            //           child: Text('출차완료')),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),

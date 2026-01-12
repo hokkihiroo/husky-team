@@ -201,7 +201,7 @@ class _StandByState extends State<StandBy> {
                         .doc(dataId)
                         .update({
                       'location': 11,
-                      'outName':'',
+                      'name':'',
                     });
                   } catch (e) {
                     print(e);

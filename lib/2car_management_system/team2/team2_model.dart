@@ -57,6 +57,14 @@ class _CarStateState extends State<CarState> {
 
   late TextEditingController etcController;
 
+  String option1 ='';
+  String option2 ='';
+  String option3 ='';
+  String option4 ='';
+  String option5 ='';
+  String option6 ='';
+  String option7 ='';
+
   @override
   void initState() {
     super.initState();
@@ -115,6 +123,13 @@ class _CarStateState extends State<CarState> {
                   remainTime = getRemainTime(dateTime);
                   String getMovingTime = getTodayTime();
                   final BuildContext rootContext = context;
+                  option1 = filteredDocs[index]['option1'];   //시승차 컬러5에 넣는 문서주소
+                  // option2 = filteredDocs[index]['option2'];
+                  // option3 = filteredDocs[index]['option3'];
+                  // option4 = filteredDocs[index]['option4'];
+                  // option5 = filteredDocs[index]['option5'];
+                  // option6 = filteredDocs[index]['option6'];
+                  // option7 = filteredDocs[index]['option7'];
 
                   showDialog(
                     context: rootContext,

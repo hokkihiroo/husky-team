@@ -216,250 +216,250 @@ class _Team2ViewState extends State<Team2View> {
                       color: Colors.white,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          List<DocumentSnapshot> getCurrentList() {
-                            switch (selectedTabIndex) {
-                              case 0:
-                                return type60;
-                              case 1:
-                                return type70;
-                              case 2:
-                                return type80;
-                              case 3:
-                                return type90;
-                              default:
-                                return [];
-                            }
-                          }
-
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              return AlertDialog(
-                                title: const Text(
-                                  '시승차 선택',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                content: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 300, // ⭐ Dialog 전체 폭 제한
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      /// 🔹 상단 탭
-                                      ToggleButtons(
-                                        isSelected: List.generate(
-                                          4,
-                                          (index) => selectedTabIndex == index,
-                                        ),
-                                        onPressed: (index) {
-                                          setState(() {
-                                            selectedTabIndex = index;
-                                          });
-                                        },
-                                        borderRadius: BorderRadius.circular(8),
-                                        selectedColor: Colors.white,
-                                        fillColor: Colors.purple,
-                                        color: Colors.black,
-                                        constraints: const BoxConstraints(
-                                          minHeight: 48, // ⭐ 높이 키우기
-                                          minWidth: 64, // ⭐ 폭 키우기
-                                        ),
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 16),
-                                            child: Text('60'),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 14),
-                                            child: Text('70'),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 14),
-                                            child: Text('80'),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 14),
-                                            child: Text('90'),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-
-                                      /// 🔹 Grid 영역
-                                      Container(
-                                        height: 350,
-                                        width: 300,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey.shade300),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: GridView.builder(
-                                          itemCount: getCurrentList().length,
-                                          padding: const EdgeInsets.all(10),
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3, // ✅ 한 줄에 3개
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 10,
-                                            childAspectRatio: 1.0,
-                                          ),
-                                          itemBuilder: (context, index) {
-                                            final doc = getCurrentList()[index];
-
-                                            return AnimatedContainer(
-                                              duration: const Duration(
-                                                  milliseconds: 150),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border: Border.all(
-                                                  color: Colors.grey.shade300,
-                                                  width: 1.2,
-                                                ),
-                                              ),
-                                              child: InkWell(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                onTap: () async {
-                                                  Color5List = COLOR5 + formatTodayDate();
-                                                  String documentId =
-                                                      FirebaseFirestore.instance
-                                                          .collection(FIELD)
-                                                          .doc()
-                                                          .id;
-                                                  try {
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection(FIELD)
-                                                        .doc(documentId)
-                                                        .set({
-                                                      'carNumber': doc['carNumber'],
-                                                      'enterName': '',
-                                                      'name': '',
-                                                      'createdAt': FieldValue
-                                                          .serverTimestamp(),
-                                                      'location': 0,
-                                                      'color': 5,
-                                                      'etc': '',
-                                                      'movedLocation': '',
-                                                      'wigetName': '',
-                                                      'movingTime': '',
-                                                      'carBrand': '제네시스',
-                                                      'carModel': doc['carBrand'],
-                                                    });
-                                                  } catch (e) {}
-
-                                                  try {
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection(
-                                                        Color5List)
-                                                        .doc(documentId)
-                                                        .set({
-                                                      'carNumber': doc['carNumber'],
-                                                      'enterName': widget.name, //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
-                                                      'enter': FieldValue.serverTimestamp(),
-                                                      'out': '',
-                                                      'outName': '',
-                                                      'outLocation': 10,
-                                                      'etc': '',
-                                                      'movedLocation': '',
-                                                      'wigetName': '',
-                                                      'movingTime': FieldValue.serverTimestamp(),
-                                                      'carBrand': '제네시스',
-                                                      'carModel': doc['carBrand'],
-
-                                                    });
-                                                  } catch (e) {}
-
-                                                  Navigator.pop(
-                                                      context); // 필요하면
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      /// 차량번호
-                                                      Text(
-                                                        doc['carNumber'] ?? '',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 3),
-
-                                                      /// 브랜드
-                                                      Text(
-                                                        formatCarNumber(
-                                                            doc['carBrand'] ??
-                                                                ''),
-                                                        maxLines: 2,
-                                                        softWrap: true,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors
-                                                              .grey.shade700,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('닫기'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
-                    child: const Text(
-                      '시승차',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (context) {
+                  //         List<DocumentSnapshot> getCurrentList() {
+                  //           switch (selectedTabIndex) {
+                  //             case 0:
+                  //               return type60;
+                  //             case 1:
+                  //               return type70;
+                  //             case 2:
+                  //               return type80;
+                  //             case 3:
+                  //               return type90;
+                  //             default:
+                  //               return [];
+                  //           }
+                  //         }
+                  //
+                  //         return StatefulBuilder(
+                  //           builder: (context, setState) {
+                  //             return AlertDialog(
+                  //               title: const Text(
+                  //                 '시승차 선택',
+                  //                 style: TextStyle(fontWeight: FontWeight.bold),
+                  //               ),
+                  //               content: ConstrainedBox(
+                  //                 constraints: const BoxConstraints(
+                  //                   maxWidth: 300, // ⭐ Dialog 전체 폭 제한
+                  //                 ),
+                  //                 child: Column(
+                  //                   mainAxisSize: MainAxisSize.min,
+                  //                   children: [
+                  //                     /// 🔹 상단 탭
+                  //                     ToggleButtons(
+                  //                       isSelected: List.generate(
+                  //                         4,
+                  //                         (index) => selectedTabIndex == index,
+                  //                       ),
+                  //                       onPressed: (index) {
+                  //                         setState(() {
+                  //                           selectedTabIndex = index;
+                  //                         });
+                  //                       },
+                  //                       borderRadius: BorderRadius.circular(8),
+                  //                       selectedColor: Colors.white,
+                  //                       fillColor: Colors.purple,
+                  //                       color: Colors.black,
+                  //                       constraints: const BoxConstraints(
+                  //                         minHeight: 48, // ⭐ 높이 키우기
+                  //                         minWidth: 64, // ⭐ 폭 키우기
+                  //                       ),
+                  //                       children: const [
+                  //                         Padding(
+                  //                           padding: EdgeInsets.symmetric(
+                  //                               horizontal: 16),
+                  //                           child: Text('60'),
+                  //                         ),
+                  //                         Padding(
+                  //                           padding: EdgeInsets.symmetric(
+                  //                               horizontal: 14),
+                  //                           child: Text('70'),
+                  //                         ),
+                  //                         Padding(
+                  //                           padding: EdgeInsets.symmetric(
+                  //                               horizontal: 14),
+                  //                           child: Text('80'),
+                  //                         ),
+                  //                         Padding(
+                  //                           padding: EdgeInsets.symmetric(
+                  //                               horizontal: 14),
+                  //                           child: Text('90'),
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                     const SizedBox(height: 12),
+                  //
+                  //                     /// 🔹 Grid 영역
+                  //                     Container(
+                  //                       height: 350,
+                  //                       width: 300,
+                  //                       decoration: BoxDecoration(
+                  //                         border: Border.all(
+                  //                             color: Colors.grey.shade300),
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(8),
+                  //                       ),
+                  //                       child: GridView.builder(
+                  //                         itemCount: getCurrentList().length,
+                  //                         padding: const EdgeInsets.all(10),
+                  //                         gridDelegate:
+                  //                             const SliverGridDelegateWithFixedCrossAxisCount(
+                  //                           crossAxisCount: 3, // ✅ 한 줄에 3개
+                  //                           crossAxisSpacing: 10,
+                  //                           mainAxisSpacing: 10,
+                  //                           childAspectRatio: 1.0,
+                  //                         ),
+                  //                         itemBuilder: (context, index) {
+                  //                           final doc = getCurrentList()[index];
+                  //
+                  //                           return AnimatedContainer(
+                  //                             duration: const Duration(
+                  //                                 milliseconds: 150),
+                  //                             decoration: BoxDecoration(
+                  //                               color: Colors.white,
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(10),
+                  //                               border: Border.all(
+                  //                                 color: Colors.grey.shade300,
+                  //                                 width: 1.2,
+                  //                               ),
+                  //                             ),
+                  //                             child: InkWell(
+                  //                               borderRadius:
+                  //                                   BorderRadius.circular(10),
+                  //                               onTap: () async {
+                  //                                 Color5List = COLOR5 + formatTodayDate();
+                  //                                 String documentId =
+                  //                                     FirebaseFirestore.instance
+                  //                                         .collection(FIELD)
+                  //                                         .doc()
+                  //                                         .id;
+                  //                                 try {
+                  //                                   await FirebaseFirestore
+                  //                                       .instance
+                  //                                       .collection(FIELD)
+                  //                                       .doc(documentId)
+                  //                                       .set({
+                  //                                     'carNumber': doc['carNumber'],
+                  //                                     'enterName': '',
+                  //                                     'name': '',
+                  //                                     'createdAt': FieldValue
+                  //                                         .serverTimestamp(),
+                  //                                     'location': 0,
+                  //                                     'color': 5,
+                  //                                     'etc': '',
+                  //                                     'movedLocation': '',
+                  //                                     'wigetName': '',
+                  //                                     'movingTime': '',
+                  //                                     'carBrand': '제네시스',
+                  //                                     'carModel': doc['carBrand'],
+                  //                                   });
+                  //                                 } catch (e) {}
+                  //
+                  //                                 try {
+                  //                                   await FirebaseFirestore
+                  //                                       .instance
+                  //                                       .collection(
+                  //                                       Color5List)
+                  //                                       .doc(documentId)
+                  //                                       .set({
+                  //                                     'carNumber': doc['carNumber'],
+                  //                                     'enterName': widget.name, //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
+                  //                                     'enter': FieldValue.serverTimestamp(),
+                  //                                     'out': '',
+                  //                                     'outName': '',
+                  //                                     'outLocation': 10,
+                  //                                     'etc': '',
+                  //                                     'movedLocation': '',
+                  //                                     'wigetName': '',
+                  //                                     'movingTime': FieldValue.serverTimestamp(),
+                  //                                     'carBrand': '제네시스',
+                  //                                     'carModel': doc['carBrand'],
+                  //
+                  //                                   });
+                  //                                 } catch (e) {}
+                  //
+                  //                                 Navigator.pop(
+                  //                                     context); // 필요하면
+                  //                               },
+                  //                               child: Padding(
+                  //                                 padding:
+                  //                                     const EdgeInsets.all(10),
+                  //                                 child: Column(
+                  //                                   mainAxisAlignment:
+                  //                                       MainAxisAlignment
+                  //                                           .center,
+                  //                                   children: [
+                  //                                     /// 차량번호
+                  //                                     Text(
+                  //                                       doc['carNumber'] ?? '',
+                  //                                       maxLines: 1,
+                  //                                       overflow: TextOverflow
+                  //                                           .ellipsis,
+                  //                                       textAlign:
+                  //                                           TextAlign.center,
+                  //                                       style: const TextStyle(
+                  //                                         fontWeight:
+                  //                                             FontWeight.bold,
+                  //                                         fontSize: 14,
+                  //                                       ),
+                  //                                     ),
+                  //                                     const SizedBox(height: 3),
+                  //
+                  //                                     /// 브랜드
+                  //                                     Text(
+                  //                                       formatCarNumber(
+                  //                                           doc['carBrand'] ??
+                  //                                               ''),
+                  //                                       maxLines: 2,
+                  //                                       softWrap: true,
+                  //                                       textAlign:
+                  //                                           TextAlign.center,
+                  //                                       style: TextStyle(
+                  //                                         fontSize: 10,
+                  //                                         color: Colors
+                  //                                             .grey.shade700,
+                  //                                         fontWeight:
+                  //                                             FontWeight.w500,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ],
+                  //                                 ),
+                  //                               ),
+                  //                             ),
+                  //                           );
+                  //                         },
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //               actions: [
+                  //                 TextButton(
+                  //                   onPressed: () => Navigator.pop(context),
+                  //                   child: const Text('닫기'),
+                  //                 ),
+                  //               ],
+                  //             );
+                  //           },
+                  //         );
+                  //       },
+                  //     );
+                  //   },
+                  //   child: const Text(
+                  //     '시승차',
+                  //     style: TextStyle(
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: Colors.purple,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(
@@ -582,7 +582,6 @@ class _Team2ViewState extends State<Team2View> {
 
   void doEnterAction(topic, hint, color) {
     CarListAdress = CARLIST + formatTodayDate();
-    Color5List = COLOR5 + formatTodayDate();
     carNumber = '0000';
 
     showDialog(
@@ -595,7 +594,7 @@ class _Team2ViewState extends State<Team2View> {
               fontWeight: FontWeight.bold,
               fontSize: 30,
               color:
-                  color == 5 ? Colors.purple : Colors.black, // 기본색은 원하는 색으로 변경
+                Colors.black,
             ),
           ),
           actions: [
@@ -610,7 +609,7 @@ class _Team2ViewState extends State<Team2View> {
                 hintText: hint,
                 hintStyle: TextStyle(
                   color:
-                      color == 5 ? Colors.purple : Colors.grey, // 기본 힌트 색은 회색
+                   Colors.grey, // 기본 힌트 색은 회색
                 ),
               ),
               onChanged: (value) {
@@ -646,6 +645,13 @@ class _Team2ViewState extends State<Team2View> {
                           'movingTime': '',
                           'carBrand': '',
                           'carModel': '',
+                          'option1': '',
+                          'option2': '',
+                          'option3': '',
+                          'option4': '',
+                          'option5': '',
+                          'option6': '',
+                          'option7': '',
                         });
                       } catch (e) {}
 
