@@ -884,7 +884,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '차종: $carModelFrom',
+                  '해당차종: $carModelFrom',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -900,7 +900,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '기타: $option5',
+                  '시승상태: $option5',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

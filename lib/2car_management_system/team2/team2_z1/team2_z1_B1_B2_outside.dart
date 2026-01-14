@@ -189,7 +189,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '차종: $carModelFrom',
+                  '해당차종: $carModelFrom',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -205,7 +205,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '기타: $option5',
+                  '시승상태: $option5',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
