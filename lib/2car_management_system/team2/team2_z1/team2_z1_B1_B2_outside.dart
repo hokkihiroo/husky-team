@@ -36,8 +36,13 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
 
-  String option1 ='';       // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
-
+  String option1 = ''; //컬러5에 들어갈 문서 필드에서 뽑아낸문서
+  int option2 = 0; //하이패스잔액
+  int option3 = 0; // 주유잔량
+  int option4 = 0; //총킬로수
+  String option5 = ''; //시승차 기타
+  String option6 = '';
+  String option7 = '';
 
   late TextEditingController etcController;
 
@@ -105,9 +110,13 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 String getMovingTime = getTodayTime();
                 final BuildContext rootContext = context;
 
-                option1 = displayList[index]['option1'];   // //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나// 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로// 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아// 결국DB에 저장하는방법 선택
-
-
+                option1 = displayList[index]['option1']; //시승차 컬러5에 넣는 문서주소
+                option2 = displayList[index]['option2']; // 하이패스잔액
+                option3 = displayList[index]['option3']; //주유잔량
+                option4 = displayList[index]['option4']; //총킬로수
+                option5 = displayList[index]['option5']; //시승차 기타
+                option6 = displayList[index]['option6']; //시승차 예비용
+                option7 = displayList[index]['option7']; //시승차 예비용
 
                 showDialog(
                   context: rootContext,
@@ -126,7 +135,11 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       movingTime,
                       getMovingTime,
                       carModelFrom,
-                        option1,
+                      option1,
+                      option2,
+                      option3,
+                      option4,
+                      option5,
                     );
                   },
                 );
@@ -162,6 +175,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
     String getMovingTime,
     String carModelFrom,
     String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
   ) {
     return AlertDialog(
       title: Row(
@@ -180,7 +197,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '잔액: $carNumber원',
+                  '하이패스: $option2원',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -188,7 +205,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '총KM: $carNumber',
+                  '총킬로수: $option4 km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -203,7 +220,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '차량번호: $carModelFrom',
+                  '차량번호: $carNumber',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -211,7 +228,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '주유량: $carNumber',
+                  '주유잔량: $option3 km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -219,7 +236,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '기타: $carNumber',
+                  '기타: $option5',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -242,13 +259,11 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-
                       Color5List = COLOR5 + formatTodayDate();
-                      String documentId =
-                          FirebaseFirestore.instance
-                              .collection(Color5List)
-                              .doc()
-                              .id;
+                      String documentId = FirebaseFirestore.instance
+                          .collection(Color5List)
+                          .doc()
+                          .id;
 
                       try {
                         await FirebaseFirestore.instance
@@ -256,27 +271,25 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .doc(dataId)
                             .update({
                           'location': 0,
-                          'option1': documentId,  //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나
-                                                  // 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로
-                                                  // 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아
-                                                   // 결국DB에 저장하는방법 선택
+                          'option1': documentId,
+                          //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나
+                          // 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로
+                          // 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아
+                          // 결국DB에 저장하는방법 선택
                         });
                       } catch (e) {
                         print(e);
                       }
                       Navigator.pop(context);
 
-
-
                       try {
-                        await FirebaseFirestore
-                            .instance
-                            .collection(
-                            Color5List)
+                        await FirebaseFirestore.instance
+                            .collection(Color5List)
                             .doc(documentId)
                             .set({
-                          'carNumber':carNumber,
-                          'enterName': widget.name, //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
+                          'carNumber': carNumber,
+                          'enterName': widget.name,
+                          //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
                           'enter': FieldValue.serverTimestamp(),
                           'out': '',
                           'outName': '',
@@ -286,7 +299,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                           'wigetName': '',
                           'movingTime': FieldValue.serverTimestamp(),
                           'carBrand': '제네시스',
-                          'carModel':carModelFrom,
+                          'carModel': carModelFrom,
                         });
                       } catch (e) {}
                     },
@@ -299,23 +312,25 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 14),
                       backgroundColor: Colors.purple,
                       elevation: 4, // 살짝 입체감
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: const BorderSide(
-                          width: 2,          // 👈 테두리 두께
+                          width: 2, // 👈 테두리 두께
                           color: Colors.purple,
                         ),
                       ),
                     ),
-
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Row(
               children: [
                 Expanded(

@@ -57,13 +57,13 @@ class _CarStateState extends State<CarState> {
 
   late TextEditingController etcController;
 
-  String option1 ='';
-  String option2 ='';
-  String option3 ='';
-  String option4 ='';
-  String option5 ='';
-  String option6 ='';
-  String option7 ='';
+  String option1 = ''; //컬러5에 들어갈 문서 필드에서 뽑아낸문서
+  int option2 = 0; //하이패스잔액
+  int option3 = 0; // 주유잔량
+  int option4 = 0; //총킬로수
+  String option5 = ''; //시승차 기타
+  String option6 = '';
+  String option7 = '';
 
   @override
   void initState() {
@@ -123,13 +123,13 @@ class _CarStateState extends State<CarState> {
                   remainTime = getRemainTime(dateTime);
                   String getMovingTime = getTodayTime();
                   final BuildContext rootContext = context;
-                  option1 = filteredDocs[index]['option1'];   //시승차 컬러5에 넣는 문서주소
-                  // option2 = filteredDocs[index]['option2'];
-                  // option3 = filteredDocs[index]['option3'];
-                  // option4 = filteredDocs[index]['option4'];
-                  // option5 = filteredDocs[index]['option5'];
-                  // option6 = filteredDocs[index]['option6'];
-                  // option7 = filteredDocs[index]['option7'];
+                  option1 = filteredDocs[index]['option1']; //시승차 컬러5에 넣는 문서주소
+                  option2 = filteredDocs[index]['option2']; // 하이패스잔액
+                  option3 = filteredDocs[index]['option3']; //주유잔량
+                  option4 = filteredDocs[index]['option4']; //총킬로수
+                  option5 = filteredDocs[index]['option5']; //시승차 기타
+                  option6 = filteredDocs[index]['option6']; //시승차 예비용
+                  option7 = filteredDocs[index]['option7']; //시승차 예비용
 
                   showDialog(
                     context: rootContext,
@@ -149,8 +149,11 @@ class _CarStateState extends State<CarState> {
                           movingTime,
                           getMovingTime,
                           carModelFrom,
-                            option1,
-
+                          option1,
+                          option2,
+                          option3,
+                          option4,
+                          option5,
                         );
                       } else {
                         return bottomTwo(
@@ -209,8 +212,8 @@ class _CarStateState extends State<CarState> {
     String getMovingTime,
     String carModelFrom,
     String enterName,
-      BuildContext rootContext,   // 화면 context (show용)
-      BuildContext dialogContext, // bottomTwo 닫기용
+    BuildContext rootContext, // 화면 context (show용)
+    BuildContext dialogContext, // bottomTwo 닫기용
   ) {
     return AlertDialog(
       title: Row(
@@ -925,6 +928,10 @@ class _CarStateState extends State<CarState> {
     String getMovingTime,
     String carModelFrom,
     String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
   ) {
     return AlertDialog(
       title: Row(
@@ -943,7 +950,7 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '차량번호: $carNumber',
+                  '잔액: $option2원',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -951,7 +958,7 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '경과: $remainTime',
+                  '총킬로수: $option4 km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -962,368 +969,107 @@ class _CarStateState extends State<CarState> {
             ),
           ),
           Expanded(
-            child: Container(
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(FIELD)
-                        .doc(dataId)
-                        .update({
-                      'location': 11,
-                      'name':'',
-                      'option1':'',
-                    });
-                  } catch (e) {
-                    print('문서 삭제 오류: $e');
-                  }
-
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(Color5List)
-                        .doc(option1)
-                        .update({
-                      'out': FieldValue.serverTimestamp(),
-                      'outName': name,
-                      'outLocation': location,
-                      'wigetName': wigetName,
-                      'etc': etc,
-                    });
-                  } catch (e) {
-                    print(e);
-                    print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('하루 지난 데이터 입니다 '),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('확인'),
-                              ),
-                            ],
-                          );
-                        });
-                  }
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  '시승종료',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '차량번호: $carModelFrom',
                   style: TextStyle(
-                    fontSize: 18, // 텍스트 크기 증가
-                    fontWeight: FontWeight.bold, // 텍스트를 굵게
-                    color: Colors.black87, // 텍스트 색상
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  backgroundColor: Colors.red, // 버튼 색상
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                Text(
+                  '주유잔량: $option3 km',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
                   ),
                 ),
-              ),
+                Text(
+                  '기타: $option5',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
       content: Container(
         width: MediaQuery.of(context).size.width,
-        height: 320,
+        height: 200,
         child: Column(
           children: [
             Row(
               children: [
                 Expanded(
-                  flex: 2,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
                     onPressed: () async {
-                      Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
-                          'name': '대면',
+                          'location': 11,
+                          'name': '',
+                          'option1': '',
                         });
                       } catch (e) {
-                        print(e);
+                        print('문서 삭제 오류: $e');
                       }
-                    },
-                    child: Text(
-                      '대면',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
+                            .collection(Color5List)
+                            .doc(option1) //field컬렉션에 저장된 컬러5에 저장할 문서 아이디
                             .update({
-                          'name': '비대',
+                          'out': FieldValue.serverTimestamp(),
+                          'outName': name,
+                          'outLocation': location,
+                          'wigetName': wigetName,
+                          'etc': etc,
                         });
                       } catch (e) {
                         print(e);
+                        print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('하루 지난 데이터 입니다 '),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            });
                       }
+                      Navigator.pop(context);
                     },
                     child: Text(
-                      '비대면',
+                      '시승종료',
                       style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
+                        fontSize: 18, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
+                      backgroundColor: Colors.red, // 버튼 색상
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name': '현동',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Text(
-                      '현장동승',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name': '현비',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Text(
-                      '현장비동승',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name': '주유',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Text(
-                      '주유',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name': '인도',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Text(
-                      '인도',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name': '컬러',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Text(
-                      '컬러확인',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name': '교육',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Text(
-                      '교육용',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
                       ),
                     ),
                   ),
@@ -1333,7 +1079,6 @@ class _CarStateState extends State<CarState> {
             SizedBox(
               height: 10,
             ),
-
             Row(
               children: [
                 Expanded(
@@ -1372,7 +1117,7 @@ class _CarStateState extends State<CarState> {
                                         controller: etcController,
                                         maxLength: 15,
                                         decoration: InputDecoration(
-                                          hintText: '특이사항 15자까지가능',
+                                          hintText: '특이사항 20자까지가능',
                                         ),
                                         onChanged: (value) {
                                           etc = value;
@@ -1430,7 +1175,7 @@ class _CarStateState extends State<CarState> {
                       });
                     },
                     child: Text(
-                      '특이사항입력하기',
+                      '특이사항수정',
                       style: TextStyle(
                         fontSize: 15, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1442,98 +1187,17 @@ class _CarStateState extends State<CarState> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             Text(
-              '$etc',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
+              etc,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.4, // 👈 글자 간격
+                color: Colors.black, // 텍스트 색상
               ),
             ),
-            // Row(
-            //   children: [
-            //     SizedBox(
-            //       width: 5,
-            //     ),
-            //     Expanded(
-            //       flex: 2,
-            //       child: ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //           textStyle:
-            //               TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            //         ),
-            //         onPressed: () async {
-            //           Navigator.pop(context);
-            //
-            //           // try {
-            //           //   await FirebaseFirestore.instance
-            //           //       .collection(dataAdress)
-            //           //       .doc(dataId)
-            //           //       .update({
-            //           //     'color': 1,
-            //           //   });
-            //           // } catch (e) {
-            //           //   print(e);
-            //           // }
-            //         },
-            //         child: Text('출차취소'),
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: ElevatedButton(
-            //           style: ElevatedButton.styleFrom(
-            //             textStyle: TextStyle(
-            //                 fontWeight: FontWeight.w500, fontSize: 18),
-            //           ),
-            //           onPressed: () async {
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(dataAdress) // 컬렉션 이름을 지정하세요
-            //             //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-            //             //       .delete();
-            //             //   print('문서 삭제 완료');
-            //             // } catch (e) {
-            //             //   print('문서 삭제 오류: $e');
-            //             // }
-            //             // Navigator.pop(context);
-            //             //
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(CarListAdress)
-            //             //       .doc(dataId)
-            //             //       .update({
-            //             //     'out': FieldValue.serverTimestamp(),
-            //             //     'outName': widget.name,
-            //             //     'outLocation': location,
-            //             //     'movedLocation': '$movedLocation',
-            //             //     'wigetName': wigetName,
-            //             //     'movingTime': movingTime,
-            //             //   });
-            //             // } catch (e) {
-            //             //   print(e);
-            //             //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-            //             //   showDialog(
-            //             //       context: context,
-            //             //       builder: (BuildContext context) {
-            //             //         return AlertDialog(
-            //             //           title: Text('하루 지난 데이터 입니다 '),
-            //             //           actions: [
-            //             //             ElevatedButton(
-            //             //               onPressed: () {
-            //             //                 Navigator.pop(context);
-            //             //               },
-            //             //               child: Text('확인'),
-            //             //             ),
-            //             //           ],
-            //             //         );
-            //             //       });
-            //             // }
-            //           },
-            //           child: Text('출차완료')),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),
@@ -1979,9 +1643,8 @@ class _CarStateState extends State<CarState> {
                         mainAxisSpacing: 8,
                         padding: const EdgeInsets.all(8),
                         childAspectRatio: 1,
-                        children: getSelectedBrandMap()
-                            .keys
-                            .map<Widget>((brand) {
+                        children:
+                            getSelectedBrandMap().keys.map<Widget>((brand) {
                           return Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
@@ -2036,13 +1699,12 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-
   Widget carModel(
-      BuildContext rootContext,
-      BuildContext carDialogContext, // ✅ 추가
-      String brand,
-      Map<String, List<String>> brandModels,
-      ) {
+    BuildContext rootContext,
+    BuildContext carDialogContext, // ✅ 추가
+    String brand,
+    Map<String, List<String>> brandModels,
+  ) {
     return AlertDialog(
       title: Center(
         child: Text(

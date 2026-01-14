@@ -44,14 +44,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
   late TextEditingController etcController;
 
+  String option1 = ''; //컬러5에 들어갈 문서 필드에서 뽑아낸문서
+  int option2 = 0; //하이패스잔액
+  int option3 = 0; // 주유잔량
+  int option4 = 0; //총킬로수
+  String option5 = ''; //시승차 기타
+  String option6 = '';
+  String option7 = '';
 
-  String option1 ='';
-  String option2 ='';
-  String option3 ='';
-  String option4 ='';
-  String option5 ='';
-  String option6 ='';
-  String option7 ='';
   @override
   void initState() {
     super.initState();
@@ -110,14 +110,13 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 dateTime = createdAt.toDate();
                 remainTime = getRemainTime(dateTime);
                 //     dataAdress = CheckLocation(location); //파이어베이스 데이터주소
-                option1 = filteredDocs[index]['option1'];   //시승차 컬러5에 넣는 문서주소
-                // option2 = filteredDocs[index]['option2'];
-                // option3 = filteredDocs[index]['option3'];
-                // option4 = filteredDocs[index]['option4'];
-                // option5 = filteredDocs[index]['option5'];
-                // option6 = filteredDocs[index]['option6'];
-                // option7 = filteredDocs[index]['option7'];
-
+                option1 = filteredDocs[index]['option1']; //시승차 컬러5에 넣는 문서주소
+                option2 = filteredDocs[index]['option2']; //하이패스 잔액
+                option3 = filteredDocs[index]['option3']; //주유잔량
+                option4 = filteredDocs[index]['option4']; //총킬로수
+                option5 = filteredDocs[index]['option5']; //시승차 기타
+                option6 = filteredDocs[index]['option6']; //예비용
+                option7 = filteredDocs[index]['option7']; //예비용
 
                 String getMovingTime = getTodayTime();
                 final BuildContext rootContext = context;
@@ -140,7 +139,11 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         movingTime,
                         getMovingTime,
                         carModelFrom,
-                          option1,
+                        option1,
+                        option2,
+                        option3,
+                        option4,
+                        option5,
                       );
                     } else {
                       return bottomTwo(
@@ -867,6 +870,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String getMovingTime,
     String carModelFrom,
     String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
   ) {
     return AlertDialog(
       title: Row(
@@ -885,7 +892,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '차량번호: $carNumber',
+                  '하이패스: $option2원',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -893,7 +900,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '경과: $remainTime',
+                  '총킬로수: $option4 km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -904,60 +911,100 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
             ),
           ),
           Expanded(
-            child: Container(
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(FIELD)
-                        .doc(dataId)
-                        .update({
-                      'location': 5,
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
-                  Navigator.pop(context);
-
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(Color5List)
-                        .doc(option1)
-                        .update({
-                      'movingTime': FieldValue.serverTimestamp(),
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                child: Text(
-                  '시승출발',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '차량번호: $carNumber',
                   style: TextStyle(
-                    fontSize: 18, // 텍스트 크기 증가
-                    fontWeight: FontWeight.bold, // 텍스트를 굵게
-                    color: Colors.black87, // 텍스트 색상
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  backgroundColor: Colors.purple, // 버튼 색상
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                Text(
+                  '주유잔량: $option3 km',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
                   ),
                 ),
-              ),
+                Text(
+                  '기타: $option5',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
       content: Container(
         width: MediaQuery.of(context).size.width.clamp(0, 290),
-        height: 320,
+        height: 220,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'location': 5,
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.pop(context);
 
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(Color5List)
+                            .doc(option1)
+                            .update({
+                          'movingTime': FieldValue.serverTimestamp(),
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '시승출발',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
+                      backgroundColor: Colors.purple,
+                      elevation: 4, // 살짝 입체감
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          width: 2, // 👈 테두리 두께
+                          color: Colors.purple,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 Expanded(
@@ -1053,7 +1100,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       });
                     },
                     child: Text(
-                      '특이사항입력하기',
+                      '특이사항수정',
                       style: TextStyle(
                         fontSize: 15, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1064,11 +1111,16 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 20,
+            ),
             Text(
-              '$etc',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
+              etc,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.4, // 👈 글자 간격
+                color: Colors.black, // 텍스트 색상
               ),
             ),
           ],
