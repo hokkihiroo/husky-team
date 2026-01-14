@@ -950,7 +950,7 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '잔액: $option2원',
+                  '하이패스: $option2원',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -1003,7 +1003,7 @@ class _CarStateState extends State<CarState> {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width,
-        height: 200,
+        height: 120,
         child: Column(
           children: [
             Row(
@@ -1078,116 +1078,6 @@ class _CarStateState extends State<CarState> {
             ),
             SizedBox(
               height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 18, // ⬅ 두께(높이) 증가
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
-                        fontSize: 17,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      etcController.text = etc;
-                      setState(() {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('특이사항'),
-                                content: Container(
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width
-                                      .clamp(0, 290),
-                                  height: 150,
-                                  child: Column(
-                                    children: [
-                                      TextField(
-                                        controller: etcController,
-                                        maxLength: 15,
-                                        decoration: InputDecoration(
-                                          hintText: '특이사항 20자까지가능',
-                                        ),
-                                        onChanged: (value) {
-                                          etc = value;
-                                        },
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                              child: ElevatedButton(
-                                                  onPressed: () async {
-                                                    Navigator.pop(context);
-
-                                                    try {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(FIELD)
-                                                          .doc(dataId)
-                                                          .update({
-                                                        'etc': etc,
-                                                      });
-                                                    } catch (e) {
-                                                      print(e);
-                                                    }
-
-                                                    try {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              CarListAdress)
-                                                          .doc(dataId)
-                                                          .update({
-                                                        'etc': etc,
-                                                      });
-                                                    } catch (e) {
-                                                      print(e);
-                                                    }
-                                                  },
-                                                  child: Text('등록'))),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text('취소'))),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
-                      });
-                    },
-                    child: Text(
-                      '특이사항수정',
-                      style: TextStyle(
-                        fontSize: 15, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.yellow, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
             ),
             Text(
               etc,
