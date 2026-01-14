@@ -43,12 +43,12 @@ class _StandByState extends State<StandBy> {
   String option5 = ''; //시승차 기타
   String option6 = '';
   String option7 = '';
+
   @override
   void initState() {
     super.initState();
     etcController = TextEditingController(text: etc ?? '');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,6 @@ class _StandByState extends State<StandBy> {
           final int docLocation = doc['location'];
           return docLocation == 0 || docLocation == 5;
         }).toList();
-
 
         return GridView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -159,25 +158,25 @@ class _StandByState extends State<StandBy> {
   }
 
   Widget bottomColor5(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+  ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,7 +194,7 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
                 Text(
-                  '하이패스: $option2원',
+                  '차량번호: $carNumber',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -218,7 +217,7 @@ class _StandByState extends State<StandBy> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '차량번호: $carModelFrom',
+                  '주유잔량: ${option3}km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -226,7 +225,7 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
                 Text(
-                  '주유잔량: $option3 km',
+                  '하이패스: $option2원',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -234,7 +233,7 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
                 Text(
-                  '총킬로수: $option4 km',
+                  '총킬로수: ${option4}km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -244,7 +243,6 @@ class _StandByState extends State<StandBy> {
               ],
             ),
           ),
-
         ],
       ),
       content: Container(
@@ -560,10 +558,9 @@ class _StandByState extends State<StandBy> {
                             .doc(dataId)
                             .update({
                           'location': 11,
-                          'name':'',
-                          'option1':'',
-                          'etc':'',
-
+                          'name': '',
+                          'option1': '',
+                          'etc': '',
                         });
                       } catch (e) {
                         print(e);
@@ -571,8 +568,7 @@ class _StandByState extends State<StandBy> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(
-                            Color5List)
+                            .collection(Color5List)
                             .doc(option1)
                             .delete();
                       } catch (e) {

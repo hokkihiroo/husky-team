@@ -197,7 +197,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '하이패스: $option2원',
+                  '차량번호: $carNumber',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -220,7 +220,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '차량번호: $carModelFrom',
+                  '주유잔량: ${option3}km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -228,7 +228,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '주유잔량: $option3 km',
+                  '하이패스: $option2원',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -236,7 +236,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '총킬로수: $option4 km',
+                  '총킬로수: ${option4}km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
