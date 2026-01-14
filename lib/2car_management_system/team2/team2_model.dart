@@ -1019,6 +1019,8 @@ class _CarStateState extends State<CarState> {
                           'location': 11,
                           'name': '',
                           'option1': '',
+                          'etc':'',
+
                         });
                       } catch (e) {
                         print('문서 삭제 오류: $e');
