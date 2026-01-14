@@ -900,7 +900,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '총킬로수: $option4 km',
+                  '기타: $option5',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -915,7 +915,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '차량번호: $carNumber',
+                  '차량번호: $carModelFrom',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -931,7 +931,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '기타: $option5',
+                  '총킬로수: $option4 km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

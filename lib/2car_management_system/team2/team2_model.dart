@@ -958,7 +958,7 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '총킬로수: $option4 km',
+                  '기타: $option5',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -989,7 +989,7 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '기타: $option5',
+                  '총킬로수: $option4 km',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -1020,8 +1020,6 @@ class _CarStateState extends State<CarState> {
                           'name': '',
                           'option1': '',
                           'etc': '',
-
-
                         });
                       } catch (e) {
                         print('문서 삭제 오류: $e');
