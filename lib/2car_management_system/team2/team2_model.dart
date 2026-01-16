@@ -1960,18 +1960,28 @@ class _CarStateState extends State<CarState> {
                       child: Text('$totalKm', textAlign: TextAlign.center)),
                 ],
               ),
+              SizedBox(height: 8),
+
               Row(
                 children: [
                   SizedBox(width: 70, child: Text('성함')),
-                  Expanded(
-                    child: Text(
-                      '$option3',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
+                  Row(
+                    children: [
+                      const SizedBox(width: 70, child: Text('성함')),
+
+                      const Expanded(
+                        child: SizedBox(), // ⭐ 빈 칸 유지
                       ),
-                    ),
+
+                      Expanded(
+                        child: Text(
+                          widget.name,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
+
 
                   Expanded(
                       child: Text(widget.name, textAlign: TextAlign.center)),
