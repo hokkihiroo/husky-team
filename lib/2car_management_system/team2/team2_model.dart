@@ -1963,7 +1963,7 @@ class _CarStateState extends State<CarState> {
               SizedBox(height: 8),
               Row(
                 children: [
-                  const SizedBox(width: 70, child: Text('성함')),
+                  const SizedBox(width: 70, child: Text('변경한 사람')),
                   const Expanded(child: SizedBox(), // ⭐ 빈 칸 유지
                   ),
                   Expanded(child: Text(widget.name, textAlign: TextAlign.center,),),
