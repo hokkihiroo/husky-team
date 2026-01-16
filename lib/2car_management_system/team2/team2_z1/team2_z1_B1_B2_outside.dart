@@ -250,7 +250,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width.clamp(0, 290),
-        height: 350,
+        height: 400,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -313,7 +313,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                     ),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 14),
+                          horizontal: 20, vertical: 11),
                       backgroundColor: Colors.purple,
                       elevation: 4, // 살짝 입체감
                       shape: RoundedRectangleBorder(
@@ -329,7 +329,81 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               ],
             ),
             SizedBox(
-              height: 5,
+              height: 3,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '대면',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '대면',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '비대',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '비대면',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Row(
               children: [
@@ -626,9 +700,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 5,
-            ),
             Row(
               children: [
                 Expanded(
@@ -636,7 +707,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
-                        vertical: 11, // ⬅ 두께(높이) 증가
+                        vertical: 10, // ⬅ 두께(높이) 증가
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -724,7 +795,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 ),
               ],
             ),
-
             Text(
               '$etc',
               style: TextStyle(
@@ -732,89 +802,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            // Row(
-            //   children: [
-            //     SizedBox(
-            //       width: 5,
-            //     ),
-            //     Expanded(
-            //       flex: 2,
-            //       child: ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //           textStyle:
-            //               TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            //         ),
-            //         onPressed: () async {
-            //           Navigator.pop(context);
-            //
-            //           // try {
-            //           //   await FirebaseFirestore.instance
-            //           //       .collection(dataAdress)
-            //           //       .doc(dataId)
-            //           //       .update({
-            //           //     'color': 1,
-            //           //   });
-            //           // } catch (e) {
-            //           //   print(e);
-            //           // }
-            //         },
-            //         child: Text('출차취소'),
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: ElevatedButton(
-            //           style: ElevatedButton.styleFrom(
-            //             textStyle: TextStyle(
-            //                 fontWeight: FontWeight.w500, fontSize: 18),
-            //           ),
-            //           onPressed: () async {
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(dataAdress) // 컬렉션 이름을 지정하세요
-            //             //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-            //             //       .delete();
-            //             //   print('문서 삭제 완료');
-            //             // } catch (e) {
-            //             //   print('문서 삭제 오류: $e');
-            //             // }
-            //             // Navigator.pop(context);
-            //             //
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(CarListAdress)
-            //             //       .doc(dataId)
-            //             //       .update({
-            //             //     'out': FieldValue.serverTimestamp(),
-            //             //     'outName': widget.name,
-            //             //     'outLocation': location,
-            //             //     'movedLocation': '$movedLocation',
-            //             //     'wigetName': wigetName,
-            //             //     'movingTime': movingTime,
-            //             //   });
-            //             // } catch (e) {
-            //             //   print(e);
-            //             //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-            //             //   showDialog(
-            //             //       context: context,
-            //             //       builder: (BuildContext context) {
-            //             //         return AlertDialog(
-            //             //           title: Text('하루 지난 데이터 입니다 '),
-            //             //           actions: [
-            //             //             ElevatedButton(
-            //             //               onPressed: () {
-            //             //                 Navigator.pop(context);
-            //             //               },
-            //             //               child: Text('확인'),
-            //             //             ),
-            //             //           ],
-            //             //         );
-            //             //       });
-            //             // }
-            //           },
-            //           child: Text('출차완료')),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),
