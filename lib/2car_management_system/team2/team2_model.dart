@@ -1961,30 +1961,12 @@ class _CarStateState extends State<CarState> {
                 ],
               ),
               SizedBox(height: 8),
-
               Row(
                 children: [
-                  SizedBox(width: 70, child: Text('성함')),
-                  Row(
-                    children: [
-                      const SizedBox(width: 70, child: Text('성함')),
-
-                      const Expanded(
-                        child: SizedBox(), // ⭐ 빈 칸 유지
-                      ),
-
-                      Expanded(
-                        child: Text(
-                          widget.name,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 70, child: Text('성함')),
+                  const Expanded(child: SizedBox(), // ⭐ 빈 칸 유지
                   ),
-
-
-                  Expanded(
-                      child: Text(widget.name, textAlign: TextAlign.center)),
+                  Expanded(child: Text(widget.name, textAlign: TextAlign.center,),),
                 ],
               ),
             ],
