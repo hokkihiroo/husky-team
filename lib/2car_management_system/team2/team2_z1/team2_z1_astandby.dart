@@ -186,7 +186,7 @@ class _StandByState extends State<StandBy> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '해당차종: $carModelFrom',
+                  '차종: $carModelFrom',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
