@@ -2021,6 +2021,9 @@ class _CarStateState extends State<CarState> {
                         'outLocation': location,
                         'wigetName': wigetName,
                         'etc': etc,
+                        'totalKmAfter': totalKm,
+                        'leftGasAfter': fuel,
+                        'hiPassAfter': hiPass,
                       });
                     } catch (e) {
                       print(e);

@@ -247,7 +247,7 @@ class _StandByState extends State<StandBy> {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width.clamp(0, 290),
-        height: 350,
+        height: 380,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -325,7 +325,6 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-
             Row(
               children: [
                 Expanded(
@@ -594,9 +593,6 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 5,
-            ),
             Row(
               children: [
                 Expanded(
@@ -692,7 +688,6 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-
             Text(
               '$etc',
               style: TextStyle(
@@ -700,89 +695,7 @@ class _StandByState extends State<StandBy> {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            // Row(
-            //   children: [
-            //     SizedBox(
-            //       width: 5,
-            //     ),
-            //     Expanded(
-            //       flex: 2,
-            //       child: ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //           textStyle:
-            //               TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            //         ),
-            //         onPressed: () async {
-            //           Navigator.pop(context);
-            //
-            //           // try {
-            //           //   await FirebaseFirestore.instance
-            //           //       .collection(dataAdress)
-            //           //       .doc(dataId)
-            //           //       .update({
-            //           //     'color': 1,
-            //           //   });
-            //           // } catch (e) {
-            //           //   print(e);
-            //           // }
-            //         },
-            //         child: Text('출차취소'),
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: ElevatedButton(
-            //           style: ElevatedButton.styleFrom(
-            //             textStyle: TextStyle(
-            //                 fontWeight: FontWeight.w500, fontSize: 18),
-            //           ),
-            //           onPressed: () async {
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(dataAdress) // 컬렉션 이름을 지정하세요
-            //             //       .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-            //             //       .delete();
-            //             //   print('문서 삭제 완료');
-            //             // } catch (e) {
-            //             //   print('문서 삭제 오류: $e');
-            //             // }
-            //             // Navigator.pop(context);
-            //             //
-            //             // try {
-            //             //   await FirebaseFirestore.instance
-            //             //       .collection(CarListAdress)
-            //             //       .doc(dataId)
-            //             //       .update({
-            //             //     'out': FieldValue.serverTimestamp(),
-            //             //     'outName': widget.name,
-            //             //     'outLocation': location,
-            //             //     'movedLocation': '$movedLocation',
-            //             //     'wigetName': wigetName,
-            //             //     'movingTime': movingTime,
-            //             //   });
-            //             // } catch (e) {
-            //             //   print(e);
-            //             //   print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-            //             //   showDialog(
-            //             //       context: context,
-            //             //       builder: (BuildContext context) {
-            //             //         return AlertDialog(
-            //             //           title: Text('하루 지난 데이터 입니다 '),
-            //             //           actions: [
-            //             //             ElevatedButton(
-            //             //               onPressed: () {
-            //             //                 Navigator.pop(context);
-            //             //               },
-            //             //               child: Text('확인'),
-            //             //             ),
-            //             //           ],
-            //             //         );
-            //             //       });
-            //             // }
-            //           },
-            //           child: Text('출차완료')),
-            //     ),
-            //   ],
-            // ),
+
           ],
         ),
       ),
