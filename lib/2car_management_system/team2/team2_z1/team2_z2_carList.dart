@@ -351,6 +351,8 @@ class ListModel extends StatelessWidget {
   int hiPassAfter = 0; // 시승후 하이패스잔액
   int totalKmAfter = 0; //시승후 총킬로수
 
+  String option1 = ''; //최종 3개 (하이패스 잔량 총거리 변경자)
+
   ListModel({
     super.key,
     required this.adress,
@@ -411,6 +413,7 @@ class ListModel extends StatelessWidget {
                   movingTime =
                       raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
 
+                  option1 = docs[index]['option1'];                           //최종 3개 (하이패스 잔량 총거리 변경자)
 
                   hiPass =
                       int.tryParse(docs[index]['hiPass'].toString()) ??
@@ -449,6 +452,7 @@ class ListModel extends StatelessWidget {
                       leftGasAfter,
                       hiPassAfter,
                       totalKmAfter,
+                      option1,
                   );
                 },
                 child: Padding(
@@ -495,6 +499,7 @@ void showCarInfoBottomSheet2(
     leftGasAfter,
     hiPassAfter,
     totalKmAfter,
+    option1,
 ) {
   showModalBottomSheet(
     context: context,
@@ -514,7 +519,7 @@ void showCarInfoBottomSheet2(
                       child: Text(
                         '차종: $carModel',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                           color: Colors.black87,
                         ),
@@ -579,7 +584,31 @@ void showCarInfoBottomSheet2(
                       child: Text(
                         '차번호: $carNumber',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        '시승상태: $outName',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        '상태표시: ???',
+                        style: const TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                           color: Colors.black87,
                         ),
@@ -704,7 +733,7 @@ void showCarInfoBottomSheet2(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            '시전',
+                            '전',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
@@ -737,7 +766,7 @@ void showCarInfoBottomSheet2(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            '시후',
+                            '후($option1)',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
@@ -765,6 +794,10 @@ void showCarInfoBottomSheet2(
                             ),
                           ),
                         ],
+                      ),
+                      Divider(
+                        color: Colors.black, // 선 색상
+                        thickness: 2.0, // 선 두께
                       ),
                       Text(
                         '특이사항',
