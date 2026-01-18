@@ -49,8 +49,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   int option3 = 0; // 주유잔량
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
-  String option6 = '';
+  String option6 = '';   //최근 3종 변경자 이름
+  //아래는 없음
   String option7 = '';
+  String option8 = '';
+  String option9 = '';
+  String option10 = '';
+  String option11= '';
+  String option12= '';
 
   @override
   void initState() {
@@ -111,12 +117,19 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 remainTime = getRemainTime(dateTime);
                 //     dataAdress = CheckLocation(location); //파이어베이스 데이터주소
                 option1 = filteredDocs[index]['option1']; //시승차 컬러5에 넣는 문서주소
-                option2 = filteredDocs[index]['option2']; //하이패스 잔액
-                option3 = filteredDocs[index]['option3']; //주유잔량
-                option4 = filteredDocs[index]['option4']; //총킬로수
+                option2 = int.tryParse(filteredDocs[index]['option2'].toString()) ?? 0;   //하이패스 잔액
+                option3 = int.tryParse(filteredDocs[index]['option3'].toString()) ?? 0;    //주유잔량
+                option4 = int.tryParse(filteredDocs[index]['option4'].toString()) ?? 0;   //총킬로수
                 option5 = filteredDocs[index]['option5']; //시승차 기타
-                option6 = filteredDocs[index]['option6']; //예비용
-                option7 = filteredDocs[index]['option7']; //예비용
+                option6 = filteredDocs[index]['option6']; // //3종 변경자 이름
+                //아래없음
+                option7 = filteredDocs[index]['option7'];                         //시승차 예비용
+                option8 = filteredDocs[index]['option8'];                          //시승차 예비용
+                option9 = filteredDocs[index]['option9'];                         //시승차 예비용
+                option10 = filteredDocs[index]['option10'];                      //시승차 예비용
+                option11= filteredDocs[index]['option11'];                            //시승차 예비용
+                option12= filteredDocs[index]['option12'];                          //시승차 예비용
+
 
                 String getMovingTime = getTodayTime();
                 final BuildContext rootContext = context;
@@ -144,6 +157,13 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         option3,
                         option4,
                         option5,
+                        option6,
+                        // option7,
+                        // option8,
+                        // option9,
+                        // option10,
+                        // option11,
+                        // option12,
                       );
                     } else {
                       return bottomTwo(
@@ -874,6 +894,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     int option3,
     int option4,
     String option5,
+      String option6,
   ) {
     return AlertDialog(
       title: Row(

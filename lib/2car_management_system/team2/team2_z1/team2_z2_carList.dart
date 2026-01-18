@@ -118,7 +118,7 @@ class _CarListState extends State<CarListz1> {
                         selectedDate = _selectedDay!;
                         final year = selectedDate.year.toString();
                         final month =
-                        selectedDate.month.toString().padLeft(2, '0');
+                            selectedDate.month.toString().padLeft(2, '0');
                         final day = selectedDate.day.toString().padLeft(2, '0');
                         DBAdress = year + month + day;
                         Navigator.of(context).pop();
@@ -139,7 +139,6 @@ class _CarListState extends State<CarListz1> {
       },
     );
   }
-
 
   // 텍스트 만드는 함수 추가
   Future<String> createClipboardText(String address) async {
@@ -179,7 +178,6 @@ class _CarListState extends State<CarListz1> {
 
     return buffer.toString();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +226,6 @@ class _CarListState extends State<CarListz1> {
   }
 }
 
-
 class _DateControl extends StatelessWidget {
   final VoidCallback onPressLeft;
   final VoidCallback onPressRight;
@@ -237,10 +234,10 @@ class _DateControl extends StatelessWidget {
 
   const _DateControl(
       {super.key,
-        required this.onPressLeft,
-        required this.onPressRight,
-        required this.onPressGoToday,
-        required this.selectedDate});
+      required this.onPressLeft,
+      required this.onPressRight,
+      required this.onPressGoToday,
+      required this.selectedDate});
 
   @override
   Widget build(BuildContext context) {
@@ -342,18 +339,28 @@ class ListModel extends StatelessWidget {
   DateTime dateTime2 = DateTime.now(); //이동할 시각들 뽑음
   String outName = '';
   String outLocation = '';
-  String movedLocation = '';
+  String carModel = '';
   String movingTime = '';
   String selfParking = '';
   String movingTimeForTabOne = '';
 
-  ListModel({super.key, required this.adress,});
+  int leftGas = 0; // 주유잔량
+  int hiPass = 0; //  하이패스잔액
+  int totalKm = 0; // 총킬로수
+  int leftGasAfter = 0; //시승후 주유잔량
+  int hiPassAfter = 0; // 시승후 하이패스잔액
+  int totalKmAfter = 0; //시승후 총킬로수
+
+  ListModel({
+    super.key,
+    required this.adress,
+  });
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(COLOR5+adress)
+          .collection(COLOR5 + adress)
           .orderBy('enter')
           .snapshots(),
       builder: (BuildContext context,
@@ -382,7 +389,7 @@ class ListModel extends StatelessWidget {
                   enterTime = getInTime(sam); //입차시각 변환코드
                   enterName = docs[index]['wigetName']; //입차한사람 이름
                   selfParking = docs[index]
-                  ['enterName']; // 자가주차하면 enterName으로 들어간데이터가 여기에 저장됨
+                      ['enterName']; // 자가주차하면 enterName으로 들어간데이터가 여기에 저장됨
                   etc = docs[index]['etc']; //특이사항
 
                   outTime = docs[index]['out'] is Timestamp
@@ -398,14 +405,31 @@ class ListModel extends StatelessWidget {
                   int location = docs[index]['outLocation']; //출차한위치 이름
                   outLocation = checkOutLocation(location);
 
-                  movedLocation = docs[index]['movedLocation']; //출차한위치 이름
-
+                  carModel = docs[index]['carModel']; //차종
 
                   final raw = docs[index]['movingTime'];
-                  movingTime = raw is Timestamp
-                      ? movingTimeGet(raw.toDate())
-                      : '';
+                  movingTime =
+                      raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
 
+
+                  hiPass =
+                      int.tryParse(docs[index]['hiPass'].toString()) ??
+                          0; //하이패스 잔액
+                  leftGas =
+                      int.tryParse(docs[index]['leftGas'].toString()) ??
+                          0; //주유잔량
+                  totalKm =
+                      int.tryParse(docs[index]['totalKm'].toString()) ??
+                          0; //총킬로수
+                  hiPassAfter =
+                      int.tryParse(docs[index]['hiPassAfter'].toString()) ??
+                          0; //하이패스 잔액
+                  leftGasAfter =
+                      int.tryParse(docs[index]['leftGasAfter'].toString()) ??
+                          0; //주유잔량
+                  totalKmAfter =
+                      int.tryParse(docs[index]['totalKmAfter'].toString()) ??
+                          0; //총킬로수
                   showCarInfoBottomSheet2(
                     context,
                     dataId,
@@ -416,9 +440,15 @@ class ListModel extends StatelessWidget {
                     outName,
                     outTime,
                     outLocation,
-                    movedLocation,
+                    carModel,
                     movingTime,
                     adress,
+                      leftGas,
+                      hiPass,
+                      totalKm,
+                      leftGasAfter,
+                      hiPassAfter,
+                      totalKmAfter,
                   );
                 },
                 child: Padding(
@@ -447,19 +477,25 @@ class ListModel extends StatelessWidget {
 }
 
 void showCarInfoBottomSheet2(
-    context,
-    id,
-    carNumber,
-    enterTime,
-    enterName,
-    etc,
-    outName,
-    outTime,
-    outLocation,
-    movedLocation,
-    movingTime,
-    adress,
-    ) {
+  context,
+  id,
+  carNumber,
+  enterTime,
+  enterName,
+  etc,
+  outName,
+  outTime,
+  outLocation,
+  carModel,
+  movingTime,
+  adress,
+    leftGas,
+    hiPass,
+    totalKm,
+    leftGasAfter,
+    hiPassAfter,
+    totalKmAfter,
+) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
@@ -471,128 +507,264 @@ void showCarInfoBottomSheet2(
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      '시승차번호:$carNumber',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
+                    /// 🚗 차종 (없으니까 변수만 자리 확보)
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        '차종: $carModel',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    TextButton(
+
+                    /// 🗑 삭제
+                    IconButton(
+                      tooltip: '삭제',
+                      icon: const Icon(Icons.delete_outline),
+                      color: Colors.red,
                       onPressed: () {
-                        Navigator.of(context).pop(); // 다이얼로그 닫기
+                        Navigator.of(context).pop(); // 바텀시트 닫기
 
                         showDialog(
                           context: context,
-                          builder: (BuildContext context) {
+                          builder: (dialogContext) {
                             return AlertDialog(
-                              title: Text("삭제 확인"),
-                              content: Text("정말로 삭제하시겠습니까?"),
+                              title: const Text('삭제 확인'),
+                              content: const Text(
+                                '정말로 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.',
+                              ),
                               actions: [
                                 TextButton(
-                                  child: Text("취소"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // 다이얼로그 닫기
-                                  },
+                                  onPressed: () => Navigator.pop(dialogContext),
+                                  child: const Text('취소'),
                                 ),
-                                TextButton(
-                                  child: Text("삭제"),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                  ),
                                   onPressed: () async {
                                     try {
-                                      // 삭제할 문서의 참조를 가져와
                                       await FirebaseFirestore.instance
-                                          .collection(
-                                          COLOR5 + adress) // 예: 'users'
-                                          .doc(id) // 예: 'abc123'
+                                          .collection(COLOR5 + adress)
+                                          .doc(id)
                                           .delete();
 
-                                      Navigator.of(context).pop(); // 다이얼로그 닫기
-                                      print('삭제 확인됨');
-                                      // 여기에 삭제 완료 후 처리 추가 (예: 스낵바 등)
+                                      Navigator.pop(dialogContext);
+                                      print('삭제 완료');
                                     } catch (e) {
                                       print('삭제 중 오류 발생: $e');
-                                      // 오류 처리 로직 추가 가능
                                     }
                                   },
+                                  child: const Text('삭제'),
                                 ),
                               ],
                             );
                           },
                         );
                       },
-                      style: TextButton.styleFrom(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        backgroundColor: Colors.red.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        '삭제',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.red, // 삭제는 빨간색이 직관적
-                        ),
-                      ),
-                    )
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: 20,
+                Row(
+                  children: [
+                    /// 🚘 차번호 (메인)
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        '차번호: $carNumber',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.black, // 선 색상
+                  thickness: 2.0, // 선 두께
                 ),
                 Container(
                   // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '스탠바이',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
-                      Text('시각 : ${enterTime ?? '-'}분'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '시승출발',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
                       Row(
-                        children: [
-                          Text('시각 : $movingTime분'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '시승종료(복귀시각)',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
-                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                              '시각 : ${outTime != null ? getOutTime(outTime!) : ''}분'),
+                            '상태',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '스탠바이',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '시승출발',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '시승종료',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            '시각',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '${enterTime ?? '-'}분',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$movingTime분',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '${outTime != null ? getOutTime(outTime!) : ''}분',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.black, // 선 색상
+                        thickness: 2.0, // 선 두께
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            '상태',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '주유잔량',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '하이패스',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '총거리',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            '시전',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$leftGas km',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$hiPass원',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$totalKm km',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            '시후',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$leftGasAfter km',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$hiPassAfter원',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '$totalKmAfter km',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       ),
                       Text(
                         '특이사항',

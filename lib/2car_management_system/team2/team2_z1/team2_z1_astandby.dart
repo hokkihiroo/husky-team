@@ -41,8 +41,14 @@ class _StandByState extends State<StandBy> {
   int option3 = 0; // 주유잔량
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
-  String option6 = '';
+  String option6 = ''; //최근 3종 변경자 이름
+  //아래는 없음
   String option7 = '';
+  String option8 = '';
+  String option9 = '';
+  String option10 = '';
+  String option11 = '';
+  String option12 = '';
 
   @override
   void initState() {
@@ -109,12 +115,25 @@ class _StandByState extends State<StandBy> {
                 final BuildContext rootContext = context;
 
                 option1 = displayList[index]['option1']; //시승차 컬러5에 넣는 문서주소
-                option2 = displayList[index]['option2']; // 하이패스잔액
-                option3 = displayList[index]['option3']; //주유잔량
-                option4 = displayList[index]['option4']; //총킬로수
+                option2 =
+                    int.tryParse(displayList[index]['option2'].toString()) ??
+                        0; //하이패스 잔액
+                option3 =
+                    int.tryParse(displayList[index]['option3'].toString()) ??
+                        0; //주유잔량
+                option4 =
+                    int.tryParse(displayList[index]['option4'].toString()) ??
+                        0; //총킬로수
                 option5 = displayList[index]['option5']; //시승차 기타
-                option6 = displayList[index]['option6']; //시승차 예비용
+                option6 = displayList[index]['option6']; //3종 최근변경자 이름
+
                 option7 = displayList[index]['option7']; //시승차 예비용
+                option8 = displayList[index]['option8']; //시승차 예비용
+                option9 = displayList[index]['option9']; //시승차 예비용
+                option10 = displayList[index]['option10']; //시승차 예비용
+                option11 = displayList[index]['option11']; //시승차 예비용
+                option12 = displayList[index]['option12']; //시승차 예비용
+
                 showDialog(
                   context: rootContext,
                   builder: (BuildContext context) {
@@ -133,10 +152,11 @@ class _StandByState extends State<StandBy> {
                       getMovingTime,
                       carModelFrom,
                       option1,
-                      option2,
-                      option3,
-                      option4,
-                      option5,
+                      option2, //하이패스
+                      option3, //주유
+                      option4, //총킬로수
+                      option5, //기타
+                      option6, //3대 변경자
                     );
                   },
                 );
@@ -172,10 +192,11 @@ class _StandByState extends State<StandBy> {
     String getMovingTime,
     String carModelFrom,
     String option1,
-    int option2,
-    int option3,
-    int option4,
-    String option5,
+    int option2, //하이패스
+    int option3, //주유잔량
+    int option4, //총킬로수
+    String option5, //기타
+    String option6, //3대변경자
   ) {
     return AlertDialog(
       title: Row(
@@ -399,7 +420,6 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-
             Row(
               children: [
                 Expanded(
@@ -472,7 +492,6 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-
             Row(
               children: [
                 Expanded(
@@ -545,7 +564,6 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-
             Row(
               children: [
                 Expanded(
@@ -695,7 +713,6 @@ class _StandByState extends State<StandBy> {
                 fontWeight: FontWeight.w800,
               ),
             ),
-
           ],
         ),
       ),

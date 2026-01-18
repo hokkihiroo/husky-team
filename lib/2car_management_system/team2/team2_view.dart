@@ -652,6 +652,11 @@ class _Team2ViewState extends State<Team2View> {
                           'option5': '',
                           'option6': '',
                           'option7': '',
+                          'option8': '',
+                          'option9': '',
+                          'option10': '',
+                          'option11': '',
+                          'option12': '',
                         });
                       } catch (e) {}
 
