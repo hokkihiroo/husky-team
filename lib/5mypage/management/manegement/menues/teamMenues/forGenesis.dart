@@ -8,9 +8,7 @@ import '../../0adress_const.dart';
 class ForGenesis extends StatefulWidget {
   final String teamDocId;
 
-
-  const ForGenesis({super.key,
-    required this.teamDocId});
+  const ForGenesis({super.key, required this.teamDocId});
 
   @override
   State<ForGenesis> createState() => _ForGenesisState();
@@ -18,26 +16,29 @@ class ForGenesis extends StatefulWidget {
 
 class _ForGenesisState extends State<ForGenesis> {
   late String forGenesis; // 전역 변수로 선언
-  final List<String> categories = ['60','70','80','90',];
+  final List<String> categories = [
+    '60',
+    '70',
+    '80',
+    '90',
+  ];
   String selectedCategory = '80'; // ✅ 선택된 값 저장
-  int selectedCategoryNum = 3;
+  int selectedCategoryNum = 3; //80이 제일 자주 사용하니 80으로 고정해둠 80이 3번임
 
-  final TextEditingController carBrandController  = TextEditingController();
-  final TextEditingController carNumberController  = TextEditingController();
-
-
+  final TextEditingController carModelController = TextEditingController();
+  final TextEditingController carNumberController = TextEditingController();
 
   @override
   void dispose() {
-    carBrandController.dispose();
+    carModelController.dispose();
     carNumberController.dispose();
     super.dispose();
   }
+
 //시승차 추가 코드
   void _showDialog() {
-
-    String selectedCategory = '80'; // 기본 선택값
-
+      carModelController.clear();
+      carNumberController.clear();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -53,7 +54,7 @@ class _ForGenesisState extends State<ForGenesis> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
-                    controller: carBrandController,
+                    controller: carModelController,
                     maxLength: 8,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(8),
@@ -63,7 +64,6 @@ class _ForGenesisState extends State<ForGenesis> {
                       counterStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
-
                   TextField(
                     controller: carNumberController,
                     maxLength: 4,
@@ -75,7 +75,6 @@ class _ForGenesisState extends State<ForGenesis> {
                       counterStyle: TextStyle(color: Colors.grey),
                     ),
                   )
-
                 ],
               ),
               actions: [
@@ -84,9 +83,8 @@ class _ForGenesisState extends State<ForGenesis> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        String carBrand = carBrandController.text;
+                        String carModel = carModelController.text;
                         String carNumber = carNumberController.text;
-
 
                         String documentId = FirebaseFirestore.instance
                             .collection(forGenesis)
@@ -98,20 +96,44 @@ class _ForGenesisState extends State<ForGenesis> {
                               .collection(forGenesis)
                               .doc(documentId)
                               .set({
-                            'carBrand': carBrand,
                             'carNumber': carNumber,
-                            'brandType': selectedCategoryNum, // 숫자로 저장
+                            'enterName': '',
+                            //자가주차하면 여기에 자가라고 들어가게함 *고객차한정*
+                            'name': '',
                             'createdAt': FieldValue.serverTimestamp(),
-                            'order': DateTime.now().millisecondsSinceEpoch,
+                            'location': 11,
+                            'color': 5,
+                            'etc': '',
+                            'movedLocation': '입차',
+                            'wigetName': '',
+                            'movingTime': '',
+                            'carBrand': '제네시스',
+                            'carModel': carModel,
+                            'option1': '',
+                            //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
+                            'option2': '',
+                            //하이패스
+                            'option3': '',
+                            //기름잔량
+                            'option4': '',
+                            //총거리
+                            'option5': '',
+                            //시승차 기타
+                            'option6': '',
+                            //최근 3종 변경자 이름
+                            'option7': selectedCategoryNum,
+                            //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                            'option8': '',
+                            'option9': '',
+                            'option10': '',
+                            'option11': '',
+                            'option12': '',
                           });
                         } catch (e) {
                           print('저장 에러: $e');
                         }
                         Navigator.of(context).pop();
-                        setState(() {
-                          carBrandController.clear();
-                          carNumberController.clear();
-                        });
+
                       },
                       child: Text('확인'),
                     ),
@@ -130,15 +152,14 @@ class _ForGenesisState extends State<ForGenesis> {
       },
     );
   }
+
   @override
   void initState() {
     super.initState();
     print('initState 호출됨');
 
-    forGenesis = getForGenesis(widget.teamDocId);
+    forGenesis = getForFieldAdress(widget.teamDocId);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -193,13 +214,12 @@ class _ForGenesisState extends State<ForGenesis> {
                             selectedCategoryNum = 2;
                           } else if (selectedCategory == '80') {
                             selectedCategoryNum = 3;
-                          }else if (selectedCategory == '90') {
+                          } else if (selectedCategory == '90') {
                             selectedCategoryNum = 4;
                           }
 
                           print("카테고리 번호: $selectedCategoryNum");
                         });
-
                       },
                     );
                   }).toList(),
@@ -212,7 +232,7 @@ class _ForGenesisState extends State<ForGenesis> {
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection(forGenesis)
-                  .where('brandType', isEqualTo: selectedCategoryNum)
+                  .where('option7', isEqualTo: selectedCategoryNum)
                   .orderBy('createdAt')
                   .snapshots(),
               builder: (BuildContext context,
@@ -232,39 +252,38 @@ class _ForGenesisState extends State<ForGenesis> {
                     var data = subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
                     return GestureDetector(
                       onTap: () async {
-
                         var document = subDoc.id;
-
-
 
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
                               title: const Text('삭제 확인'),
-                              content: Text(
-                                    '해당차종을 삭제하시겠습니까?'
-                              ),
+                              content: Text('해당차종을 삭제하시겠습니까?'),
                               actions: [
                                 // ✅ grade == 1 일 때만 확인 버튼 표시
-                                  TextButton(
-                                    onPressed: () async {
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection(forGenesis)
-                                            .doc(document)
-                                            .delete();
+                                TextButton(
+                                  onPressed: () async {
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection(forGenesis)
+                                          .doc(document)
+                                          .update({
+                                        'location': 14,       //location이 13이면 외부주차장으로보이고 14면 필드에서 사라짐
+                                        'option7': 5,         // option7  이 0은 고객차 1은 60이고 4가 90임
+                                                              // 5로 바꾸면 시승차관리 페이지에서도 사라지게해둠
+                                      });
 
-                                        Navigator.pop(context); // 다이얼로그 닫기
-                                      } catch (e) {
-                                        print('❌ 삭제 에러: $e');
-                                      }
-                                    },
-                                    child: const Text(
-                                      '확인',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
+                                      Navigator.pop(context); // 다이얼로그 닫기
+                                    } catch (e) {
+                                      print('❌ 삭제 에러: $e');
+                                    }
+                                  },
+                                  child: const Text(
+                                    '확인',
+                                    style: TextStyle(color: Colors.red),
                                   ),
+                                ),
 
                                 // 취소 버튼 (항상 존재)
                                 TextButton(
@@ -280,14 +299,13 @@ class _ForGenesisState extends State<ForGenesis> {
                             );
                           },
                         );
-
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 5.0),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        // 👈 카드 사이 간격
                         child: ForgenesisCard(
-                          carBrand:data['carBrand'],
-                          carNumber:data['carNumber'],
+                          carModel: data['carModel'],
+                          carNumber: data['carNumber'],
                         ),
                       ),
                     );
@@ -300,8 +318,8 @@ class _ForGenesisState extends State<ForGenesis> {
       ),
       bottomNavigationBar: bottomOne(),
     );
-
   }
+
   Widget bottomOne() {
     return BottomAppBar(
       child: Row(
@@ -326,5 +344,4 @@ class _ForGenesisState extends State<ForGenesis> {
       color: Colors.white,
     );
   }
-
 }

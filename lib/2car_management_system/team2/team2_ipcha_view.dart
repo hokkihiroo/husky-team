@@ -50,8 +50,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
   String option6 = '';   //최근 3종 변경자 이름
+  int option7 = 0;      //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   //아래는 없음
-  String option7 = '';
   String option8 = '';
   String option9 = '';
   String option10 = '';
@@ -63,6 +63,235 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     super.initState();
     etcController = TextEditingController(text: etc ?? '');
   }
+
+  void showBrandSelectDialog(BuildContext rootContext) {
+    showDialog(
+      context: rootContext,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            String? selectedBrand;
+
+            // 탭 인덱스에 따른 브랜드 맵 선택
+            Map<String, List<String>> getSelectedBrandMap() {
+              if (selectedTabIndex == 0) return widget.domesticBrands;
+              if (selectedTabIndex == 1) return widget.importedFamousBrands;
+              return widget.otherBrands;
+            }
+
+            return AlertDialog(
+              title: const Text(
+                '브랜드를 선택하세요',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width.clamp(0, 290),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    /// 🔘 탭 버튼
+                    ToggleButtons(
+                      isSelected: [
+                        selectedTabIndex == 0,
+                        selectedTabIndex == 1,
+                        selectedTabIndex == 2,
+                      ],
+                      onPressed: (index) {
+                        setState(() {
+                          selectedTabIndex = index;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      selectedColor: Colors.white,
+                      fillColor: Colors.blue,
+                      color: Colors.black,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text('국산'),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text('수입'),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text('기타'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    /// 🚗 브랜드 그리드
+                    Container(
+                      height: 350,
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: GridView.count(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        padding: const EdgeInsets.all(8),
+                        childAspectRatio: 1,
+                        children:
+                        getSelectedBrandMap().keys.map<Widget>((brand) {
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(6),
+                              onTap: () {
+                                Navigator.pop(dialogContext); // ✅ 브랜드 다이얼로그 닫기
+
+                                Future.microtask(() {
+                                  showDialog(
+                                    context: rootContext, // ✅ 화면 context
+                                    builder: (BuildContext carDialogContext) {
+                                      return carModel(
+                                        rootContext,
+                                        carDialogContext, // ✅ 전달
+                                        brand,
+                                        getSelectedBrandMap(),
+                                      );
+                                    },
+                                  );
+                                });
+                              },
+                              child: Center(
+                                child: Text(
+                                  brand,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('닫기'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }     //브랜드넣는함수
+
+  Widget carModel(
+      BuildContext rootContext,                                   //차종넣는함수
+      BuildContext carDialogContext, // ✅ 추가
+      String brand,
+      Map<String, List<String>> brandModels,
+      ) {
+    return AlertDialog(
+      title: Center(
+        child: Text(
+          brand,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
+      content: Container(
+        height: 360,
+        width: MediaQuery.of(rootContext).size.width.clamp(0, 290),
+        decoration: BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: GridView.count(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          padding: const EdgeInsets.all(8),
+          childAspectRatio: 1,
+          children: brandModels[brand]!.map<Widget>((model) {
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () async {
+                  Navigator.pop(carDialogContext); // ✅ carModel 닫기
+
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection(FIELD)
+                        .doc(dataId)
+                        .update({
+                      'carBrand': brand,
+                      'carModel': model,
+                    });
+                  } catch (e) {
+                    print('업데이트 에러: $e');
+                  }
+
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection((color == 5 ? Color5List : CarListAdress))
+                        .doc(dataId)
+                        .update({
+                      'carBrand': brand,
+                      'carModel': model,
+                    });
+                  } catch (e) {
+                    print('업데이트 에러: $e');
+                  }
+                },
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      model,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            /// 🔙 뒤로 → 브랜드 선택 다시 열기
+            TextButton.icon(
+              onPressed: () {
+                Navigator.pop(carDialogContext); // 차종 닫기
+                showBrandSelectDialog(rootContext); // 브랜드 다시 열기
+              },
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('뒤로'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(carDialogContext),
+              child: const Text('닫기'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +351,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 option4 = int.tryParse(filteredDocs[index]['option4'].toString()) ?? 0;   //총킬로수
                 option5 = filteredDocs[index]['option5']; //시승차 기타
                 option6 = filteredDocs[index]['option6']; // //3종 변경자 이름
+                option7 = filteredDocs[index]['option7'];     //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 //아래없음
-                option7 = filteredDocs[index]['option7'];                         //시승차 예비용
                 option8 = filteredDocs[index]['option8'];                          //시승차 예비용
                 option9 = filteredDocs[index]['option9'];                         //시승차 예비용
                 option10 = filteredDocs[index]['option10'];                      //시승차 예비용
@@ -469,7 +698,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white60, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -505,7 +734,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white60, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -541,7 +770,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white60, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -581,7 +810,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white60, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -617,7 +846,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white, // 버튼 색상
+                            backgroundColor: Colors.white60, // 버튼 색상
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
@@ -824,32 +1053,96 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    Navigator.pop(context); // 첫 번째 Dialog 닫기
 
-                    showDialog(
+                    if (carModelFrom == null || carModelFrom.trim().isEmpty) {
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            titlePadding:
+                            const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                            contentPadding:
+                            const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                            actionsPadding:
+                            const EdgeInsets.only(right: 12, bottom: 12),
+                            title: Row(
+                              children: [
+                                Icon(Icons.warning_amber_rounded,
+                                    color: Colors.orange, size: 28),
+                                SizedBox(width: 8),
+                                Text(
+                                  '안내',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            content: Text(
+                              '차종을 넣어주세요.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.blue,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  '닫기',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    await showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return bottomEtc(
-                          carNumber,
-                          name,
-                          color,
-                          location,
-                          dateTime,
-                          dataId,
-                          etc,
-                          remainTime,
-                          movedLocation,
-                          wigetName,
-                          movingTime,
-                          getMovingTime,
-                          carModelFrom,
+                        return ElectricButtonDialog(
+                          carNumber: carNumber,
+                          name: name,
+                          color: color,
+                          location: location,
+                          dateTime: dateTime,
+                          dataId: dataId,
+                          etc: etc,
+                          remainTime: remainTime,
+                          movedLocation: movedLocation,
+                          wigetName: wigetName,
+                          movingTime: movingTime,
+                          getMovingTime: getMovingTime,
+                          carModelFrom: carModelFrom,
                         );
                       },
                     );
                   },
                   child: Text(
-                    '기타',
+                    '전기',
                     style: TextStyle(
                       fontSize: 14, // 텍스트 크기 증가
                       fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1041,597 +1334,6 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     );
   }
 
-  Widget bottomEtc(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-  ) {
-    return AlertDialog(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 공간을 나누기 위해 사용
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '차량번호: $carNumber',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 5), // 간격을 더 좁혀서 일관된 디자인
-              Text(
-                '경과: $remainTime',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
-                ),
-              ),
-            ],
-          ),
-          Container(
-            height: 60,
-            width: 120,
-            child: ElevatedButton(
-              onPressed: () async {
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(FIELD) // 컬렉션 이름을 지정하세요
-                      .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                      .delete();
-                  print('문서 삭제 완료');
-                } catch (e) {
-                  print('문서 삭제 오류: $e');
-                }
-                Navigator.pop(context);
 
-                try {
-                  await FirebaseFirestore.instance
-                      .collection(CarListAdress)
-                      .doc(dataId)
-                      .update({
-                    'out': FieldValue.serverTimestamp(),
-                    'outName': name,
-                    'outLocation': location,
-                    'movedLocation': '$movedLocation',
-                    'wigetName': wigetName,
-                    'movingTime': movingTime,
-                    'etc': etc,
-                  });
-                } catch (e) {
-                  print(e);
-                  print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('하루 지난 데이터 입니다 '),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('확인'),
-                            ),
-                          ],
-                        );
-                      });
-                }
-              },
-              child: Text(
-                '출차완료',
-                style: TextStyle(
-                  fontSize: 17, // 텍스트 크기 증가
-                  fontWeight: FontWeight.bold, // 텍스트를 굵게
-                  color: Colors.black87, // 텍스트 색상
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                backgroundColor: Colors.red, // 버튼 색상
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      content: Container(
-        width: MediaQuery.of(context).size.width.clamp(0, 290),
-        height: 260,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.blue, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context); // 첫 번째 Dialog 닫기
 
-                      if (carModelFrom == null || carModelFrom.trim().isEmpty) {
-                        await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              titlePadding:
-                                  const EdgeInsets.fromLTRB(24, 24, 24, 8),
-                              contentPadding:
-                                  const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                              actionsPadding:
-                                  const EdgeInsets.only(right: 12, bottom: 12),
-                              title: Row(
-                                children: [
-                                  Icon(Icons.warning_amber_rounded,
-                                      color: Colors.orange, size: 28),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    '안내',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              content: Text(
-                                '차종을 넣어주세요.',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    '닫기',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        return;
-                      }
-
-                      await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ElectricButtonDialog(
-                            carNumber: carNumber,
-                            name: name,
-                            color: color,
-                            location: location,
-                            dateTime: dateTime,
-                            dataId: dataId,
-                            etc: etc,
-                            remainTime: remainTime,
-                            movedLocation: movedLocation,
-                            wigetName: wigetName,
-                            movingTime: movingTime,
-                            getMovingTime: getMovingTime,
-                            carModelFrom: carModelFrom,
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      '전기차 등록',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'location': 0,
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '입차대기로이동',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'etc': '',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '특이사항삭제',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'color': 1,
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '출차취소',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '돌아가기',
-                      style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void showBrandSelectDialog(BuildContext rootContext) {
-    showDialog(
-      context: rootContext,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            String? selectedBrand;
-
-            // 탭 인덱스에 따른 브랜드 맵 선택
-            Map<String, List<String>> getSelectedBrandMap() {
-              if (selectedTabIndex == 0) return widget.domesticBrands;
-              if (selectedTabIndex == 1) return widget.importedFamousBrands;
-              return widget.otherBrands;
-            }
-
-            return AlertDialog(
-              title: const Text(
-                '브랜드를 선택하세요',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width.clamp(0, 290),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    /// 🔘 탭 버튼
-                    ToggleButtons(
-                      isSelected: [
-                        selectedTabIndex == 0,
-                        selectedTabIndex == 1,
-                        selectedTabIndex == 2,
-                      ],
-                      onPressed: (index) {
-                        setState(() {
-                          selectedTabIndex = index;
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      selectedColor: Colors.white,
-                      fillColor: Colors.blue,
-                      color: Colors.black,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Text('국산'),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Text('수입'),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Text('기타'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    /// 🚗 브랜드 그리드
-                    Container(
-                      height: 350,
-                      decoration: BoxDecoration(
-                        color: Colors.black12,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                        padding: const EdgeInsets.all(8),
-                        childAspectRatio: 1,
-                        children:
-                            getSelectedBrandMap().keys.map<Widget>((brand) {
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(6),
-                              onTap: () {
-                                Navigator.pop(dialogContext); // ✅ 브랜드 다이얼로그 닫기
-
-                                Future.microtask(() {
-                                  showDialog(
-                                    context: rootContext, // ✅ 화면 context
-                                    builder: (BuildContext carDialogContext) {
-                                      return carModel(
-                                        rootContext,
-                                        carDialogContext, // ✅ 전달
-                                        brand,
-                                        getSelectedBrandMap(),
-                                      );
-                                    },
-                                  );
-                                });
-                              },
-                              child: Center(
-                                child: Text(
-                                  brand,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('닫기'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget carModel(
-    BuildContext rootContext,
-    BuildContext carDialogContext, // ✅ 추가
-    String brand,
-    Map<String, List<String>> brandModels,
-  ) {
-    return AlertDialog(
-      title: Center(
-        child: Text(
-          brand,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-      ),
-      content: Container(
-        height: 360,
-        width: MediaQuery.of(rootContext).size.width.clamp(0, 290),
-        decoration: BoxDecoration(
-          color: Colors.black12,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: GridView.count(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          padding: const EdgeInsets.all(8),
-          childAspectRatio: 1,
-          children: brandModels[brand]!.map<Widget>((model) {
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(8),
-                onTap: () async {
-                  Navigator.pop(carDialogContext); // ✅ carModel 닫기
-
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection(FIELD)
-                        .doc(dataId)
-                        .update({
-                      'carBrand': brand,
-                      'carModel': model,
-                    });
-                  } catch (e) {
-                    print('업데이트 에러: $e');
-                  }
-
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection((color == 5 ? Color5List : CarListAdress))
-                        .doc(dataId)
-                        .update({
-                      'carBrand': brand,
-                      'carModel': model,
-                    });
-                  } catch (e) {
-                    print('업데이트 에러: $e');
-                  }
-                },
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Text(
-                      model,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            /// 🔙 뒤로 → 브랜드 선택 다시 열기
-            TextButton.icon(
-              onPressed: () {
-                Navigator.pop(carDialogContext); // 차종 닫기
-                showBrandSelectDialog(rootContext); // 브랜드 다시 열기
-              },
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('뒤로'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(carDialogContext),
-              child: const Text('닫기'),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 }

@@ -42,8 +42,8 @@ class _StandByState extends State<StandBy> {
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
   String option6 = ''; //최근 3종 변경자 이름
-  //아래는 없음
-  String option7 = '';
+  int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+  //아래아직없음
   String option8 = '';
   String option9 = '';
   String option10 = '';
@@ -272,6 +272,54 @@ class _StandByState extends State<StandBy> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'location': 11,
+                          'name': '',
+                          'option1': '',
+                          'etc': '',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(Color5List)
+                            .doc(option1)
+                            .delete();
+                      } catch (e) {
+                        print('데이터가 존재하지 않습니다');
+                      }
+                    },
+                    child: Text(
+                      '시승취소',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 11),
+                      backgroundColor: Colors.deepOrange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Row(
               children: [
                 Expanded(
@@ -564,53 +612,7 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'location': 11,
-                          'name': '',
-                          'option1': '',
-                          'etc': '',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(Color5List)
-                            .doc(option1)
-                            .delete();
-                      } catch (e) {
-                        print('데이터가 존재하지 않습니다');
-                      }
-                    },
-                    child: Text(
-                      '시승취소',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.deepOrange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
             Row(
               children: [
                 Expanded(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ForgenesisCard extends StatelessWidget {
-  final String carBrand;
+  final String carModel;
   final String carNumber;
 
-  const ForgenesisCard({super.key,
-    required this.carBrand,
+  const ForgenesisCard({
+    super.key,
+    required this.carModel,
     required this.carNumber,
   });
 
@@ -13,9 +14,9 @@ class ForgenesisCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 56,
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 22), // ⭐ 전체 여백 증가
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.green.shade400, // ⭐ 연한 배경
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -26,23 +27,31 @@ class ForgenesisCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // 🚗 차량 브랜드
-          Text(
-            carBrand,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.8,
-              color: Colors.black87,
+          const SizedBox(width: 50), // ⭐ 왼쪽 숨 쉴 공간
+
+          // 🚗 차종
+          SizedBox(
+            width: 150,
+            child: Text(
+              carModel,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+                color: Colors.black87,
+              ),
             ),
           ),
 
-          // 🔢 차량 번호 (배지 스타일)
+          const Spacer(),
+
+          // 🔢 차량 번호
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 12,
+              horizontal: 14,
               vertical: 6,
             ),
             decoration: BoxDecoration(
@@ -59,9 +68,10 @@ class ForgenesisCard extends StatelessWidget {
               ),
             ),
           ),
+
+          const SizedBox(width: 50), // ⭐ 오른쪽 숨 쉴 공간
         ],
       ),
     );
-
   }
 }

@@ -645,13 +645,13 @@ class _Team2ViewState extends State<Team2View> {
                           'movingTime': '',
                           'carBrand': '',
                           'carModel': '',
-                          'option1': '',
-                          'option2': '',
-                          'option3': '',
-                          'option4': '',
-                          'option5': '',
-                          'option6': '',
-                          'option7': '',
+                          'option1': '',            //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
+                          'option2': '',            //하이패스
+                          'option3': '',            //기름잔량
+                          'option4': '',            //총거리
+                          'option5': '',           //시승차 기타
+                          'option6': '',          //최근 3종 변경자 이름
+                          'option7': 0,          //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                           'option8': '',
                           'option9': '',
                           'option10': '',

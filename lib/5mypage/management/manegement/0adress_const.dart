@@ -26,12 +26,12 @@ String getBrandNameList() {
     return 'local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/brandName/';
 }
 
-String getForGenesis(String teamDocId) {
+String getForFieldAdress(String teamDocId) {
   if (teamDocId == 'PJcc0iQSHShpJvONGBC7') {
-    return 'local/q0LRMbznxA2yPca1DKNw/team1/SBMhSMQHzp4A0pnveh5L/forGenesis/';
+    return 'local/q0LRMbznxA2yPca1DKNw/team1/fL35GKC4jObRZpSPmSQ8/field/';
   } else if (teamDocId == 'zSvgctyCZUnOx8rYMioF') {
-    return 'local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/forGenesis/';
+    return 'local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field/';
   } else {
-    return 'local/q0LRMbznxA2yPca1DKNw/$teamDocId/SBMhSMQHzp4A0pnveh5L/forGenesis/'; // 기본 경로 설정
+    return 'local/q0LRMbznxA2yPca1DKNw/$teamDocId/fL35GKC4jObRZpSPmSQ8/field/'; // 기본 경로 설정
   }
 }

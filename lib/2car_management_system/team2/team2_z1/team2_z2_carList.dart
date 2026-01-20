@@ -389,7 +389,7 @@ class ListModel extends StatelessWidget {
                   carNumber = docs[index]['carNumber'];
                   Timestamp sam = docs[index]['enter']; //입차시각
                   enterTime = getInTime(sam); //입차시각 변환코드
-                  enterName = docs[index]['wigetName']; //입차한사람 이름
+                  enterName = docs[index]['enterName']; //입차한사람 이름
                   selfParking = docs[index]
                       ['enterName']; // 자가주차하면 enterName으로 들어간데이터가 여기에 저장됨
                   etc = docs[index]['etc']; //특이사항
@@ -478,6 +478,7 @@ class ListModel extends StatelessWidget {
       },
     );
   }
+
 }
 
 void showCarInfoBottomSheet2(
@@ -499,326 +500,267 @@ void showCarInfoBottomSheet2(
     leftGasAfter,
     hiPassAfter,
     totalKmAfter,
-    option1,
+    option1,                    //시승종료후 차량 내려서 3대 기록한사람
 ) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return Container(
-        height: 400,
+        height: 600,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    /// 🚗 차종 (없으니까 변수만 자리 확보)
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        '차종: $carModel',
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '차종 : $carModel',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
-                          color: Colors.black87,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ),
+                      SizedBox(width: 20,),
+                      Text(
+                        '차번호 : $carNumber',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 30,),
 
-                    /// 🗑 삭제
-                    IconButton(
-                      tooltip: '삭제',
-                      icon: const Icon(Icons.delete_outline),
-                      color: Colors.red,
-                      onPressed: () {
-                        Navigator.of(context).pop(); // 바텀시트 닫기
-
-                        showDialog(
-                          context: context,
-                          builder: (dialogContext) {
-                            return AlertDialog(
-                              title: const Text('삭제 확인'),
-                              content: const Text(
-                                '정말로 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(dialogContext),
-                                  child: const Text('취소'),
+                      IconButton(
+                        tooltip: '삭제',
+                        icon: const Icon(Icons.delete_outline),
+                        color: Colors.red,
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                title: const Text('삭제 확인'),
+                                content: const Text(
+                                  '정말로 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.',
                                 ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext),
+                                    child: const Text('취소'),
                                   ),
-                                  onPressed: () async {
-                                    try {
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    onPressed: () async {
                                       await FirebaseFirestore.instance
                                           .collection(COLOR5 + adress)
                                           .doc(id)
                                           .delete();
-
                                       Navigator.pop(dialogContext);
-                                      print('삭제 완료');
-                                    } catch (e) {
-                                      print('삭제 중 오류 발생: $e');
-                                    }
-                                  },
-                                  child: const Text('삭제'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    /// 🚘 차번호 (메인)
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        '차번호: $carNumber',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                                    },
+                                    child: const Text('삭제'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        '시승상태: $outName',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        '상태표시: ???',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  color: Colors.black, // 선 색상
-                  thickness: 2.0, // 선 두께
-                ),
-                Container(
-                  // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '상태',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '스탠바이',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '시승출발',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '시승종료',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '시각',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '${enterTime ?? '-'}분',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$movingTime분',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '${outTime != null ? getOutTime(outTime!) : ''}분',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(
-                        color: Colors.black, // 선 색상
-                        thickness: 2.0, // 선 두께
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '상태',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '주유잔량',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '하이패스',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '총거리',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '전',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$leftGas km',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$hiPass원',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$totalKm km',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '후($option1)',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$leftGasAfter km',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$hiPassAfter원',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            '$totalKmAfter km',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(
-                        color: Colors.black, // 선 색상
-                        thickness: 2.0, // 선 두께
-                      ),
-                      Text(
-                        '특이사항',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(etc),
-                        ],
-                      )
                     ],
                   ),
                 ),
+
+                const SizedBox(height: 5),
+
+                /// =====================
+                /// 🕒 상태 / 시각 카드
+                /// =====================
+                _card(
+                  child: Column(
+                    children: [
+                      _rowHeader(['상태', '스탠바이', '시승출발', '시승종료']),
+                      const SizedBox(height: 8),
+                      _rowValue([
+                        '시각',
+                        '${enterTime ?? '-'}분',
+                        '$movingTime분',
+                        outTime != null ? '${getOutTime(outTime)}분' : '-',
+                      ]),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                /// =====================
+                /// ⛽ 주유 / 거리 카드
+                /// =====================
+                _card(
+                  child: Column(
+                    children: [
+                      _rowHeader(['상태', '주유잔량', '하이패스', '총거리']),
+                      const SizedBox(height: 8),
+                      _rowValue([
+                        '시승전',
+                        '$leftGas km',
+                        '$hiPass 원',
+                        '$totalKm km',
+                      ]),
+                      const SizedBox(height: 6),
+                      _rowValue([
+                        '시승후',
+                        '$leftGasAfter km',
+                        '$hiPassAfter 원',
+                        '$totalKmAfter km',
+                      ]),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+
+                /// =====================
+                /// 👤 시승상태 카드 (변경됨)
+                /// =====================
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승준비 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell(enterName),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승복귀 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell(option1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                _card(
+                  child: Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '특이사항',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(etc.isNotEmpty ? etc : ''),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
               ],
             ),
           ),
         ),
       );
     },
+  );
+}
+
+
+
+Widget _cell(String text, {TextAlign align = TextAlign.center}) {
+  return Text(
+    text,
+    textAlign: align,
+    style: const TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+}
+
+Widget _rowHeader(List<String> texts) {
+  return Row(
+    children: texts
+        .map(
+          (t) => Expanded(
+        child: _cell(
+          t,
+          align: TextAlign.center,
+        ),
+      ),
+    )
+        .toList(),
+  );
+}
+
+Widget _rowValue(List<String> texts) {
+  return Row(
+    children: texts
+        .map(
+          (t) => Expanded(
+        child: _cell(t),
+      ),
+    )
+        .toList(),
+  );
+}
+
+Widget _card({required Widget child}) {
+  return Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.06),
+          blurRadius: 8,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    ),
+    child: child,
   );
 }

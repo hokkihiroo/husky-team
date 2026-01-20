@@ -42,8 +42,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
   String option6 = ''; //최근 3종 변경자 이름
+  int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   //아래는 없음
-  String option7 = '';
   String option8 = '';
   String option9 = '';
   String option10 = '';
