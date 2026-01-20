@@ -673,24 +673,50 @@ void showCarInfoBottomSheet2(
                 ),
 
                 const SizedBox(height: 5),
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승상태 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('대면시승'),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승상태 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('c1'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
 
                 _card(
                   child: Row(
                     children: [
-                      SizedBox(width: 20,),
+                      SizedBox(width: 10,),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
                           children: [
                             const Text(
-                              '특이사항',
+                              '특이사항 :',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(etc.isNotEmpty ? etc : ''),
+                            SizedBox(width: 5,),
+                            Text('가나다라마바사아자차타파하마나아라하바자'),
+                      //      etc.isNotEmpty ? etc :
                           ],
                         ),
                       ),
