@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
 import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric_selector.dart';
 
+import '../team2-2/team2_4_3_repository.dart';
 import 'team2_numbercard.dart';
 
 class CarState extends StatefulWidget {
@@ -34,6 +35,8 @@ class CarState extends StatefulWidget {
 }
 
 class _CarStateState extends State<CarState> {
+  final repo = StateRepository(); //시승차 상태리스트 객체
+
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
   String carNumber = ''; // 차번호 클릭시 차번호 추출
   int location = 0; //차번호 클릭시 그차번호 위치
@@ -63,7 +66,8 @@ class _CarStateState extends State<CarState> {
   int option3 = 0; // 주유잔량
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
-  String option6 = ''; //최근 3종 변경자 이름하려했는데 컬러5리스트에만 작성하면 되는거라 거긴 option1에 저장함 그래서 이건 사실상 다른용도로 써도될것같음
+  String option6 =
+      ''; //최근 3종 변경자 이름하려했는데 컬러5리스트에만 작성하면 되는거라 거긴 option1에 저장함 그래서 이건 사실상 다른용도로 써도될것같음
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   //아래는 없음
   String option8 = '';
@@ -1779,7 +1783,14 @@ class _CarStateState extends State<CarState> {
                     } catch (e) {
                       print('문서 삭제 오류: $e');
                     }
-
+                    try {
+                      await repo.createData(
+                        dataId: dataId,
+                        state: '시승복귀',
+                      );
+                    } catch (e) {
+                      print('문서 삭제 오류: $e');
+                    }
                     try {
                       await FirebaseFirestore.instance
                           .collection(Color5List)
