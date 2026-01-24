@@ -35,3 +35,11 @@ String getForFieldAdress(String teamDocId) {
     return 'local/q0LRMbznxA2yPca1DKNw/$teamDocId/fL35GKC4jObRZpSPmSQ8/field/'; // 기본 경로 설정
   }
 }
+
+
+String carStateAddress() {
+  final now = DateTime.now();
+  final year = now.year.toString();
+  final month = now.month.toString().padLeft(2, '0');
+  return year + month ;
+}

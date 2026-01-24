@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team2/team2-2/team2_3_standbycard.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_3_repository.dart';
 
 import '../team2_adress_const.dart';
 
@@ -17,6 +18,7 @@ class StandBy extends StatefulWidget {
 }
 
 class _StandByState extends State<StandBy> {
+  final repo = StateRepository();
   String Color5List = COLOR5 + formatTodayDate();
 
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
@@ -277,6 +279,8 @@ class _StandByState extends State<StandBy> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
+                      final nowLocation = getLocationName(location); //시승차 위치파악함수
+                      
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
@@ -298,6 +302,12 @@ class _StandByState extends State<StandBy> {
                       } catch (e) {
                         print('데이터가 존재하지 않습니다');
                       }
+                      await repo.createData(
+                        dataId: dataId,
+                        state: '$nowLocation -> B1(시승취소)',
+                      );
+
+
                     },
                     child: Text(
                       '시승취소',

@@ -25,7 +25,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
   String Color5List = COLOR5 + formatTodayDate();
 
-  String thisMonth='';
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
   String carNumber = ''; // 차번호 클릭시 차번호 추출
   int location = 0; //차번호 클릭시 그차번호 위치
@@ -101,7 +100,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
             return GestureDetector(
               onTap: () async {
                 //  활성화 시키면 bar 가 바뀜 데이터 클릭시마다
-                thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
                 Color5List = COLOR5 + formatTodayDate();
                 var document = displayList[index];
                 dataId = document.id;
@@ -286,6 +284,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
+                      final nowLocation = getLocationName(location); //시승차 위치파악함수
+
                       Color5List = COLOR5 + formatTodayDate();
                       String documentId = FirebaseFirestore.instance
                           .collection(Color5List)
@@ -345,6 +345,12 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                           'option10': '',
                         });
                       } catch (e) {}
+
+                      await repo.createData(
+                        dataId: dataId,
+                        state: '$nowLocation > 스탠바이',
+                      );
+
                     },
                     child: Text(
                       '스탠바이',
@@ -675,6 +681,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       ),
                     ),
                     onPressed: () async {
+                     final nowLocation = getLocationName(location);
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
@@ -686,16 +693,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       } catch (e) {
                         print(e);
                       }
-
                       await repo.createData(
                         dataId: dataId,
-                        thisMonth: thisMonth,
-
+                        state: '$nowLocation -> B1',
                       );
-
-
-
-
                     },
                     child: Text(
                       'B1',
@@ -721,7 +722,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pop(context);
+                      final nowLocation = getLocationName(location);
 
                       try {
                         await FirebaseFirestore.instance
@@ -733,6 +734,14 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       } catch (e) {
                         print(e);
                       }
+                      Navigator.pop(context);
+
+
+                      await repo.createData(
+                        dataId: dataId,
+                        state: '$nowLocation -> B2',
+                      );
+
                     },
                     child: Text(
                       'B2',
@@ -758,7 +767,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pop(context);
+                      final nowLocation = getLocationName(location);
+
 
                       try {
                         await FirebaseFirestore.instance
@@ -770,6 +780,14 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       } catch (e) {
                         print(e);
                       }
+                      Navigator.pop(context);
+
+                      await repo.createData(
+                        dataId: dataId,
+                        state: '$nowLocation -> 외부주차장',
+
+                      );
+
                     },
                     child: Text(
                       '외부로',

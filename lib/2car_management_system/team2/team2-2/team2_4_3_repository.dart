@@ -17,8 +17,12 @@ class StateRepository {
 
   Future<void> createData({
     required String dataId,
-    required String thisMonth,
+    required String state,
   }) async {
+
+   final thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
+
+
     try {
       await _firestore
           .collection(collection)
@@ -30,6 +34,7 @@ class StateRepository {
         'name': 'name',
         'color': 'color',
         'location': 'location',
+        'state': state,
       });
       print('✅ 데이터 생성 성공');
     } catch (e) {

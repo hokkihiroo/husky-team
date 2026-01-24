@@ -7,7 +7,7 @@ final String carModel;
 
 final String theDay;
 final String theTime;
-final String etc;
+final String state;
 
 
 const StateListCard(
@@ -16,7 +16,7 @@ const StateListCard(
         required this.carModel,
         required this.theDay,
         required this.theTime,
-        required this.etc,
+        required this.state,
         });
 
 
@@ -35,7 +35,8 @@ const StateListCard(
           SizedBox(width: 6,),
           _buildCell(width: 70, text: theDay),
           _buildCell(width: 60, text: theTime),
-          _buildCell(width: 170, text: etc),
+          SizedBox(width: 20,),
+          _buildCell(width: 200, text: state),
         ],
       ),
     );
@@ -48,13 +49,13 @@ const StateListCard(
   }) {
     return Container(
       width: width,
-      alignment: Alignment.center, // 텍스트 왼쪽 정렬
+      alignment: Alignment.centerLeft, // 텍스트 왼쪽 정렬
       child: Text(
         text,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Colors.yellow,
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
       ),

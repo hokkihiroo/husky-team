@@ -134,6 +134,23 @@ class _ForGenesisState extends State<ForGenesis> {
                         }
                         Navigator.of(context).pop();
 
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection(field)
+                              .doc(documentId)
+                              .collection(thisMonth)
+                              .doc()
+                              .set({
+                            'createdAt': FieldValue.serverTimestamp(),
+                            'name': 'name',
+                            'color': 'color',
+                            'location': 'location',
+                            'state': '시승차량입고',
+                          });
+                        } catch (e) {
+                          print('저장 에러: $e');
+                        }
+
                       },
                       child: Text('확인'),
                     ),
@@ -152,6 +169,8 @@ class _ForGenesisState extends State<ForGenesis> {
       },
     );
   }
+
+  String thisMonth='';
 
   @override
   void initState() {
@@ -335,6 +354,8 @@ class _ForGenesisState extends State<ForGenesis> {
               ),
               onPressed: () {
                 _showDialog();
+                thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
+                print(thisMonth);
               },
               child: Text('시승차 추가'),
             ),
