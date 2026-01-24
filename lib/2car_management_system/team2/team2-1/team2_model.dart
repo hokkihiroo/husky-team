@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2_electric_selector.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric_selector.dart';
 
 import 'team2_numbercard.dart';
 
@@ -63,36 +63,37 @@ class _CarStateState extends State<CarState> {
   int option3 = 0; // 주유잔량
   int option4 = 0; //총킬로수
   String option5 = ''; //시승차 기타
-  String option6 = '';  //최근 3종 변경자 이름
-  int option7 =0;         //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+  String option6 = ''; //최근 3종 변경자 이름하려했는데 컬러5리스트에만 작성하면 되는거라 거긴 option1에 저장함 그래서 이건 사실상 다른용도로 써도될것같음
+  int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   //아래는 없음
   String option8 = '';
   String option9 = '';
   String option10 = '';
-  String option11= '';
-  String option12= '';
+  String option11 = '';
+  String option12 = '';
 
+  //주유잔량 하이패스 킬로미터 넣는함수 (아래)
   void showIntInputBottomSheet(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,                          //
-      String movedLocation,                       //주유잔량 하이패스 킬로미터 넣는함수
-      String wigetName,                           //
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+  ) {
     final TextEditingController fuelController = TextEditingController();
     final TextEditingController hipassController = TextEditingController();
     final TextEditingController totalKmController = TextEditingController();
@@ -181,11 +182,7 @@ class _CarStateState extends State<CarState> {
                             final int fuel = int.parse(fuelController.text);
                             final int hiPass = int.parse(hipassController.text);
                             final int totalKm =
-                            int.parse(totalKmController.text);
-
-                            print(fuel);
-                            print(hiPass);
-                            print(totalKm);
+                                int.parse(totalKmController.text);
 
                             // 🔥 Firebase 저장
                             Navigator.pop(sheetContext);
@@ -237,7 +234,7 @@ class _CarStateState extends State<CarState> {
   }
 
   Widget _inputField({
-    required TextEditingController controller,      //이함수는 상잔 주유잔량 하이패스 킬로미터 내용그리는함수
+    required TextEditingController controller, //이함수는 상잔 주유잔량 하이패스 킬로미터 내용그리는함수
     required String label,
     required int maxLength,
     String? suffix,
@@ -268,6 +265,8 @@ class _CarStateState extends State<CarState> {
     super.initState();
     etcController = TextEditingController(text: etc ?? '');
   }
+
+  //브랜드 넣는함수 (아래)
   void showBrandSelectDialog(BuildContext rootContext) {
     showDialog(
       context: rootContext,
@@ -340,7 +339,7 @@ class _CarStateState extends State<CarState> {
                         padding: const EdgeInsets.all(8),
                         childAspectRatio: 1,
                         children:
-                        getSelectedBrandMap().keys.map<Widget>((brand) {
+                            getSelectedBrandMap().keys.map<Widget>((brand) {
                           return Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
@@ -393,14 +392,15 @@ class _CarStateState extends State<CarState> {
         );
       },
     );
-  } //브랜드 넣는함수
+  }
 
-  Widget carModel(                                            //차종넣는함수
-      BuildContext rootContext,
-      BuildContext carDialogContext, // ✅ 추가
-      String brand,
-      Map<String, List<String>> brandModels,
-      ) {
+  //차종넣는함수(아래)
+  Widget carModel(
+    BuildContext rootContext,
+    BuildContext carDialogContext, // ✅ 추가
+    String brand,
+    Map<String, List<String>> brandModels,
+  ) {
     return AlertDialog(
       title: Center(
         child: Text(
@@ -549,18 +549,25 @@ class _CarStateState extends State<CarState> {
                   String getMovingTime = getTodayTime();
                   final BuildContext rootContext = context;
                   option1 = filteredDocs[index]['option1']; //시승차 컬러5에 넣는 문서주소
-                  option2 = int.tryParse(filteredDocs[index]['option2'].toString()) ?? 0;   //하이패스 잔액
-                  option3 = int.tryParse(filteredDocs[index]['option3'].toString()) ?? 0;    //주유잔량
-                  option4 = int.tryParse(filteredDocs[index]['option4'].toString()) ?? 0;   //총킬로수
+                  option2 =
+                      int.tryParse(filteredDocs[index]['option2'].toString()) ??
+                          0; //하이패스 잔액
+                  option3 =
+                      int.tryParse(filteredDocs[index]['option3'].toString()) ??
+                          0; //주유잔량
+                  option4 =
+                      int.tryParse(filteredDocs[index]['option4'].toString()) ??
+                          0; //총킬로수
                   option5 = filteredDocs[index]['option5']; //시승차 기타
                   option6 = filteredDocs[index]['option6']; //최근 3종 변경자 이름
-                  option7 = filteredDocs[index]['option7'];   //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                  option7 = filteredDocs[index]
+                      ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                   //아래없음
-                  option8 = filteredDocs[index]['option8'];                          //시승차 예비용
-                  option9 = filteredDocs[index]['option9'];                         //시승차 예비용
-                  option10 = filteredDocs[index]['option10'];                      //시승차 예비용
-                  option11= filteredDocs[index]['option11'];                            //시승차 예비용
-                  option12= filteredDocs[index]['option12'];                          //시승차 예비용
+                  option8 = filteredDocs[index]['option8']; //시승차 예비용
+                  option9 = filteredDocs[index]['option9']; //시승차 예비용
+                  option10 = filteredDocs[index]['option10']; //시승차 예비용
+                  option11 = filteredDocs[index]['option11']; //시승차 예비용
+                  option12 = filteredDocs[index]['option12']; //시승차 예비용
 
                   showDialog(
                     context: rootContext,
@@ -586,12 +593,12 @@ class _CarStateState extends State<CarState> {
                           option4,
                           option5,
                           option6,
-                          // option7,
-                          // option8,
-                          // option9,
-                          // option10,
-                          // option11,
-                          // option12,
+                          option7,
+                          option8,
+                          option9,
+                          option10,
+                          option11,
+                          option12,
                           rootContext,
                           context,
                         );
@@ -1351,11 +1358,11 @@ class _CarStateState extends State<CarState> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             titlePadding:
-                            const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                                const EdgeInsets.fromLTRB(24, 24, 24, 8),
                             contentPadding:
-                            const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                                const EdgeInsets.fromLTRB(24, 0, 24, 16),
                             actionsPadding:
-                            const EdgeInsets.only(right: 12, bottom: 12),
+                                const EdgeInsets.only(right: 12, bottom: 12),
                             title: Row(
                               children: [
                                 Icon(Icons.warning_amber_rounded,
@@ -1465,7 +1472,7 @@ class _CarStateState extends State<CarState> {
     String remainTime,
     String movedLocation,
     String wigetName,
-    String movingTime,                      //시승차 선택했을때 나오는함수 그다음 저위로 감
+    String movingTime, //시승차 선택했을때 나오는함수 그다음 저위로 감
     String getMovingTime,
     String carModelFrom,
     String option1,
@@ -1474,6 +1481,12 @@ class _CarStateState extends State<CarState> {
     int option4,
     String option5,
     String option6,
+    int option7,
+    String option8,
+    String option9,
+    String option10,
+    String option11,
+    String option12,
     BuildContext rootContext, // 화면 context (show용)
     BuildContext dialogContext, // bottomColor5 닫기용
   ) {
@@ -1617,29 +1630,29 @@ class _CarStateState extends State<CarState> {
   }
 
   void bottomColor5Final(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,                      //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      int fuel,
-      int hiPass,
-      int totalKm,
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+    int fuel,
+    int hiPass,
+    int totalKm,
+  ) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -1716,9 +1729,15 @@ class _CarStateState extends State<CarState> {
               Row(
                 children: [
                   const SizedBox(width: 70, child: Text('변경한 사람')),
-                  const Expanded(child: SizedBox(), // ⭐ 빈 칸 유지
+                  const Expanded(
+                    child: SizedBox(), // ⭐ 빈 칸 유지
                   ),
-                  Expanded(child: Text(widget.name, textAlign: TextAlign.center,),),
+                  Expanded(
+                    child: Text(
+                      widget.name,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -1752,11 +1771,10 @@ class _CarStateState extends State<CarState> {
                           .update({
                         'location': 11,
                         'name': '',
-                        'option1': '',     //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
-                        'option2': hiPass,           //하이패스
-                        'option3': fuel,            //기름잔량
-                        'option4': totalKm,         //총거리
-
+                        'option1': '', //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
+                        'option2': hiPass, //하이패스
+                        'option3': fuel, //기름잔량
+                        'option4': totalKm, //총거리
                       });
                     } catch (e) {
                       print('문서 삭제 오류: $e');
@@ -1775,7 +1793,7 @@ class _CarStateState extends State<CarState> {
                         'totalKmAfter': totalKm,
                         'leftGasAfter': fuel,
                         'hiPassAfter': hiPass,
-                        'option1': widget.name,    //최종 3종 데이터 변경자
+                        'option1': widget.name, //최종 3종 데이터 변경자
                       });
                     } catch (e) {
                       print(e);
@@ -1813,9 +1831,4 @@ class _CarStateState extends State<CarState> {
       },
     );
   }
-
-
-
-
-
 }

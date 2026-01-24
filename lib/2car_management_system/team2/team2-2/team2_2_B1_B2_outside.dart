@@ -1,24 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_standbycard.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_1_stateList.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_3_repository.dart';
+import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_numbercard.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_3_standbycard.dart';
 
-import '../team2_adress_const.dart';
-
-class StandBy extends StatefulWidget {
+class B1B2Outside extends StatefulWidget {
   final String name;
+  final int location;
 
-  const StandBy({
+  const B1B2Outside({
     super.key,
     required this.name,
+    required this.location,
   });
 
   @override
-  State<StandBy> createState() => _StandByState();
+  State<B1B2Outside> createState() => _B1B2OutsideStateState();
 }
 
-class _StandByState extends State<StandBy> {
+class _B1B2OutsideStateState extends State<B1B2Outside> {
+  final repo = StateRepository();
+
   String Color5List = COLOR5 + formatTodayDate();
 
+  String thisMonth='';
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
   String carNumber = ''; // 차번호 클릭시 차번호 추출
   int location = 0; //차번호 클릭시 그차번호 위치
@@ -34,8 +41,6 @@ class _StandByState extends State<StandBy> {
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
 
-  late TextEditingController etcController;
-
   String option1 = ''; //컬러5에 들어갈 문서 필드에서 뽑아낸문서
   int option2 = 0; //하이패스잔액
   int option3 = 0; // 주유잔량
@@ -43,12 +48,14 @@ class _StandByState extends State<StandBy> {
   String option5 = ''; //시승차 기타
   String option6 = ''; //최근 3종 변경자 이름
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
-  //아래아직없음
+  //아래는 없음
   String option8 = '';
   String option9 = '';
   String option10 = '';
   String option11 = '';
   String option12 = '';
+
+  late TextEditingController etcController;
 
   @override
   void initState() {
@@ -76,7 +83,7 @@ class _StandByState extends State<StandBy> {
 
         final List<QueryDocumentSnapshot> displayList = docs.where((doc) {
           final int docLocation = doc['location'];
-          return docLocation == 0 || docLocation == 5;
+          return docLocation == widget.location;
         }).toList();
 
         return GridView.builder(
@@ -94,9 +101,11 @@ class _StandByState extends State<StandBy> {
             return GestureDetector(
               onTap: () async {
                 //  활성화 시키면 bar 가 바뀜 데이터 클릭시마다
+                thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
                 Color5List = COLOR5 + formatTodayDate();
                 var document = displayList[index];
                 dataId = document.id;
+                print(dataId);
                 name = displayList[index]['name'];
                 enterName = displayList[index]['enterName'];
                 carNumber = displayList[index]['carNumber'];
@@ -126,8 +135,8 @@ class _StandByState extends State<StandBy> {
                         0; //총킬로수
                 option5 = displayList[index]['option5']; //시승차 기타
                 option6 = displayList[index]['option6']; //3종 최근변경자 이름
+                option7 = displayList[index]['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
 
-                option7 = displayList[index]['option7']; //시승차 예비용
                 option8 = displayList[index]['option8']; //시승차 예비용
                 option9 = displayList[index]['option9']; //시승차 예비용
                 option10 = displayList[index]['option10']; //시승차 예비용
@@ -277,31 +286,68 @@ class _StandByState extends State<StandBy> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
+                      Color5List = COLOR5 + formatTodayDate();
+                      String documentId = FirebaseFirestore.instance
+                          .collection(Color5List)
+                          .doc()
+                          .id;
+
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
-                          'location': 11,
-                          'name': '',
-                          'option1': '',
-                          'etc': '',
+                          'location': 0,
+                          'option1': documentId,
+                          //시승 출발시 시승차 리스트에 문서아이디가 필요하나 필드아이디와 동일시키는게 가장좋은 방법이나
+                          // 추가로 시승이 나가면 앞서 나간 시승리스트에 같은 문서아이디에 모든 데이터를 덮어버리는 부분으로
+                          // 새로운 문서아이디를 발급받아 진행시키려했더니 고객차량관리 창에서 해당 문서아이디를 못찾아
+                          // 결국DB에 저장하는방법 선택
                         });
                       } catch (e) {
                         print(e);
                       }
                       Navigator.pop(context);
+
                       try {
                         await FirebaseFirestore.instance
                             .collection(Color5List)
-                            .doc(option1)
-                            .delete();
-                      } catch (e) {
-                        print('데이터가 존재하지 않습니다');
-                      }
+                            .doc(documentId)
+                            .set({
+                          'carNumber': carNumber,
+                          'enterName': widget.name,
+                          //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
+                          'enter': FieldValue.serverTimestamp(),
+                          'out': '',
+                          'outName': '',
+                          'outLocation': 10,
+                          'etc': etc,
+                          'movedLocation': '',
+                          'wigetName': '',
+                          'movingTime': FieldValue.serverTimestamp(),
+                          'carBrand': '제네시스',
+                          'carModel': carModelFrom,
+                          'totalKm': option4,
+                          'leftGas': option3,
+                          'hiPass': option2,
+                          'totalKmAfter': '',
+                          'leftGasAfter': '',
+                          'hiPassAfter': '',
+                          'option1': '',
+                          'option2': '',
+                          'option3': '',
+                          'option4': '',
+                          'option5': '',
+                          'option6': '',
+                          'option7': '',
+                          'option8': '',
+                          'option9': '',
+                          'option10': '',
+                        });
+                      } catch (e) {}
                     },
                     child: Text(
-                      '시승취소',
+                      '스탠바이',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -310,20 +356,27 @@ class _StandByState extends State<StandBy> {
                     ),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 11),
-                      backgroundColor: Colors.deepOrange,
+                          horizontal: 20, vertical: 14),
+                      backgroundColor: Colors.purple,
+                      elevation: 4, // 살짝 입체감
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          width: 2, // 👈 테두리 두께
+                          color: Colors.purple,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
+            SizedBox(
+              height: 3,
+            ),
             Row(
               children: [
                 Expanded(
-                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -346,7 +399,7 @@ class _StandByState extends State<StandBy> {
                       }
                     },
                     child: Text(
-                      '대면',
+                      '대면시승',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -359,7 +412,6 @@ class _StandByState extends State<StandBy> {
                   width: 5,
                 ),
                 Expanded(
-                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -383,7 +435,7 @@ class _StandByState extends State<StandBy> {
                       }
                     },
                     child: Text(
-                      '비대면',
+                      '비대면시승',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -393,11 +445,10 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
               ],
-            ),
+            ),        //대면비대면
             Row(
               children: [
                 Expanded(
-                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -433,7 +484,6 @@ class _StandByState extends State<StandBy> {
                   width: 5,
                 ),
                 Expanded(
-                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -466,10 +516,82 @@ class _StandByState extends State<StandBy> {
                     ),
                   ),
                 ),
+
               ],
-            ),
+            ),      //현장
             Row(
               children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '교육',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '교육',
+                      style: TextStyle(
+                        fontSize: 13, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name': '컬러',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '컬러',
+                      style: TextStyle(
+                        fontSize: 13, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -495,7 +617,7 @@ class _StandByState extends State<StandBy> {
                     child: Text(
                       '주유',
                       style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
+                        fontSize: 13, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -531,7 +653,7 @@ class _StandByState extends State<StandBy> {
                     child: Text(
                       '인도',
                       style: TextStyle(
-                        fontSize: 17, // 텍스트 크기 증가
+                        fontSize: 13, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
@@ -539,10 +661,11 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
               ],
-            ),
+            ),        //교육컬러주유인도
             Row(
               children: [
                 Expanded(
+                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -558,14 +681,24 @@ class _StandByState extends State<StandBy> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
-                          'name': '컬러',
+                          'location': 11,
                         });
                       } catch (e) {
                         print(e);
                       }
+
+                      await repo.createData(
+                        dataId: dataId,
+                        thisMonth: thisMonth,
+
+                      );
+
+
+
+
                     },
                     child: Text(
-                      '컬러확인',
+                      'B1',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -578,6 +711,7 @@ class _StandByState extends State<StandBy> {
                   width: 5,
                 ),
                 Expanded(
+                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -594,14 +728,51 @@ class _StandByState extends State<StandBy> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update({
-                          'name': '교육',
+                          'location': 12,
                         });
                       } catch (e) {
                         print(e);
                       }
                     },
                     child: Text(
-                      '교육용',
+                      'B2',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'location': 13,
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '외부로',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -611,8 +782,7 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
               ],
-            ),
-
+            ),      //이동
             Row(
               children: [
                 Expanded(
@@ -620,7 +790,45 @@ class _StandByState extends State<StandBy> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
-                        vertical: 13, // ⬅ 두께(높이) 증가
+                        vertical: 10, // ⬅ 두께(높이) 증가
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
+                        fontSize: 17,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => StateList(dataId: dataId,),),
+                      );
+                    },
+                    child: Text(
+                      '차량 상태 리스트로 이동',
+                      style: TextStyle(
+                        fontSize: 15, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.grey, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),        //상태리스트이동
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10, // ⬅ 두께(높이) 증가
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -706,8 +914,52 @@ class _StandByState extends State<StandBy> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10, // ⬅ 두께(높이) 증가
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
+                        fontSize: 17,
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore
+                            .instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update({
+                          'etc':'',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '삭제',
+                      style: TextStyle(
+                        fontSize: 15, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.yellow, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            ),
+            ),         //특이사항
             Text(
               '$etc',
               style: TextStyle(

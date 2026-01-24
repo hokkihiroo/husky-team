@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_6_carListCard.dart';
 
-import 'team2_adress_const.dart';
-import 'team2_car_card.dart';
+import '../team2_adress_const.dart';
 
-class CarList extends StatefulWidget {
-  const CarList({super.key});
+class CarListz1 extends StatefulWidget {
+  const CarListz1({super.key});
 
   @override
-  State<CarList> createState() => _CarListState();
+  State<CarListz1> createState() => _CarListState();
 }
 
-class _CarListState extends State<CarList> {
+class _CarListState extends State<CarListz1> {
   DateTime selectedDate = DateTime.now();
   String DBAdress = formatTodayDate();
 
@@ -179,40 +179,31 @@ class _CarListState extends State<CarList> {
     return buffer.toString();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        title: Text(
+          '시승차 일일리스트',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // 고객차 버튼
-            Text(
-              '고객차리스트',
-              style: TextStyle(
-                color:Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.copy),
-            onPressed: () async {
-              final text = await createClipboardText(DBAdress);
-              Clipboard.setData(ClipboardData(text: text));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('고객차 텍스트만 복사되었습니다!')),
-              );
-            },
-          )
+          // IconButton(
+          //   icon: Icon(Icons.copy),
+          //   onPressed: () async {
+          //     final text = await createClipboardText(DBAdress);
+          //     Clipboard.setData(ClipboardData(text: text));
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       SnackBar(content: Text('텍스트가 복사되었습니다!')),
+          //     );
+          //   },
+          // )
         ],
       ),
       body: SingleChildScrollView(
@@ -224,9 +215,7 @@ class _CarListState extends State<CarList> {
               onPressGoToday: goToday,
               selectedDate: selectedDate,
             ),
-            // 🔥 selectedTab 값에 따라 다른 위젯 적용
-        _ListState() ,
-// 기존 ListModel 유지
+            _Color5State(),
             ListModel(
               adress: DBAdress,
             ),
@@ -299,8 +288,8 @@ class _DateControl extends StatelessWidget {
   }
 }
 
-class _ListState extends StatelessWidget {
-  const _ListState({super.key});
+class _Color5State extends StatelessWidget {
+  const _Color5State({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -312,11 +301,11 @@ class _ListState extends StatelessWidget {
         child: Row(
           children: [
             _buildHeaderCell(width: 40, label: '번호'),
-            _buildHeaderCell(width: 70, label: '브랜드'),
             _buildHeaderCell(width: 60, label: '차종'),
-            _buildHeaderCell(width: 60, label: '차량번호'),
-            _buildHeaderCell(width: 60, label: '입차'),
-            _buildHeaderCell(width: 60, label: '출차'),
+            _buildHeaderCell(width: 70, label: '차량번호'),
+            _buildHeaderCell(width: 60, label: '스탠바이'),
+            _buildHeaderCell(width: 60, label: '시승출발'),
+            _buildHeaderCell(width: 60, label: '시승종료'),
           ],
         ),
       ),
@@ -339,8 +328,6 @@ class _ListState extends StatelessWidget {
   }
 }
 
-
-
 class ListModel extends StatelessWidget {
   final String adress;
   String dataId = '';
@@ -352,18 +339,30 @@ class ListModel extends StatelessWidget {
   DateTime dateTime2 = DateTime.now(); //이동할 시각들 뽑음
   String outName = '';
   String outLocation = '';
-  String movedLocation = '';
+  String carModel = '';
   String movingTime = '';
   String selfParking = '';
   String movingTimeForTabOne = '';
 
-  ListModel({super.key, required this.adress,});
+  int leftGas = 0; // 주유잔량
+  int hiPass = 0; //  하이패스잔액
+  int totalKm = 0; // 총킬로수
+  int leftGasAfter = 0; //시승후 주유잔량
+  int hiPassAfter = 0; // 시승후 하이패스잔액
+  int totalKmAfter = 0; //시승후 총킬로수
+
+  String option1 = ''; //최종 3개 (하이패스 잔량 총거리 변경자)
+
+  ListModel({
+    super.key,
+    required this.adress,
+  });
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(CARLIST+adress)
+          .collection(COLOR5 + adress)
           .orderBy('enter')
           .snapshots(),
       builder: (BuildContext context,
@@ -390,7 +389,7 @@ class ListModel extends StatelessWidget {
                   carNumber = docs[index]['carNumber'];
                   Timestamp sam = docs[index]['enter']; //입차시각
                   enterTime = getInTime(sam); //입차시각 변환코드
-                  enterName = docs[index]['wigetName']; //입차한사람 이름
+                  enterName = docs[index]['enterName']; //입차한사람 이름
                   selfParking = docs[index]
                       ['enterName']; // 자가주차하면 enterName으로 들어간데이터가 여기에 저장됨
                   etc = docs[index]['etc']; //특이사항
@@ -408,14 +407,33 @@ class ListModel extends StatelessWidget {
                   int location = docs[index]['outLocation']; //출차한위치 이름
                   outLocation = checkOutLocation(location);
 
-                  movedLocation = docs[index]['movedLocation']; //출차한위치 이름
-
+                  carModel = docs[index]['carModel']; //차종
 
                   final raw = docs[index]['movingTime'];
-                  movingTime = raw is Timestamp
-                      ? movingTimeGet(raw.toDate())
-                      : '';
-                  showCarInfoBottomSheet(
+                  movingTime =
+                      raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
+
+                  option1 = docs[index]['option1'];                           //최종 3개 (하이패스 잔량 총거리 변경자)
+
+                  hiPass =
+                      int.tryParse(docs[index]['hiPass'].toString()) ??
+                          0; //하이패스 잔액
+                  leftGas =
+                      int.tryParse(docs[index]['leftGas'].toString()) ??
+                          0; //주유잔량
+                  totalKm =
+                      int.tryParse(docs[index]['totalKm'].toString()) ??
+                          0; //총킬로수
+                  hiPassAfter =
+                      int.tryParse(docs[index]['hiPassAfter'].toString()) ??
+                          0; //하이패스 잔액
+                  leftGasAfter =
+                      int.tryParse(docs[index]['leftGasAfter'].toString()) ??
+                          0; //주유잔량
+                  totalKmAfter =
+                      int.tryParse(docs[index]['totalKmAfter'].toString()) ??
+                          0; //총킬로수
+                  showCarInfoBottomSheet2(
                     context,
                     dataId,
                     carNumber,
@@ -425,14 +443,21 @@ class ListModel extends StatelessWidget {
                     outName,
                     outTime,
                     outLocation,
-                    movedLocation,
+                    carModel,
+                    movingTime,
                     adress,
-                    selfParking,
+                      leftGas,
+                      hiPass,
+                      totalKm,
+                      leftGasAfter,
+                      hiPassAfter,
+                      totalKmAfter,
+                      option1,
                   );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
-                  child: CarListCard(
+                  child: ListCard(
                     index: index + 1,
                     carNum: docs[index]['carNumber'],
                     inTime: docs[index]['enter'],
@@ -454,189 +479,320 @@ class ListModel extends StatelessWidget {
     );
   }
 
-  void showCarInfoBottomSheet(
-    context,
-    id,
-    carNumber,
-    enterTime,
-    enterName,
-    etc,
-    outName,
-    outTime,
-    outLocation,
-    movedLocation,
-    adress,
-    selfParking,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 400,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+}
+
+void showCarInfoBottomSheet2(
+  context,
+  id,
+  carNumber,
+  enterTime,
+  enterName,
+  etc,
+  outName,
+  outTime,
+  outLocation,
+  carModel,
+  movingTime,
+  adress,
+    leftGas,
+    hiPass,
+    totalKm,
+    leftGasAfter,
+    hiPassAfter,
+    totalKmAfter,
+    option1,                    //시승종료후 차량 내려서 3대 기록한사람
+) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        height: 600,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '차번호:$carNumber',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
+                        '차종 : $carModel',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(width: 20,),
+                      Text(
+                        '차번호 : $carNumber',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // 다이얼로그 닫기
+                      SizedBox(width: 30,),
 
+                      IconButton(
+                        tooltip: '삭제',
+                        icon: const Icon(Icons.delete_outline),
+                        color: Colors.red,
+                        onPressed: () {
+                          Navigator.pop(context);
                           showDialog(
                             context: context,
-                            builder: (BuildContext context) {
+                            builder: (dialogContext) {
                               return AlertDialog(
-                                title: Text("삭제 확인"),
-                                content: Text("정말로 삭제하시겠습니까?"),
+                                title: const Text('삭제 확인'),
+                                content: const Text(
+                                  '정말로 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.',
+                                ),
                                 actions: [
                                   TextButton(
-                                    child: Text("취소"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); // 다이얼로그 닫기
-                                    },
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext),
+                                    child: const Text('취소'),
                                   ),
-                                  TextButton(
-                                    child: Text("삭제"),
+                                  SizedBox(width: 40),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                    ),
                                     onPressed: () async {
-                                      try {
-                                        // 삭제할 문서의 참조를 가져와
-                                        await FirebaseFirestore.instance
-                                            .collection(
-                                                CARLIST + adress) // 예: 'users'
-                                            .doc(id) // 예: 'abc123'
-                                            .delete();
-
-                                        Navigator.of(context).pop(); // 다이얼로그 닫기
-                                        print('삭제 확인됨');
-                                        // 여기에 삭제 완료 후 처리 추가 (예: 스낵바 등)
-                                      } catch (e) {
-                                        print('삭제 중 오류 발생: $e');
-                                        // 오류 처리 로직 추가 가능
-                                      }
+                                      await FirebaseFirestore.instance
+                                          .collection(COLOR5 + adress)
+                                          .doc(id)
+                                          .delete();
+                                      Navigator.pop(dialogContext);
                                     },
+                                    child: const Text(
+                                      '삭제',
+                                      style: TextStyle(
+                                        color: Colors.yellow,
+                                      ),
+                                    ),
+
                                   ),
                                 ],
                               );
                             },
                           );
                         },
-                        style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          backgroundColor: Colors.red.withOpacity(0.1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          '삭제',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.red, // 삭제는 빨간색이 직관적
-                          ),
-                        ),
-                      )
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
+                ),
+
+                const SizedBox(height: 5),
+
+                /// =====================
+                /// 🕒 상태 / 시각 카드
+                /// =====================
+                _card(
+                  child: Column(
+                    children: [
+                      _rowHeader(['상태', '스탠바이', '시승출발', '시승종료']),
+                      const SizedBox(height: 8),
+                      _rowValue([
+                        '시각',
+                        '${enterTime ?? '-'}분',
+                        '$movingTime분',
+                        outTime != null ? '${getOutTime(outTime)}분' : '-',
+                      ]),
+                    ],
                   ),
-                  Container(
-                    // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+
+                const SizedBox(height: 5),
+
+                /// =====================
+                /// ⛽ 주유 / 거리 카드
+                /// =====================
+                _card(
+                  child: Column(
+                    children: [
+                      _rowHeader(['상태', '주유잔량', '하이패스', '총거리']),
+                      const SizedBox(height: 8),
+                      _rowValue([
+                        '시승전',
+                        '$leftGas km',
+                        '$hiPass 원',
+                        '$totalKm km',
+                      ]),
+                      const SizedBox(height: 6),
+                      _rowValue([
+                        '시승후',
+                        '$leftGasAfter km',
+                        '$hiPassAfter 원',
+                        '$totalKmAfter km',
+                      ]),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+
+                /// =====================
+                /// 👤 시승상태 카드 (변경됨)
+                /// =====================
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
                       children: [
-                        Text(
-                          '입차',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승준비 :', align: TextAlign.right),
                         ),
-                        Row(
-                          children: [
-                            Text('시각 : $enterTime분'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('이름 : $enterName'),
-                          ],
+                        Expanded(
+                          flex: 4,
+                          child: _cell(enterName),
                         ),
-                        SizedBox(
-                          height: 10,
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승복귀 :', align: TextAlign.right),
                         ),
-                        Text(
-                          '출차',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                '시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('이름 : ${outName ?? ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('위치 : ${outLocation ?? ''}'),
-                            // Text(selfParking),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '특이사항',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(width: 15,),
-                            Text(
-                              selfParking,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: Colors.blue
-                              ),
-                            ),
-
-
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(etc),
-                          ],
+                        Expanded(
+                          flex: 4,
+                          child: _cell(option1),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+
+                const SizedBox(height: 5),
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승상태 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('대면시승'),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승상태 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('c1'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+
+                _card(
+                  child: Row(
+                    children: [
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Text(
+                              '특이사항 :',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 5,),
+                            Text( etc.isNotEmpty ? etc :''),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
+
+
+
+Widget _cell(String text, {TextAlign align = TextAlign.center}) {
+  return Text(
+    text,
+    textAlign: align,
+    style: const TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+}
+
+Widget _rowHeader(List<String> texts) {
+  return Row(
+    children: texts
+        .map(
+          (t) => Expanded(
+        child: _cell(
+          t,
+          align: TextAlign.center,
+        ),
+      ),
+    )
+        .toList(),
+  );
+}
+
+Widget _rowValue(List<String> texts) {
+  return Row(
+    children: texts
+        .map(
+          (t) => Expanded(
+        child: _cell(t),
+      ),
+    )
+        .toList(),
+  );
+}
+
+Widget _card({required Widget child}) {
+  return Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.06),
+          blurRadius: 8,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    ),
+    child: child,
+  );
 }

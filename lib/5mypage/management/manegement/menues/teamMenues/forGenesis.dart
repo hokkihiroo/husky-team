@@ -15,7 +15,7 @@ class ForGenesis extends StatefulWidget {
 }
 
 class _ForGenesisState extends State<ForGenesis> {
-  late String forGenesis; // 전역 변수로 선언
+  late String field; // 전역 변수로 선언
   final List<String> categories = [
     '60',
     '70',
@@ -87,13 +87,13 @@ class _ForGenesisState extends State<ForGenesis> {
                         String carNumber = carNumberController.text;
 
                         String documentId = FirebaseFirestore.instance
-                            .collection(forGenesis)
+                            .collection(field)
                             .doc()
                             .id;
 
                         try {
                           await FirebaseFirestore.instance
-                              .collection(forGenesis)
+                              .collection(field)
                               .doc(documentId)
                               .set({
                             'carNumber': carNumber,
@@ -158,7 +158,7 @@ class _ForGenesisState extends State<ForGenesis> {
     super.initState();
     print('initState 호출됨');
 
-    forGenesis = getForFieldAdress(widget.teamDocId);
+    field = getForFieldAdress(widget.teamDocId);
   }
 
   @override
@@ -231,7 +231,7 @@ class _ForGenesisState extends State<ForGenesis> {
             ),
             StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection(forGenesis)
+                  .collection(field)
                   .where('option7', isEqualTo: selectedCategoryNum)
                   .orderBy('createdAt')
                   .snapshots(),
@@ -266,7 +266,7 @@ class _ForGenesisState extends State<ForGenesis> {
                                   onPressed: () async {
                                     try {
                                       await FirebaseFirestore.instance
-                                          .collection(forGenesis)
+                                          .collection(field)
                                           .doc(document)
                                           .update({
                                         'location': 14,       //location이 13이면 외부주차장으로보이고 14면 필드에서 사라짐

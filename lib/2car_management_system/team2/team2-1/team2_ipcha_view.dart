@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2_electric_selector.dart';
-import 'package:team_husky/2car_management_system/team2/team2_numbercard.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric_selector.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_numbercard.dart';
 
 class Team2IpchaView extends StatefulWidget {
   final String name;

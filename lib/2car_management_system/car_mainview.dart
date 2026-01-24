@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:team_husky/2car_management_system/team1/team1_view.dart';
-import 'package:team_husky/2car_management_system/team2/team2_view.dart';
-import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_view.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_view.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_view.dart';
 import 'package:team_husky/2car_management_system/team3/team3_view.dart';
 import 'package:team_husky/2car_management_system/team4/team4_view.dart';
 

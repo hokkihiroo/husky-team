@@ -1,10 +1,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team_husky/2car_management_system/team2/team2_electric.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric.dart';
 
 final FIELD ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field';
-
-final TEAM2CARSCHEDULE ='local/q0LRMbznxA2yPca1DKNw/team2/TxPOvECdU2W8gOh7bkPZ/';
 
 final TEAM2GANGNAMCAR ='local/q0LRMbznxA2yPca1DKNw/team2/SBMhSMQHzp4A0pnveh5L/gangnamCar';
 
@@ -20,6 +18,9 @@ final COLOR5 ='local/q0LRMbznxA2yPca1DKNw/team2/yJ82irnxnFs2Pe2JlMAA/';  //시�
 
 // 전기차 리스트 주소
 final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/team2/pNHnni1uB4xc61VODmx9/';
+
+final STATELIST ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field/';
+
 
 
 // 시간과 분이 스트링으로 되어있는데 이함수를 통해 서버에 다시 DateTime 형태로 변환저장
@@ -174,6 +175,17 @@ String formatCarNumber(String value) {
   if (value.length <= 6) return value;
   return value.substring(0, 6) + '\n' + value.substring(6);
 }
+//시승차 상태 저장할때 쓰는 년 월 주소값
+String carStateAddress() {
+  final now = DateTime.now();
+  final year = now.year.toString();
+  final month = now.month.toString().padLeft(2, '0');
+  return year + month ;
+}
+
+
+
+
 // 직접입력 버튼 브랜드관리에서 직접입력하는버튼 이쪽으로 빼놧음
 // ElevatedButton(
 //   style: ElevatedButton.styleFrom(

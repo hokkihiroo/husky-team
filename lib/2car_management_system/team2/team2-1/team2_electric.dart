@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2_electric_card.dart';
+import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric_card.dart';
 
 class Electric extends StatefulWidget {
   const Electric({super.key});
@@ -30,7 +30,7 @@ class _ElectricState extends State<Electric> {
     });
   }
 
-  //다음날로 이동
+  //다음달로 이동
   void _nextDay() {
     final today = DateTime.now();
     final nextMonth = DateTime(

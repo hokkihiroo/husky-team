@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_B1_B2_outside.dart';
-import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z1_astandby.dart';
-import 'package:team_husky/2car_management_system/team2/team2_z1/team2_z2_carList.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_2_B1_B2_outside.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_1_standby.dart';
+import 'package:team_husky/2car_management_system/team2/team2-2/team2_5_carList.dart';
 
 class Team2Z1View extends StatefulWidget {
   const Team2Z1View({super.key, required this.name});
