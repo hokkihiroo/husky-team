@@ -168,8 +168,12 @@ class _ListState extends StatelessWidget {
               width: 20,
             ),
             _buildHeaderCell(width: 40, label: '날짜'),
-            _buildHeaderCell(width: 90, label: '시각'),
-            _buildHeaderCell(width: 70, label: '상태일지'),
+            SizedBox(width: 20,),
+            _buildHeaderCell(width: 40, label: '시각'),
+            SizedBox(width: 40,),
+            _buildHeaderCell(width: 50, label: '상태일지'),
+            SizedBox(width: 50,),
+            _buildHeaderCell(width: 50, label: '시승방법'),
           ],
         ),
       ),
@@ -251,7 +255,7 @@ class ListModel extends StatelessWidget {
                   var document = docs[index];
                   print(document.id);
                   print(theDay);
-                  print(theTime);
+                  print(docs[index]['wayToDrive']);
 
                 },
                 child: Padding(
@@ -262,6 +266,7 @@ class ListModel extends StatelessWidget {
                     theDay: theDay,
                     theTime: theTime,
                     state: docs[index]['state'],
+                    wayToDrive: docs[index]['wayToDrive'],
                   ),
                 ),
               ),

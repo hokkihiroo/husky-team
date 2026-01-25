@@ -142,10 +142,11 @@ class _ForGenesisState extends State<ForGenesis> {
                               .doc()
                               .set({
                             'createdAt': FieldValue.serverTimestamp(),
-                            'name': 'name',
-                            'color': 'color',
-                            'location': 'location',
+                            'name': '',
+                            'color': '',
+                            'location': '',
                             'state': '시승차량입고',
+                            'wayToDrive': '',
                           });
                         } catch (e) {
                           print('저장 에러: $e');

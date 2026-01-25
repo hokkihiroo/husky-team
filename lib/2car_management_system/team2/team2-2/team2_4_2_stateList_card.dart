@@ -8,6 +8,7 @@ final String carModel;
 final String theDay;
 final String theTime;
 final String state;
+final String wayToDrive;
 
 
 const StateListCard(
@@ -17,6 +18,7 @@ const StateListCard(
         required this.theDay,
         required this.theTime,
         required this.state,
+        required this.wayToDrive,
         });
 
 
@@ -32,11 +34,12 @@ const StateListCard(
       ),
       child: Row(
         children: [
-          SizedBox(width: 6,),
-          _buildCell(width: 70, text: theDay),
+          SizedBox(width: 10,),
+          _buildCell(width: 60, text: theDay),
           _buildCell(width: 60, text: theTime),
-          SizedBox(width: 20,),
-          _buildCell(width: 200, text: state),
+          SizedBox(width: 15,),
+          _buildCell(width: 120, text: state),
+          _buildCell(width: 100, text: wayToDrive),
         ],
       ),
     );

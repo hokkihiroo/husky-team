@@ -35,8 +35,8 @@ class StateRepository {
         'name':'name',
         'color': 'color',
         'location': 'location',
-        'state': state,
-        'wayToDrive': wayToDrive,
+        'state': state,                               //차량의 상태기록
+        'wayToDrive': wayToDrive,                     // 시승방법 기록 대면,현장동승, 기타 등등
 
       });
       print('✅ 데이터 생성 성공');

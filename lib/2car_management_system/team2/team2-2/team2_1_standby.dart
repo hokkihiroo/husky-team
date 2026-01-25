@@ -304,8 +304,8 @@ class _StandByState extends State<StandBy> {
                       }
                       await repo.createData(
                         dataId: dataId,
-                        state: '$nowLocation -> B1(시승취소)',
-                        wayToDrive: '',
+                        state: '$nowLocation -> B1',
+                        wayToDrive: '$name(시승취소)',
                       );
 
 
