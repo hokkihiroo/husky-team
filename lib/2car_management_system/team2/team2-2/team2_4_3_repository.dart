@@ -32,10 +32,12 @@ class StateRepository {
           .doc() // 랜덤 ID로 새 문서 생성
           .set({
         'createdAt': FieldValue.serverTimestamp(),
-        'wayToDrive': wayToDrive,
+        'name':'name',
         'color': 'color',
         'location': 'location',
         'state': state,
+        'wayToDrive': wayToDrive,
+
       });
       print('✅ 데이터 생성 성공');
     } catch (e) {
