@@ -1297,6 +1297,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       await repo.createData(
                         dataId: dataId,
                         state: '시승출발',
+                        wayToDrive: name,
 
                       );
 

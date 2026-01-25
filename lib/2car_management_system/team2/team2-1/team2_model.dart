@@ -1787,6 +1787,8 @@ class _CarStateState extends State<CarState> {
                       await repo.createData(
                         dataId: dataId,
                         state: '시승복귀',
+                        wayToDrive: name,
+
                       );
                     } catch (e) {
                       print('문서 삭제 오류: $e');

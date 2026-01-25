@@ -18,6 +18,7 @@ class StateRepository {
   Future<void> createData({
     required String dataId,
     required String state,
+    required String wayToDrive,
   }) async {
 
    final thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
@@ -31,7 +32,7 @@ class StateRepository {
           .doc() // 랜덤 ID로 새 문서 생성
           .set({
         'createdAt': FieldValue.serverTimestamp(),
-        'name': 'name',
+        'wayToDrive': wayToDrive,
         'color': 'color',
         'location': 'location',
         'state': state,

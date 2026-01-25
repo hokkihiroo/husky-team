@@ -285,13 +285,11 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   child: ElevatedButton(
                     onPressed: () async {
                       final nowLocation = getLocationName(location); //시승차 위치파악함수
-
                       Color5List = COLOR5 + formatTodayDate();
                       String documentId = FirebaseFirestore.instance
                           .collection(Color5List)
                           .doc()
                           .id;
-
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
@@ -345,12 +343,11 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                           'option10': '',
                         });
                       } catch (e) {}
-
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation > 스탠바이',
+                        wayToDrive: name,
                       );
-
                     },
                     child: Text(
                       '스탠바이',
@@ -696,6 +693,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> B1',
+                        wayToDrive: name,
+
                       );
                     },
                     child: Text(
@@ -740,6 +739,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> B2',
+                        wayToDrive: name,
+
                       );
 
                     },
@@ -785,6 +786,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> 외부주차장',
+                        wayToDrive: name,
+
 
                       );
 
