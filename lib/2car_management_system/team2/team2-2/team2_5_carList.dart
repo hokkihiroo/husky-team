@@ -352,6 +352,8 @@ class ListModel extends StatelessWidget {
   int totalKmAfter = 0; //시승후 총킬로수
 
   String option1 = ''; //최종 3개 (하이패스 잔량 총거리 변경자)
+  String option5 = ''; // 시승차상태 기본시승 비교시승 비대면시승 등등
+  String option8 = ''; //A-1 A-2 C D
 
   ListModel({
     super.key,
@@ -413,7 +415,9 @@ class ListModel extends StatelessWidget {
                   movingTime =
                       raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
 
-                  option1 = docs[index]['option1'];                           //최종 3개 (하이패스 잔량 총거리 변경자)
+                  option1 = docs[index]['option1'];  //최종 3개 (하이패스 잔량 총거리 변경자)
+                  option5 = docs[index]['option5']; // 시승차상태 기본시승 비교시승 비대면시승 등등
+                  option8 = docs[index]['option8'];  //A-1 A-2 C D
 
                   hiPass =
                       int.tryParse(docs[index]['hiPass'].toString()) ??
@@ -453,6 +457,8 @@ class ListModel extends StatelessWidget {
                       hiPassAfter,
                       totalKmAfter,
                       option1,
+                      option5,
+                      option8,
                   );
                 },
                 child: Padding(
@@ -500,7 +506,9 @@ void showCarInfoBottomSheet2(
     leftGasAfter,
     hiPassAfter,
     totalKmAfter,
-    option1,                    //시승종료후 차량 내려서 3대 기록한사람
+    option1,   //시승종료후 차량 내려서 3대 기록한사람
+    option5, // 시승차상태 기본시승 비교시승 비대면시승 등등
+    option8, //A-1 C D
 ) {
   showModalBottomSheet(
     context: context,
@@ -691,7 +699,7 @@ void showCarInfoBottomSheet2(
                         ),
                         Expanded(
                           flex: 4,
-                          child: _cell('대면시승'),
+                          child: _cell(option5),
                         ),
                         Expanded(
                           flex: 3,
@@ -699,7 +707,7 @@ void showCarInfoBottomSheet2(
                         ),
                         Expanded(
                           flex: 4,
-                          child: _cell('c1'),
+                          child: _cell(option8),
                         ),
                       ],
                     ),

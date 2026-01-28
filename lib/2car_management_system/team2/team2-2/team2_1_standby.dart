@@ -211,7 +211,7 @@ class _StandByState extends State<StandBy> {
                 Text(
                   '차종: $carModelFrom',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[700],
                   ),
@@ -219,15 +219,15 @@ class _StandByState extends State<StandBy> {
                 Text(
                   '차량번호: $carNumber',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[700],
                   ),
                 ),
                 Text(
-                  '시승상태: $option5',
+                  '상태: $option5 $option8',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[700],
                   ),
@@ -242,7 +242,7 @@ class _StandByState extends State<StandBy> {
                 Text(
                   '주유잔량: ${option3}km',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[700],
                   ),
@@ -250,7 +250,7 @@ class _StandByState extends State<StandBy> {
                 Text(
                   '하이패스: $option2원',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[700],
                   ),
@@ -258,7 +258,7 @@ class _StandByState extends State<StandBy> {
                 Text(
                   '총킬로수: ${option4}km',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey[700],
                   ),
@@ -289,6 +289,8 @@ class _StandByState extends State<StandBy> {
                           'location': 11,
                           'name': '',
                           'option1': '',        //필드에 옵션1은 컬러5에 들어갈 문서 ID임
+                          'option5': '',        //필드에 옵션1은 컬러5에 들어갈 문서 ID임
+                          'option8': '',        //필드에 옵션1은 컬러5에 들어갈 문서 ID임
                         });
                       } catch (e) {
                         print(e);

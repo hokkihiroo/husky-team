@@ -1779,6 +1779,8 @@ class _CarStateState extends State<CarState> {
                         'option2': hiPass, //하이패스
                         'option3': fuel, //기름잔량
                         'option4': totalKm, //총거리
+                        'option5': '', //  기본시승 비교시승 비대면시승 등등
+                        'option8': '', //  A-1 A-2 C D
                       });
                     } catch (e) {
                       print('문서 삭제 오류: $e');
@@ -1807,6 +1809,8 @@ class _CarStateState extends State<CarState> {
                         'leftGasAfter': fuel,
                         'hiPassAfter': hiPass,
                         'option1': widget.name, //최종 3종 데이터 변경자
+                        'option5': option5,
+                        'option8': option8,
                       });
                     } catch (e) {
                       print(e);
