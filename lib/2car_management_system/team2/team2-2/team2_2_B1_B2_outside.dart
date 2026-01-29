@@ -426,13 +426,25 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         print(e);
                       }
                     },
-                    child: Text(
-                      '기본(A-1)',
-                      style: TextStyle(
-                        fontSize: 11, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '기본시승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-1',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -472,13 +484,25 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         print(e);
                       }
                     },
-                    child: Text(
-                      '비교',
-                      style: TextStyle(
-                        fontSize: 13, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '비교시승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-1',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -518,13 +542,25 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         print(e);
                       }
                     },
-                    child: Text(
-                      '비대면',
-                      style: TextStyle(
-                        fontSize: 13, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '비대면',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-1',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -565,13 +601,25 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         print(e);
                       }
                     },
-                    child: Text(
-                      '현장시승',
-                      style: TextStyle(
-                        fontSize: 14, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '현장동승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-2',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -611,17 +659,86 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         print(e);
                       }
                     },
-                    child: Text(
-                      '현장비대면',
-                      style: TextStyle(
-                        fontSize: 14, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black87, // 텍스트 색상
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '현장비동승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-2',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
 
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                          name.isEmpty
+                              ? {
+                            'name': '현비',
+                            'option5': '현장비대면',  //시승상태 기본 비교 비대면
+                            'option8': 'A-2',   //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '현장비대면',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-2',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),      //현장
             Row(
