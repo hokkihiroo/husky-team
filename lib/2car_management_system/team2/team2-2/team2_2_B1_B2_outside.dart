@@ -429,8 +429,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                     child: Text(
                       '기본(A-1)',
                       style: TextStyle(
-                        fontSize: 10, // 텍스트 크기 증가
-                        fontWeight: FontWeight.w400, // 텍스트를 굵게
+                        fontSize: 11, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
                     ),
