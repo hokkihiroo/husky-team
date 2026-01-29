@@ -52,11 +52,11 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   int option2 = 0; //하이패스잔액
   int option3 = 0; // 주유잔량
   int option4 = 0; //총킬로수
-  String option5 = ''; //시승차 기타
+  String option5 = ''; //기본시승 비교시승 비대면시승
   String option6 = '';   //최근 3종 변경자 이름
   int option7 = 0;      //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   //아래는 없음
-  String option8 = '';
+  String option8 = '';    //A-1 A-2 C D
   String option9 = '';
   String option10 = '';
   String option11= '';
@@ -353,15 +353,15 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 option2 = int.tryParse(filteredDocs[index]['option2'].toString()) ?? 0;   //하이패스 잔액
                 option3 = int.tryParse(filteredDocs[index]['option3'].toString()) ?? 0;    //주유잔량
                 option4 = int.tryParse(filteredDocs[index]['option4'].toString()) ?? 0;   //총킬로수
-                option5 = filteredDocs[index]['option5']; //시승차 기타
+                option5 = filteredDocs[index]['option5']; //기본시승 비교시승 등등
                 option6 = filteredDocs[index]['option6']; // //3종 변경자 이름
                 option7 = filteredDocs[index]['option7'];     //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                option8 = filteredDocs[index]['option8'];         //A-1 A-2 C D
                 //아래없음
-                option8 = filteredDocs[index]['option8'];                          //시승차 예비용
-                option9 = filteredDocs[index]['option9'];                         //시승차 예비용
-                option10 = filteredDocs[index]['option10'];                      //시승차 예비용
-                option11= filteredDocs[index]['option11'];                            //시승차 예비용
-                option12= filteredDocs[index]['option12'];                          //시승차 예비용
+                option9 = filteredDocs[index]['option9'];            //시승차 예비용
+                option10 = filteredDocs[index]['option10'];            //시승차 예비용
+                option11= filteredDocs[index]['option11'];               //시승차 예비용
+                option12= filteredDocs[index]['option12'];           //시승차 예비용
 
 
                 String getMovingTime = getTodayTime();
@@ -392,7 +392,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         option5,
                         option6,
                         // option7,
-                        // option8,
+                        option8,
                         // option9,
                         // option10,
                         // option11,
@@ -1192,6 +1192,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     int option4,
     String option5,
       String option6,
+      String option8,
   ) {
     return AlertDialog(
       title: Row(
@@ -1218,7 +1219,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '시승상태: $option5',
+                  '상태: $option5 $option8',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

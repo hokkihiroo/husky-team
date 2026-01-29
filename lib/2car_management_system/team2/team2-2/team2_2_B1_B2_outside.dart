@@ -164,8 +164,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       option2, //하이패스
                       option3, //주유
                       option4, //총킬로수
-                      option5, //기타
+                      option5, //기본시승 비대면시승
                       option6, //3대 변경자
+                      option8, //3대 변경자
                     );
                   },
                 );
@@ -206,6 +207,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
     int option4, //총킬로수
     String option5, //기타
     String option6, //3대변경자
+    String option8, //3대변경자
   ) {
     return AlertDialog(
       title: Row(
@@ -425,10 +427,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       }
                     },
                     child: Text(
-                      '기본',
+                      '기본(A-1)',
                       style: TextStyle(
-                        fontSize: 13, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        fontSize: 10, // 텍스트 크기 증가
+                        fontWeight: FontWeight.w400, // 텍스트를 굵게
                         color: Colors.black87, // 텍스트 색상
                       ),
                     ),

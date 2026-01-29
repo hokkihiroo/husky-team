@@ -428,6 +428,7 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
+            SizedBox(height: 5,),
             Text(
               '$etc',
               style: TextStyle(
