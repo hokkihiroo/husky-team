@@ -523,7 +523,7 @@ void showCarInfoBottomSheet2(
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 5,
+                    vertical: 2,
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -544,7 +544,8 @@ void showCarInfoBottomSheet2(
                         '차종 : $carModel',
                         style: const TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
+                          height: 1.1, // 👈 이거 추가
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -552,13 +553,16 @@ void showCarInfoBottomSheet2(
                       Text(
                         '차번호 : $carNumber',
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
+                          height: 1.1, // 👈 이거 추가
                         ),
                       ),
                       SizedBox(width: 30,),
 
                       IconButton(
+                        padding: EdgeInsets.zero, // 👈 필수
+                        constraints: const BoxConstraints(), // 👈 필수
                         tooltip: '삭제',
                         icon: const Icon(Icons.delete_outline),
                         color: Colors.red,
@@ -617,7 +621,7 @@ void showCarInfoBottomSheet2(
                   child: Column(
                     children: [
                       _rowHeader(['상태', '스탠바이', '시승출발', '시승종료']),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 5),
                       _rowValue([
                         '시각',
                         '${enterTime ?? '-'}분',
@@ -637,14 +641,14 @@ void showCarInfoBottomSheet2(
                   child: Column(
                     children: [
                       _rowHeader(['상태', '주유잔량', '하이패스', '총거리']),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 5),
                       _rowValue([
                         '시승전',
                         '$leftGas km',
                         '$hiPass 원',
                         '$totalKm km',
                       ]),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 5),
                       _rowValue([
                         '시승후',
                         '$leftGasAfter km',
@@ -789,7 +793,11 @@ Widget _rowValue(List<String> texts) {
 
 Widget _card({required Widget child}) {
   return Container(
-    padding: const EdgeInsets.all(14),
+    padding: const EdgeInsets.symmetric(
+      horizontal: 12,
+      vertical: 12,
+    ),
+
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(14),

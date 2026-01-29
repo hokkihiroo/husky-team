@@ -47,7 +47,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String option5 = ''; //시승차상태 기본시승 비교시승 비대면 기타 등등
   String option6 = ''; //최근 3종 변경자 이름
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
-  String option8 = '';      //A-1,A-2,C,D 시승상태
+  String option8 = ''; //A-1,A-2,C,D 시승상태
   //아래는 없음
 
   String option9 = '';
@@ -132,11 +132,11 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 option4 =
                     int.tryParse(displayList[index]['option4'].toString()) ??
                         0; //총킬로수
-                option5 = displayList[index]['option5'];//시승차 기타
+                option5 = displayList[index]['option5']; //시승차 기타
                 option6 = displayList[index]['option6']; //3종 최근변경자 이름
-                option7 = displayList[index]['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                option7 = displayList[index]
+                    ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = displayList[index]['option8']; //A-1,A-2,C,D 시승상태
-
 
                 option9 = displayList[index]['option9']; //시승차 예비용
                 option10 = displayList[index]['option10']; //시승차 예비용
@@ -145,7 +145,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                 showDialog(
                   context: rootContext,
-                  builder: (BuildContext context) {
+                  builder: (BuildContext Color5Context) {
                     return bottomColor5(
                       carNumber,
                       name,
@@ -160,12 +160,19 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       movingTime,
                       getMovingTime,
                       carModelFrom,
+                      rootContext,
+                      Color5Context,
                       option1,
-                      option2, //하이패스
-                      option3, //주유
-                      option4, //총킬로수
-                      option5, //기본시승 비대면시승
-                      option6, //3대 변경자
+                      option2,
+                      //하이패스
+                      option3,
+                      //주유
+                      option4,
+                      //총킬로수
+                      option5,
+                      //기본시승 비대면시승
+                      option6,
+                      //3대 변경자
                       option8, //3대 변경자
                     );
                   },
@@ -201,6 +208,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
     String movingTime,
     String getMovingTime,
     String carModelFrom,
+    BuildContext rootContext, // 메인화면 context (show용)
+    BuildContext context, // 컬러5화면 context (show용)
     String option1,
     int option2, //하이패스
     int option3, //주유잔량
@@ -288,7 +297,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-                      final nowLocation = getLocationName(location); //시승차 위치파악함수
+                      final nowLocation =
+                          getLocationName(location); //시승차 위치파악함수
                       Color5List = COLOR5 + formatTodayDate();
                       String documentId = FirebaseFirestore.instance
                           .collection(Color5List)
@@ -335,26 +345,20 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                           'totalKmAfter': '',
                           'leftGasAfter': '',
                           'hiPassAfter': '',
-                          'option1': '',    //최종 3개 (하이패스 잔량 총거리 변경자)
-                          'option5': option5,     //현재 시승상태 대면 비대면 현장
-                          'option8':option8,        // 시승상태 A-1 A-2 C D
+                          'option1': '', //최종 3개 (하이패스 잔량 총거리 변경자)
+                          'option5': option5, //현재 시승상태 대면 비대면 현장
+                          'option8': option8, // 시승상태 A-1 A-2 C D
 
                           //아래는 아직없음
-                          'option2':'',
+                          'option2': '',
                           'option3': '',
                           'option4': '',
                           'option6': '',
                           'option7': '',
                           'option9': '',
                           'option10': '',
-
-
-
-
-
                         });
                       } catch (e) {}
-
 
                       await repo.createData(
                         dataId: dataId,
@@ -409,19 +413,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '기본',
-                            'option5': '기본시승',  //시승상태 기본 비교 비대면
-                            'option8': 'A-1',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
-
+                              name.isEmpty
+                                  ? {
+                                      'name': '기본',
+                                      'option5': '기본시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -468,18 +471,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '비교',
-                            'option5': '비교시승',  //시승상태 기본 비교 비대면
-                            'option8': 'A-1',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '비교',
+                                      'option5': '비교시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -526,18 +529,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '비대',
-                            'option5': '비대면시승',  //시승상태 기본 비교 비대면
-                            'option8': 'A-1',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '비대',
+                                      'option5': '비대면시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -564,9 +567,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                     ),
                   ),
                 ),
-
               ],
-            ),        //대면비대면
+            ), //대면비대면
             Row(
               children: [
                 Expanded(
@@ -585,18 +587,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '현장',
-                            'option5': '현장동승',  //시승상태 기본 비교 비대면
-                            'option8': 'A-2',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '현장',
+                                      'option5': '현장동승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -643,18 +645,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '현비',
-                            'option5': '현장비동승',  //시승상태 기본 비교 비대면
-                            'option8': 'A-2',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '현비',
+                                      'option5': '현장비동승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -701,18 +703,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '현비',
-                            'option5': '현장비대면',  //시승상태 기본 비교 비대면
-                            'option8': 'A-2',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '비대',
+                                      'option5': '현장비대면', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -740,7 +742,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
               ],
-            ),      //현장
+            ), //현장
             Row(
               children: [
                 Expanded(
@@ -760,18 +762,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '교육',
-                            'option5': '교육',  //시승상태 기본 비교 비대면
-                            'option8': 'C',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '교육',
+                                      'option5': '교육', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -805,18 +807,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '답사',
-                            'option5': '답사',  //시승상태 기본 비교 비대면
-                            'option8': 'C',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '답사',
+                                      'option5': '답사', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -834,7 +836,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 SizedBox(
                   width: 5,
                 ),
-
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -852,18 +853,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '컬러',
-                            'option5': '컬러확인',  //시승상태 기본 비교 비대면
-                            'option8': 'C',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '컬러',
+                                      'option5': '컬러확인', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -879,10 +880,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
               ],
-            ),        //교육답사컬러
+            ), //교육답사컬러
             Row(
               children: [
-
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -899,18 +899,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '주유',
-                            'option5': '주유',  //시승상태 기본 비교 비대면
-                            'option8': 'C',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '주유',
+                                      'option5': '주유', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -944,18 +944,18 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             .collection(FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '인도',
-                            'option5': '인도픽업',  //시승상태 기본 비교 비대면
-                            'option8': 'C',   //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '인도',
+                                      'option5': '인도픽업', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -988,11 +988,34 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         fontSize: 17,
                       ),
                     ),
-                    onPressed: ()  {
+                    onPressed: () {
                       Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => StateList(dataId: dataId,),),
+
+                      showDialog(
+                        context: rootContext,
+                        builder: (bottomColor5EtcContext) => bottomColor5Etc(
+                          bottomColor5EtcContext,
+                          carNumber,
+                          name,
+                          color,
+                          location,
+                          dateTime,
+                          dataId,
+                          etc,
+                          remainTime,
+                          movedLocation,
+                          wigetName,
+                          movingTime,
+                          getMovingTime,
+                          carModelFrom,
+                          option1,
+                          option2,
+                          option3,
+                          option4,
+                          option5,
+                          option6,
+                          option8,
+                        ),
                       );
                     },
                     child: Text(
@@ -1006,7 +1029,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
               ],
-            ),        //상태리스트이동
+            ), //상태리스트이동
             Row(
               children: [
                 Expanded(
@@ -1020,7 +1043,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       ),
                     ),
                     onPressed: () async {
-                     final nowLocation = getLocationName(location);
+                      final nowLocation = getLocationName(location);
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
@@ -1036,7 +1059,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         dataId: dataId,
                         state: '$nowLocation -> B1',
                         wayToDrive: name,
-
                       );
                     },
                     child: Text(
@@ -1077,14 +1099,11 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       }
                       Navigator.pop(context);
 
-
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> B2',
                         wayToDrive: name,
-
                       );
-
                     },
                     child: Text(
                       'B2',
@@ -1112,7 +1131,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                     onPressed: () async {
                       final nowLocation = getLocationName(location);
 
-
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
@@ -1129,10 +1147,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         dataId: dataId,
                         state: '$nowLocation -> 외부주차장',
                         wayToDrive: name,
-
-
                       );
-
                     },
                     child: Text(
                       '외부로',
@@ -1145,7 +1160,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
               ],
-            ),      //이동
+            ), //이동
 
             Row(
               children: [
@@ -1260,7 +1275,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         fontSize: 17,
                       ),
                     ),
-                    onPressed: ()  async{
+                    onPressed: () async {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
@@ -1276,15 +1291,14 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                     child: Text(
                       '삭제',
                       style: TextStyle(
-                        fontSize: 15, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.yellow
-                      ),
+                          fontSize: 15, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.yellow),
                     ),
                   ),
                 ),
               ],
-            ),         //특이사항
+            ), //특이사항
             Text(
               '$etc',
               style: TextStyle(
@@ -1294,6 +1308,507 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget bottomColor5Etc(                                 //기타 클릭시
+    BuildContext bottomColor5EtcContext, // 컬러5Etc화면 context (show용)
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    String option6,
+    String option8,
+  ) {
+    return AlertDialog(
+      title: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black54,
+          padding: const EdgeInsets.symmetric(
+            vertical: 10, // ⬅ 두께(높이) 증가
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
+            fontSize: 17,
+          ),
+        ),
+        onPressed: () {
+          Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StateList(
+                dataId: dataId,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          '차량 상태 리스트보기(클릭)',
+          style: TextStyle(
+            fontSize: 13, // 텍스트 크기 증가
+            fontWeight: FontWeight.bold, // 텍스트를 굵게
+            color: Colors.yellow, // 텍스트 색상
+          ),
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': 'VP',
+                                    'option5': 'VIP시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        'VIP시승',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                      Text(
+                        'A-1',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '인도',
+                                    'option5': '찾아가는시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        '찾아가는시승',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                      Text(
+                        'A-1',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '오너',
+                                    'option5': '오너스시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        '오너스시승',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                      Text(
+                        'A-1',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '시그',
+                                    'option5': '시그니처시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        '시그니처',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                      Text(
+                        'A-1',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '오너',
+                                    'option5': '오너스현장', //시승상태 기본 비교 비대면
+                                    'option8': 'A-2', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        '오너스현장',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                      Text(
+                        'A-2',
+                        style: TextStyle(
+                          fontSize: 11, // 텍스트 크기 증가
+                          fontWeight: FontWeight.bold, // 텍스트를 굵게
+                          color: Colors.black87, // 텍스트 색상
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '수리',
+                                    'option5': '시승차수리', //시승상태 기본 비교 비대면
+                                    'option8': 'C', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Text(
+                    '수리 C',
+                    style: TextStyle(
+                      fontSize: 11, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '장기',
+                                    'option5': '장기시승', //시승상태 기본 비교 비대면
+                                    'option8': 'C', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Text(
+                    '장기 C',
+                    style: TextStyle(
+                      fontSize: 11, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.grey, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(bottomColor5EtcContext); //  다이얼로그 닫기
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update(
+                            name.isEmpty
+                                ? {
+                                    'name': '지원',
+                                    'option5': '외부지원', //시승상태 기본 비교 비대면
+                                    'option8': 'C', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Text(
+                    '지원 C',
+                    style: TextStyle(
+                      fontSize: 11, // 텍스트 크기 증가
+                      fontWeight: FontWeight.bold, // 텍스트를 굵게
+                      color: Colors.black87, // 텍스트 색상
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
