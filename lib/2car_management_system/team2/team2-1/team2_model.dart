@@ -255,9 +255,9 @@ class _CarStateState extends State<CarState> {
                               //       );
                               //     });
                             }
+                            Navigator.pop(sheetContext);
 
 
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
                               bottomColor5Final(
                                   carNumber,
                                   name,
@@ -281,8 +281,6 @@ class _CarStateState extends State<CarState> {
                                   fuel,
                                   hiPass,
                                   totalKm);
-                            });
-                            Navigator.pop(sheetContext);
 
                           },
                           child: const Text(

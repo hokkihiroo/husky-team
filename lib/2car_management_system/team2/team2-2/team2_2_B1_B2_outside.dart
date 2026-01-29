@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_1_stateList.dart';
 import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_3_repository.dart';
 import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
@@ -56,6 +57,371 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String option12 = '';
 
   late TextEditingController etcController;
+
+
+
+  //주유잔량 하이패스 킬로미터 넣는함수 (아래)
+  void showIntInputBottomSheet(
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2,
+      int option3,
+      int option4,
+      String option5,
+      BuildContext rootContext, // 화면 context (show용)
+      ) {
+    final TextEditingController fuelController = TextEditingController();
+    final TextEditingController hipassController = TextEditingController();
+    final TextEditingController totalKmController = TextEditingController();
+
+    showModalBottomSheet(
+      context: rootContext,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent, // 👈 카드 느낌
+      builder: (sheetContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            top: 50,
+          ),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: MediaQuery.of(context).size.width.clamp(0, 290), // ⭐ 여기
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '차량 정보 입력',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _inputField(
+                    controller: fuelController,
+                    label: '주유 잔량 (숫자만)',
+                    suffix: 'km',
+                    maxLength: 4,
+                  ),
+                  const SizedBox(height: 12),
+                  _inputField(
+                    controller: hipassController,
+                    label: '하이패스 (숫자만)',
+                    suffix: '원',
+                    maxLength: 6,
+                  ),
+                  const SizedBox(height: 12),
+                  _inputField(
+                    controller: totalKmController,
+                    label: '총 킬로수 (숫자만)',
+                    suffix: 'km',
+                    maxLength: 6,
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    height: 48,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('취소'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () async{
+                            if (fuelController.text.isEmpty ||
+                                hipassController.text.isEmpty ||
+                                totalKmController.text.isEmpty) {
+                              return;
+                            }
+
+                            final int fuel = int.parse(fuelController.text);
+                            final int hiPass = int.parse(hipassController.text);
+                            final int totalKm =
+                            int.parse(totalKmController.text);
+
+                            // 🔥 Firebase 저장
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(FIELD)
+                                  .doc(dataId)
+                                  .update({
+                                'option2': hiPass, //하이패스
+                                'option3': fuel, //기름잔량
+                                'option4': totalKm, //총거리
+                              });
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
+
+                            try {
+                              await repo.createData(
+                                dataId: dataId,
+                                state: '데이터변경',
+                                wayToDrive: name,
+
+                              );
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
+
+                            Navigator.pop(sheetContext);
+
+                              bottomColor5Final(
+                                  carNumber,
+                                  name,
+                                  color,
+                                  location,
+                                  dateTime,
+                                  dataId,
+                                  etc,
+                                  remainTime,
+                                  movedLocation,
+                                  wigetName,
+                                  movingTime,
+                                  getMovingTime,
+                                  carModelFrom,
+                                  option1,
+                                  option2,
+                                  option3,
+                                  option4,
+                                  option5,
+                                  rootContext,
+                                  fuel,
+                                  hiPass,
+                                  totalKm);
+                          },
+                          child: const Text(
+                            '저장',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.yellow),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void bottomColor5Final(
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2,
+      int option3,
+      int option4,
+      String option5,
+      BuildContext rootContext, // 화면 context (show용)
+      int fuel,
+      int hiPass,
+      int totalKm,
+      ) {
+    showDialog(
+      context: rootContext,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text(
+            '변경 내용 확인',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '입력한 정보가 아래와 같이 반영되었습니다.',
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(height: 16),
+
+              // 헤더
+              Row(
+                children: [
+                  SizedBox(
+                      width: 70,
+                      child: Text('메뉴',
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Text('전',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Text('후',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                ],
+              ),
+              SizedBox(height: 8),
+              Divider(),
+
+              // 주유 잔량
+              Row(
+                children: [
+                  SizedBox(width: 70, child: Text('주유 잔량')),
+                  Expanded(
+                      child: Text('$option3', textAlign: TextAlign.center)),
+                  Expanded(child: Text('$fuel', textAlign: TextAlign.center)),
+                ],
+              ),
+              SizedBox(height: 8),
+
+              // 하이패스
+              Row(
+                children: [
+                  SizedBox(width: 70, child: Text('하이패스')),
+                  Expanded(
+                      child: Text('$option2', textAlign: TextAlign.center)),
+                  Expanded(child: Text('$hiPass', textAlign: TextAlign.center)),
+                ],
+              ),
+              SizedBox(height: 8),
+
+              // 총 킬로수
+              Row(
+                children: [
+                  SizedBox(width: 70, child: Text('총 킬로수')),
+                  Expanded(
+                      child: Text('$option4', textAlign: TextAlign.center)),
+                  Expanded(
+                      child: Text('$totalKm', textAlign: TextAlign.center)),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  const SizedBox(width: 70, child: Text('변경한 사람')),
+                  const Expanded(
+                    child: SizedBox(), // ⭐ 빈 칸 유지
+                  ),
+                  Expanded(
+                    child: Text(
+                      widget.name,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: ()  {
+
+                    Navigator.pop(dialogContext);
+
+                  },
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(
+                      color: Colors.yellow,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _inputField({
+    required TextEditingController controller, //이함수는 상잔 주유잔량 하이패스 킬로미터 내용그리는함수
+    required String label,
+    required int maxLength,
+    String? suffix,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(maxLength),
+      ],
+      decoration: InputDecoration(
+        labelText: label,
+        suffixText: suffix,
+        // ⭐ 여기
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+
 
   @override
   void initState() {
@@ -1260,10 +1626,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   width: 5,
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: Colors.blueGrey,
                       padding: const EdgeInsets.symmetric(
                         vertical: 10, // ⬅ 두께(높이) 증가
                       ),
@@ -1275,25 +1641,36 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         fontSize: 17,
                       ),
                     ),
-                    onPressed: () async {
+                    onPressed: ()  {
                       Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(FIELD)
-                            .doc(dataId)
-                            .update({
-                          'etc': '',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
+                      showIntInputBottomSheet(
+                        carNumber,
+                        name,
+                        color,
+                        location,
+                        dateTime,
+                        dataId,
+                        etc,
+                        remainTime,
+                        movedLocation,
+                        wigetName,
+                        movingTime,
+                        getMovingTime,
+                        carModelFrom,
+                        option1,
+                        option2,
+                        option3,
+                        option4,
+                        option5,
+                        rootContext,
+                      ); // 2️⃣ 바텀시트 열기
                     },
                     child: Text(
-                      '삭제',
+                      '데이터수정',
                       style: TextStyle(
                           fontSize: 15, // 텍스트 크기 증가
                           fontWeight: FontWeight.bold, // 텍스트를 굵게
-                          color: Colors.yellow),
+                          color: Colors.black),
                     ),
                   ),
                 ),
@@ -1490,7 +1867,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
@@ -1608,7 +1984,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
@@ -1714,7 +2089,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
