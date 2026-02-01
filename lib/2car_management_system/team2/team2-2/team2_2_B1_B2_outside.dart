@@ -49,9 +49,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String option6 = ''; //최근 3종 변경자 이름
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   String option8 = ''; //A-1,A-2,C,D 시승상태
+  String option9 = '';    //시승예약 고객 성함
   //아래는 없음
 
-  String option9 = '';
   String option10 = '';
   String option11 = '';
   String option12 = '';
@@ -503,8 +503,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 option7 = displayList[index]
                     ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = displayList[index]['option8']; //A-1,A-2,C,D 시승상태
+                option9 = displayList[index]['option9']; ////시승예약고객 성함
 
-                option9 = displayList[index]['option9']; //시승차 예비용
+                //아래없음
                 option10 = displayList[index]['option10']; //시승차 예비용
                 option11 = displayList[index]['option11']; //시승차 예비용
                 option12 = displayList[index]['option12']; //시승차 예비용
@@ -624,7 +625,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '주유잔량: ${option3}km',
+                  '주유잔량: ${formatKm(option3)}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -632,7 +633,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '하이패스: $option2원',
+                  '하이패스: ${formatWon(option2)}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -640,7 +641,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   ),
                 ),
                 Text(
-                  '총킬로수: ${option4}km',
+                  '총킬로수: ${formatKm(option4)}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -716,7 +717,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                           'option8': option8, // 시승상태 A-1 A-2 C D
 
                           //아래는 아직없음
-                          'option2': '',
+                          'option2': 0,
                           'option3': '',
                           'option4': '',
                           'option6': '',
@@ -1566,9 +1567,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                                     children: [
                                       TextField(
                                         controller: etcController,
-                                        maxLength: 20,
+                                        maxLength: 13,
                                         decoration: InputDecoration(
-                                          hintText: '특이사항 20자까지가능',
+                                          hintText: '특이사항 13자까지가능',
                                         ),
                                         onChanged: (value) {
                                           etc = value;

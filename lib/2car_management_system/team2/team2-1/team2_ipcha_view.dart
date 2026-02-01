@@ -57,7 +57,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   int option7 = 0;      //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   //아래는 없음
   String option8 = '';    //A-1 A-2 C D
-  String option9 = '';
+  String option9 = '';    //시승차예약자 성함
   String option10 = '';
   String option11= '';
   String option12= '';
@@ -357,8 +357,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 option6 = filteredDocs[index]['option6']; // //3종 변경자 이름
                 option7 = filteredDocs[index]['option7'];     //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = filteredDocs[index]['option8'];         //A-1 A-2 C D
+                option9 = filteredDocs[index]['option9'];            //시승차 예약자성함
                 //아래없음
-                option9 = filteredDocs[index]['option9'];            //시승차 예비용
                 option10 = filteredDocs[index]['option10'];            //시승차 예비용
                 option11= filteredDocs[index]['option11'];               //시승차 예비용
                 option12= filteredDocs[index]['option12'];           //시승차 예비용
@@ -393,7 +393,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         option6,
                         // option7,
                         option8,
-                        // option9,
+                        option9,
                         // option10,
                         // option11,
                         // option12,
@@ -1193,6 +1193,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     String option5,
       String option6,
       String option8,
+      String option9,
   ) {
     return AlertDialog(
       title: Row(
@@ -1226,6 +1227,14 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     color: Colors.grey[700],
                   ),
                 ),
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
               ],
             ),
           ),
@@ -1234,7 +1243,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '주유잔량: ${option3}km',
+                  '주유잔량: ${formatKm(option3)}',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -1242,7 +1251,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '하이패스: $option2원',
+                  '하이패스: ${formatWon(option2)}',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -1250,7 +1259,15 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   ),
                 ),
                 Text(
-                  '총킬로수: ${option4}km',
+                  '총킬로수: ${formatKm(option4)}',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                Text(
+                  '예약자:    $option9',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

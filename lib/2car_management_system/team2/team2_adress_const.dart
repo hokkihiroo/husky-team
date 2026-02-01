@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric.dart';
 
 final FIELD ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field';
@@ -21,6 +22,17 @@ final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/team2/pNHnni1uB4xc61VODmx9/';
 
 final STATELIST ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field/';
 
+
+//금액포맷 원단위, 표시
+String formatWon(int value) {
+  final formatter = NumberFormat('#,###');
+  return '${formatter.format(value)}원';
+}
+//거리포맷 km, 표시
+String formatKm(int value) {
+  final formatter = NumberFormat('#,###');
+  return '${formatter.format(value)}km';
+}
 
 
 // 시간과 분이 스트링으로 되어있는데 이함수를 통해 서버에 다시 DateTime 형태로 변환저장

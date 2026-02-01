@@ -99,6 +99,7 @@ class _StandByState extends State<StandBy> {
                 Color5List = COLOR5 + formatTodayDate();
                 var document = displayList[index];
                 dataId = document.id;
+                print(dataId);
                 name = displayList[index]['name'];
                 enterName = displayList[index]['enterName'];
                 carNumber = displayList[index]['carNumber'];
@@ -128,10 +129,12 @@ class _StandByState extends State<StandBy> {
                         0; //총킬로수
                 option5 = displayList[index]['option5']; //시승차 기타
                 option6 = displayList[index]['option6']; //3종 최근변경자 이름
-                option7 = displayList[index]['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                option7 = displayList[index]
+                    ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                option8 = displayList[index]['option8']; //시승차 A-1 A-2 C D
+                option9 = displayList[index]['option9']; //시승예약고객 성함
 
-                option8 = displayList[index]['option8']; //시승차 예비용
-                option9 = displayList[index]['option9']; //시승차 예비용
+                //아래없음
                 option10 = displayList[index]['option10']; //시승차 예비용
                 option11 = displayList[index]['option11']; //시승차 예비용
                 option12 = displayList[index]['option12']; //시승차 예비용
@@ -154,11 +157,17 @@ class _StandByState extends State<StandBy> {
                       getMovingTime,
                       carModelFrom,
                       option1,
-                      option2, //하이패스
-                      option3, //주유
-                      option4, //총킬로수
-                      option5, //기타
-                      option6, //3대 변경자
+                      option2,
+                      //하이패스
+                      option3,
+                      //주유
+                      option4,
+                      //총킬로수
+                      option5,
+                      //기타
+                      option6,
+                      //3대 변경자
+                      option9, //시승예약고객 성함
                     );
                   },
                 );
@@ -199,6 +208,7 @@ class _StandByState extends State<StandBy> {
     int option4, //총킬로수
     String option5, //기타
     String option6, //3대변경자
+    String option9, //3대변경자
   ) {
     return AlertDialog(
       title: Row(
@@ -232,6 +242,14 @@ class _StandByState extends State<StandBy> {
                     color: Colors.grey[700],
                   ),
                 ),
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
               ],
             ),
           ),
@@ -240,7 +258,7 @@ class _StandByState extends State<StandBy> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '주유잔량: ${option3}km',
+                  '주유잔량: ${formatKm(option3)}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -248,7 +266,7 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
                 Text(
-                  '하이패스: $option2원',
+                  '하이패스: ${formatWon(option2)}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -256,7 +274,15 @@ class _StandByState extends State<StandBy> {
                   ),
                 ),
                 Text(
-                  '총킬로수: ${option4}km',
+                  '총킬로수: ${formatKm(option4)}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                Text(
+                  '예약자:    $option9',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -270,7 +296,7 @@ class _StandByState extends State<StandBy> {
       ),
       content: Container(
         width: MediaQuery.of(context).size.width.clamp(0, 290),
-        height: 180,
+        height: 250,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -279,8 +305,9 @@ class _StandByState extends State<StandBy> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-                      final nowLocation = getLocationName(location); //시승차 위치파악함수
-                      
+                      final nowLocation =
+                          getLocationName(location); //시승차 위치파악함수
+
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
@@ -288,9 +315,10 @@ class _StandByState extends State<StandBy> {
                             .update({
                           'location': 11,
                           'name': '',
-                          'option1': '',        //필드에 옵션1은 컬러5에 들어갈 문서 ID임
-                          'option5': '',        //필드에 옵션1은 컬러5에 들어갈 문서 ID임
-                          'option8': '',        //필드에 옵션1은 컬러5에 들어갈 문서 ID임
+                          'option1': '', //필드에 옵션1은 컬러5에 들어갈 문서 ID임
+                          'option5': '', //시승상태  기본 비대면 등등
+                          'option8': '', //C D A-1
+                          'option9': '', //예약자성함
                         });
                       } catch (e) {
                         print(e);
@@ -309,8 +337,6 @@ class _StandByState extends State<StandBy> {
                         state: '$nowLocation -> B1',
                         wayToDrive: '$name(시승취소)',
                       );
-
-
                     },
                     child: Text(
                       '시승취소',
@@ -332,7 +358,105 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueGrey,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15, // ⬅ 두께(높이) 증가
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
+                        fontSize: 17,
+                      ),
+                    ),
+                    onPressed: () {
+
+                      String tempEtc = option9 ?? '';
+
+                      showDialog(
+                        context: context,
+                        builder: (dialogContext) {
+                          return AlertDialog(
+                            title: const Text('고객성함'),
+                            content: SizedBox(
+                              width: MediaQuery.of(dialogContext)
+                                  .size
+                                  .width
+                                  .clamp(0, 290),
+                              child: TextFormField(
+                                initialValue: tempEtc,
+                                maxLength: 4,
+                                decoration: const InputDecoration(
+                                  hintText: '고객성함 입력',
+                                  counterText: '',
+                                ),
+                                onChanged: (value) {
+                                  tempEtc = value;
+                                },
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('취소'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  final String newEtc = tempEtc.trim();
+
+                                  try {
+                                    await FirebaseFirestore.instance
+                                        .collection(FIELD)
+                                        .doc(dataId)
+                                        .update({
+                                      'option9': newEtc,
+                                    });
+
+                                    setState(() {
+                                      etc = newEtc;
+                                    });
+
+                                    Navigator.pop(dialogContext);
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                  Navigator.pop(context);
+
+                                },
+                                child: const Text('등록'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '고객이름넣기',
+                      style: TextStyle(
+                        fontSize: 13, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 Expanded(
@@ -370,9 +494,9 @@ class _StandByState extends State<StandBy> {
                                     children: [
                                       TextField(
                                         controller: etcController,
-                                        maxLength: 20,
+                                        maxLength: 13,
                                         decoration: InputDecoration(
-                                          hintText: '특이사항 20자까지가능',
+                                          hintText: '특이사항 13자까지가능',
                                         ),
                                         onChanged: (value) {
                                           etc = value;
@@ -428,7 +552,9 @@ class _StandByState extends State<StandBy> {
                 ),
               ],
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Text(
               '$etc',
               style: TextStyle(

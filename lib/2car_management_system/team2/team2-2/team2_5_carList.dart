@@ -143,7 +143,7 @@ class _CarListState extends State<CarListz1> {
   // 텍스트 만드는 함수 추가
   Future<String> createClipboardText(String address) async {
     final query = await FirebaseFirestore.instance
-        .collection(CARLIST + address)
+        .collection(COLOR5 + address)
         .orderBy('enter')
         .get();
 
@@ -151,20 +151,25 @@ class _CarListState extends State<CarListz1> {
 
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address (총 $count대)');
-    buffer.writeln('번호 브랜드 차종 차번호 입차 출차');
+    buffer.writeln('번호 차종 차번호 출발 도착 용도 고객성함 총거리(전) 총거리(후) 주유량(전) 주유량(후)');
 
     for (int i = 0; i < count; i++) {
       final doc = query.docs[i];
-      final carNum = doc['carNumber'];
-      final brand = doc['carBrand'];
       final model = doc['carModel'];
-      final etc = doc['etc'];
-      final enter = getInTime(doc['enter']);
+      final carNum = doc['carNumber'];
+      Timestamp movingTime123 =doc['movingTime']; //입차시각
+      final movingTime =getInTime(movingTime123);
+
+
       final out = doc['out'] is Timestamp
           ? getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
-      buffer.writeln('${i + 1} $brand $model $carNum $enter $out');
+
+
+
+
+      // buffer.writeln('${i + 1} $brand $model $carNum $enter $out');
 
       //
       // buffer.writeln('(${i + 1})');
@@ -194,16 +199,17 @@ class _CarListState extends State<CarListz1> {
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
         actions: [
-          // IconButton(
-          //   icon: Icon(Icons.copy),
-          //   onPressed: () async {
-          //     final text = await createClipboardText(DBAdress);
-          //     Clipboard.setData(ClipboardData(text: text));
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(content: Text('텍스트가 복사되었습니다!')),
-          //     );
-          //   },
-          // )
+          IconButton(
+            icon: Icon(Icons.copy),
+            onPressed: () async {
+              final text = await createClipboardText(DBAdress);
+              Clipboard.setData(ClipboardData(text: text));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('텍스트가 복사되었습니다!')),
+              );
+            },
+          ),
+          SizedBox(width: 15,),
         ],
       ),
       body: SingleChildScrollView(
@@ -352,8 +358,10 @@ class ListModel extends StatelessWidget {
   int totalKmAfter = 0; //시승후 총킬로수
 
   String option1 = ''; //최종 3개 (하이패스 잔량 총거리 변경자)
+  int? option2; // 주유금액
   String option5 = ''; // 시승차상태 기본시승 비교시승 비대면시승 등등
   String option8 = ''; //A-1 A-2 C D
+  String option9 = ''; //예약한 고객성함
 
   ListModel({
     super.key,
@@ -415,19 +423,18 @@ class ListModel extends StatelessWidget {
                   movingTime =
                       raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
 
-                  option1 = docs[index]['option1'];  //최종 3개 (하이패스 잔량 총거리 변경자)
+                  option1 = docs[index]['option1']; //최종 3개 (하이패스 잔량 총거리 변경자)
+                  option2 = docs[index]['option2'] as int?; //주유금액 설정
                   option5 = docs[index]['option5']; // 시승차상태 기본시승 비교시승 비대면시승 등등
-                  option8 = docs[index]['option8'];  //A-1 A-2 C D
+                  option8 = docs[index]['option8']; //A-1 A-2 C D
+                  option9 = docs[index]['option9']; //예약한 고객성함
 
-                  hiPass =
-                      int.tryParse(docs[index]['hiPass'].toString()) ??
-                          0; //하이패스 잔액
-                  leftGas =
-                      int.tryParse(docs[index]['leftGas'].toString()) ??
-                          0; //주유잔량
-                  totalKm =
-                      int.tryParse(docs[index]['totalKm'].toString()) ??
-                          0; //총킬로수
+                  hiPass = int.tryParse(docs[index]['hiPass'].toString()) ??
+                      0; //하이패스 잔액
+                  leftGas = int.tryParse(docs[index]['leftGas'].toString()) ??
+                      0; //주유잔량
+                  totalKm = int.tryParse(docs[index]['totalKm'].toString()) ??
+                      0; //총킬로수
                   hiPassAfter =
                       int.tryParse(docs[index]['hiPassAfter'].toString()) ??
                           0; //하이패스 잔액
@@ -437,6 +444,8 @@ class ListModel extends StatelessWidget {
                   totalKmAfter =
                       int.tryParse(docs[index]['totalKmAfter'].toString()) ??
                           0; //총킬로수
+
+
                   showCarInfoBottomSheet2(
                     context,
                     dataId,
@@ -450,15 +459,17 @@ class ListModel extends StatelessWidget {
                     carModel,
                     movingTime,
                     adress,
-                      leftGas,
-                      hiPass,
-                      totalKm,
-                      leftGasAfter,
-                      hiPassAfter,
-                      totalKmAfter,
-                      option1,
-                      option5,
-                      option8,
+                    leftGas,
+                    hiPass,
+                    totalKm,
+                    leftGasAfter,
+                    hiPassAfter,
+                    totalKmAfter,
+                    option1,
+                    option2,
+                    option5,
+                    option8,
+                    option9, //예약한 고객성함
                   );
                 },
                 child: Padding(
@@ -484,7 +495,6 @@ class ListModel extends StatelessWidget {
       },
     );
   }
-
 }
 
 void showCarInfoBottomSheet2(
@@ -500,15 +510,17 @@ void showCarInfoBottomSheet2(
   carModel,
   movingTime,
   adress,
-    leftGas,
-    hiPass,
-    totalKm,
-    leftGasAfter,
-    hiPassAfter,
-    totalKmAfter,
-    option1,   //시승종료후 차량 내려서 3대 기록한사람
-    option5, // 시승차상태 기본시승 비교시승 비대면시승 등등
-    option8, //A-1 C D
+  leftGas,
+  hiPass,
+  totalKm,
+  leftGasAfter,
+  hiPassAfter,
+  totalKmAfter,
+  option1, //시승종료후 차량 내려서 3대 기록한사람
+  option2, //주유금액
+  option5, // 시승차상태 기본시승 비교시승 비대면시승 등등
+  option8, //A-1 C D
+  option9, //예약한 고객성함
 ) {
   showModalBottomSheet(
     context: context,
@@ -549,7 +561,9 @@ void showCarInfoBottomSheet2(
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Text(
                         '차번호 : $carNumber',
                         style: const TextStyle(
@@ -558,11 +572,14 @@ void showCarInfoBottomSheet2(
                           height: 1.1, // 👈 이거 추가
                         ),
                       ),
-                      SizedBox(width: 30,),
-
+                      SizedBox(
+                        width: 30,
+                      ),
                       IconButton(
-                        padding: EdgeInsets.zero, // 👈 필수
-                        constraints: const BoxConstraints(), // 👈 필수
+                        padding: EdgeInsets.zero,
+                        // 👈 필수
+                        constraints: const BoxConstraints(),
+                        // 👈 필수
                         tooltip: '삭제',
                         icon: const Icon(Icons.delete_outline),
                         color: Colors.red,
@@ -600,7 +617,6 @@ void showCarInfoBottomSheet2(
                                         color: Colors.yellow,
                                       ),
                                     ),
-
                                   ),
                                 ],
                               );
@@ -644,23 +660,23 @@ void showCarInfoBottomSheet2(
                       const SizedBox(height: 5),
                       _rowValue([
                         '시승전',
-                        '$leftGas km',
-                        '$hiPass 원',
-                        '$totalKm km',
+                        formatKm(leftGas),
+                        formatWon(hiPass),
+                        formatKm(totalKm),
                       ]),
                       const SizedBox(height: 5),
                       _rowValue([
                         '시승후',
-                        '$leftGasAfter km',
-                        '$hiPassAfter 원',
-                        '$totalKmAfter km',
+                        formatKm(leftGasAfter),
+                        formatWon(hiPassAfter),
+                        formatKm(totalKmAfter),
+
                       ]),
                     ],
                   ),
                 ),
 
                 const SizedBox(height: 5),
-
 
                 /// =====================
                 /// 👤 시승상태 카드 (변경됨)
@@ -718,30 +734,56 @@ void showCarInfoBottomSheet2(
                   ),
                 ),
                 const SizedBox(height: 5),
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('주유금액 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell(formatWon(option2)),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('예약자 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell(option9),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
 
                 _card(
                   child: Row(
                     children: [
-                      SizedBox(width: 10,),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            const Text(
-                              '특이사항 :',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5,),
-                            Text( etc.isNotEmpty ? etc :''),
-                          ],
+                      SizedBox(width: 15,),
+                      const Text(
+                        '특이사항 :',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        etc.isNotEmpty ? etc : '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
                         ),
                       ),
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
@@ -750,8 +792,6 @@ void showCarInfoBottomSheet2(
     },
   );
 }
-
-
 
 Widget _cell(String text, {TextAlign align = TextAlign.center}) {
   return Text(
@@ -769,12 +809,12 @@ Widget _rowHeader(List<String> texts) {
     children: texts
         .map(
           (t) => Expanded(
-        child: _cell(
-          t,
-          align: TextAlign.center,
-        ),
-      ),
-    )
+            child: _cell(
+              t,
+              align: TextAlign.center,
+            ),
+          ),
+        )
         .toList(),
   );
 }
@@ -784,9 +824,9 @@ Widget _rowValue(List<String> texts) {
     children: texts
         .map(
           (t) => Expanded(
-        child: _cell(t),
-      ),
-    )
+            child: _cell(t),
+          ),
+        )
         .toList(),
   );
 }
@@ -797,7 +837,6 @@ Widget _card({required Widget child}) {
       horizontal: 12,
       vertical: 12,
     ),
-
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(14),

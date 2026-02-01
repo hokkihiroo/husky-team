@@ -69,9 +69,10 @@ class _CarStateState extends State<CarState> {
   String option6 =
       ''; //최근 3종 변경자 이름하려했는데 컬러5리스트에만 작성하면 되는거라 거긴 option1에 저장함 그래서 이건 사실상 다른용도로 써도될것같음
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+  String option8 = ''; //A-1 A-2 C D
+  String option9 = '';    //시승차예약자성함
   //아래는 없음
-  String option8 = '';   //A-1 A-2 C D
-  String option9 = '';
+
   String option10 = '';
   String option11 = '';
   String option12 = '';
@@ -101,6 +102,7 @@ class _CarStateState extends State<CarState> {
     final TextEditingController fuelController = TextEditingController();
     final TextEditingController hipassController = TextEditingController();
     final TextEditingController totalKmController = TextEditingController();
+    final TextEditingController oilPriceController = TextEditingController();
 
     showModalBottomSheet(
       context: rootContext,
@@ -159,6 +161,17 @@ class _CarStateState extends State<CarState> {
                     suffix: 'km',
                     maxLength: 6,
                   ),
+                  // 🔧 [수정] 주유일 때만 주유금액 입력칸 표시
+                  if (name == '주유') ...[
+                    const SizedBox(height: 12),
+                    _inputField(
+                      controller: oilPriceController,
+                      label: '주유금액 (숫자만)',
+                      suffix: '원',
+                      maxLength: 6,
+                    ),
+                  ],
+
                   const SizedBox(height: 24),
                   SizedBox(
                     height: 48,
@@ -178,19 +191,28 @@ class _CarStateState extends State<CarState> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () async{
+                          onPressed: () async {
                             if (fuelController.text.isEmpty ||
                                 hipassController.text.isEmpty ||
                                 totalKmController.text.isEmpty) {
                               return;
                             }
-
+                            // 🔧 [추가 위치 ⭐ 여기 ⭐]
+                            if (name == '주유' && oilPriceController.text.isEmpty) {
+                              return;
+                            }
                             final int fuel = int.parse(fuelController.text);
                             final int hiPass = int.parse(hipassController.text);
                             final int totalKm =
                                 int.parse(totalKmController.text);
+                            int? oilPriceValue; // 🔧 [수정] 실제 저장할 값
+                            if (name == '주유' && oilPriceController.text.isNotEmpty) {
+                              oilPriceValue = int.parse(oilPriceController.text);
+                            }
 
                             // 🔥 Firebase 저장
+                            Navigator.pop(sheetContext);
+
                             try {
                               await FirebaseFirestore.instance
                                   .collection(FIELD)
@@ -198,23 +220,24 @@ class _CarStateState extends State<CarState> {
                                   .update({
                                 'location': 11,
                                 'name': '',
+                                'etc': '',
                                 'option1': '', //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
                                 'option2': hiPass, //하이패스
                                 'option3': fuel, //기름잔량
                                 'option4': totalKm, //총거리
                                 'option5': '', //  기본시승 비교시승 비대면시승 등등
                                 'option8': '', //  A-1 A-2 C D
+                                'option9': '', //  시승예약자 성함
                               });
                             } catch (e) {
                               print('문서 삭제 오류: $e');
                             }
-
+                            //상태 리스트
                             try {
                               await repo.createData(
                                 dataId: dataId,
                                 state: '시승복귀',
                                 wayToDrive: name,
-
                               );
                             } catch (e) {
                               print('문서 삭제 오류: $e');
@@ -234,54 +257,80 @@ class _CarStateState extends State<CarState> {
                                 'leftGasAfter': fuel,
                                 'hiPassAfter': hiPass,
                                 'option1': widget.name, //최종 3종 데이터 변경자
-                                'option5': option5,
-                                'option8': option8,
+                                'option2': name == '주유' ? oilPriceValue : 0,  //컬러5에 주유한금액들어감
+                                'option5': option5,     //기본시승 비교시승 비대면
+                                'option8': option8,// C D A-1
+                                'option9': option9, //시승예약자 성함
                               });
                             } catch (e) {
-                              print(e);
-                              // showDialog(
-                              //     context: rootContext,
-                              //     builder: (BuildContext context) {
-                              //       return AlertDialog(
-                              //         title: Text('하루 지난 데이터 입니다 '),
-                              //         actions: [
-                              //           ElevatedButton(
-                              //             onPressed: () {
-                              //               Navigator.pop(context);
-                              //             },
-                              //             child: Text('확인'),
-                              //           ),
-                              //         ],
-                              //       );
-                              //     });
+
+                              await FirebaseFirestore.instance
+                                  .collection(Color5List)
+                                  .doc(option1)
+                                  .set({
+                                'carNumber': carNumber,
+                                'enterName': '',
+                                //자가주차하면 여기에 자가라고 들어가게함/시승차는 자기이름들어감
+                                'enter': Timestamp.fromDate(
+                                  DateTime(2026, 1, 1, 0, 0, 0), // 00:00:00
+                                ),
+
+                                'out': FieldValue.serverTimestamp(),
+                                'outName': name,
+                                'outLocation': location,
+                                'etc': etc,
+                                'movedLocation': '',
+                                'wigetName': wigetName,
+                                'movingTime': Timestamp.fromDate(
+                                  DateTime(2026, 1, 1, 0, 0, 0), // 00:00:00
+                                ),
+                                'carBrand': '제네시스',
+                                'carModel': carModelFrom,
+                                'totalKm': option4,
+                                'leftGas': option3,
+                                'hiPass': option2,
+                                'totalKmAfter': totalKm,
+                                'leftGasAfter': fuel,
+                                'hiPassAfter': hiPass,
+                                'option1': widget.name, //최종 3종 데이터 변경자
+                                'option2': name == '주유' ? oilPriceValue : 0, //주유금액
+                                'option5': option5, //현재 시승상태 대면 비대면 현장
+                                'option8': option8, // 시승상태 A-1 A-2 C D
+                                'option9': option9,   //시승예약자 성함
+
+                                //아래는 아직없음
+                                'option3': '',
+                                'option4': '',
+                                'option6': '',
+                                'option7': '',
+                                'option10': '',
+                              });
                             }
-                            Navigator.pop(sheetContext);
 
-
-                              bottomColor5Final(
-                                  carNumber,
-                                  name,
-                                  color,
-                                  location,
-                                  dateTime,
-                                  dataId,
-                                  etc,
-                                  remainTime,
-                                  movedLocation,
-                                  wigetName,
-                                  movingTime,
-                                  getMovingTime,
-                                  carModelFrom,
-                                  option1,
-                                  option2,
-                                  option3,
-                                  option4,
-                                  option5,
-                                  rootContext,
-                                  fuel,
-                                  hiPass,
-                                  totalKm);
-
+                            bottomColor5Final(
+                                carNumber,
+                                name,
+                                color,
+                                location,
+                                dateTime,
+                                dataId,
+                                etc,
+                                remainTime,
+                                movedLocation,
+                                wigetName,
+                                movingTime,
+                                getMovingTime,
+                                carModelFrom,
+                                option1,
+                                option2,
+                                option3,
+                                option4,
+                                option5,
+                                rootContext,
+                                fuel,
+                                hiPass,
+                                totalKm,
+                                oilPriceValue);
                           },
                           child: const Text(
                             '저장',
@@ -331,29 +380,30 @@ class _CarStateState extends State<CarState> {
   }
 
   void bottomColor5Final(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      int fuel,
-      int hiPass,
-      int totalKm,
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+    int fuel,
+    int hiPass,
+    int totalKm,
+    int? oilPrice,
+  ) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -427,6 +477,23 @@ class _CarStateState extends State<CarState> {
                 ],
               ),
               SizedBox(height: 8),
+            if (oilPrice != null) ...[
+              Row(
+                children: [
+                  const SizedBox(width: 70, child: Text('주유금액')),
+                  const Expanded(
+                    child: SizedBox(), // ⭐ 빈 칸 유지
+                  ),
+                  Expanded(
+                    child: Text(
+                      '$oilPrice',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              ],
               Row(
                 children: [
                   const SizedBox(width: 70, child: Text('변경한 사람')),
@@ -447,7 +514,6 @@ class _CarStateState extends State<CarState> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-            
                 TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -457,10 +523,8 @@ class _CarStateState extends State<CarState> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: ()  {
-       
+                  onPressed: () {
                     Navigator.pop(dialogContext);
-
                   },
                   child: const Text(
                     '확인',
@@ -478,6 +542,7 @@ class _CarStateState extends State<CarState> {
       },
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -778,11 +843,12 @@ class _CarStateState extends State<CarState> {
                           0; //총킬로수
                   option5 = filteredDocs[index]['option5']; //시승차 차량상대 기본시승 비교시승
                   option6 = filteredDocs[index]['option6']; //최근 3종 변경자 이름
-                  option7 = filteredDocs[index]['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                  option7 = filteredDocs[index]
+                      ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                   option8 = filteredDocs[index]['option8']; //A-1 A-2 C D
+                  option9 = filteredDocs[index]['option9']; //시승차예약자 성함
+                  //아래는 없음
 
-                  //아래없음
-                  option9 = filteredDocs[index]['option9']; //시승차 예비용
                   option10 = filteredDocs[index]['option10']; //시승차 예비용
                   option11 = filteredDocs[index]['option11']; //시승차 예비용
                   option12 = filteredDocs[index]['option12']; //시승차 예비용
@@ -1740,6 +1806,14 @@ class _CarStateState extends State<CarState> {
                     color: Colors.grey[700],
                   ),
                 ),
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
               ],
             ),
           ),
@@ -1748,7 +1822,7 @@ class _CarStateState extends State<CarState> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '주유잔량: ${option3}km',
+                  '주유잔량: ${formatKm(option3)}',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -1756,7 +1830,7 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '하이패스: $option2원',
+                  '하이패스: ${formatWon(option2)}',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -1764,7 +1838,15 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
                 Text(
-                  '총킬로수: ${option4}km',
+                  '총킬로수: ${formatKm(option4)}',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                Text(
+                  '예약자:    $option9',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
