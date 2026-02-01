@@ -449,8 +449,8 @@ class _CarStateState extends State<CarState> {
                 children: [
                   SizedBox(width: 70, child: Text('주유 잔량')),
                   Expanded(
-                      child: Text('$option3', textAlign: TextAlign.center)),
-                  Expanded(child: Text('$fuel', textAlign: TextAlign.center)),
+                      child: Text(formatKm(option3), textAlign: TextAlign.center)),
+                  Expanded(child: Text(formatKm(fuel), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -460,8 +460,8 @@ class _CarStateState extends State<CarState> {
                 children: [
                   SizedBox(width: 70, child: Text('하이패스')),
                   Expanded(
-                      child: Text('$option2', textAlign: TextAlign.center)),
-                  Expanded(child: Text('$hiPass', textAlign: TextAlign.center)),
+                      child: Text(formatWon(option2), textAlign: TextAlign.center)),
+                  Expanded(child: Text(formatWon(hiPass), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -471,9 +471,9 @@ class _CarStateState extends State<CarState> {
                 children: [
                   SizedBox(width: 70, child: Text('총 킬로수')),
                   Expanded(
-                      child: Text('$option4', textAlign: TextAlign.center)),
+                      child: Text(formatKm(option4), textAlign: TextAlign.center)),
                   Expanded(
-                      child: Text('$totalKm', textAlign: TextAlign.center)),
+                      child: Text(formatKm(totalKm), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -486,7 +486,7 @@ class _CarStateState extends State<CarState> {
                   ),
                   Expanded(
                     child: Text(
-                      '$oilPrice',
+                      formatWon(oilPrice),
                       textAlign: TextAlign.center,
                     ),
                   ),

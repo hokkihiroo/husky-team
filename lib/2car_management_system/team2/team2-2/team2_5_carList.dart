@@ -151,25 +151,55 @@ class _CarListState extends State<CarListz1> {
 
     final buffer = StringBuffer();
     buffer.writeln('날짜: $address (총 $count대)');
-    buffer.writeln('번호 차종 차번호 출발 도착 용도 고객성함 총거리(전) 총거리(후) 주유량(전) 주유량(후)');
+    buffer.writeln(
+        '번호 차종 차번호 출발 도착 용도 고객성함 총거리(전) 총거리(후) 주유량(전) 주유량(후) 주유충전여부 주유/충전금액');
 
     for (int i = 0; i < count; i++) {
       final doc = query.docs[i];
       final model = doc['carModel'];
       final carNum = doc['carNumber'];
-      Timestamp movingTime123 =doc['movingTime']; //입차시각
-      final movingTime =getInTime(movingTime123);
-
-
+      Timestamp movingTime123 = doc['movingTime']; //입차시각
+      final movingTime = getInTime(movingTime123);
       final out = doc['out'] is Timestamp
           ? getOutTime((doc['out'] as Timestamp).toDate())
           : '---';
 
+      final option5 = '${doc['option5'] ?? ''}'; //대면시승 비대면시승
+      final option8 = '${doc['option8'] ?? ''}'; //A-1 A-2 C D
+      final option9Raw = doc['option9'];
+      final option9 = (option9Raw == null ||
+          option9Raw.toString().trim().isEmpty)
+          ? '없음'
+          : option9Raw.toString().trim();
 
+      final totalKm = '${doc['totalKm'] ?? ''}'; //총거리(시승전)
+      final totalKmAfter = '${doc['totalKmAfter'] ?? ''}'; //총거리(시승후)
+      final leftGas = '${doc['leftGas'] ?? ''}'; //주유량(시승전)
+      final leftGasAfter = '${doc['leftGasAfter'] ?? ''}'; //주유량(시승후)
+      final dynamic rawOption2 = doc['option2'];
 
+      final int option2222 = rawOption2 is int
+          ? rawOption2
+          : int.tryParse(rawOption2?.toString() ?? '') ?? 0; // 🔥 핵심     주유충전금액
+      final String gasOk = option2222 > 0 ? 'O' : 'X'; //금액이 0보다크면 O 아니면X
+      final String option2 = option2222.toString(); //0보다 클때 스트링으로
 
+      print(model);
+      print(carNum);
+      print(movingTime);
+      print(out);
+      print(option5);
+      print(option8);
+      print(option9);
+      print(totalKm);
+      print(totalKmAfter);
+      print(leftGas);
+      print(option2222);
+      print(gasOk);
+      print(option2);
 
-      // buffer.writeln('${i + 1} $brand $model $carNum $enter $out');
+      buffer.writeln(
+          '${i + 1} $model $carNum $movingTime $out $option5$option8 $option9 $totalKm $totalKmAfter $leftGas $leftGasAfter $gasOk $option2');
 
       //
       // buffer.writeln('(${i + 1})');
@@ -209,7 +239,9 @@ class _CarListState extends State<CarListz1> {
               );
             },
           ),
-          SizedBox(width: 15,),
+          SizedBox(
+            width: 15,
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -445,7 +477,6 @@ class ListModel extends StatelessWidget {
                       int.tryParse(docs[index]['totalKmAfter'].toString()) ??
                           0; //총킬로수
 
-
                   showCarInfoBottomSheet2(
                     context,
                     dataId,
@@ -670,7 +701,6 @@ void showCarInfoBottomSheet2(
                         formatKm(leftGasAfter),
                         formatWon(hiPassAfter),
                         formatKm(totalKmAfter),
-
                       ]),
                     ],
                   ),
@@ -764,7 +794,9 @@ void showCarInfoBottomSheet2(
                 _card(
                   child: Row(
                     children: [
-                      SizedBox(width: 15,),
+                      SizedBox(
+                        width: 15,
+                      ),
                       const Text(
                         '특이사항 :',
                         style: TextStyle(
