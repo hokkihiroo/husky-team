@@ -6,6 +6,8 @@ class OutCarCard extends StatelessWidget {
   final String myName;
   final String carNumber;
   final String name;
+  final String option12;
+  final String etc;
   final String dataAdress;
   final int location;
   final int color;
@@ -15,11 +17,19 @@ class OutCarCard extends StatelessWidget {
 
   String CarListAdress = CARLIST + formatTodayDate();
 
-
   OutCarCard({
     super.key,
     required this.carNumber,
-    required this.name, required this.location, required this.dataId, required this.myName, required this.dataAdress, required this.movedLocation, required this.wigetName,required this.color
+    required this.name,
+    required this.option12,
+    required this.etc,
+    required this.location,
+    required this.dataId,
+    required this.myName,
+    required this.dataAdress,
+    required this.movedLocation,
+    required this.wigetName,
+    required this.color,
   });
 
   @override
@@ -38,8 +48,8 @@ class OutCarCard extends StatelessWidget {
               color: color == 4
                   ? Colors.green
                   : (name != null && name.isNotEmpty
-                  ? Colors.yellow
-                  : Colors.red),
+                      ? Colors.yellow
+                      : Colors.red),
             ),
           ),
           Text(
@@ -54,100 +64,99 @@ class OutCarCard extends StatelessWidget {
                   : Colors.black,
             ),
           ),
-
-
-
           color == 4
               ? ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: () async {
-              try {
-                await FirebaseFirestore.instance
-                    .collection(FIELD)
-                    .doc(dataId)
-                    .update({
-                  'color': 1,
-                  'name':'',
-                });
-              } catch (e) {
-                print(e);
-              }
-            },
-            child: Text(
-              '회차완료',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          )
-              : ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              backgroundColor: Colors.white, // 버튼 색상
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-              ),
-            ),
-            onPressed: () async {
-              try {
-                await FirebaseFirestore.instance
-                    .collection(FIELD)
-                    .doc(dataId)
-                    .delete();
-                print('문서 삭제 완료');
-              } catch (e) {
-                print('문서 삭제 오류: $e');
-              }
-
-              try {
-                await FirebaseFirestore.instance
-                    .collection(CarListAdress)
-                    .doc(dataId)
-                    .update({
-                  'out': FieldValue.serverTimestamp(),
-                  'outName': name,
-                  'outLocation': location,
-                  'movedLocation': movedLocation,
-                  'wigetName': wigetName,
-                });
-                print('출차완료 업데이트 완료');
-              } catch (e) {
-                print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('하루 지난 데이터 입니다 '),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('확인'),
-                        ),
-                      ],
-                    );
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .update({
+                        'color': 1,
+                        'name': '',
+                      });
+                    } catch (e) {
+                      print(e);
+                    }
                   },
-                );
-              }
-            },
-            child: Text(
-              '출차완료',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ),
+                  child: Text(
+                    '회차완료',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              : ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    backgroundColor: Colors.white, // 버튼 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(FIELD)
+                          .doc(dataId)
+                          .delete();
+                      print('문서 삭제 완료');
+                    } catch (e) {
+                      print('문서 삭제 오류: $e');
+                    }
+
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(CarListAdress)
+                          .doc(dataId)
+                          .update({
+                        'out': FieldValue.serverTimestamp(),
+                        'outName': name,
+                        'outLocation': location,
+                        'movedLocation': movedLocation,
+                        'wigetName': wigetName,
+                        'etc': '($option12) $etc',
+
+                      });
+                      print('출차완료 업데이트 완료');
+                    } catch (e) {
+                      print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('하루 지난 데이터 입니다 '),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('확인'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child: Text(
+                    '출차완료',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
         ],
       ),
     );

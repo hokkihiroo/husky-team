@@ -50,6 +50,8 @@ class _OutCarState extends State<OutCar> {
                 child: OutCarCard(
                   carNumber: filteredDocs[index]['carNumber'],
                   name: filteredDocs[index]['name'],
+                  option12: filteredDocs[index]['option12'],
+                  etc: filteredDocs[index]['etc'],
                   dataId: filteredDocs[index].id,
                   location:  filteredDocs[index]['location'],
                   myName: widget.name,

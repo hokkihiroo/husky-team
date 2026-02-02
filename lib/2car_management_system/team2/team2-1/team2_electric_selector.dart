@@ -297,7 +297,7 @@ class _ElectricButtonDialogState extends State<ElectricButtonDialog> {
                         .collection(FIELD)
                         .doc(widget.dataId)
                         .update({
-                      'color': 6,
+                      'option12':'충전',
                     });
                   } catch (e) {
                     print(e);
@@ -308,7 +308,7 @@ class _ElectricButtonDialogState extends State<ElectricButtonDialog> {
                         .collection(CarListAdress)
                         .doc(widget.dataId)
                         .update({
-                      'etc': '${widget.etc}/충전/',
+                      'etc': widget.etc,
 
                     });
                   } catch (e) {

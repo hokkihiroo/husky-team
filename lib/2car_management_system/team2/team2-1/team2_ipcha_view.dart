@@ -55,12 +55,12 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String option5 = ''; //기본시승 비교시승 비대면시승
   String option6 = '';   //최근 3종 변경자 이름
   int option7 = 0;      //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
-  //아래는 없음
   String option8 = '';    //A-1 A-2 C D
   String option9 = '';    //시승차예약자 성함
+  String option12= '';    //전기차 충전시 스트링 '충전'
+  //아래는 없음
   String option10 = '';
   String option11= '';
-  String option12= '';
 
   @override
   void initState() {
@@ -336,6 +336,8 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 Color5List = COLOR5 + formatTodayDate();
                 var document = filteredDocs[index];
                 dataId = document.id;
+                print(dataId);
+
                 name = filteredDocs[index]['name'];
                 enterName = filteredDocs[index]['enterName'];
                 carNumber = filteredDocs[index]['carNumber'];
@@ -358,10 +360,10 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 option7 = filteredDocs[index]['option7'];     //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = filteredDocs[index]['option8'];         //A-1 A-2 C D
                 option9 = filteredDocs[index]['option9'];            //시승차 예약자성함
+                option12= filteredDocs[index]['option12'];          //전기차 충전시 사용 '충전'
                 //아래없음
                 option10 = filteredDocs[index]['option10'];            //시승차 예비용
                 option11= filteredDocs[index]['option11'];               //시승차 예비용
-                option12= filteredDocs[index]['option12'];           //시승차 예비용
 
 
                 String getMovingTime = getTodayTime();
@@ -396,12 +398,12 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         option9,
                         // option10,
                         // option11,
-                        // option12,
                       );
                     } else {
                       return bottomTwo(
                         carNumber,
                         name,
+                        option12,   //전기차 충전시 '충전' 스트링값 삽입
                         color,
                         location,
                         dateTime,
@@ -428,6 +430,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 etc: filteredDocs[index]['etc'],
                 carBrand: filteredDocs[index]['carBrand'],
                 carModel: filteredDocs[index]['carModel'],
+                option12: filteredDocs[index]['option12'],
               ),
             );
           },
@@ -439,6 +442,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   Widget bottomTwo(
     String carNumber,
     String name,
+    String option12,
     int color,
     int location,
     DateTime dateTime,
@@ -552,7 +556,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
                         'enterName': enterName,
-                        'etc': etc,
+                        'etc': '($option12) $etc',
                       });
                     } catch (e) {
                       print(e);

@@ -71,11 +71,11 @@ class _CarStateState extends State<CarState> {
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   String option8 = ''; //A-1 A-2 C D
   String option9 = '';    //시승차예약자성함
-  //아래는 없음
+  String option12 = '';       //전기차 충전시 사용 '충전'
 
+  //아래는 없음
   String option10 = '';
   String option11 = '';
-  String option12 = '';
 
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
   void showIntInputBottomSheet(
@@ -814,6 +814,8 @@ class _CarStateState extends State<CarState> {
                   Color5List = COLOR5 + formatTodayDate();
                   var document = filteredDocs[index];
                   dataId = document.id;
+                  print(dataId);
+
                   name = filteredDocs[index]['name'];
                   enterName = filteredDocs[index]['enterName'];
                   carNumber = filteredDocs[index]['carNumber'];
@@ -847,11 +849,11 @@ class _CarStateState extends State<CarState> {
                       ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                   option8 = filteredDocs[index]['option8']; //A-1 A-2 C D
                   option9 = filteredDocs[index]['option9']; //시승차예약자 성함
+                  option12 = filteredDocs[index]['option12'];  //전기차 충전시 사용 '충전'
                   //아래는 없음
 
                   option10 = filteredDocs[index]['option10']; //시승차 예비용
                   option11 = filteredDocs[index]['option11']; //시승차 예비용
-                  option12 = filteredDocs[index]['option12']; //시승차 예비용
 
                   showDialog(
                     context: rootContext,
@@ -882,7 +884,6 @@ class _CarStateState extends State<CarState> {
                           option9,
                           option10,
                           option11,
-                          option12,
                           rootContext,
                           context,
                         );
@@ -890,6 +891,7 @@ class _CarStateState extends State<CarState> {
                         return bottomTwo(
                           carNumber,
                           name,
+                          option12,
                           color,
                           location,
                           dateTime,
@@ -918,6 +920,7 @@ class _CarStateState extends State<CarState> {
                     etc: filteredDocs[index]['etc'],
                     carBrand: filteredDocs[index]['carBrand'],
                     carModel: filteredDocs[index]['carModel'],
+                    option12: filteredDocs[index]['option12'],
                   ),
                 ),
               ),
@@ -931,6 +934,7 @@ class _CarStateState extends State<CarState> {
   Widget bottomTwo(
     String carNumber,
     String name,
+    String option12,
     int color,
     int location,
     DateTime dateTime,
@@ -1044,7 +1048,7 @@ class _CarStateState extends State<CarState> {
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
                         'enterName': enterName,
-                        'etc': etc,
+                        'etc': '($option12) $etc',
                       });
                     } catch (e) {
                       print(e);
@@ -1770,7 +1774,6 @@ class _CarStateState extends State<CarState> {
     String option9,
     String option10,
     String option11,
-    String option12,
     BuildContext rootContext, // 화면 context (show용)
     BuildContext dialogContext, // bottomColor5 닫기용
   ) {

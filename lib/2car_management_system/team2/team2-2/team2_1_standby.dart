@@ -180,6 +180,7 @@ class _StandByState extends State<StandBy> {
                 carBrand: displayList[index]['carBrand'],
                 carModel: displayList[index]['carModel'],
                 location: displayList[index]['location'],
+                option9: displayList[index]['option9'],
               ),
             );
           },

@@ -9,6 +9,7 @@ class StandByCard extends StatelessWidget {
   final String etc;
   final String? carBrand;
   final String? carModel;
+  final String? option9;
 
   const StandByCard({
     super.key,
@@ -19,6 +20,7 @@ class StandByCard extends StatelessWidget {
     required this.etc,
     this.carBrand,
     this.carModel,
+    this.option9,
   });
 
   String splitNames() {
@@ -97,14 +99,14 @@ class StandByCard extends StatelessWidget {
           ),
         // ⭐ 브랜드가 있을 때만 별 아이콘 추가
 
-        if (color==6)
+        if (option9!=null)
           Positioned(
             top: 20, // 위로 살짝 올리기
             left: 20,
             right: 0,
             child: Icon(
-              Icons.bolt_outlined,
-              color: Colors.red,
+              Icons.grade_outlined,
+              color: Colors.yellow,
               size: 13,
             ),
           ),
