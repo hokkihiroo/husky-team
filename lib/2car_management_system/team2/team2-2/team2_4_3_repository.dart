@@ -19,6 +19,14 @@ class StateRepository {
     required String dataId,
     required String state,
     required String wayToDrive,
+    required int totalKmBefore, // 출발전 총거리
+    required int leftGasBefore, // 출발전 남은 주유량
+    required int hiPassBefore, // 출발전 하이패스
+    String? name, // 데이터수정 눌렀을때 변경자 넣기
+    int? totalKmAfter, // 데이터수정 눌렀을때 변경자 넣기
+    int? leftGasAfter, // 데이터수정 눌렀을때 변경자 넣기
+    int? hiPassAfter, // 데이터수정 눌렀을때 변경자 넣기
+
   }) async {
 
    final thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
@@ -32,12 +40,15 @@ class StateRepository {
           .doc() // 랜덤 ID로 새 문서 생성
           .set({
         'createdAt': FieldValue.serverTimestamp(),
-        'name':'name',
-        'color': 'color',
-        'location': 'location',
+        'name': name ?? '',
         'state': state,                               //차량의 상태기록
         'wayToDrive': wayToDrive,                     // 시승방법 기록 대면,현장동승, 기타 등등
-
+        'totalKmBefore': totalKmBefore,
+        'leftGasBefore': leftGasBefore,
+        'hiPassBefore': hiPassBefore,
+        'totalKmAfter': totalKmAfter,
+        'leftGasAfter': leftGasAfter,
+        'hiPassAfter': hiPassAfter,
       });
       print('✅ 데이터 생성 성공');
     } catch (e) {

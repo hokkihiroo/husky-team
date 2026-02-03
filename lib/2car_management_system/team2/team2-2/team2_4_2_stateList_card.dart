@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class StateListCard extends StatelessWidget {
 final String smallDataId;
-final String carModel;
 
 final String theDay;
 final String theTime;
@@ -14,7 +13,6 @@ final String wayToDrive;
 const StateListCard(
       {super.key,
         required this.smallDataId,
-        required this.carModel,
         required this.theDay,
         required this.theTime,
         required this.state,

@@ -332,8 +332,11 @@ class _StandByState extends State<StandBy> {
                       }
                       await repo.createData(
                         dataId: dataId,
-                        state: '스탠바이 -> B1',
-                        wayToDrive: '$option5(시승취소)',
+                        state: '시승취소(B1)',
+                        wayToDrive: option5,
+                        totalKmBefore: option4,
+                        leftGasBefore: option3,
+                        hiPassBefore: option2,
                       );
                     },
                     child: Text(

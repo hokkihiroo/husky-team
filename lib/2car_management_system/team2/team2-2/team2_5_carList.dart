@@ -184,31 +184,9 @@ class _CarListState extends State<CarListz1> {
       final String gasOk = option2222 > 0 ? 'O' : 'X'; //금액이 0보다크면 O 아니면X
       final String option2 = option2222.toString(); //0보다 클때 스트링으로
 
-      print(model);
-      print(carNum);
-      print(movingTime);
-      print(out);
-      print(option5);
-      print(option8);
-      print(option9);
-      print(totalKm);
-      print(totalKmAfter);
-      print(leftGas);
-      print(option2222);
-      print(gasOk);
-      print(option2);
-
       buffer.writeln(
           '${i + 1} $model $carNum $movingTime $out $option5$option8 $option9 $totalKm $totalKmAfter $leftGas $leftGasAfter $gasOk $option2');
 
-      //
-      // buffer.writeln('(${i + 1})');
-      // buffer.writeln('브랜드: $brand');
-      // buffer.writeln('차종: $model');
-      // buffer.writeln('차량번호: $carNum');
-      // buffer.writeln('입차: $enter / 출차: $out');
-      // buffer.writeln('특이사항: $etc ');
-      // buffer.writeln('');
     }
 
     return buffer.toString();

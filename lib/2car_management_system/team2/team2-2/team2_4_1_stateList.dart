@@ -205,11 +205,13 @@ class ListModel extends StatelessWidget {
   String enterName = '';
   DateTime? outTime;
   String theDay = '';
-  String outLocation = '';
-  String movedLocation = '';
   String wigetName = '';
-  String movingTime = '';
-  String etc = '';
+  int? hiPass =0;
+  int? leftGas =0;
+  int? totalKm =0;
+  int? hiPassAfter =0;
+  int? leftGasAfter =0;
+  int? totalKmAfter =0;
 
   ListModel({super.key, required this.adress, required this.mainDataId});
 
@@ -220,7 +222,7 @@ class ListModel extends StatelessWidget {
           .collection(STATELIST)
           .doc(mainDataId)           // 123
           .collection(adress)
-          .orderBy('createdAt')
+          .orderBy('createdAt', descending: true)
           .snapshots(),
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -252,17 +254,42 @@ class ListModel extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: GestureDetector(
                 onTap: () async {
-                  var document = docs[index];
-                  print(document.id);
-                  print(theDay);
-                  print(docs[index]['wayToDrive']);
 
+                  var document = docs[index];
+                  smallDataId=document.id;
+                  hiPass = int.tryParse(docs[index]['hiPass'].toString()) ??
+                      0; //하이패스 잔액
+                  leftGas = int.tryParse(docs[index]['leftGas'].toString()) ??
+                      0; //주유잔량
+                  totalKm = int.tryParse(docs[index]['totalKm'].toString()) ??
+                      0; //총킬로수
+                  hiPassAfter =
+                      int.tryParse(docs[index]['hiPassAfter'].toString()) ??
+                          0; //하이패스 잔액
+                  leftGasAfter =
+                      int.tryParse(docs[index]['leftGasAfter'].toString()) ??
+                          0; //주유잔량
+                  totalKmAfter =
+                      int.tryParse(docs[index]['totalKmAfter'].toString()) ??
+                          0; //총킬로수
+
+
+                  showCarInfoBottomSheet2(
+                    context,
+                    smallDataId,
+                    leftGas,
+                    hiPass,
+                    totalKm,
+                    leftGasAfter,
+                    hiPassAfter,
+                    totalKmAfter,
+
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: StateListCard(
                     smallDataId: docs[index]['name'],
-                    carModel: docs[index]['location'],
                     theDay: theDay,
                     theTime: theTime,
                     state: docs[index]['state'],
@@ -276,4 +303,204 @@ class ListModel extends StatelessWidget {
       },
     );
   }
+}
+
+void showCarInfoBottomSheet2(
+    context,
+    id,
+    leftGas,
+    hiPass,
+    totalKm,
+    leftGasAfter,
+    hiPassAfter,
+    totalKmAfter,
+    ) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        height: 400,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+
+                const SizedBox(height: 5),
+
+                /// =====================
+                /// ⛽ 주유 / 거리 카드
+                /// =====================
+                _card(
+                  child: Column(
+                    children: [
+                      _rowHeader(['상태', '주유잔량', '하이패스', '총거리']),
+                      const SizedBox(height: 5),
+                      _rowValue([
+                        '시승전',
+                        formatKm(leftGas),
+                        formatWon(hiPass),
+                        formatKm(totalKm),
+                      ]),
+                      const SizedBox(height: 5),
+                      _rowValue([
+                        '시승후',
+                        formatKm(leftGasAfter),
+                        formatWon(hiPassAfter),
+                        formatKm(totalKmAfter),
+                      ]),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                /// =====================
+                /// 👤 시승상태 카드 (변경됨)
+                /// =====================
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승준비 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('예시'),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승복귀 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('예시'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승상태 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('(예시)'),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('시승상태 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('A-1(예시)'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('주유금액 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('예시'),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('예약자 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell('예시'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _cell(String text, {TextAlign align = TextAlign.center}) {
+  return Text(
+    text,
+    textAlign: align,
+    style: const TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+}
+
+Widget _rowHeader(List<String> texts) {
+  return Row(
+    children: texts
+        .map(
+          (t) => Expanded(
+        child: _cell(
+          t,
+          align: TextAlign.center,
+        ),
+      ),
+    )
+        .toList(),
+  );
+}
+
+Widget _rowValue(List<String> texts) {
+  return Row(
+    children: texts
+        .map(
+          (t) => Expanded(
+        child: _cell(t),
+      ),
+    )
+        .toList(),
+  );
+}
+
+Widget _card({required Widget child}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(
+      horizontal: 12,
+      vertical: 12,
+    ),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.06),
+          blurRadius: 8,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    ),
+    child: child,
+  );
 }

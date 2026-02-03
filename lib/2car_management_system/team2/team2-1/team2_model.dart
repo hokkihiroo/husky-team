@@ -70,8 +70,8 @@ class _CarStateState extends State<CarState> {
       ''; //최근 3종 변경자 이름하려했는데 컬러5리스트에만 작성하면 되는거라 거긴 option1에 저장함 그래서 이건 사실상 다른용도로 써도될것같음
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   String option8 = ''; //A-1 A-2 C D
-  String option9 = '';    //시승차예약자성함
-  String option12 = '';       //전기차 충전시 사용 '충전'
+  String option9 = ''; //시승차예약자성함
+  String option12 = ''; //전기차 충전시 사용 '충전'
 
   //아래는 없음
   String option10 = '';
@@ -198,7 +198,8 @@ class _CarStateState extends State<CarState> {
                               return;
                             }
                             // 🔧 [추가 위치 ⭐ 여기 ⭐]
-                            if (name == '주유' && oilPriceController.text.isEmpty) {
+                            if (name == '주유' &&
+                                oilPriceController.text.isEmpty) {
                               return;
                             }
                             final int fuel = int.parse(fuelController.text);
@@ -206,8 +207,10 @@ class _CarStateState extends State<CarState> {
                             final int totalKm =
                                 int.parse(totalKmController.text);
                             int? oilPriceValue; // 🔧 [수정] 실제 저장할 값
-                            if (name == '주유' && oilPriceController.text.isNotEmpty) {
-                              oilPriceValue = int.parse(oilPriceController.text);
+                            if (name == '주유' &&
+                                oilPriceController.text.isNotEmpty) {
+                              oilPriceValue =
+                                  int.parse(oilPriceController.text);
                             }
 
                             // 🔥 Firebase 저장
@@ -236,8 +239,15 @@ class _CarStateState extends State<CarState> {
                             try {
                               await repo.createData(
                                 dataId: dataId,
-                                state: '시승복귀',
-                                wayToDrive: name,
+                                state: '시승복귀(B1)',
+                                wayToDrive: option5,
+                                totalKmBefore: option4,
+                                leftGasBefore: option3,
+                                hiPassBefore: option2,
+                                totalKmAfter: totalKm,
+                                leftGasAfter: fuel,
+                                hiPassAfter: hiPass,
+                                name: widget.name,
                               );
                             } catch (e) {
                               print('문서 삭제 오류: $e');
@@ -256,14 +266,18 @@ class _CarStateState extends State<CarState> {
                                 'totalKmAfter': totalKm,
                                 'leftGasAfter': fuel,
                                 'hiPassAfter': hiPass,
-                                'option1': widget.name, //최종 3종 데이터 변경자
-                                'option2': name == '주유' ? oilPriceValue : 0,  //컬러5에 주유한금액들어감
-                                'option5': option5,     //기본시승 비교시승 비대면
-                                'option8': option8,// C D A-1
-                                'option9': option9, //시승예약자 성함
+                                'option1': widget.name,
+                                //최종 3종 데이터 변경자
+                                'option2': name == '주유' ? oilPriceValue : 0,
+                                //컬러5에 주유한금액들어감
+                                'option5': option5,
+                                //기본시승 비교시승 비대면
+                                'option8': option8,
+                                // C D A-1
+                                'option9': option9,
+                                //시승예약자 성함
                               });
                             } catch (e) {
-
                               await FirebaseFirestore.instance
                                   .collection(Color5List)
                                   .doc(option1)
@@ -292,11 +306,16 @@ class _CarStateState extends State<CarState> {
                                 'totalKmAfter': totalKm,
                                 'leftGasAfter': fuel,
                                 'hiPassAfter': hiPass,
-                                'option1': widget.name, //최종 3종 데이터 변경자
-                                'option2': name == '주유' ? oilPriceValue : 0, //주유금액
-                                'option5': option5, //현재 시승상태 대면 비대면 현장
-                                'option8': option8, // 시승상태 A-1 A-2 C D
-                                'option9': option9,   //시승예약자 성함
+                                'option1': widget.name,
+                                //최종 3종 데이터 변경자
+                                'option2': name == '주유' ? oilPriceValue : 0,
+                                //주유금액
+                                'option5': option5,
+                                //현재 시승상태 대면 비대면 현장
+                                'option8': option8,
+                                // 시승상태 A-1 A-2 C D
+                                'option9': option9,
+                                //시승예약자 성함
 
                                 //아래는 아직없음
                                 'option3': '',
@@ -449,8 +468,10 @@ class _CarStateState extends State<CarState> {
                 children: [
                   SizedBox(width: 70, child: Text('주유 잔량')),
                   Expanded(
-                      child: Text(formatKm(option3), textAlign: TextAlign.center)),
-                  Expanded(child: Text(formatKm(fuel), textAlign: TextAlign.center)),
+                      child:
+                          Text(formatKm(option3), textAlign: TextAlign.center)),
+                  Expanded(
+                      child: Text(formatKm(fuel), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -460,8 +481,11 @@ class _CarStateState extends State<CarState> {
                 children: [
                   SizedBox(width: 70, child: Text('하이패스')),
                   Expanded(
-                      child: Text(formatWon(option2), textAlign: TextAlign.center)),
-                  Expanded(child: Text(formatWon(hiPass), textAlign: TextAlign.center)),
+                      child: Text(formatWon(option2),
+                          textAlign: TextAlign.center)),
+                  Expanded(
+                      child:
+                          Text(formatWon(hiPass), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -471,28 +495,30 @@ class _CarStateState extends State<CarState> {
                 children: [
                   SizedBox(width: 70, child: Text('총 킬로수')),
                   Expanded(
-                      child: Text(formatKm(option4), textAlign: TextAlign.center)),
+                      child:
+                          Text(formatKm(option4), textAlign: TextAlign.center)),
                   Expanded(
-                      child: Text(formatKm(totalKm), textAlign: TextAlign.center)),
+                      child:
+                          Text(formatKm(totalKm), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
-            if (oilPrice != null) ...[
-              Row(
-                children: [
-                  const SizedBox(width: 70, child: Text('주유금액')),
-                  const Expanded(
-                    child: SizedBox(), // ⭐ 빈 칸 유지
-                  ),
-                  Expanded(
-                    child: Text(
-                      formatWon(oilPrice),
-                      textAlign: TextAlign.center,
+              if (oilPrice != null) ...[
+                Row(
+                  children: [
+                    const SizedBox(width: 70, child: Text('주유금액')),
+                    const Expanded(
+                      child: SizedBox(), // ⭐ 빈 칸 유지
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
+                    Expanded(
+                      child: Text(
+                        formatWon(oilPrice),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
               ],
               Row(
                 children: [
@@ -849,7 +875,7 @@ class _CarStateState extends State<CarState> {
                       ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                   option8 = filteredDocs[index]['option8']; //A-1 A-2 C D
                   option9 = filteredDocs[index]['option9']; //시승차예약자 성함
-                  option12 = filteredDocs[index]['option12'];  //전기차 충전시 사용 '충전'
+                  option12 = filteredDocs[index]['option12']; //전기차 충전시 사용 '충전'
                   //아래는 없음
 
                   option10 = filteredDocs[index]['option10']; //시승차 예비용

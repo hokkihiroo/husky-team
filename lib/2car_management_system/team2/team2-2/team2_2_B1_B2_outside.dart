@@ -191,9 +191,12 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             try {
                               await repo.createData(
                                 dataId: dataId,
-                                state: '데이터변경',
-                                wayToDrive: name,
-
+                                state: '데이터가 변경됨',
+                                wayToDrive: option5,
+                                name: widget.name,
+                                totalKmBefore: totalKm ,
+                                leftGasBefore: fuel ,
+                                hiPassBefore:  hiPass ,
                               );
                             } catch (e) {
                               print('문서 삭제 오류: $e');
@@ -731,6 +734,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         dataId: dataId,
                         state: '$nowLocation > 스탠바이',
                         wayToDrive: option5,
+                        totalKmBefore: option4,
+                        leftGasBefore: option3,
+                        hiPassBefore: option2,
                       );
                     },
                     child: Text(
@@ -1425,7 +1431,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> B1',
-                        wayToDrive: name,
+                        wayToDrive: option5,
+                        totalKmBefore: option4,
+                        leftGasBefore: option3,
+                        hiPassBefore: option2,
                       );
                     },
                     child: Text(
@@ -1469,7 +1478,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> B2',
-                        wayToDrive: name,
+                        wayToDrive: option5,
+                        totalKmBefore: option4,
+                        leftGasBefore: option3,
+                        hiPassBefore: option2,
                       );
                     },
                     child: Text(
@@ -1513,7 +1525,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation -> 외부주차장',
-                        wayToDrive: name,
+                        wayToDrive: option5,
+                        totalKmBefore: option4,
+                        leftGasBefore: option3,
+                        hiPassBefore: option2,
                       );
                     },
                     child: Text(
