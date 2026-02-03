@@ -247,7 +247,9 @@ class _CarStateState extends State<CarState> {
                                 totalKmAfter: totalKm,
                                 leftGasAfter: fuel,
                                 hiPassAfter: hiPass,
-                                name: widget.name,
+                                finishdName: widget.name,
+                                  oilPriceValue:oilPriceValue,
+                                wayToDrive2: option8,
                               );
                             } catch (e) {
                               print('문서 삭제 오류: $e');

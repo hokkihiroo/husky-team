@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class StateListCard extends StatelessWidget {
-final String smallDataId;
-
 final String theDay;
 final String theTime;
 final String state;
@@ -12,7 +10,6 @@ final String wayToDrive;
 
 const StateListCard(
       {super.key,
-        required this.smallDataId,
         required this.theDay,
         required this.theTime,
         required this.state,

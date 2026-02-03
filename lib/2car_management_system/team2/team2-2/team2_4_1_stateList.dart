@@ -199,19 +199,24 @@ class _ListState extends StatelessWidget {
 class ListModel extends StatelessWidget {
   final String adress;
   final String mainDataId;
+
   String smallDataId = '';
+  String prepareName = '';
+  String finishdName = '';
+  String wayToDrive2 = '';
   String carModel = '';
   String enterTime = '';
   String enterName = '';
   DateTime? outTime;
   String theDay = '';
   String wigetName = '';
-  int? hiPass =0;
-  int? leftGas =0;
-  int? totalKm =0;
+  int? hiPassBefore =0;
+  int? leftGasBefore =0;
+  int? totalKmBefore =0;
   int? hiPassAfter =0;
   int? leftGasAfter =0;
   int? totalKmAfter =0;
+  int? oilPriceValue =0;
 
   ListModel({super.key, required this.adress, required this.mainDataId});
 
@@ -257,11 +262,11 @@ class ListModel extends StatelessWidget {
 
                   var document = docs[index];
                   smallDataId=document.id;
-                  hiPass = int.tryParse(docs[index]['hiPass'].toString()) ??
+                  hiPassBefore = int.tryParse(docs[index]['hiPassBefore'].toString()) ??
                       0; //하이패스 잔액
-                  leftGas = int.tryParse(docs[index]['leftGas'].toString()) ??
+                  leftGasBefore = int.tryParse(docs[index]['leftGasBefore'].toString()) ??
                       0; //주유잔량
-                  totalKm = int.tryParse(docs[index]['totalKm'].toString()) ??
+                  totalKmBefore = int.tryParse(docs[index]['totalKmBefore'].toString()) ??
                       0; //총킬로수
                   hiPassAfter =
                       int.tryParse(docs[index]['hiPassAfter'].toString()) ??
@@ -273,23 +278,33 @@ class ListModel extends StatelessWidget {
                       int.tryParse(docs[index]['totalKmAfter'].toString()) ??
                           0; //총킬로수
 
+                  oilPriceValue =
+                      int.tryParse(docs[index]['oilPriceValue'].toString()) ??
+                          0; //총킬로수
+
+                  prepareName = document['prepareName']?.toString() ?? '';
+                  finishdName = document['finishdName']?.toString() ?? '';
+                  wayToDrive2 = document['wayToDrive2']?.toString() ?? '';
 
                   showCarInfoBottomSheet2(
                     context,
                     smallDataId,
-                    leftGas,
-                    hiPass,
-                    totalKm,
+                    leftGasBefore,
+                    hiPassBefore,
+                    totalKmBefore,
                     leftGasAfter,
                     hiPassAfter,
                     totalKmAfter,
+                      prepareName,
+                      finishdName,
+                      oilPriceValue,
+                      wayToDrive2,
 
                   );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: StateListCard(
-                    smallDataId: docs[index]['name'],
                     theDay: theDay,
                     theTime: theTime,
                     state: docs[index]['state'],
@@ -308,18 +323,22 @@ class ListModel extends StatelessWidget {
 void showCarInfoBottomSheet2(
     context,
     id,
-    leftGas,
-    hiPass,
-    totalKm,
+    leftGasBefore,
+    hiPassBefore,
+    totalKmBefore,
     leftGasAfter,
     hiPassAfter,
     totalKmAfter,
+    prepareName,
+    finishdName,
+    oilPriceValue,
+    wayToDrive2,
     ) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return Container(
-        height: 400,
+        height: 300,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -338,9 +357,9 @@ void showCarInfoBottomSheet2(
                       const SizedBox(height: 5),
                       _rowValue([
                         '시승전',
-                        formatKm(leftGas),
-                        formatWon(hiPass),
-                        formatKm(totalKm),
+                        formatKm(leftGasBefore),
+                        formatWon(hiPassBefore),
+                        formatKm(totalKmBefore),
                       ]),
                       const SizedBox(height: 5),
                       _rowValue([
@@ -369,7 +388,7 @@ void showCarInfoBottomSheet2(
                         ),
                         Expanded(
                           flex: 4,
-                          child: _cell('예시'),
+                          child: _cell(prepareName),
                         ),
                         Expanded(
                           flex: 3,
@@ -377,7 +396,7 @@ void showCarInfoBottomSheet2(
                         ),
                         Expanded(
                           flex: 4,
-                          child: _cell('예시'),
+                          child: _cell(finishdName),
                         ),
                       ],
                     ),
@@ -392,45 +411,19 @@ void showCarInfoBottomSheet2(
                       children: [
                         Expanded(
                           flex: 3,
-                          child: _cell('시승상태 :', align: TextAlign.right),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: _cell('(예시)'),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: _cell('시승상태 :', align: TextAlign.right),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: _cell('A-1(예시)'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                _card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
                           child: _cell('주유금액 :', align: TextAlign.right),
                         ),
                         Expanded(
                           flex: 4,
-                          child: _cell('예시'),
+                          child: _cell(formatWon(oilPriceValue)),
                         ),
                         Expanded(
                           flex: 3,
-                          child: _cell('예약자 :', align: TextAlign.right),
+                          child: _cell('시승상태 :', align: TextAlign.right),
                         ),
                         Expanded(
                           flex: 4,
-                          child: _cell('예시'),
+                          child: _cell(wayToDrive2),
                         ),
                       ],
                     ),

@@ -49,7 +49,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String option6 = ''; //최근 3종 변경자 이름
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   String option8 = ''; //A-1,A-2,C,D 시승상태
-  String option9 = '';    //시승예약 고객 성함
+  String option9 = ''; //시승예약 고객 성함
   //아래는 없음
 
   String option10 = '';
@@ -58,30 +58,28 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
   late TextEditingController etcController;
 
-
-
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
   void showIntInputBottomSheet(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+  ) {
     final TextEditingController fuelController = TextEditingController();
     final TextEditingController hipassController = TextEditingController();
     final TextEditingController totalKmController = TextEditingController();
@@ -162,7 +160,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () async{
+                          onPressed: () async {
                             if (fuelController.text.isEmpty ||
                                 hipassController.text.isEmpty ||
                                 totalKmController.text.isEmpty) {
@@ -172,7 +170,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             final int fuel = int.parse(fuelController.text);
                             final int hiPass = int.parse(hipassController.text);
                             final int totalKm =
-                            int.parse(totalKmController.text);
+                                int.parse(totalKmController.text);
 
                             // 🔥 Firebase 저장
                             try {
@@ -193,10 +191,10 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                                 dataId: dataId,
                                 state: '데이터가 변경됨',
                                 wayToDrive: option5,
-                                name: widget.name,
-                                totalKmBefore: totalKm ,
-                                leftGasBefore: fuel ,
-                                hiPassBefore:  hiPass ,
+                                finishdName: widget.name,
+                                totalKmBefore: totalKm,
+                                leftGasBefore: fuel,
+                                hiPassBefore: hiPass,
                               );
                             } catch (e) {
                               print('문서 삭제 오류: $e');
@@ -204,29 +202,29 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                             Navigator.pop(sheetContext);
 
-                              bottomColor5Final(
-                                  carNumber,
-                                  name,
-                                  color,
-                                  location,
-                                  dateTime,
-                                  dataId,
-                                  etc,
-                                  remainTime,
-                                  movedLocation,
-                                  wigetName,
-                                  movingTime,
-                                  getMovingTime,
-                                  carModelFrom,
-                                  option1,
-                                  option2,
-                                  option3,
-                                  option4,
-                                  option5,
-                                  rootContext,
-                                  fuel,
-                                  hiPass,
-                                  totalKm);
+                            bottomColor5Final(
+                                carNumber,
+                                name,
+                                color,
+                                location,
+                                dateTime,
+                                dataId,
+                                etc,
+                                remainTime,
+                                movedLocation,
+                                wigetName,
+                                movingTime,
+                                getMovingTime,
+                                carModelFrom,
+                                option1,
+                                option2,
+                                option3,
+                                option4,
+                                option5,
+                                rootContext,
+                                fuel,
+                                hiPass,
+                                totalKm);
                           },
                           child: const Text(
                             '저장',
@@ -249,29 +247,29 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   }
 
   void bottomColor5Final(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      int fuel,
-      int hiPass,
-      int totalKm,
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+    int fuel,
+    int hiPass,
+    int totalKm,
+  ) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -365,7 +363,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-
                 TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -375,10 +372,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: ()  {
-
+                  onPressed: () {
                     Navigator.pop(dialogContext);
-
                   },
                   child: const Text(
                     '확인',
@@ -423,8 +418,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
       ),
     );
   }
-
-
 
   @override
   void initState() {
@@ -731,13 +724,14 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       } catch (e) {}
 
                       await repo.createData(
-                        dataId: dataId,
-                        state: '$nowLocation > 스탠바이',
-                        wayToDrive: option5,
-                        totalKmBefore: option4,
-                        leftGasBefore: option3,
-                        hiPassBefore: option2,
-                      );
+                          dataId: dataId,
+                          state: '$nowLocation > 스탠바이',
+                          wayToDrive: option5,
+                          totalKmBefore: option4,
+                          leftGasBefore: option3,
+                          hiPassBefore: option2,
+                          prepareName: widget.name,
+                        wayToDrive2: option8,);
                     },
                     child: Text(
                       '스탠바이',
@@ -1435,6 +1429,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
+                          prepareName:widget.name,
                       );
                     },
                     child: Text(
@@ -1482,6 +1477,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
+                        prepareName:widget.name,
+
                       );
                     },
                     child: Text(
@@ -1529,6 +1526,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
+                        prepareName:widget.name,
+
                       );
                     },
                     child: Text(
@@ -1657,7 +1656,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         fontSize: 17,
                       ),
                     ),
-                    onPressed: ()  {
+                    onPressed: () {
                       Navigator.pop(context);
                       showIntInputBottomSheet(
                         carNumber,
@@ -1705,7 +1704,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
     );
   }
 
-  Widget bottomColor5Etc(                                 //기타 클릭시
+  Widget bottomColor5Etc(
+    //기타 클릭시
     BuildContext bottomColor5EtcContext, // 컬러5Etc화면 context (show용)
     String carNumber,
     String name,

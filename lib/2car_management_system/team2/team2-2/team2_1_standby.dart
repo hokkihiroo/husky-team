@@ -337,6 +337,7 @@ class _StandByState extends State<StandBy> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
+                        wayToDrive2: '시승취소',
                       );
                     },
                     child: Text(
@@ -381,7 +382,6 @@ class _StandByState extends State<StandBy> {
                       ),
                     ),
                     onPressed: () {
-
                       String tempEtc = option9 ?? '';
 
                       showDialog(
@@ -434,7 +434,6 @@ class _StandByState extends State<StandBy> {
                                     print(e);
                                   }
                                   Navigator.pop(context);
-
                                 },
                                 child: const Text('등록'),
                               ),
