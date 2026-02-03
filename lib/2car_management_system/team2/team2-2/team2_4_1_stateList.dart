@@ -203,6 +203,8 @@ class ListModel extends StatelessWidget {
   String smallDataId = '';
   String prepareName = '';
   String finishdName = '';
+  String repairName = '';
+  String movedName = '';
   String wayToDrive2 = '';
   String carModel = '';
   String enterTime = '';
@@ -284,7 +286,11 @@ class ListModel extends StatelessWidget {
 
                   prepareName = document['prepareName']?.toString() ?? '';
                   finishdName = document['finishdName']?.toString() ?? '';
+                  movedName = document['movedName']?.toString() ?? '';
+                  repairName = document['repairName']?.toString() ?? '';
                   wayToDrive2 = document['wayToDrive2']?.toString() ?? '';
+
+
 
                   showCarInfoBottomSheet2(
                     context,
@@ -297,6 +303,8 @@ class ListModel extends StatelessWidget {
                     totalKmAfter,
                       prepareName,
                       finishdName,
+                      movedName,
+                      repairName,
                       oilPriceValue,
                       wayToDrive2,
 
@@ -331,6 +339,8 @@ void showCarInfoBottomSheet2(
     totalKmAfter,
     prepareName,
     finishdName,
+    movedName,
+    repairName,
     oilPriceValue,
     wayToDrive2,
     ) {
@@ -356,14 +366,14 @@ void showCarInfoBottomSheet2(
                       _rowHeader(['상태', '주유잔량', '하이패스', '총거리']),
                       const SizedBox(height: 5),
                       _rowValue([
-                        '시승전',
+                        '전',
                         formatKm(leftGasBefore),
                         formatWon(hiPassBefore),
                         formatKm(totalKmBefore),
                       ]),
                       const SizedBox(height: 5),
                       _rowValue([
-                        '시승후',
+                        '후',
                         formatKm(leftGasAfter),
                         formatWon(hiPassAfter),
                         formatKm(totalKmAfter),
@@ -397,6 +407,33 @@ void showCarInfoBottomSheet2(
                         Expanded(
                           flex: 4,
                           child: _cell(finishdName),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+                _card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12), // ⭐ 핵심
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: _cell('이동 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell(movedName),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _cell('수정 :', align: TextAlign.right),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: _cell(repairName),
                         ),
                       ],
                     ),

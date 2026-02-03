@@ -191,10 +191,13 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                                 dataId: dataId,
                                 state: '데이터가 변경됨',
                                 wayToDrive: option5,
-                                finishdName: widget.name,
-                                totalKmBefore: totalKm,
-                                leftGasBefore: fuel,
-                                hiPassBefore: hiPass,
+                                repairName: widget.name,
+                                totalKmBefore: option4,
+                                leftGasBefore: option3,
+                                hiPassBefore: option2,
+                                totalKmAfter: totalKm,
+                                leftGasAfter: fuel,
+                                hiPassAfter: hiPass,
                               );
                             } catch (e) {
                               print('문서 삭제 오류: $e');
@@ -1429,7 +1432,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
-                          prepareName:widget.name,
+                        movedName:widget.name,
                       );
                     },
                     child: Text(
@@ -1477,7 +1480,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
-                        prepareName:widget.name,
+                        movedName:widget.name,
 
                       );
                     },
@@ -1526,7 +1529,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
-                        prepareName:widget.name,
+                        movedName:widget.name,
 
                       );
                     },

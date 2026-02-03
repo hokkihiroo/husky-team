@@ -25,11 +25,12 @@ class StateRepository {
     required int hiPassBefore, // 출발전 하이패스
     String? prepareName, //   시승준비자 이름
     String? finishdName, //     시승종료자 이름 데이터변경자
+    String? movedName, //     시승종료자 이름 데이터변경자
+    String? repairName, //     시승종료자 이름 데이터변경자
     int? totalKmAfter, //     변경 혹은 도착후 총거리
     int? leftGasAfter, //  변경 혹은 도착후 주유잔량
     int? hiPassAfter, //  변경 혹은 도착후 하이패스
     int? oilPriceValue, //  변경 혹은 도착후 하이패스
-
   }) async {
 
    final thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
@@ -45,6 +46,8 @@ class StateRepository {
         'createdAt': FieldValue.serverTimestamp(),
         'prepareName': prepareName ?? '',
         'finishdName': finishdName ?? '',
+        'movedName': movedName ?? '',
+        'repairName': repairName ?? '',
         'state': state,                               //차량의 상태기록
         'wayToDrive': wayToDrive,                     // 시승방법 기록 대면,현장동승, 기타 등등
         'totalKmBefore': totalKmBefore,
