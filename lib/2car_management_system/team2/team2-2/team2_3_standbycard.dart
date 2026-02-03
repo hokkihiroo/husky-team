@@ -99,14 +99,14 @@ class StandByCard extends StatelessWidget {
           ),
         // ⭐ 브랜드가 있을 때만 별 아이콘 추가
 
-        if (option9!=null)
+        if (option9!=null && option9 != '')
           Positioned(
             top: 20, // 위로 살짝 올리기
             left: 20,
             right: 0,
             child: Icon(
-              Icons.grade_outlined,
-              color: Colors.yellow,
+              Icons.grade,
+              color: Colors.green,
               size: 13,
             ),
           ),

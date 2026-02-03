@@ -306,9 +306,6 @@ class _StandByState extends State<StandBy> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-                      final nowLocation =
-                          getLocationName(location); //시승차 위치파악함수
-
                       try {
                         await FirebaseFirestore.instance
                             .collection(FIELD)
@@ -335,8 +332,8 @@ class _StandByState extends State<StandBy> {
                       }
                       await repo.createData(
                         dataId: dataId,
-                        state: '$nowLocation -> B1',
-                        wayToDrive: '$name(시승취소)',
+                        state: '스탠바이 -> B1',
+                        wayToDrive: '$option5(시승취소)',
                       );
                     },
                     child: Text(

@@ -730,7 +730,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       await repo.createData(
                         dataId: dataId,
                         state: '$nowLocation > 스탠바이',
-                        wayToDrive: name,
+                        wayToDrive: option5,
                       );
                     },
                     child: Text(
