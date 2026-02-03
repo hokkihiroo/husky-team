@@ -1433,6 +1433,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         leftGasBefore: option3,
                         hiPassBefore: option2,
                         movedName:widget.name,
+                        wayToDrive2: '이동',
+
                       );
                     },
                     child: Text(
@@ -1481,7 +1483,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         leftGasBefore: option3,
                         hiPassBefore: option2,
                         movedName:widget.name,
-
+                        wayToDrive2: '이동',
                       );
                     },
                     child: Text(
@@ -1530,6 +1532,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                         leftGasBefore: option3,
                         hiPassBefore: option2,
                         movedName:widget.name,
+                        wayToDrive2: '이동',
 
                       );
                     },

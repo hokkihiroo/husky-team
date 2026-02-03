@@ -338,6 +338,7 @@ class _StandByState extends State<StandBy> {
                         leftGasBefore: option3,
                         hiPassBefore: option2,
                         wayToDrive2: '시승취소',
+                        repairName: widget.name,
                       );
                     },
                     child: Text(
