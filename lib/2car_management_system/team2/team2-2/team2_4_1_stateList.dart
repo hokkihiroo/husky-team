@@ -70,16 +70,16 @@ class _StateListState extends State<StateList> {
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.copy),
-            onPressed: () async {
-              // final text = await createClipboardText2(DBAdress);
-              // Clipboard.setData(ClipboardData(text: text));
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(content: Text('텍스트가 복사되었습니다!')),
-              // );
-            },
-          )
+          // IconButton(
+          //   icon: Icon(Icons.copy),
+          //   onPressed: () async {
+          //     // final text = await createClipboardText2(DBAdress);
+          //     // Clipboard.setData(ClipboardData(text: text));
+          //     // ScaffoldMessenger.of(context).showSnackBar(
+          //     //   SnackBar(content: Text('텍스트가 복사되었습니다!')),
+          //     // );
+          //   },
+          // )
         ],
       ),
       body: SingleChildScrollView(
