@@ -87,20 +87,53 @@ class _CarScheduleViewState extends State<CarScheduleView> {
     testTime,
   ) {
     return AlertDialog(
-      title: Column(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text('차량이름: $testCar'),
-          Text('시승시각: $testTime'),
+          Row(
+            children: [
+              Icon(Icons.access_time, size: 16, color: Colors.grey),
+              SizedBox(width: 4),
+              Text(
+                testTime,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+          Text(
+            testCar,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[700],
+            ),
+          ),
         ],
       ),
+
       content: Container(
-        height: 150,
         child: Column(
+          mainAxisSize: MainAxisSize.min, // 👈 핵심!
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black, // 🔥 버튼 배경 검정
+                      foregroundColor: Colors.yellow, // 🔥 텍스트 노랑
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(6), // 🔥 네모 느낌 (기존보다 덜 둥글게)
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 20,
+                      ),
+                    ),
                     onPressed: () async {
                       try {
                         await FirebaseFirestore.instance
@@ -114,13 +147,35 @@ class _CarScheduleViewState extends State<CarScheduleView> {
                         print('문서 업뎃 오류: $e');
                       }
                     },
-                    child: Text('시승완료')),
+                    child: const Text(
+                      '시승완료',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
+            SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black, // 🔥 버튼 배경 검정
+                      foregroundColor: Colors.yellow, // 🔥 텍스트 노랑
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(6), // 🔥 네모 느낌 (기존보다 덜 둥글게)
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 20,
+                      ),
+                    ),
                     onPressed: () async {
                       await FirebaseFirestore.instance
                           .collection(CARSCHEDULE + widget.CarScheduleAdress)
@@ -130,23 +185,17 @@ class _CarScheduleViewState extends State<CarScheduleView> {
                       });
                       Navigator.pop(context);
                     },
-                    child: Text('시승취소')),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
-                          .collection(CARSCHEDULE + widget.CarScheduleAdress)
-                          .doc(docId)
-                          .update({
-                        'testOk': 0,
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Text('복귀 ')),
+                    child: const Text(
+                      '시승취소',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.redAccent,
+
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
 import 'package:team_husky/2car_management_system/team4/team4_electric_selector.dart';
 import 'package:team_husky/2car_management_system/team4/team4_numbercard.dart';
@@ -435,6 +436,130 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
             ),
             Row(
               children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.brown, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
+                      print(CarListAdress);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              '번호수정',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 30),
+                            ),
+                            actions: [
+                              TextField(
+                                keyboardType: TextInputType.number,
+                                autofocus: true,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp('[0-9]')),
+                                ],
+                                maxLength: 4,
+                                decoration: InputDecoration(
+                                  hintText: '현재번호 : $carNumber',
+                                ),
+                                onChanged: (value) {
+                                  carNumber = value;
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                      ),
+                                      onPressed: () async {
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(TEAM4FIELD)
+                                              .doc(dataId)
+                                              .update({
+                                            'carNumber': carNumber,
+                                          });
+                                        } catch (e) {
+                                          print(e);
+                                        }
+
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(CarListAdress)
+                                              .doc(dataId)
+                                              .update({
+                                            'carNumber': carNumber,
+                                          });
+                                        } catch (e) {}
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('수정'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('취소'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    },
+                    child: Text(
+                      '번호수정',
+                      style: TextStyle(
+                        fontSize: 17, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5,),
                 Expanded(
                   child: Container(
                     child: ElevatedButton(

@@ -156,72 +156,72 @@ class _MyPageState extends State<MyPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 나의 스케줄 버튼
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyLicenseUpdate(
-                                name: widget.name,
-                                uid: widget.uid,
-                                team: widget.team,
-                                management: false,
-                              )),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        // 텍스트를 왼쪽으로 정렬
-                        children: const [
-                          Icon(Icons.car_repair_outlined), // 아이콘
-                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('운전면허증'), // 텍스트
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MySchedule(
-                              team: widget.team,
-                              uid: widget.uid,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        // 텍스트를 왼쪽으로 정렬
-                        children: const [
-                          Icon(Icons.schedule), // 아이콘
-                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('나의스케줄'), // 텍스트
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Expanded(
+              //       child: ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           backgroundColor: Colors.purple,
+              //           foregroundColor: Colors.white,
+              //         ),
+              //         onPressed: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => MyLicenseUpdate(
+              //                   name: widget.name,
+              //                   uid: widget.uid,
+              //                   team: widget.team,
+              //                   management: false,
+              //                 )),
+              //           );
+              //         },
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.start,
+              //           // 텍스트를 왼쪽으로 정렬
+              //           children: const [
+              //             Icon(Icons.car_repair_outlined), // 아이콘
+              //             SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+              //             Text('운전면허증'), // 텍스트
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 10,
+              //     ),
+              //     Expanded(
+              //       child: ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           backgroundColor: Colors.green,
+              //           foregroundColor: Colors.white,
+              //         ),
+              //         onPressed: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //               builder: (context) => MySchedule(
+              //                 team: widget.team,
+              //                 uid: widget.uid,
+              //               ),
+              //             ),
+              //           );
+              //         },
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.start,
+              //           // 텍스트를 왼쪽으로 정렬
+              //           children: const [
+              //             Icon(Icons.schedule), // 아이콘
+              //             SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+              //             Text('나의스케줄'), // 텍스트
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -351,7 +351,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '버전 2.2',
+                    '버전 2.3',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade600,

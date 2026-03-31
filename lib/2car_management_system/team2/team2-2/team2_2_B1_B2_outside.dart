@@ -1318,7 +1318,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                                   ? {
                                       'name': '인도',
                                       'option5': '인도픽업', //시승상태 기본 비교 비대면
-                                      'option8': 'C', //A-1 A-2 C D
+                                      'option8': 'D', //A-1 A-2 C D
                                     }
                                   : {
                                       'name': '',
@@ -1331,7 +1331,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       }
                     },
                     child: Text(
-                      '인도 C',
+                      '인도 D',
                       style: TextStyle(
                         fontSize: 11, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
