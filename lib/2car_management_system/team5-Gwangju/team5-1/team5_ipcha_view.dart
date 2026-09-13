@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric_selector.dart';
-import 'package:team_husky/2car_management_system/team2/team2-1/team2_numbercard.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_electric_selector.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_numbercard.dart';
 
-import '../team2-2/team2_4_3_repository.dart';
+import '../team5-2/team5_reposi.dart';
+import '../team5_adress.dart';
 
-class Team2IpchaView extends StatefulWidget {
+class Team5IpchaView extends StatefulWidget {
   final String name;
 
   final Map<String, List<String>> domesticBrands;
   final Map<String, List<String>> importedFamousBrands;
   final Map<String, List<String>> otherBrands;
 
-  const Team2IpchaView({
+  const Team5IpchaView({
     super.key,
     required this.name,
     required this.domesticBrands,
@@ -22,11 +22,12 @@ class Team2IpchaView extends StatefulWidget {
   });
 
   @override
-  State<Team2IpchaView> createState() => _Team2IpchaViewState();
+  State<Team5IpchaView> createState() => _Team5IpchaViewState();
 }
 
-class _Team2IpchaViewState extends State<Team2IpchaView> {
-  final repo = StateRepository();   //시승차 상태리스트 객체
+class _Team5IpchaViewState extends State<Team5IpchaView> {
+
+  final repo = Team5Reposi();   //시승차 상태리스트 객체
 
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
   String carNumber = ''; // 차번호 클릭시 차번호 추출
@@ -37,7 +38,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   String name = ''; //픽업 하는 사람 이름
   String etc = ''; // 특이사항
   String remainTime = ''; // 경과시간
-  String CarListAdress = CARLIST + formatTodayDate();
+  String CarListAdress = TEAM5CARLIST + formatTodayDate();
   String Color5List = COLOR5 + formatTodayDate();
   String movedLocation = ''; //과거 이동위치
   String wigetName = ''; //추가할 이름들 뽑음
@@ -234,7 +235,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
                   try {
                     await FirebaseFirestore.instance
-                        .collection(FIELD)
+                        .collection(TEAM5FIELD)
                         .doc(dataId)
                         .update({
                       'carBrand': brand,
@@ -298,11 +299,12 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(FIELD)
+          .collection(TEAM5FIELD)
           .orderBy('createdAt')
           .snapshots(),
       builder: (BuildContext context,
@@ -333,7 +335,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
             return GestureDetector(
               onTap: () async {
                 //  활성화 시키면 bar 가 바뀜 데이터 클릭시마다
-                CarListAdress = CARLIST + formatTodayDate();
+                CarListAdress = TEAM5CARLIST + formatTodayDate();
                 Color5List = COLOR5 + formatTodayDate();
                 var document = filteredDocs[index];
                 dataId = document.id;
@@ -364,6 +366,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                 option12= filteredDocs[index]['option12'];          //전기차 충전시 사용 '충전'
                 option10 = filteredDocs[index]['option10'] as Timestamp?;       //출차시 사용할시간
                 //아래없음
+
                 option11= filteredDocs[index]['option11'];               //시승차 예비용
 
 
@@ -424,7 +427,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   },
                 );
               },
-              child: Team2NumberCard(
+              child: Team5NumberCard(
                 carNumber: filteredDocs[index]['carNumber'],
                 name: filteredDocs[index]['name'],
                 color: filteredDocs[index]['color'],
@@ -440,25 +443,26 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     );
   }
 
+
   Widget bottomTwo(
-    String carNumber,
-    String name,
-    String option12,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-    String enterName,
-    BuildContext rootContext, // 화면 context (show용)
-    BuildContext dialogContext, // bottomTwo 닫기용
-  ) {
+      String carNumber,
+      String name,
+      String option12,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      String enterName,
+      BuildContext rootContext, // 화면 context (show용)
+      BuildContext dialogContext, // bottomTwo 닫기용
+      ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -502,12 +506,11 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   onPressed: () async {
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update({
                         'color': color == 2 ? 1 : 2,
                         'option10':  FieldValue.serverTimestamp(),
-
                       });
                     } catch (e) {
                       print(e);
@@ -540,7 +543,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   onPressed: () async {
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD) // 컬렉션 이름을 지정하세요
+                          .collection(TEAM5FIELD) // 컬렉션 이름을 지정하세요
                           .doc(dataId) // 삭제할 문서의 ID를 지정하세요
                           .delete();
                       print('문서 삭제 완료');
@@ -623,11 +626,11 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'name':
-                              (name == null || name.isEmpty) ? widget.name : '',
+                          (name == null || name.isEmpty) ? widget.name : '',
                         });
                       } catch (e) {
                         print(e);
@@ -661,7 +664,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'color': (color == 3) ? 1 : 3,
@@ -717,7 +720,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
                                 'location': 2,
@@ -729,7 +732,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'A존',
+                            'B1',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -753,7 +756,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
                                 'location': 3,
@@ -765,7 +768,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B존',
+                            'B2',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -789,7 +792,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
                                 'location': 4,
@@ -801,7 +804,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B2',
+                            '기타',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -829,7 +832,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
                                 'location': 1,
@@ -841,7 +844,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '가벽',
+                            '필드',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -865,7 +868,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                           onPressed: () async {
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
                                 'location': 5,
@@ -931,7 +934,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                   onPressed: () async {
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update({
                         'color': 4,
@@ -965,7 +968,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
                       textStyle:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                      TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -1002,7 +1005,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                     try {
                                                       await FirebaseFirestore
                                                           .instance
-                                                          .collection(FIELD)
+                                                          .collection(TEAM5FIELD)
                                                           .doc(dataId)
                                                           .update({
                                                         'etc': etc,
@@ -1015,7 +1018,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                                                       await FirebaseFirestore
                                                           .instance
                                                           .collection(
-                                                              CarListAdress)
+                                                          CarListAdress)
                                                           .doc(dataId)
                                                           .update({
                                                         'etc': etc,
@@ -1134,7 +1137,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     await showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return ElectricButtonDialog(
+                        return Team5ElectricSelector(
                           carNumber: carNumber,
                           name: name,
                           color: color,
@@ -1179,29 +1182,30 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
     );
   }
 
+
   Widget bottomColor5(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-    String option1,
-    int option2,
-    int option3,
-    int option4,
-    String option5,
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2,
+      int option3,
+      int option4,
+      String option5,
       String option6,
       String option8,
       String option9,
-  ) {
+      ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1299,7 +1303,7 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
                     onPressed: () async {
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'location': 5,
@@ -1371,7 +1375,5 @@ class _Team2IpchaViewState extends State<Team2IpchaView> {
       ),
     );
   }
-
-
 
 }

@@ -20,20 +20,21 @@ class Team4View extends StatefulWidget {
 class _Team4ViewState extends State<Team4View> {
   String carNumber = '';
   String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
+
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ차량데이터 불러오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   Map<String, List<String>> domesticBrands = {};
   Map<String, List<String>> importedFamousBrands = {};
   Map<String, List<String>> otherBrands = {};
+
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ차량데이터 불러오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-
-  List<Map<String, dynamic>> memberList = [];  //멤버리스트 불러오기
+  List<Map<String, dynamic>> memberList = []; //멤버리스트 불러오기
 
   @override
   void initState() {
     super.initState();
     _loadBrandModels();
-   // _loadMember();
+    // _loadMember();
   }
 
   Future<void> _loadBrandModels() async {
@@ -106,8 +107,6 @@ class _Team4ViewState extends State<Team4View> {
 //     }
 //   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,8 +138,6 @@ class _Team4ViewState extends State<Team4View> {
                   ),
                 ),
               ),
-
-
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -194,10 +191,9 @@ class _Team4ViewState extends State<Team4View> {
                 name: widget.name,
                 location: 0,
                 domesticBrands: domesticBrands,
-                importedFamousBrands:importedFamousBrands,
+                importedFamousBrands: importedFamousBrands,
                 otherBrands: otherBrands,
                 memberList: memberList,
-
               ),
               SizedBox(
                 height: 10,
@@ -229,10 +225,9 @@ class _Team4ViewState extends State<Team4View> {
                 name: widget.name,
                 location: 1,
                 domesticBrands: domesticBrands,
-                importedFamousBrands:importedFamousBrands,
+                importedFamousBrands: importedFamousBrands,
                 otherBrands: otherBrands,
                 memberList: memberList,
-
               ),
               SizedBox(
                 height: 10,
@@ -250,6 +245,22 @@ class _Team4ViewState extends State<Team4View> {
                     child: Center(
                       child: Text(
                         '출차중',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        '(번호순대로 출차하세요)',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -354,6 +365,8 @@ class _Team4ViewState extends State<Team4View> {
                                         'movingTime': '',
                                         'carBrand': '',
                                         'carModel': '',
+                                        'option10':
+                                            FieldValue.serverTimestamp(),
                                       });
                                     } catch (e) {}
 

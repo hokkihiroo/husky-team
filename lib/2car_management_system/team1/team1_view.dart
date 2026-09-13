@@ -7,6 +7,7 @@ import 'package:team_husky/2car_management_system/team1/team1_adress_const.dart'
 import 'package:team_husky/2car_management_system/team1/team1_car_list.dart';
 import 'package:team_husky/2car_management_system/team1/team1_carschedule.dart';
 import 'package:team_husky/2car_management_system/team1/team1_carschedule_view.dart';
+import 'package:team_husky/2car_management_system/team1/team1_locationName.dart';
 import 'package:team_husky/2car_management_system/team1/team1_model.dart';
 import 'package:team_husky/2car_management_system/team1/team1_outcar.dart';
 import 'package:another_telephony/telephony.dart';
@@ -141,7 +142,7 @@ class _Team1ViewState extends State<Team1View> {
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
               ),
-              _LocationName(),
+              Team1LocationName(),
               SizedBox(
                 height: 20,
               ),
@@ -438,80 +439,6 @@ class _Team1ViewState extends State<Team1View> {
 }
 
 
-class _LocationName extends StatelessWidget {
-  const _LocationName({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            child: Text(
-              '로터',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              '외벽',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              '광장',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              '문앞',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              '신사',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _Lists extends StatelessWidget {
   final String name;

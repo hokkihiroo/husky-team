@@ -20,6 +20,7 @@ final COLOR5 ='local/q0LRMbznxA2yPca1DKNw/team2/yJ82irnxnFs2Pe2JlMAA/';  //시�
 // 전기차 리스트 주소
 final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/team2/pNHnni1uB4xc61VODmx9/';
 
+// b1b2에서 눌러서 차량들 내역볼때 나오는 주소
 final STATELIST ='local/q0LRMbznxA2yPca1DKNw/team2/fL35GKC4jObRZpSPmSQ8/field/';
 
 

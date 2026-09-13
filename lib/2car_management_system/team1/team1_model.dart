@@ -380,7 +380,7 @@ class _RotaryListState extends State<RotaryList> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width.clamp(0, 300),
         height: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -490,49 +490,49 @@ class _RotaryListState extends State<RotaryList> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              backgroundColor: Colors.white60, // 버튼 색상
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
-                            onPressed: () async {
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(dataAdress) // 컬렉션 이름을 지정하세요
-                                    .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                                    .delete();
-                                print('문서 삭제 완료');
-                              } catch (e) {
-                                print('문서 삭제 오류: $e');
-                              }
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                                  .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                                  .delete();
+                              print('문서 삭제 완료');
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
 
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(LOTARY)
-                                    .doc(dataId)
-                                    .set({
-                                  'carNumber': carNumber,
-                                  'color': color,
-                                  'createdAt': dateTime,
-                                  'location': 0,
-                                  'name': name,
-                                  'etc': etc,
-                                  'movedLocation': '$movedLocation->로터리=로터리',
-                                  'wigetName': '$wigetName=이름:${widget.name}',
-                                  'movingTime': '$movingTime=$getMovingTime',
-                                });
-                              } catch (e) {
-                                print(e);
-                              }
-                              Navigator.pop(context);
-                            },
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(LOTARY)
+                                  .doc(dataId)
+                                  .set({
+                                'carNumber': carNumber,
+                                'color': color,
+                                'createdAt': dateTime,
+                                'location': 0,
+                                'name': name,
+                                'etc': etc,
+                                'movedLocation': '$movedLocation->로터리=로터리',
+                                'wigetName': '$wigetName=이름:${widget.name}',
+                                'movingTime': '$movingTime=$getMovingTime',
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             '로터리',
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
-                              fontSize: 18,                // 글자 크게 (원하면 20도 가능)
+                              fontSize: 18, // 글자 크게 (원하면 20도 가능)
                             ),
                           ),
                         ),
@@ -542,49 +542,49 @@ class _RotaryListState extends State<RotaryList> {
                       ),
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              backgroundColor: Colors.white60, // 버튼 색상
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
-                            onPressed: () async {
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(dataAdress) // 컬렉션 이름을 지정하세요
-                                    .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                                    .delete();
-                                print('문서 삭제 완료');
-                              } catch (e) {
-                                print('문서 삭제 오류: $e');
-                              }
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                                  .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                                  .delete();
+                              print('문서 삭제 완료');
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
 
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(OUTSIDE)
-                                    .doc(dataId)
-                                    .set({
-                                  'carNumber': carNumber,
-                                  'color': color,
-                                  'createdAt': dateTime,
-                                  'location': 1,
-                                  'name': name,
-                                  'etc': etc,
-                                  'movedLocation': '$movedLocation->외벽=외벽',
-                                  'wigetName': '$wigetName=이름:${widget.name}',
-                                  'movingTime': '$movingTime=$getMovingTime',
-                                });
-                              } catch (e) {
-                                print(e);
-                              }
-                              Navigator.pop(context);
-                            },
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(OUTSIDE)
+                                  .doc(dataId)
+                                  .set({
+                                'carNumber': carNumber,
+                                'color': color,
+                                'createdAt': dateTime,
+                                'location': 1,
+                                'name': name,
+                                'etc': etc,
+                                'movedLocation': '$movedLocation->외벽=외벽',
+                                'wigetName': '$wigetName=이름:${widget.name}',
+                                'movingTime': '$movingTime=$getMovingTime',
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             '외벽',
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
-                              fontSize: 18,                // 글자 크게 (원하면 20도 가능)
+                              fontSize: 18, // 글자 크게 (원하면 20도 가능)
                             ),
                           ),
                         ),
@@ -595,49 +595,49 @@ class _RotaryListState extends State<RotaryList> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              backgroundColor: Colors.white60, // 버튼 색상
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
-                            onPressed: () async {
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(dataAdress) // 컬렉션 이름을 지정하세요
-                                    .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                                    .delete();
-                                print('문서 삭제 완료');
-                              } catch (e) {
-                                print('문서 삭제 오류: $e');
-                              }
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                                  .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                                  .delete();
+                              print('문서 삭제 완료');
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
 
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(MAIN)
-                                    .doc(dataId)
-                                    .set({
-                                  'carNumber': carNumber,
-                                  'color': color,
-                                  'createdAt': dateTime,
-                                  'location': 2,
-                                  'name': name,
-                                  'etc': etc,
-                                  'movedLocation': '$movedLocation->광장=광장',
-                                  'wigetName': '$wigetName=이름:${widget.name}',
-                                  'movingTime': '$movingTime=$getMovingTime',
-                                });
-                              } catch (e) {
-                                print(e);
-                              }
-                              Navigator.pop(context);
-                            },
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(MAIN)
+                                  .doc(dataId)
+                                  .set({
+                                'carNumber': carNumber,
+                                'color': color,
+                                'createdAt': dateTime,
+                                'location': 2,
+                                'name': name,
+                                'etc': etc,
+                                'movedLocation': '$movedLocation->광장=광장',
+                                'wigetName': '$wigetName=이름:${widget.name}',
+                                'movingTime': '$movingTime=$getMovingTime',
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             '광장',
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
-                              fontSize: 18,                // 글자 크게 (원하면 20도 가능)
+                              fontSize: 18, // 글자 크게 (원하면 20도 가능)
                             ),
                           ),
                         ),
@@ -647,49 +647,49 @@ class _RotaryListState extends State<RotaryList> {
                       ),
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              backgroundColor: Colors.white60, // 버튼 색상
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
-                            onPressed: () async {
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(dataAdress) // 컬렉션 이름을 지정하세요
-                                    .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                                    .delete();
-                                print('문서 삭제 완료');
-                              } catch (e) {
-                                print('문서 삭제 오류: $e');
-                              }
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                                  .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                                  .delete();
+                              print('문서 삭제 완료');
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
 
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(MOON)
-                                    .doc(dataId)
-                                    .set({
-                                  'carNumber': carNumber,
-                                  'color': color,
-                                  'createdAt': dateTime,
-                                  'location': 3,
-                                  'name': name,
-                                  'etc': etc,
-                                  'movedLocation': '$movedLocation->문=문',
-                                  'wigetName': '$wigetName=이름:${widget.name}',
-                                  'movingTime': '$movingTime=$getMovingTime',
-                                });
-                              } catch (e) {
-                                print(e);
-                              }
-                              Navigator.pop(context);
-                            },
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(MOON)
+                                  .doc(dataId)
+                                  .set({
+                                'carNumber': carNumber,
+                                'color': color,
+                                'createdAt': dateTime,
+                                'location': 3,
+                                'name': name,
+                                'etc': etc,
+                                'movedLocation': '$movedLocation->문=문',
+                                'wigetName': '$wigetName=이름:${widget.name}',
+                                'movingTime': '$movingTime=$getMovingTime',
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             '문앞',
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
-                              fontSize: 18,                // 글자 크게 (원하면 20도 가능)
+                              fontSize: 18, // 글자 크게 (원하면 20도 가능)
                             ),
                           ),
                         ),
@@ -699,49 +699,49 @@ class _RotaryListState extends State<RotaryList> {
                       ),
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              backgroundColor: Colors.white60, // 버튼 색상
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                             ),
-                            onPressed: () async {
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(dataAdress) // 컬렉션 이름을 지정하세요
-                                    .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                                    .delete();
-                                print('문서 삭제 완료');
-                              } catch (e) {
-                                print('문서 삭제 오류: $e');
-                              }
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                                  .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                                  .delete();
+                              print('문서 삭제 완료');
+                            } catch (e) {
+                              print('문서 삭제 오류: $e');
+                            }
 
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection(SINSA)
-                                    .doc(dataId)
-                                    .set({
-                                  'carNumber': carNumber,
-                                  'color': color,
-                                  'createdAt': dateTime,
-                                  'location': 4,
-                                  'name': name,
-                                  'etc': etc,
-                                  'movedLocation': '$movedLocation->신사=신사',
-                                  'wigetName': '$wigetName=이름:${widget.name}',
-                                  'movingTime': '$movingTime=$getMovingTime',
-                                });
-                              } catch (e) {
-                                print(e);
-                              }
-                              Navigator.pop(context);
-                            },
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(SINSA)
+                                  .doc(dataId)
+                                  .set({
+                                'carNumber': carNumber,
+                                'color': color,
+                                'createdAt': dateTime,
+                                'location': 4,
+                                'name': name,
+                                'etc': etc,
+                                'movedLocation': '$movedLocation->신사=신사',
+                                'wigetName': '$wigetName=이름:${widget.name}',
+                                'movingTime': '$movingTime=$getMovingTime',
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             '신사',
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
-                              fontSize: 18,                // 글자 크게 (원하면 20도 가능)
+                              fontSize: 18, // 글자 크게 (원하면 20도 가능)
                             ),
                           ),
                         ),
@@ -751,73 +751,73 @@ class _RotaryListState extends State<RotaryList> {
                 ],
               ),
             ),
-
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              4), // 👈 숫자 작을수록 각짐 (0이면 완전 각)
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17,
                       ),
-                      onPressed: () async {
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection(dataAdress) // 컬렉션 이름을 지정하세요
-                              .doc(dataId) // 삭제할 문서의 ID를 지정하세요
-                              .delete();
-                          print('문서 삭제 완료');
-                        } catch (e) {
-                          print('문서 삭제 오류: $e');
-                        }
-                        Navigator.pop(context);
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            4), // 👈 숫자 작을수록 각짐 (0이면 완전 각)
+                      ),
+                    ),
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(dataAdress) // 컬렉션 이름을 지정하세요
+                            .doc(dataId) // 삭제할 문서의 ID를 지정하세요
+                            .delete();
+                        print('문서 삭제 완료');
+                      } catch (e) {
+                        print('문서 삭제 오류: $e');
+                      }
+                      Navigator.pop(context);
 
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection(CarListAdress)
-                              .doc(dataId)
-                              .update({
-                            'out': FieldValue.serverTimestamp(),
-                            'outName': widget.name,
-                            'outLocation': location,
-                            'movedLocation': '$movedLocation',
-                            'wigetName': wigetName,
-                            'movingTime': movingTime,
-                          });
-                        } catch (e) {
-                          print(e);
-                          print('데이터가 존재하지 않아 업데이트 할게 없습니당');
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('하루 지난 데이터 입니다 '),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('확인'),
-                                    ),
-                                  ],
-                                );
-                              });
-                        }
-                      },
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(CarListAdress)
+                            .doc(dataId)
+                            .update({
+                          'out': FieldValue.serverTimestamp(),
+                          'outName': widget.name,
+                          'outLocation': location,
+                          'movedLocation': '$movedLocation',
+                          'wigetName': wigetName,
+                          'movingTime': movingTime,
+                        });
+                      } catch (e) {
+                        print(e);
+                        print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('하루 지난 데이터 입니다 '),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            });
+                      }
+                    },
                     child: Text(
                       '출차완료',
                       style: TextStyle(
-                        fontSize: 18,                // 글자 크게 (원하면 20도 가능)
-                        color: Colors.black,         // 블랙
+                        fontSize: 18, // 글자 크게 (원하면 20도 가능)
+                        color: Colors.black, // 블랙
                       ),
-                    ),),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 10,

@@ -1,35 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2-1/team2_electric.dart';
-import 'package:team_husky/2car_management_system/team2/team2-1/team2_ipcha_view.dart';
-import 'team2_car_list.dart';
-import 'team2_model.dart';
-import 'team2_outcar.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_carList.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_electric.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_ipcha_view.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_model.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_outCar.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5_adress.dart';
 
-class Team2View extends StatefulWidget {
-  const Team2View({super.key, required this.name});
+class Team5Mainview extends StatefulWidget {
+  const Team5Mainview({super.key, required this.name});
 
   final String name;
 
   @override
-  State<Team2View> createState() => _Team2ViewState();
+  State<Team5Mainview> createState() => _Team5MainviewState();
 }
 
-class _Team2ViewState extends State<Team2View> {
+class _Team5MainviewState extends State<Team5Mainview> {
   String carNumber = '';
-  String CarListAdress = CARLIST + formatTodayDate();
+  String CarListAdress = TEAM5CARLIST + formatTodayDate();
   String Color5List = COLOR5 + formatTodayDate();
   String CarScheduleAdress = formatTodayDate();
   String dayOfWeek = '';
   int bottomAction = 0;
 
-// 이건 브랜드 선택에 사용되는 맵
+  // 이건 브랜드 선택에 사용되는 맵
   Map<String, List<String>> domesticBrands = {};
   Map<String, List<String>> importedFamousBrands = {};
   Map<String, List<String>> otherBrands = {};
-
 
   // 이건 시승차 60,70,80,90, 카드 선택 인덱스 값
   int selectedTabIndex = 0;
@@ -49,7 +48,6 @@ class _Team2ViewState extends State<Team2View> {
     print('🔥메인뷰 국내: $domesticBrands');
     print('🔥메인뷰 수입유명: $importedFamousBrands');
     print('🔥메인뷰 잡브랜드: $otherBrands');
-
   }
 
   Future<void> fetchBrandsWithModels() async {
@@ -93,9 +91,9 @@ class _Team2ViewState extends State<Team2View> {
               Expanded(
                 child: Center(
                   child: Text(
-                    '제네시스 청주',
+                    '제네시스 광주',
                     style: TextStyle(
-                      color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
+                      color: Colors.yellow, // 골드 컬러로 고급스러움 강조
                     ),
                   ),
                 ),
@@ -104,13 +102,13 @@ class _Team2ViewState extends State<Team2View> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Electric()),
+                    MaterialPageRoute(builder: (context) => Team5Electric()),
                   );
                 },
                 child: Text(
                   '전기차',
                   style: TextStyle(
-                    color: Color(0xFFC6A667), // 골드 컬러로 고급스러움 강조
+                    color: Colors.yellow, // 골드 컬러로 고급스러움 강조
                     decorationColor: Colors.white,
                     // 줄 색상
                     decorationThickness: 2, // 줄 두께
@@ -148,7 +146,7 @@ class _Team2ViewState extends State<Team2View> {
               SizedBox(
                 height: 10,
               ),
-              Team2IpchaView(
+              Team5IpchaView(
                 name: widget.name,
                 domesticBrands: domesticBrands,
                 importedFamousBrands: importedFamousBrands,
@@ -191,10 +189,28 @@ class _Team2ViewState extends State<Team2View> {
                   ),
                 ],
               ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        '(번호순대로 출차하세요)',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
               SizedBox(
                 height: 10,
               ),
-              OutCar(
+
+              Team5Outcar(
                 name: widget.name,
               ),
               SizedBox(
@@ -244,7 +260,7 @@ class _Team2ViewState extends State<Team2View> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CarList(),
+                      builder: (context) => Team5CarList(),
                     ),
                   );
                 },
@@ -264,7 +280,7 @@ class _Team2ViewState extends State<Team2View> {
   }
 
   void doEnterAction(topic, hint, color) {
-    CarListAdress = CARLIST + formatTodayDate();
+    CarListAdress = TEAM5CARLIST + formatTodayDate();
     carNumber = '0000';
 
     showDialog(
@@ -276,8 +292,7 @@ class _Team2ViewState extends State<Team2View> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
-              color:
-                Colors.black,
+              color: Colors.black,
             ),
           ),
           actions: [
@@ -291,8 +306,7 @@ class _Team2ViewState extends State<Team2View> {
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle: TextStyle(
-                  color:
-                   Colors.grey, // 기본 힌트 색은 회색
+                  color: Colors.grey, // 기본 힌트 색은 회색
                 ),
               ),
               onChanged: (value) {
@@ -309,11 +323,13 @@ class _Team2ViewState extends State<Team2View> {
                           EdgeInsets.symmetric(vertical: 20.0), // 버튼의 위아래 패딩 조정
                     ),
                     onPressed: () async {
-                      String documentId =
-                          FirebaseFirestore.instance.collection(FIELD).doc().id;
+                      String documentId = FirebaseFirestore.instance
+                          .collection(TEAM5FIELD)
+                          .doc()
+                          .id;
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(documentId)
                             .set({
                           'carNumber': carNumber,
@@ -328,16 +344,16 @@ class _Team2ViewState extends State<Team2View> {
                           'movingTime': '',
                           'carBrand': '',
                           'carModel': '',
-                          'option1': '',            //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
-                          'option2': '',            //하이패스
-                          'option3': '',            //기름잔량
-                          'option4': '',            //총거리
-                          'option5': '',           //시승차 기타
-                          'option6': '',          //최근 3종 변경자 이름
-                          'option7': 0,          //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                          'option1': '', //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
+                          'option2': '', //하이패스
+                          'option3': '', //기름잔량
+                          'option4': '', //총거리
+                          'option5': '', //시승차 기타
+                          'option6': '', //최근 3종 변경자 이름
+                          'option7': 0, //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                           'option8': '',
                           'option9': '',
-                          'option10': FieldValue.serverTimestamp(),
+                          'option10':  FieldValue.serverTimestamp(),
                           'option11': '',
                           'option12': '',
                         });
@@ -403,7 +419,7 @@ class _LocationName extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '가벽',
+              '필드',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -416,30 +432,30 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              'A존',
+              'B1',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 25,
               ),
             ),
-          ),
-          Expanded(
-            child: Text(
-              'B존',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
           ),
           Expanded(
             child: Text(
               'B2',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            child: Text(
+              '기타',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -465,7 +481,6 @@ class _LocationName extends StatelessWidget {
     );
   }
 }
-
 class _Lists extends StatelessWidget {
   final String name;
 
@@ -491,7 +506,7 @@ class _Lists extends StatelessWidget {
             children: [
               CarState(
                 name: name,
-                location: FIELD,
+                location: TEAM5FIELD,
                 reverse: 1,
                 check: () {},
                 fieldLocation: 1,
@@ -507,7 +522,7 @@ class _Lists extends StatelessWidget {
             children: [
               CarState(
                 name: name,
-                location: FIELD,
+                location: TEAM5FIELD,
                 reverse: 1,
                 check: () {},
                 fieldLocation: 2,
@@ -523,7 +538,7 @@ class _Lists extends StatelessWidget {
             children: [
               CarState(
                 name: name,
-                location: FIELD,
+                location: TEAM5FIELD,
                 reverse: 1,
                 check: () {},
                 fieldLocation: 3,
@@ -539,7 +554,7 @@ class _Lists extends StatelessWidget {
             children: [
               CarState(
                 name: name,
-                location: FIELD,
+                location: TEAM5FIELD,
                 reverse: 1,
                 check: () {},
                 fieldLocation: 4,
@@ -555,7 +570,7 @@ class _Lists extends StatelessWidget {
             children: [
               CarState(
                 name: name,
-                location: FIELD,
+                location: TEAM5FIELD,
                 reverse: 1,
                 check: () {},
                 fieldLocation: 5,

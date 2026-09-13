@@ -1,29 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
-import 'package:team_husky/2car_management_system/team4/team4_outcar_card.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_outCar_card.dart';
 
-class Team4OutCar extends StatefulWidget {
+import '../team5_adress.dart';
+
+class Team5Outcar extends StatefulWidget {
   final String name;
 
-  const Team4OutCar({super.key, required this.name});
+  const Team5Outcar({super.key, required this.name});
+
 
   @override
-  State<Team4OutCar> createState() => _Team4OutCarState();
+  State<Team5Outcar> createState() => _OutCarState();
 }
 
-class _Team4OutCarState extends State<Team4OutCar> {
+class _OutCarState extends State<Team5Outcar> {
+
   int location = 0; //차번호 클릭시 그차번호 위치
   String dataAdress = ''; // 차번호 클릭시 나오는 위치 주소값
   String movedLocation = ''; //과거 이동위치
-
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(TEAM4FIELD)
-          .orderBy('createdAt')
+          .collection(TEAM5FIELD)
+          .orderBy('option10')
           .snapshots(),
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -47,20 +49,19 @@ class _Team4OutCarState extends State<Team4OutCar> {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Team4OutcarCard(
+                child: Team5OutcarCard(
                   carNumber: filteredDocs[index]['carNumber'],
                   name: filteredDocs[index]['name'],
+                  option12: filteredDocs[index]['option12'],
+                  etc: filteredDocs[index]['etc'],
                   dataId: filteredDocs[index].id,
                   location:  filteredDocs[index]['location'],
                   myName: widget.name,
-                  dataAdress: TEAM4CARLIST,
+                  dataAdress: TEAM5CARLIST,
                   movedLocation: filteredDocs[index]['movedLocation'],
                   wigetName: filteredDocs[index]['wigetName'],
-                  movingTime: filteredDocs[index]['movingTime'],
                   color:  filteredDocs[index]['color'],
-                  etc:  filteredDocs[index]['etc'],
                   choolchaNum: index+1,
-
                 ),
               ),
             );

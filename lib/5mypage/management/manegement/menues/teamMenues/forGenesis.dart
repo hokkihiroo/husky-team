@@ -125,7 +125,7 @@ class _ForGenesisState extends State<ForGenesis> {
                             //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                             'option8': '',
                             'option9': '',
-                            'option10': '',
+                            'option10':  FieldValue.serverTimestamp(),
                             'option11': '',
                             'option12': '',
                           });

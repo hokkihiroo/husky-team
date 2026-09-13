@@ -5,6 +5,8 @@ import 'package:team_husky/2car_management_system/team2/team2-1/team2_view.dart'
 import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_view.dart';
 import 'package:team_husky/2car_management_system/team3/team3_view.dart';
 import 'package:team_husky/2car_management_system/team4/team4_view.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_mainView.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5-2_mainview.dart';
 
 import '../5mypage/management/manegement/menues/teamMenues/brandManage.dart';
 import '../user/user_screen.dart';
@@ -215,7 +217,7 @@ class CarManagementSystem extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -555,7 +557,7 @@ class CarManagementSystem extends StatelessWidget {
               //   ),
               // ),
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               GestureDetector(
                 onTap: () {
@@ -689,6 +691,223 @@ class CarManagementSystem extends StatelessWidget {
                   ),
                 ),
 
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (team == 'zSvgctyCZUnOx8rYMioF' ||
+                          team == 'e46miKLAbe8CjR1RsQkR') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Team5Mainview(name: name)),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('입장 불가'),
+                              content: Text('해당 팀만 접근가능합니다.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: 145.0,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFFFD54F), // 밝은 골드 옐로우
+                            Color(0xFFF2B705), // 진한 골드 옐로우
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          // 깊은 그림자 (하단/오른쪽)
+                          BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(6, 6),
+                            blurRadius: 12.0,
+                          ),
+
+                          // 밝은 하이라이트 (상단/왼쪽)
+                          BoxShadow(
+                            color: Colors.white54,
+                            offset: Offset(-4, -4),
+                            blurRadius: 8.0,
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Color(0xFFD99B00), // 진한 골드 테두리
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '광주 [GENESIS]',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black, // 검은색
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2.0,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.white38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 5.0),
+
+                            Text(
+                              '고객차 차량관리',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black, // 검은색
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.8,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.white38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 10,),
+                  GestureDetector(
+                    onTap: () {
+                      if (team == 'zSvgctyCZUnOx8rYMioF' ||
+                          team == 'e46miKLAbe8CjR1RsQkR') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Team5_2Mainview(name: name)),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('입장 불가'),
+                              content: Text('해당 팀만 접근가능합니다.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: 145.0,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFFFD54F), // 밝은 골드 옐로우
+                            Color(0xFFF2B705), // 진한 골드 옐로우
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          // 깊은 그림자 (하단/오른쪽)
+                          BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(6, 6),
+                            blurRadius: 12.0,
+                          ),
+                          // 밝은 하이라이트 (상단/왼쪽)
+                          BoxShadow(
+                            color: Colors.white54,
+                            offset: Offset(-4, -4),
+                            blurRadius: 8.0,
+                          ),
+                        ],
+                        border: Border.all(
+                          color: Color(0xFFD99B00), // 진한 골드 테두리
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '광주 [GENESIS]',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2.0,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.white38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              '시승차 상태관리',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.8,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.white38,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

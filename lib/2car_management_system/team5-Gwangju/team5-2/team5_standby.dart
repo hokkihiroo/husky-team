@@ -1,24 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team2/team2-2/team2_3_standbycard.dart';
-import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_3_repository.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5_reposi.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5_standby_card.dart';
 
-import '../team2_adress_const.dart';
+import '../team5_adress.dart';
 
-class StandBy extends StatefulWidget {
+class Team5Standby extends StatefulWidget {
   final String name;
 
-  const StandBy({
+  const Team5Standby({
     super.key,
     required this.name,
   });
 
+
   @override
-  State<StandBy> createState() => _StandByState();
+  State<Team5Standby> createState() => _Team5StandbyState();
 }
 
-class _StandByState extends State<StandBy> {
-  final repo = StateRepository();
+class _Team5StandbyState extends State<Team5Standby> {
+
+  final repo = Team5Reposi();
   String Color5List = COLOR5 + formatTodayDate();
 
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
@@ -45,25 +47,20 @@ class _StandByState extends State<StandBy> {
   String option5 = ''; //시승차 기타
   String option6 = ''; //최근 3종 변경자 이름
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+  Timestamp? option10; //출차시 시간 다시 입력해서 이거대로 진행하면 순서매길수있음 아웃카에서
+
   //아래아직없음
   String option8 = '';
   String option9 = '';
-  Timestamp? option10; //출차시 시간 다시 입력해서 이거대로 진행하면 순서매길수있음 아웃카에서
-
   String option11 = '';
   String option12 = '';
 
-  @override
-  void initState() {
-    super.initState();
-    etcController = TextEditingController(text: etc ?? '');
-  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(FIELD)
+          .collection(TEAM5FIELD)
           .where('color', isEqualTo: 5)
           .orderBy('createdAt')
           .snapshots(),
@@ -131,13 +128,12 @@ class _StandByState extends State<StandBy> {
                 option5 = displayList[index]['option5']; //시승차 기타
                 option6 = displayList[index]['option6']; //3종 최근변경자 이름
                 option7 = displayList[index]
-                    ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = displayList[index]['option8']; //시승차 A-1 A-2 C D
                 option9 = displayList[index]['option9']; //시승예약고객 성함
-
-
                 option10 = displayList[index]['option10'] as Timestamp?;       //출차시 사용할시간
                 //아래없음
+
                 option11 = displayList[index]['option11']; //시승차 예비용
                 option12 = displayList[index]['option12']; //시승차 예비용
 
@@ -174,7 +170,7 @@ class _StandByState extends State<StandBy> {
                   },
                 );
               },
-              child: StandByCard(
+              child: Team5StandByCard(
                 carNumber: displayList[index]['carNumber'],
                 name: displayList[index]['name'],
                 color: displayList[index]['color'],
@@ -190,29 +186,28 @@ class _StandByState extends State<StandBy> {
       },
     );
   }
-
   Widget bottomColor5(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-    String option1,
-    int option2, //하이패스
-    int option3, //주유잔량
-    int option4, //총킬로수
-    String option5, //기타
-    String option6, //3대변경자
-    String option9, //3대변경자
-  ) {
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2, //하이패스
+      int option3, //주유잔량
+      int option4, //총킬로수
+      String option5, //기타
+      String option6, //3대변경자
+      String option9, //3대변경자
+      ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -310,7 +305,7 @@ class _StandByState extends State<StandBy> {
                     onPressed: () async {
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'location': 11,
@@ -422,7 +417,7 @@ class _StandByState extends State<StandBy> {
 
                                   try {
                                     await FirebaseFirestore.instance
-                                        .collection(FIELD)
+                                        .collection(TEAM5FIELD)
                                         .doc(dataId)
                                         .update({
                                       'option9': newEtc,
@@ -515,7 +510,7 @@ class _StandByState extends State<StandBy> {
                                                     try {
                                                       await FirebaseFirestore
                                                           .instance
-                                                          .collection(FIELD)
+                                                          .collection(TEAM5FIELD)
                                                           .doc(dataId)
                                                           .update({
                                                         'etc': etc,

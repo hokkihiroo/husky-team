@@ -216,6 +216,9 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                           .doc(dataId)
                           .update({
                         'color': color == 2 ? 1 : 2,
+                        'option10':  FieldValue.serverTimestamp(),
+
+
                       });
                     } catch (e) {
                       print(e);

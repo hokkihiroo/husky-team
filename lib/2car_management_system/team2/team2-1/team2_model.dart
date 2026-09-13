@@ -73,8 +73,8 @@ class _CarStateState extends State<CarState> {
   String option9 = ''; //시승차예약자성함
   String option12 = ''; //전기차 충전시 사용 '충전'
 
+  Timestamp? option10; //출차시 시간 다시 입력해서 이거대로 진행하면 순서매길수있음 아웃카에서
   //아래는 없음
-  String option10 = '';
   String option11 = '';
 
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
@@ -147,13 +147,16 @@ class _CarStateState extends State<CarState> {
                     suffix: 'km',
                     maxLength: 4,
                   ),
-                  const SizedBox(height: 12),
-                  _inputField(
-                    controller: hipassController,
-                    label: '하이패스 (숫자만)',
-                    suffix: '원',
-                    maxLength: 6,
-                  ),
+
+                  if (name != '주유') ...[
+                    const SizedBox(height: 12),
+                    _inputField(
+                      controller: hipassController,
+                      label: '하이패스 (숫자만)',
+                      suffix: '원',
+                      maxLength: 6,
+                    ),
+                  ],
                   const SizedBox(height: 12),
                   _inputField(
                     controller: totalKmController,
@@ -193,8 +196,8 @@ class _CarStateState extends State<CarState> {
                           ),
                           onPressed: () async {
                             if (fuelController.text.isEmpty ||
-                                hipassController.text.isEmpty ||
-                                totalKmController.text.isEmpty) {
+                                totalKmController.text.isEmpty ||
+                                (name != '주유' && hipassController.text.isEmpty)) {
                               return;
                             }
                             // 🔧 [추가 위치 ⭐ 여기 ⭐]
@@ -203,9 +206,12 @@ class _CarStateState extends State<CarState> {
                               return;
                             }
                             final int fuel = int.parse(fuelController.text);
-                            final int hiPass = int.parse(hipassController.text);
+                            final int hiPass = name == '주유'
+                                ? option2
+                                : int.parse(hipassController.text);
+
                             final int totalKm =
-                                int.parse(totalKmController.text);
+                            int.parse(totalKmController.text);
                             int? oilPriceValue; // 🔧 [수정] 실제 저장할 값
                             if (name == '주유' &&
                                 oilPriceController.text.isNotEmpty) {
@@ -324,7 +330,6 @@ class _CarStateState extends State<CarState> {
                                 'option4': '',
                                 'option6': '',
                                 'option7': '',
-                                'option10': '',
                               });
                             }
 
@@ -878,9 +883,8 @@ class _CarStateState extends State<CarState> {
                   option8 = filteredDocs[index]['option8']; //A-1 A-2 C D
                   option9 = filteredDocs[index]['option9']; //시승차예약자 성함
                   option12 = filteredDocs[index]['option12']; //전기차 충전시 사용 '충전'
-                  //아래는 없음
-
-                  option10 = filteredDocs[index]['option10']; //시승차 예비용
+                  option10 = filteredDocs[index]['option10'] as Timestamp?;       //출차시 사용할시간
+                  //아래없음
                   option11 = filteredDocs[index]['option11']; //시승차 예비용
 
                   showDialog(
@@ -910,7 +914,6 @@ class _CarStateState extends State<CarState> {
                           option7,
                           option8,
                           option9,
-                          option10,
                           option11,
                           rootContext,
                           context,
@@ -1025,6 +1028,8 @@ class _CarStateState extends State<CarState> {
                           .doc(dataId)
                           .update({
                         'color': color == 2 ? 1 : 2,
+                        'option10':  FieldValue.serverTimestamp(),
+
                       });
                     } catch (e) {
                       print(e);
@@ -1800,7 +1805,6 @@ class _CarStateState extends State<CarState> {
     int option7,
     String option8,
     String option9,
-    String option10,
     String option11,
     BuildContext rootContext, // 화면 context (show용)
     BuildContext dialogContext, // bottomColor5 닫기용

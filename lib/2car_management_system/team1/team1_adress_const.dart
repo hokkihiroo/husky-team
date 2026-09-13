@@ -11,6 +11,11 @@ final MOON ='local/q0LRMbznxA2yPca1DKNw/team1/1ACUzVo3Quod24RLILGr/moon';
 final SINSA ='local/q0LRMbznxA2yPca1DKNw/team1/1ACUzVo3Quod24RLILGr/sinsa';
 
 
+final parkLocation ='local/q0LRMbznxA2yPca1DKNw/team1/xGAQeCS3vHukIZyPhIlk/';
+
+
+
+
 
 // 픽업에 필요한 위치파악
 String CheckLocation(int location){

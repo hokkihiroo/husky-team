@@ -1,28 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_1_stateList.dart';
-import 'package:team_husky/2car_management_system/team2/team2-2/team2_4_3_repository.dart';
-import 'package:team_husky/2car_management_system/team2/team2_adress_const.dart';
-import 'package:team_husky/2car_management_system/team2/team2-1/team2_numbercard.dart';
-import 'package:team_husky/2car_management_system/team2/team2-2/team2_3_standbycard.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5_reposi.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5_standby_card.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5_stateList.dart';
 
-class B1B2Outside extends StatefulWidget {
+import '../team5_adress.dart';
+
+class Team5B1B2 extends StatefulWidget {
   final String name;
   final int location;
 
-  const B1B2Outside({
+  const Team5B1B2({
     super.key,
     required this.name,
     required this.location,
   });
 
   @override
-  State<B1B2Outside> createState() => _B1B2OutsideStateState();
+  State<Team5B1B2> createState() => _Team5B1B2State();
 }
 
-class _B1B2OutsideStateState extends State<B1B2Outside> {
-  final repo = StateRepository();
+class _Team5B1B2State extends State<Team5B1B2> {
+
+  final repo = Team5Reposi();
 
   String Color5List = COLOR5 + formatTodayDate();
 
@@ -50,8 +51,8 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   int option7 = 0; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
   String option8 = ''; //A-1,A-2,C,D 시승상태
   String option9 = ''; //시승예약 고객 성함
-
   Timestamp? option10; //출차시 시간 다시 입력해서 이거대로 진행하면 순서매길수있음 아웃카에서
+
   //아래는 없음
 
   String option11 = '';
@@ -61,26 +62,26 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
   void showIntInputBottomSheet(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-    String option1,
-    int option2,
-    int option3,
-    int option4,
-    String option5,
-    BuildContext rootContext, // 화면 context (show용)
-  ) {
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2,
+      int option3,
+      int option4,
+      String option5,
+      BuildContext rootContext, // 화면 context (show용)
+      ) {
     final TextEditingController fuelController = TextEditingController();
     final TextEditingController hipassController = TextEditingController();
     final TextEditingController totalKmController = TextEditingController();
@@ -171,12 +172,12 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                             final int fuel = int.parse(fuelController.text);
                             final int hiPass = int.parse(hipassController.text);
                             final int totalKm =
-                                int.parse(totalKmController.text);
+                            int.parse(totalKmController.text);
 
                             // 🔥 Firebase 저장
                             try {
                               await FirebaseFirestore.instance
-                                  .collection(FIELD)
+                                  .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
                                 'option2': hiPass, //하이패스
@@ -251,29 +252,29 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   }
 
   void bottomColor5Final(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
-    String getMovingTime,
-    String carModelFrom,
-    String option1,
-    int option2,
-    int option3,
-    int option4,
-    String option5,
-    BuildContext rootContext, // 화면 context (show용)
-    int fuel,
-    int hiPass,
-    int totalKm,
-  ) {
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2,
+      int option3,
+      int option4,
+      String option5,
+      BuildContext rootContext, // 화면 context (show용)
+      int fuel,
+      int hiPass,
+      int totalKm,
+      ) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -433,7 +434,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection(FIELD)
+          .collection(TEAM5FIELD)
           .where('color', isEqualTo: 5)
           .orderBy('createdAt')
           .snapshots(),
@@ -501,10 +502,9 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                 option5 = displayList[index]['option5']; //시승차 기타
                 option6 = displayList[index]['option6']; //3종 최근변경자 이름
                 option7 = displayList[index]
-                    ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = displayList[index]['option8']; //A-1,A-2,C,D 시승상태
                 option9 = displayList[index]['option9']; ////시승예약고객 성함
-
                 option10 = displayList[index]['option10'] as Timestamp?;       //출차시 사용할시간
                 //아래없음
 
@@ -546,7 +546,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   },
                 );
               },
-              child: StandByCard(
+              child: Team5StandByCard(
                 carNumber: displayList[index]['carNumber'],
                 name: displayList[index]['name'],
                 color: displayList[index]['color'],
@@ -563,29 +563,29 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   }
 
   Widget bottomColor5(
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-    BuildContext rootContext, // 메인화면 context (show용)
-    BuildContext context, // 컬러5화면 context (show용)
-    String option1,
-    int option2, //하이패스
-    int option3, //주유잔량
-    int option4, //총킬로수
-    String option5, //기타
-    String option6, //3대변경자
-    String option8, //3대변경자
-  ) {
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      BuildContext rootContext, // 메인화면 context (show용)
+      BuildContext context, // 컬러5화면 context (show용)
+      String option1,
+      int option2, //하이패스
+      int option3, //주유잔량
+      int option4, //총킬로수
+      String option5, //기타
+      String option6, //3대변경자
+      String option8, //3대변경자
+      ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -666,7 +666,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                   child: ElevatedButton(
                     onPressed: () async {
                       final nowLocation =
-                          getLocationName(location); //시승차 위치파악함수
+                      getLocationName(location); //시승차 위치파악함수
                       Color5List = COLOR5 + formatTodayDate();
                       String documentId = FirebaseFirestore.instance
                           .collection(Color5List)
@@ -674,7 +674,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                           .id;
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'location': 0,
@@ -728,13 +728,13 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       } catch (e) {}
 
                       await repo.createData(
-                          dataId: dataId,
-                          state: '$nowLocation > 스탠바이',
-                          wayToDrive: option5,
-                          totalKmBefore: option4,
-                          leftGasBefore: option3,
-                          hiPassBefore: option2,
-                          prepareName: widget.name,
+                        dataId: dataId,
+                        state: '$nowLocation > 스탠바이',
+                        wayToDrive: option5,
+                        totalKmBefore: option4,
+                        leftGasBefore: option3,
+                        hiPassBefore: option2,
+                        prepareName: widget.name,
                         wayToDrive2: option8,);
                     },
                     child: Text(
@@ -781,21 +781,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '기본',
-                                      'option5': '기본시승', //시승상태 기본 비교 비대면
-                                      'option8': 'A-1', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '기본',
+                            'option5': '기본시승', //시승상태 기본 비교 비대면
+                            'option8': 'A-1', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -839,21 +839,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '비교',
-                                      'option5': '비교시승', //시승상태 기본 비교 비대면
-                                      'option8': 'A-1', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '비교',
+                            'option5': '비교시승', //시승상태 기본 비교 비대면
+                            'option8': 'A-1', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -897,21 +897,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '비대',
-                                      'option5': '비대면시승', //시승상태 기본 비교 비대면
-                                      'option8': 'A-1', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '비대',
+                            'option5': '비대면시승', //시승상태 기본 비교 비대면
+                            'option8': 'A-1', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -955,21 +955,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '현장',
-                                      'option5': '현장동승', //시승상태 기본 비교 비대면
-                                      'option8': 'A-2', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '현장',
+                            'option5': '현장동승', //시승상태 기본 비교 비대면
+                            'option8': 'A-2', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1013,21 +1013,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '현비',
-                                      'option5': '현장비동승', //시승상태 기본 비교 비대면
-                                      'option8': 'A-2', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '현비',
+                            'option5': '현장비동승', //시승상태 기본 비교 비대면
+                            'option8': 'A-2', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1071,21 +1071,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '비대',
-                                      'option5': '현장비대면', //시승상태 기본 비교 비대면
-                                      'option8': 'A-2', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '비대',
+                            'option5': '현장비대면', //시승상태 기본 비교 비대면
+                            'option8': 'A-2', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1130,21 +1130,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '교육',
-                                      'option5': '교육', //시승상태 기본 비교 비대면
-                                      'option8': 'C', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '교육',
+                            'option5': '교육', //시승상태 기본 비교 비대면
+                            'option8': 'C', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1175,21 +1175,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '답사',
-                                      'option5': '답사', //시승상태 기본 비교 비대면
-                                      'option8': 'C', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '답사',
+                            'option5': '답사', //시승상태 기본 비교 비대면
+                            'option8': 'C', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1221,21 +1221,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '컬러',
-                                      'option5': '컬러확인', //시승상태 기본 비교 비대면
-                                      'option8': 'C', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '컬러',
+                            'option5': '컬러확인', //시승상태 기본 비교 비대면
+                            'option8': 'C', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1267,21 +1267,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '주유',
-                                      'option5': '주유', //시승상태 기본 비교 비대면
-                                      'option8': 'C', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '주유',
+                            'option5': '주유', //시승상태 기본 비교 비대면
+                            'option8': 'C', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1312,21 +1312,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                              name.isEmpty
-                                  ? {
-                                      'name': '인도',
-                                      'option5': '인도픽업', //시승상태 기본 비교 비대면
-                                      'option8': 'D', //A-1 A-2 C D
-                                    }
-                                  : {
-                                      'name': '',
-                                      'option5': '',
-                                      'option8': '',
-                                    },
-                            );
+                          name.isEmpty
+                              ? {
+                            'name': '인도',
+                            'option5': '인도픽업', //시승상태 기본 비교 비대면
+                            'option8': 'D', //A-1 A-2 C D
+                          }
+                              : {
+                            'name': '',
+                            'option5': '',
+                            'option8': '',
+                          },
+                        );
                       } catch (e) {
                         print(e);
                       }
@@ -1418,7 +1418,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       Navigator.pop(context);
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'location': 11,
@@ -1466,7 +1466,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'location': 12,
@@ -1515,7 +1515,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                       try {
                         await FirebaseFirestore.instance
-                            .collection(FIELD)
+                            .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update({
                           'location': 13,
@@ -1538,7 +1538,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                       );
                     },
                     child: Text(
-                      '외부로',
+                      '기타',
                       style: TextStyle(
                         fontSize: 13, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1606,7 +1606,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
                                                     try {
                                                       await FirebaseFirestore
                                                           .instance
-                                                          .collection(FIELD)
+                                                          .collection(TEAM5FIELD)
                                                           .doc(dataId)
                                                           .update({
                                                         'etc': etc,
@@ -1712,29 +1712,29 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   }
 
   Widget bottomColor5Etc(
-    //기타 클릭시
-    BuildContext bottomColor5EtcContext, // 컬러5Etc화면 context (show용)
-    String carNumber,
-    String name,
-    int color,
-    int location,
-    DateTime dateTime,
-    String dataId,
-    String etc,
-    String remainTime,
-    String movedLocation,
-    String wigetName,
-    String movingTime,
-    String getMovingTime,
-    String carModelFrom,
-    String option1,
-    int option2,
-    int option3,
-    int option4,
-    String option5,
-    String option6,
-    String option8,
-  ) {
+      //기타 클릭시
+      BuildContext bottomColor5EtcContext, // 컬러5Etc화면 context (show용)
+      String carNumber,
+      String name,
+      int color,
+      int location,
+      DateTime dateTime,
+      String dataId,
+      String etc,
+      String remainTime,
+      String movedLocation,
+      String wigetName,
+      String movingTime,
+      String getMovingTime,
+      String carModelFrom,
+      String option1,
+      int option2,
+      int option3,
+      int option4,
+      String option5,
+      String option6,
+      String option8,
+      ) {
     return AlertDialog(
       title: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -1755,7 +1755,7 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => StateList(
+              builder: (context) => Team5Statelist(
                 dataId: dataId,
               ),
             ),
@@ -1789,21 +1789,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': 'VP',
-                                    'option5': 'VIP시승', //시승상태 기본 비교 비대면
-                                    'option8': 'A-1', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': 'VP',
+                          'option5': 'VIP시승', //시승상태 기본 비교 비대면
+                          'option8': 'A-1', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -1847,21 +1847,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '인도',
-                                    'option5': '찾아가는시승', //시승상태 기본 비교 비대면
-                                    'option8': 'A-1', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '인도',
+                          'option5': '찾아가는시승', //시승상태 기본 비교 비대면
+                          'option8': 'A-1', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -1906,21 +1906,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '오너',
-                                    'option5': '오너스시승', //시승상태 기본 비교 비대면
-                                    'option8': 'A-1', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '오너',
+                          'option5': '오너스시승', //시승상태 기본 비교 비대면
+                          'option8': 'A-1', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -1964,21 +1964,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '시그',
-                                    'option5': '시그니처시승', //시승상태 기본 비교 비대면
-                                    'option8': 'A-1', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '시그',
+                          'option5': '시그니처시승', //시승상태 기본 비교 비대면
+                          'option8': 'A-1', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -2023,21 +2023,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '오너',
-                                    'option5': '오너스현장', //시승상태 기본 비교 비대면
-                                    'option8': 'A-2', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '오너',
+                          'option5': '오너스현장', //시승상태 기본 비교 비대면
+                          'option8': 'A-2', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -2081,21 +2081,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '수리',
-                                    'option5': '시승차수리', //시승상태 기본 비교 비대면
-                                    'option8': 'C', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '수리',
+                          'option5': '시승차수리', //시승상태 기본 비교 비대면
+                          'option8': 'C', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -2128,21 +2128,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '장기',
-                                    'option5': '장기시승', //시승상태 기본 비교 비대면
-                                    'option8': 'C', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '장기',
+                          'option5': '장기시승', //시승상태 기본 비교 비대면
+                          'option8': 'C', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -2174,21 +2174,21 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
 
                     try {
                       await FirebaseFirestore.instance
-                          .collection(FIELD)
+                          .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                            name.isEmpty
-                                ? {
-                                    'name': '지원',
-                                    'option5': '외부지원', //시승상태 기본 비교 비대면
-                                    'option8': 'C', //A-1 A-2 C D
-                                  }
-                                : {
-                                    'name': '',
-                                    'option5': '',
-                                    'option8': '',
-                                  },
-                          );
+                        name.isEmpty
+                            ? {
+                          'name': '지원',
+                          'option5': '외부지원', //시승상태 기본 비교 비대면
+                          'option8': 'C', //A-1 A-2 C D
+                        }
+                            : {
+                          'name': '',
+                          'option5': '',
+                          'option8': '',
+                        },
+                      );
                     } catch (e) {
                       print(e);
                     }
@@ -2209,4 +2209,5 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
       ),
     );
   }
+
 }

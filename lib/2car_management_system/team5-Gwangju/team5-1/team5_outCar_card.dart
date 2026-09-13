@@ -1,37 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
 
-class Team4OutcarCard extends StatelessWidget {
+import '../team5_adress.dart';
+
+class Team5OutcarCard extends StatelessWidget {
   final String myName;
   final String carNumber;
   final String name;
+  final String option12;
+  final String etc;
   final String dataAdress;
   final int location;
   final int color;
   final String dataId;
   final String movedLocation;
   final String wigetName;
-  final String movingTime;
-  final String etc;
   final int choolchaNum;
 
-  String CarListAdress = TEAM4CARLIST + Team4formatTodayDate();
+  String CarListAdress = TEAM5CARLIST + formatTodayDate();
 
-  Team4OutcarCard({
+  Team5OutcarCard({
     super.key,
     required this.carNumber,
     required this.name,
+    required this.option12,
+    required this.etc,
     required this.location,
     required this.dataId,
     required this.myName,
     required this.dataAdress,
     required this.movedLocation,
     required this.wigetName,
-    required this.movingTime,
     required this.color,
     required this.choolchaNum,
-    required this.etc,
   });
 
   @override
@@ -41,7 +42,6 @@ class Team4OutcarCard extends StatelessWidget {
       color: Colors.black,
       child: Column(
         children: [
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -88,7 +88,7 @@ class Team4OutcarCard extends StatelessWidget {
                       onPressed: () async {
                         try {
                           await FirebaseFirestore.instance
-                              .collection(TEAM4FIELD)
+                              .collection(TEAM5FIELD)
                               .doc(dataId)
                               .update({
                             'color': 1,
@@ -118,7 +118,7 @@ class Team4OutcarCard extends StatelessWidget {
                       onPressed: () async {
                         try {
                           await FirebaseFirestore.instance
-                              .collection(TEAM4FIELD)
+                              .collection(TEAM5FIELD)
                               .doc(dataId)
                               .delete();
                           print('문서 삭제 완료');
@@ -136,11 +136,11 @@ class Team4OutcarCard extends StatelessWidget {
                             'outLocation': location,
                             'movedLocation': movedLocation,
                             'wigetName': wigetName,
-                            'movingTime': movingTime,
+                            'etc': '($option12) $etc',
                           });
                           print('출차완료 업데이트 완료');
                         } catch (e) {
-                          print('데이터가 존재하지 않아 업데이트 할게 없습니당');
+                          print('데이터가없어 업데이트가 존재하지 않습니다');
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {

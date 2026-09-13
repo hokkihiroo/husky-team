@@ -23,7 +23,7 @@ class _OutCarState extends State<OutCar> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection(FIELD)
-          .orderBy('createdAt')
+          .orderBy('option10')
           .snapshots(),
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -59,6 +59,7 @@ class _OutCarState extends State<OutCar> {
                   movedLocation: filteredDocs[index]['movedLocation'],
                   wigetName: filteredDocs[index]['wigetName'],
                   color:  filteredDocs[index]['color'],
+                  choolchaNum: index+1,
                 ),
               ),
             );
