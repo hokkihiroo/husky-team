@@ -23,7 +23,7 @@ class _Team4OutCarState extends State<Team4OutCar> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection(TEAM4FIELD)
-          .orderBy('createdAt')
+          .orderBy('option10')
           .snapshots(),
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
