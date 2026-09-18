@@ -1079,7 +1079,7 @@ class _UserResumeState extends State<UserResume> {
                   children: [
                     // 경력
                     CustomTextForm(
-                      hintText: '경력을 입력해주세요.',
+                      hintText: '운전경력을 입력해주세요.',
                       icon: const Icon(
                         Icons.work_outline,
                       ),
@@ -1338,7 +1338,7 @@ class _UserResumeState extends State<UserResume> {
 
                     // 보호자/어머니
                     CustomTextForm(
-                      hintText: '가족 정보를 입력해주세요.',
+                      hintText: '응급시 연락할 보호자 번호입력.',
                       icon: const Icon(
                         Icons.family_restroom_outlined,
                       ),
@@ -1357,7 +1357,7 @@ class _UserResumeState extends State<UserResume> {
 
                     // 관계
                     CustomTextForm(
-                      hintText: '관계를 입력해주세요.',
+                      hintText: '보호자와 관계 (예:아버지)',
                       icon: const Icon(
                         Icons.people_outline,
                       ),
