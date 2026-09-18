@@ -351,7 +351,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '버전 2.3',
+                    '버전 3.0',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade600,

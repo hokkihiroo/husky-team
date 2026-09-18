@@ -239,38 +239,6 @@ class _Team4ViewState extends State<Team4View> {
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '출차중',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '(번호순대로 출차하세요)',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               SizedBox(
                 height: 10,
               ),

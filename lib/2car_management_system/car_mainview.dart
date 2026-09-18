@@ -700,7 +700,7 @@ class CarManagementSystem extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      if (team == 'zSvgctyCZUnOx8rYMioF' ||
+                      if (team == 'NWIXrK7TWAq7gW8x1w1b' ||
                           team == 'e46miKLAbe8CjR1RsQkR') {
                         Navigator.push(
                           context,
@@ -785,7 +785,7 @@ class CarManagementSystem extends StatelessWidget {
                             Text(
                               '고객차 차량관리',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.black, // 검은색
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.8,
@@ -807,7 +807,7 @@ class CarManagementSystem extends StatelessWidget {
                   SizedBox(width: 10,),
                   GestureDetector(
                     onTap: () {
-                      if (team == 'zSvgctyCZUnOx8rYMioF' ||
+                      if (team == 'NWIXrK7TWAq7gW8x1w1b' ||
                           team == 'e46miKLAbe8CjR1RsQkR') {
                         Navigator.push(
                           context,
@@ -889,7 +889,7 @@ class CarManagementSystem extends StatelessWidget {
                             Text(
                               '시승차 상태관리',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.8,

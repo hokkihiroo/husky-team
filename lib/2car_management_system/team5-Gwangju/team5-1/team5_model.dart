@@ -79,8 +79,7 @@ class _CarStateState extends State<CarState> {
   String option11 = '';
 
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
-  void showIntInputBottomSheet(
-      String carNumber,
+  void showIntInputBottomSheet(String carNumber,
       String name,
       int color,
       int location,
@@ -112,13 +111,20 @@ class _CarStateState extends State<CarState> {
       builder: (sheetContext) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            bottom: MediaQuery
+                .of(context)
+                .viewInsets
+                .bottom + 20,
             top: 50,
           ),
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              width: MediaQuery.of(context).size.width.clamp(0, 290), // ⭐ 여기
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width
+                  .clamp(0, 290), // ⭐ 여기
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -149,13 +155,13 @@ class _CarStateState extends State<CarState> {
                     maxLength: 4,
                   ),
                   if (name != '주유') ...[
-                  const SizedBox(height: 12),
-                  _inputField(
-                    controller: hipassController,
-                    label: '하이패스 (숫자만)',
-                    suffix: '원',
-                    maxLength: 6,
-                  ),
+                    const SizedBox(height: 12),
+                    _inputField(
+                      controller: hipassController,
+                      label: '하이패스 (숫자만)',
+                      suffix: '원',
+                      maxLength: 6,
+                    ),
                   ],
                   const SizedBox(height: 12),
                   _inputField(
@@ -197,7 +203,8 @@ class _CarStateState extends State<CarState> {
                           onPressed: () async {
                             if (fuelController.text.isEmpty ||
                                 totalKmController.text.isEmpty ||
-                                (name != '주유' && hipassController.text.isEmpty)) {
+                                (name != '주유' &&
+                                    hipassController.text.isEmpty)) {
                               return;
                             }
                             // 🔧 [추가 위치 ⭐ 여기 ⭐]
@@ -254,7 +261,7 @@ class _CarStateState extends State<CarState> {
                                 leftGasAfter: fuel,
                                 hiPassAfter: hiPass,
                                 finishdName: widget.name,
-                                oilPriceValue:oilPriceValue,
+                                oilPriceValue: oilPriceValue,
                                 wayToDrive2: option8,
                               );
                             } catch (e) {
@@ -405,8 +412,7 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-  void bottomColor5Final(
-      String carNumber,
+  void bottomColor5Final(String carNumber,
       String name,
       int color,
       int location,
@@ -428,8 +434,7 @@ class _CarStateState extends State<CarState> {
       int fuel,
       int hiPass,
       int totalKm,
-      int? oilPrice,
-      ) {
+      int? oilPrice,) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -604,10 +609,15 @@ class _CarStateState extends State<CarState> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               content: SizedBox(
-                width: MediaQuery.of(context).size.width.clamp(0, 290),
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width
+                    .clamp(0, 290),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+
                     /// 🔘 탭 버튼
                     ToggleButtons(
                       isSelected: [
@@ -711,12 +721,10 @@ class _CarStateState extends State<CarState> {
   }
 
   //차종넣는함수(아래)
-  Widget carModel(
-      BuildContext rootContext,
+  Widget carModel(BuildContext rootContext,
       BuildContext carDialogContext, // ✅ 추가
       String brand,
-      Map<String, List<String>> brandModels,
-      ) {
+      Map<String, List<String>> brandModels,) {
     return AlertDialog(
       title: Center(
         child: Text(
@@ -726,7 +734,11 @@ class _CarStateState extends State<CarState> {
       ),
       content: Container(
         height: 360,
-        width: MediaQuery.of(rootContext).size.width.clamp(0, 290),
+        width: MediaQuery
+            .of(rootContext)
+            .size
+            .width
+            .clamp(0, 290),
         decoration: BoxDecoration(
           color: Colors.black12,
           borderRadius: BorderRadius.circular(10),
@@ -793,6 +805,7 @@ class _CarStateState extends State<CarState> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+
             /// 🔙 뒤로 → 브랜드 선택 다시 열기
             TextButton.icon(
               onPressed: () {
@@ -883,7 +896,8 @@ class _CarStateState extends State<CarState> {
                   option8 = filteredDocs[index]['option8']; //A-1 A-2 C D
                   option9 = filteredDocs[index]['option9']; //시승차예약자 성함
                   option12 = filteredDocs[index]['option12']; //전기차 충전시 사용 '충전'
-                  option10 = filteredDocs[index]['option10'] as Timestamp?;       //출차시 사용할시간
+                  option10 =
+                  filteredDocs[index]['option10'] as Timestamp?; //출차시 사용할시간
                   //아래없음
                   option11 = filteredDocs[index]['option11']; //시승차 예비용
 
@@ -962,8 +976,7 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-  Widget bottomTwo(
-      String carNumber,
+  Widget bottomTwo(String carNumber,
       String name,
       String option12,
       int color,
@@ -1028,7 +1041,7 @@ class _CarStateState extends State<CarState> {
                           .doc(dataId)
                           .update({
                         'color': color == 2 ? 1 : 2,
-                        'option10':  FieldValue.serverTimestamp(),
+                        'option10': FieldValue.serverTimestamp(),
                       });
                     } catch (e) {
                       print(e);
@@ -1123,7 +1136,11 @@ class _CarStateState extends State<CarState> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width.clamp(0, 300),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width
+            .clamp(0, 300),
         height: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1534,7 +1551,10 @@ class _CarStateState extends State<CarState> {
                               return AlertDialog(
                                 title: Text('특이사항'),
                                 content: Container(
-                                  width: MediaQuery.of(context).size.width,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
                                   height: 150,
                                   child: Column(
                                     children: [
@@ -1669,7 +1689,9 @@ class _CarStateState extends State<CarState> {
                   onPressed: () async {
                     Navigator.pop(context); // 첫 번째 Dialog 닫기
 
-                    if (carModelFrom == null || carModelFrom.trim().isEmpty) {
+                    if (carModelFrom == null || carModelFrom
+                        .trim()
+                        .isEmpty) {
                       await showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -1781,8 +1803,7 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-  Widget bottomColor5(
-      String carNumber,
+  Widget bottomColor5(String carNumber,
       String name,
       int color,
       int location,
@@ -1893,7 +1914,11 @@ class _CarStateState extends State<CarState> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width.clamp(0, 290),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width
+            .clamp(0, 290),
         height: 130,
         child: Column(
           children: [

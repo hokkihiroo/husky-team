@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,9 +8,11 @@ import 'package:team_husky/1insa/InsaCard.dart';
 import 'package:team_husky/1insa/teamcard.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class Organization extends StatefulWidget {
-  const Organization({super.key, required this.grade});
+  const Organization({
+    super.key,
+    required this.grade,
+  });
 
   final int grade;
 
@@ -17,24 +21,226 @@ class Organization extends StatefulWidget {
 }
 
 class _OrganizationState extends State<Organization> {
-  String teamId = ''; //팀 클릭시 그 팀 고유문서 아이디값
+  // ------------------------------------------------------------
+  // 기존 변수
+  // ------------------------------------------------------------
+
+  String teamId = ''; // 팀 클릭시 그 팀 고유문서 아이디값
   String name = ''; // 팀 이름
   String mansID = ''; // 팀원문서아이디
   String formattedDate = '';
   String? picUrl = '';
 
+  // ------------------------------------------------------------
+  // Firestore 실시간 스트림
+  // ------------------------------------------------------------
+
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
+  _insaSubscription;
+
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
+  _employeeSubscription;
+
+  // 건물 목록
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> _buildingDocs = [];
+
+  // 건물ID별 직원 목록
+  Map<String, List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+  _employeesByBuilding = {};
+
+  // 각각의 첫 데이터가 들어왔는지 확인
+  bool _insaLoaded = false;
+  bool _employeeLoaded = false;
+
+  // 에러
+  Object? _error;
+
+  // ------------------------------------------------------------
+  // 초기화
+  // ------------------------------------------------------------
+
+  @override
+  void initState() {
+    super.initState();
+
+    _listenToInsa();
+    _listenToEmployees();
+  }
+
+  // ------------------------------------------------------------
+  // 인사(건물) 실시간 감시
+  // ------------------------------------------------------------
+
+  void _listenToInsa() {
+    _insaSubscription = FirebaseFirestore.instance
+        .collection(INSA)
+        .orderBy('createdAt')
+        .snapshots()
+        .listen(
+          (snapshot) {
+        if (!mounted) return;
+
+        setState(() {
+          _buildingDocs = snapshot.docs;
+          _insaLoaded = true;
+          _error = null;
+        });
+      },
+      onError: (error) {
+        if (!mounted) return;
+
+        setState(() {
+          _insaLoaded = true;
+          _error = error;
+        });
+      },
+    );
+  }
+
+  // ------------------------------------------------------------
+  // 모든 list 하위 컬렉션 실시간 감시
+  //
+  // 구조:
+  //
+  // insa
+  //   ├─ 본사ID
+  //   │    └─ list
+  //   │         ├─ 직원1
+  //   │         └─ 직원2
+  //   │
+  //   ├─ 강남ID
+  //   │    └─ list
+  //   │         ├─ 직원3
+  //   │         └─ 직원4
+  //   │
+  //   └─ 강북ID
+  //        └─ list
+  //
+  // collectionGroup('list')를 사용하면
+  // 모든 list를 한 번에 실시간으로 받을 수 있음.
+  // ------------------------------------------------------------
+
+  void _listenToEmployees() {
+    _employeeSubscription = FirebaseFirestore.instance
+        .collectionGroup(LIST)
+        .snapshots()
+        .listen(
+          (snapshot) {
+        if (!mounted) return;
+
+        final Map<String,
+            List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+        groupedEmployees = {};
+
+        for (final employeeDoc in snapshot.docs) {
+          final data = employeeDoc.data();
+
+          // levelNumber가 없으면 0으로 처리
+          final dynamic levelValue = data['levelNumber'];
+          final int levelNumber = levelValue is num
+              ? levelValue.toInt()
+              : int.tryParse(levelValue?.toString() ?? '') ?? 0;
+
+          // 기존 코드와 동일하게 levelNumber == 0은 제외
+          if (levelNumber == 0) {
+            continue;
+          }
+
+          // 직원이 들어있는 list의 부모 건물 ID
+          //
+          // insa / 건물ID / list / 직원ID
+          //                  ↑ employeeDoc
+          //
+          // parent      = list
+          // parent.parent = 건물ID
+          final buildingId = employeeDoc.reference.parent.parent?.id;
+
+          if (buildingId == null) {
+            continue;
+          }
+
+          groupedEmployees
+              .putIfAbsent(buildingId, () => [])
+              .add(employeeDoc);
+        }
+
+        // levelNumber 순서대로 정렬
+        for (final employees in groupedEmployees.values) {
+          employees.sort((a, b) {
+            final aData = a.data();
+            final bData = b.data();
+
+            final aLevelValue = aData['levelNumber'];
+            final bLevelValue = bData['levelNumber'];
+
+            final int aLevel = aLevelValue is num
+                ? aLevelValue.toInt()
+                : int.tryParse(aLevelValue?.toString() ?? '') ?? 0;
+
+            final int bLevel = bLevelValue is num
+                ? bLevelValue.toInt()
+                : int.tryParse(bLevelValue?.toString() ?? '') ?? 0;
+
+            return aLevel.compareTo(bLevel);
+          });
+        }
+
+        setState(() {
+          _employeesByBuilding = groupedEmployees;
+          _employeeLoaded = true;
+          _error = null;
+        });
+      },
+      onError: (error) {
+        if (!mounted) return;
+
+        setState(() {
+          _employeeLoaded = true;
+          _error = error;
+        });
+      },
+    );
+  }
+
+  // ------------------------------------------------------------
+  // 종료
+  // ------------------------------------------------------------
+
+  @override
+  void dispose() {
+    _insaSubscription?.cancel();
+    _employeeSubscription?.cancel();
+
+    super.dispose();
+  }
+
+  // ------------------------------------------------------------
+  // 홈페이지 열기
+  // ------------------------------------------------------------
+
   void _launchWebsite(String url) async {
     final Uri uri = Uri.parse(url);
+
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication); // 외부 브라우저로 열기
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
     } else {
       throw 'Could not launch $url';
     }
   }
 
+  // ------------------------------------------------------------
+  // 전화 걸기
+  // ------------------------------------------------------------
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri url = Uri(scheme: 'tel', path: phoneNumber);
+    final Uri url = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
@@ -42,148 +248,168 @@ class _OrganizationState extends State<Organization> {
     }
   }
 
+  // ------------------------------------------------------------
+  // 화면
+  // ------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection(INSA)
-            .orderBy('createdAt')
-            .snapshots(),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    // 두 스트림에서 최초 데이터가 모두 들어올 때까지 로딩
+    if (!_insaLoaded || !_employeeLoaded) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-          final docs = snapshot.data!.docs;
-          return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                // 등급이 0이고, 문서 ID가 특정 ID일 경우 해당 아이템은 보여주지 않음
-                if (widget.grade == 0 &&
-                    docs[index].id == '3LDEwvJicNKtzDemmHY6') {
-                  return SizedBox.shrink(); // 빈 공간을 반환하여 해당 아이템을 숨김
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
+    // 에러 처리
+    if (_error != null) {
+      return Center(
+        child: Text(
+          '데이터를 불러오는 중 오류가 발생했습니다.\n$_error',
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
 
-                           final schedule = docs[index]['schedule'];
+    // 기존 코드의 grade == 0 조건 유지
+    final visibleBuildings = _buildingDocs.where((buildingDoc) {
+      if (widget.grade == 0 &&
+          buildingDoc.id == '3LDEwvJicNKtzDemmHY6') {
+        return false;
+      }
 
-                            if (schedule != null && schedule.toString().trim().isNotEmpty) {
-                            final siteUrl = schedule.toString();
-                            _launchWebsite(siteUrl);
-                            } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('사이트 주소가 없습니다')),
-                            );
-                            }
+      return true;
+    }).toList();
 
+    return ListView.builder(
+      itemCount: visibleBuildings.length,
+      itemBuilder: (context, index) {
+        final buildingDoc = visibleBuildings[index];
+        final buildingData = buildingDoc.data();
 
+        final String buildingId = buildingDoc.id;
 
+        // 이 건물에 속한 직원들
+        final employees =
+            _employeesByBuilding[buildingId] ?? const [];
 
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: Column(
+              children: [
+                // ------------------------------------------------
+                // 건물 카드
+                // ------------------------------------------------
 
+                GestureDetector(
+                  onTap: () {
+                    final schedule = buildingData['schedule'];
 
+                    if (schedule != null &&
+                        schedule.toString().trim().isNotEmpty) {
+                      final siteUrl = schedule.toString();
 
-
-                            // teamId = docs[index].id;
-                            // print(teamId);
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => SchedulePage(
-                            //       teamId: teamId,
-                            //     ),
-                            //   ),
-                            // );
-                          },
-                          child: BuildingCard(
-                            image: Image.asset(docs[index]['image']),
-                            name: docs[index]['name'],
-                            position: docs[index]['position'],
-                          ),
+                      _launchWebsite(siteUrl);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('권한이 없습니다'),
                         ),
-                        StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection(INSA)
-                              .doc(docs[index].id)
-                              .collection('list')
-                              .orderBy('levelNumber')
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                                  snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            }
-                            final docs = snapshot.data!.docs.where((subDoc) {
-                              // levelNumber 필드 값 확인 (필드가 없으면 기본값 0)
-                              final data = subDoc.data();
-                              final levelNumber = data['levelNumber'] ?? 0;
-                              return levelNumber !=
-                                  0; // levelNumber가 0이 아닌 문서만 포함
-                            }).toList();
-
-                            // 바뀐 부분: ListView 대신 Column을 사용하여 하위 컬렉션의 데이터를 표시
-                            return Column(
-                              children: docs.map((subDoc) {
-                                var data =
-                                    subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
-                                return GestureDetector(
-                                  onTap: () async {
-                                    var document = subDoc;
-                                    mansID = document.id;
-                                    Map<String, dynamic> userData =
-                                        await getData(mansID);
-                                    Timestamp timestamp = userData['enterDay'];
-                                    DateTime dateTime = timestamp.toDate();
-                                    formattedDate =
-                                        DateFormat('yy/MM/dd').format(dateTime);
-                                    picUrl = userData['picUrl'];
-
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-
-                                        return viewInsa(
-                                          userData,
-                                          formattedDate,
-                                          picUrl!,
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: OrganizationCard(
-                                    image: data['image'] != null
-                                        ? Image.asset(data['image'])
-                                        : Icon(Icons.image_outlined),
-                                    name: data['name'] ?? '',
-                                    // 이름이 널인 경우 빈 문자열 사용
-                                    grade: data['grade'] ?? '',
-                                    // 포지션이 널인 경우 빈 문자열 사용
-                                    position: data['position'] ?? '',
-                                    picUrl: data['picUrl'] ?? '',
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          },
-                        ),
-                      ],
+                      );
+                    }
+                  },
+                  child: BuildingCard(
+                    image: Image.asset(
+                      buildingData['image'],
                     ),
+                    name: buildingData['name'] ?? '',
+                    position: buildingData['position'] ?? '',
+                    adress: buildingData['adress'] ?? '',
                   ),
-                );
-              });
-        });
+                ),
+
+                // ------------------------------------------------
+                // 직원 목록
+                //
+                // 여기에는 StreamBuilder가 없음.
+                // 이미 위에서 collectionGroup으로 전체 직원 데이터를
+                // 받아놓았기 때문에 화면에서는 바로 그려줌.
+                // ------------------------------------------------
+
+                Column(
+                  children: employees.map((employeeDoc) {
+                    final data = employeeDoc.data();
+
+                    return GestureDetector(
+                      onTap: () async {
+                        final document = employeeDoc;
+
+                        mansID = document.id;
+
+                        // 선택한 직원의 user 정보 가져오기
+                        final Map<String, dynamic> userData =
+                        await getData(mansID);
+
+                        // 입사일 처리
+                        String selectedFormattedDate = '';
+
+                        final enterDay = userData['enterDay'];
+
+                        if (enterDay is Timestamp) {
+                          final DateTime dateTime =
+                          enterDay.toDate();
+
+                          selectedFormattedDate =
+                              DateFormat('yy/MM/dd')
+                                  .format(dateTime);
+                        }
+
+                        // 프로필 이미지
+                        final String selectedPicUrl =
+                            userData['picUrl']?.toString() ?? '';
+
+                        if (!mounted) return;
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return viewInsa(
+                              userData,
+                              selectedFormattedDate,
+                              selectedPicUrl,
+                            );
+                          },
+                        );
+                      },
+                      child: OrganizationCard(
+                        image: data['image'] != null
+                            ? Image.asset(
+                          data['image'],
+                        )
+                            : const Icon(
+                          Icons.image_outlined,
+                        ),
+                        name: data['name'] ?? '',
+                        grade: data['grade'] ?? '',
+                        position: data['position'] ?? '',
+                        picUrl: data['picUrl'] ?? '',
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
+
+  // ------------------------------------------------------------
+  // 직원 상세정보
+  // ------------------------------------------------------------
 
   Widget viewInsa(
       Map<String, dynamic> data,
@@ -191,14 +417,17 @@ class _OrganizationState extends State<Organization> {
       String picUrl,
       ) {
     return AlertDialog(
-      backgroundColor: Colors.white, // 전체 배경색을 기본 흰색으로 설정
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0), // 모서리 둥글게
+        borderRadius: BorderRadius.circular(16.0),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // ------------------------------------------------------
           // 브라운 색 배경 영역
+          // ------------------------------------------------------
+
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -206,15 +435,17 @@ class _OrganizationState extends State<Organization> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.brown.shade800, // 진한 브라운
-                  Colors.brown.shade200, // 연한 브라운
+                  Colors.brown.shade800,
+                  Colors.brown.shade200,
                 ],
               ),
             ),
-            padding: EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 20.0,
+            ),
             child: Column(
               children: [
-                Text(
+                const Text(
                   '(주)팀허스키',
                   style: TextStyle(
                     fontSize: 18.0,
@@ -223,33 +454,44 @@ class _OrganizationState extends State<Organization> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16.0),
+
+                const SizedBox(height: 16.0),
+
                 GestureDetector(
                   onTap: picUrl.isNotEmpty
                       ? () {
-                    _showFullImage(context, picUrl);
+                    _showFullImage(
+                      context,
+                      picUrl,
+                    );
                   }
-                      : null, // 이미지 URL이 없으면 클릭 비활성화
+                      : null,
                   child: CircleAvatar(
-                    backgroundImage: picUrl != null && picUrl.isNotEmpty
+                    backgroundImage: picUrl.isNotEmpty
                         ? NetworkImage(picUrl)
-                        : AssetImage('asset/img/husky_Logo.png') as ImageProvider,
+                        : const AssetImage(
+                      'asset/img/husky_Logo.png',
+                    ) as ImageProvider,
                     radius: 50,
                   ),
                 ),
-                SizedBox(height: 16.0),
+
+                const SizedBox(height: 16.0),
+
                 Text(
                   data['name'] ?? '이름 없음',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 8.0),
+
+                const SizedBox(height: 8.0),
+
                 Text(
                   data['birthDay'] ?? '생일 정보 없음',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                     color: Colors.black87,
                   ),
@@ -257,22 +499,42 @@ class _OrganizationState extends State<Organization> {
               ],
             ),
           ),
+
+          // ------------------------------------------------------
           // 흰색 배경 영역
+          // ------------------------------------------------------
+
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 20.0,
+            ),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 연락처
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: _infoRow('연락처', data['phoneNumber'])),
+                      Expanded(
+                        child: _infoRow(
+                          '연락처',
+                          data['phoneNumber'],
+                        ),
+                      ),
+
                       IconButton(
-                        icon: Icon(Icons.phone, color: Colors.green),
+                        icon: const Icon(
+                          Icons.phone,
+                          color: Colors.green,
+                        ),
                         onPressed: () {
-                          final phone = data['phoneNumber']?.toString() ?? '';
+                          final phone =
+                              data['phoneNumber']?.toString() ??
+                                  '';
+
                           if (phone.isNotEmpty) {
                             _makePhoneCall(phone);
                           }
@@ -281,28 +543,79 @@ class _OrganizationState extends State<Organization> {
                     ],
                   ),
 
-                  Divider(thickness: 1, color: Colors.grey[300]),
-                  _infoRow('등록일', formattedDate),
-                  Divider(thickness: 1, color: Colors.grey[300]),
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey[300],
+                  ),
+
+                  // 등록일
+                  _infoRow(
+                    '등록일',
+                    formattedDate,
+                  ),
+
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey[300],
+                  ),
+
+                  // 상의 / 하의
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: _infoRow('상의', data['tShirtSize'])),
-                      SizedBox(width: 16),
-                      Expanded(child: _infoRow('하의', data['pantsSize'])),
+                      Expanded(
+                        child: _infoRow(
+                          '상의',
+                          data['tShirtSize'],
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _infoRow(
+                          '하의',
+                          data['pantsSize'],
+                        ),
+                      ),
                     ],
                   ),
-                  Divider(thickness: 1, color: Colors.grey[300]),
+
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey[300],
+                  ),
+
+                  // 신발 / 키
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: _infoRow('신발', data['footSize'])),
-                      SizedBox(width: 16),
-                      Expanded(child: _infoRow('키', '${data['cm']} cm')),
+                      Expanded(
+                        child: _infoRow(
+                          '신발',
+                          data['footSize'],
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _infoRow(
+                          '키',
+                          '${data['cm'] ?? '정보 없음'} cm',
+                        ),
+                      ),
                     ],
                   ),
-                  Divider(thickness: 1, color: Colors.grey[300]),
-                  _infoRow('몸무게', '${data['kg']} kg'),
+
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey[300],
+                  ),
+
+                  // 몸무게
+                  _infoRow(
+                    '몸무게',
+                    '${data['kg'] ?? '정보 없음'} kg',
+                  ),
                 ],
               ),
             ),
@@ -312,23 +625,35 @@ class _OrganizationState extends State<Organization> {
     );
   }
 
-  Widget _infoRow(String label, String value) {
+  // ------------------------------------------------------------
+  // 상세정보 한 줄
+  // ------------------------------------------------------------
+
+  Widget _infoRow(
+      String label,
+      dynamic value,
+      ) {
+    final String displayValue =
+        value?.toString() ?? '정보 없음';
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '$label:',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 14.0,
             color: Colors.black87,
           ),
         ),
-        SizedBox(width: 8.0),
+
+        const SizedBox(width: 8.0),
+
         Expanded(
           child: Text(
-            value ?? '정보 없음',
-            style: TextStyle(
+            displayValue,
+            style: const TextStyle(
               fontSize: 14.0,
               color: Colors.black54,
             ),
@@ -339,51 +664,69 @@ class _OrganizationState extends State<Organization> {
     );
   }
 
-  void _showFullImage(BuildContext context, String imageUrl) {
+  // ------------------------------------------------------------
+  // 전체 이미지 보기
+  // ------------------------------------------------------------
+
+  void _showFullImage(
+      BuildContext context,
+      String imageUrl,
+      ) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => FullImageView(imageUrl: imageUrl),
+        builder: (context) => FullImageView(
+          imageUrl: imageUrl,
+        ),
       ),
     );
   }
-
 }
 
-//선택한 직원 신상 불러오기
-Future<Map<String, dynamic>> getData(String documentId) async {
+// ================================================================
+// 선택한 직원 신상 불러오기
+// ================================================================
+
+Future<Map<String, dynamic>> getData(
+    String documentId,
+    ) async {
   try {
-    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc(documentId)
-            .get();
+    final DocumentSnapshot<Map<String, dynamic>>
+    documentSnapshot =
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(documentId)
+        .get();
 
     if (documentSnapshot.exists) {
-      Map<String, dynamic> data = documentSnapshot.data()!;
+      final Map<String, dynamic>? data =
+      documentSnapshot.data();
+
       if (data != null) {
         return data;
       } else {
         print('문서 데이터가 null입니다.');
-        // 데이터가 null인 경우에 대한 처리를 추가합니다.
       }
     } else {
       print('문서가 존재하지 않습니다.');
-      // 문서가 존재하지 않는 경우에 대한 처리를 추가합니다.
     }
   } catch (e) {
     print('데이터를 가져오는 중에 오류가 발생했습니다: $e');
-    // 오류가 발생한 경우에 대한 처리를 추가합니다.
   }
 
-  // 모든 분기에서 return 문을 추가하여 반환 유형이 Future<Map<String, dynamic>>을 만족시킵니다.
   return {};
 }
 
+// ================================================================
+// 전체 이미지 화면
+// ================================================================
 
 class FullImageView extends StatelessWidget {
   final String imageUrl;
 
-  FullImageView({required this.imageUrl});
+  const FullImageView({
+    super.key,
+    required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -191,6 +191,22 @@ class _Team2ViewState extends State<Team2View> {
                   ),
                 ],
               ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        '(번호순대로 출차하세요)',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 10,
               ),

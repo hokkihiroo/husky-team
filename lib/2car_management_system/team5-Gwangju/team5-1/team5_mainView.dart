@@ -419,7 +419,7 @@ class _LocationName extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '필드',
+              'CX',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -432,30 +432,30 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              'B1',
+              'B앞',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 25,
               ),
             ),
+          ),
+          Expanded(
+            child: Text(
+              'B뒤',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5,
           ),
           Expanded(
             child: Text(
               'B2',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            child: Text(
-              '기타',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
