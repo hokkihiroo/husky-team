@@ -8,7 +8,6 @@ import 'package:team_husky/5mypage/myschedule/myschedule.dart';
 import 'package:team_husky/user/user_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 import 'mysalary/mySalary.dart';
 import 'updatePicture/mypicture.dart';
 
@@ -37,8 +36,8 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  final String cjAdress='zSvgctyCZUnOx8rYMioF'; //브랜드관리는 청주 주소에있어서 청주 문서 아이디를 담아 바깥에서 브랜드관리 들어갈때 사용
-
+  final String cjAdress =
+      'zSvgctyCZUnOx8rYMioF'; //브랜드관리는 청주 주소에있어서 청주 문서 아이디를 담아 바깥에서 브랜드관리 들어갈때 사용
 
   void _launchWebsite(String url) async {
     final Uri uri = Uri.parse(url);
@@ -236,12 +235,11 @@ class _MyPageState extends State<MyPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => MySalary(
-                                name: widget.name,
-                                uid: widget.uid,
-                                team: widget.team,
-                                management: false,
-
-                              )),
+                                    name: widget.name,
+                                    uid: widget.uid,
+                                    team: widget.team,
+                                    management: false,
+                                  )),
                         );
                       },
                       child: Row(
@@ -310,10 +308,9 @@ class _MyPageState extends State<MyPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    Management(
-                                      name: widget.name,
-                                   ),
+                                builder: (context) => Management(
+                                  name: widget.name,
+                                ),
                               ),
                             );
                           },
@@ -340,7 +337,9 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ),
                 ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -351,7 +350,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '버전 3.0',
+                    '버전 3.0  디자인,기능 대폭 수정',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade600,
@@ -360,7 +359,6 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ],
               ),
-
             ],
           ),
         ),
@@ -390,9 +388,9 @@ class _MyPageState extends State<MyPage> {
             const SizedBox(height: 4),
             GestureDetector(
               onTap: () {
-                const siteUrl ='https://sites.google.com/view/teamhusky-privacy?usp=sharing'; // 원하는 사이트 URL
+                const siteUrl =
+                    'https://sites.google.com/view/teamhusky-privacy?usp=sharing'; // 원하는 사이트 URL
                 _launchWebsite(siteUrl);
-
               },
               child: const Text(
                 '개인정보 처리방침',
@@ -406,7 +404,6 @@ class _MyPageState extends State<MyPage> {
           ],
         ),
       ),
-
     );
   }
 
