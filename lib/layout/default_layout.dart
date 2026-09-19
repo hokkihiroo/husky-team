@@ -17,18 +17,23 @@ class DefaultLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor ?? Colors.white,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        // 최상단 상태바 배경
+        statusBarColor: Colors.white,
 
-      appBar: renderAppBar(),
+        // Android 시간 / Wi-Fi / 배터리 → 검은색
+        statusBarIconBrightness: Brightness.dark,
 
-      body: child,
-
-      bottomNavigationBar: bottomNavigationBar,
-
-      // 최상단 상태바(시간, 배터리, 와이파이) 색상
-      // 항상 흰색으로 표시
-      extendBodyBehindAppBar: false,
+        // iOS 시간 / 상태 아이콘 → 검은색
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: backgroundColor ?? Colors.white,
+        appBar: renderAppBar(),
+        body: child,
+        bottomNavigationBar: bottomNavigationBar,
+      ),
     );
   }
 
@@ -38,18 +43,8 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         automaticallyImplyLeading: false,
-
         backgroundColor: backgroundColor ?? Colors.white,
-
-        // 최상단 상태바 색상
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Color(0xFFF2F2F2),
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        ),
-
         elevation: 0,
-
         title: Text(
           title!,
           style: const TextStyle(
@@ -57,135 +52,9 @@ class DefaultLayout extends StatelessWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-
         centerTitle: false,
         foregroundColor: Colors.black,
       );
     }
   }
 }
-
-
-
-// 직접입력 버튼 브랜드관리에서 직접입력하는버튼 이쪽으로 빼놧음
-// ElevatedButton(
-//   style: ElevatedButton.styleFrom(
-//     padding: EdgeInsets.symmetric(
-//         horizontal: 24, vertical: 14),
-//     backgroundColor: Colors.black,
-//     // 검정 배경
-//     foregroundColor: Colors.yellow,
-//     // 노란 글씨
-//     shape: RoundedRectangleBorder(
-//       borderRadius:
-//           BorderRadius.circular(12),
-//     ),
-//     textStyle: TextStyle(
-//       fontSize: 16,
-//       fontWeight: FontWeight.bold,
-//     ),
-//   ),
-//   onPressed: () {
-//     Navigator.of(context)
-//         .pop(); // 이전 다이얼로그 닫기
-//
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         TextEditingController
-//             brandController =
-//             TextEditingController();
-//         TextEditingController
-//             modelController =
-//             TextEditingController();
-//
-//         return AlertDialog(
-//           title: Text(
-//             '직접입력',
-//             style: TextStyle(
-//                 fontWeight:
-//                     FontWeight.bold),
-//           ),
-//           content: Column(
-//             mainAxisSize:
-//                 MainAxisSize.min,
-//             children: [
-//               TextField(
-//                 controller:
-//                     brandController,
-//                 decoration:
-//                     InputDecoration(
-//                   labelText: '브랜드',
-//                   border:
-//                       OutlineInputBorder(),
-//                 ),
-//               ),
-//               SizedBox(height: 12),
-//               TextField(
-//                 controller:
-//                     modelController,
-//                 decoration:
-//                     InputDecoration(
-//                   labelText: '차종',
-//                   border:
-//                       OutlineInputBorder(),
-//                 ),
-//               ),
-//             ],
-//           ),
-//           actions: [
-//             TextButton(
-//               onPressed: () =>
-//                   Navigator.of(context)
-//                       .pop(),
-//               child: Text('취소'),
-//             ),
-//             ElevatedButton(
-//               onPressed: () async {
-//                 String brand =
-//                     brandController.text
-//                         .trim();
-//                 String model =
-//                     modelController.text
-//                         .trim();
-//
-//                 try {
-//                   await FirebaseFirestore
-//                       .instance
-//                       .collection(FIELD)
-//                       .doc(dataId)
-//                       .update({
-//                     'carBrand': brand,
-//                     'carModel': model,
-//                   });
-//                 } catch (e) {
-//                   print(e);
-//                 }
-//                 try {
-//                   await FirebaseFirestore
-//                       .instance
-//                       .collection(
-//                           CarListAdress)
-//                       .doc(dataId)
-//                       .update({
-//                     'carBrand': brand,
-//                     'carModel': model,
-//                   });
-//                 } catch (e) {
-//                   print(e);
-//                 }
-//
-//                 Navigator.of(context)
-//                     .pop(); // 다이얼로그 닫기
-//               },
-//               child: Text('확인'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   },
-//   child: Text('직접입력'),
-// ),
-// 닫기 버튼 (작고 기본 스타일)
-
