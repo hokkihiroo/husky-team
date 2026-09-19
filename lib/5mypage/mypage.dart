@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/5mypage/authorization/authorization.dart';
 import 'package:team_husky/5mypage/management/management.dart';
 import 'package:team_husky/5mypage/management/manegement/menues/teamMenues/brandManage.dart';
@@ -36,232 +37,321 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  final String cjAdress =
-      'zSvgctyCZUnOx8rYMioF'; //브랜드관리는 청주 주소에있어서 청주 문서 아이디를 담아 바깥에서 브랜드관리 들어갈때 사용
+  final String cjAdress = 'zSvgctyCZUnOx8rYMioF';
+
+  static const Color navy = Color(0xFF17233C);
+  static const Color gold = Color(0xFFC6A667);
+  static const Color background = Color(0xFFF5F6F8);
+  static const Color textDark = Color(0xFF20242B);
+  static const Color textGrey = Color(0xFF747B87);
 
   void _launchWebsite(String url) async {
     final Uri uri = Uri.parse(url);
+
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication); // 외부 브라우저로 열기
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
     } else {
       throw 'Could not launch $url';
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120), // AppBar 높이 설정
-        child: AppBar(
-          backgroundColor: Colors.black45, // AppBar 배경색
-          elevation: 4,
-          flexibleSpace: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              children: [
-                // 사진 섹션
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          child: MyPicture(
-                            uid: widget.uid,
-                            team: widget.team,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.grey[300],
-                    backgroundImage:
-                        (widget.picUrl != null && widget.picUrl.isNotEmpty)
-                            ? NetworkImage(widget.picUrl)
-                            : null,
-                    child: (widget.picUrl != null && widget.picUrl.isNotEmpty)
-                        ? null
-                        : const Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // 텍스트 정보 섹션
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "이름: ${widget.name}",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.logout,
-                              color: Colors.white,
-                            ),
-                            tooltip: "로그아웃",
-                            onPressed: () async {
-                              await FirebaseAuth.instance.signOut();
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const UserScreen(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "생년월일 : ${widget.birthDay}",
-                        style: const TextStyle(
-                            fontSize: 14, color: Colors.white70),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "메일 : ${widget.email}",
-                        style: const TextStyle(
-                            fontSize: 14, color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+  void _showProfilePicture() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: MyPicture(
+            uid: widget.uid,
+            team: widget.team,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _logout() async {
+    await FirebaseAuth.instance.signOut();
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UserScreen(),
+      ),
+    );
+  }
+
+  Widget _menuButton({
+    required IconData icon,
+    required String title,
+    required VoidCallback onPressed,
+  }) {
+    return Expanded(
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          height: 76,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: const Color(0xFFE4E7EC),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: navy.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: navy,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: textDark,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Color(0xFF9AA1AC),
+                size: 22,
+              ),
+            ],
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 나의 스케줄 버튼
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Expanded(
-              //       child: ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           backgroundColor: Colors.purple,
-              //           foregroundColor: Colors.white,
-              //         ),
-              //         onPressed: () {
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => MyLicenseUpdate(
-              //                   name: widget.name,
-              //                   uid: widget.uid,
-              //                   team: widget.team,
-              //                   management: false,
-              //                 )),
-              //           );
-              //         },
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.start,
-              //           // 텍스트를 왼쪽으로 정렬
-              //           children: const [
-              //             Icon(Icons.car_repair_outlined), // 아이콘
-              //             SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-              //             Text('운전면허증'), // 텍스트
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       width: 10,
-              //     ),
-              //     Expanded(
-              //       child: ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           backgroundColor: Colors.green,
-              //           foregroundColor: Colors.white,
-              //         ),
-              //         onPressed: () {
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //               builder: (context) => MySchedule(
-              //                 team: widget.team,
-              //                 uid: widget.uid,
-              //               ),
-              //             ),
-              //           );
-              //         },
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.start,
-              //           // 텍스트를 왼쪽으로 정렬
-              //           children: const [
-              //             Icon(Icons.schedule), // 아이콘
-              //             SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-              //             Text('나의스케줄'), // 텍스트
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
+    );
+  }
+
+  Widget _adminButton({
+    required IconData icon,
+    required String title,
+    required VoidCallback onPressed,
+  }) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        height: 58,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8F9FB),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: const Color(0xFFE1E4E9),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: navy,
+              size: 21,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: textDark,
+                ),
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: Color(0xFF8B929D),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: background,
+      
+        // 프로필 영역
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(142),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: navy,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24),
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 12, 16),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: _showProfilePicture,
+                      child: Container(
+                        width: 78,
+                        height: 78,
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: gold,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.18),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: const Color(0xFFD9DDE4),
+                          backgroundImage: widget.picUrl.isNotEmpty
+                              ? NetworkImage(widget.picUrl)
+                              : null,
+                          child: widget.picUrl.isEmpty
+                              ? const Icon(
+                            Icons.person_rounded,
+                            size: 42,
+                            color: Colors.white,
+                          )
+                              : null,
+                        ),
                       ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 21,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            widget.email,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Color(0xFFC9CED8),
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            '생년월일  ${widget.birthDay}',
+                            style: const TextStyle(
+                              color: Color(0xFFC9CED8),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: _logout,
+                      tooltip: '로그아웃',
+                      icon: const Icon(
+                        Icons.logout_rounded,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      
+        // 본문
+        body: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '내 메뉴',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    color: textDark,
+                  ),
+                ),
+                const SizedBox(height: 12),
+      
+                // 급여명세서 / 브랜드관리
+                Row(
+                  children: [
+                    _menuButton(
+                      icon: Icons.payments_outlined,
+                      title: '급여명세서',
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MySalary(
-                                    name: widget.name,
-                                    uid: widget.uid,
-                                    team: widget.team,
-                                    management: false,
-                                  )),
+                            builder: (context) => MySalary(
+                              name: widget.name,
+                              uid: widget.uid,
+                              team: widget.team,
+                              management: false,
+                            ),
+                          ),
                         );
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        // 텍스트를 왼쪽으로 정렬
-                        children: const [
-                          Icon(Icons.paid_outlined), // 아이콘
-                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('급여명세서'), // 텍스트
-                        ],
-                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown,
-                        foregroundColor: Colors.white,
-                      ),
+                    const SizedBox(width: 12),
+                    _menuButton(
+                      icon: Icons.directions_car_outlined,
+                      title: '브랜드관리',
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -273,37 +363,44 @@ class _MyPageState extends State<MyPage> {
                           ),
                         );
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        // 텍스트를 왼쪽으로 정렬
-                        children: const [
-                          Icon(Icons.edit), // 아이콘
-                          SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
-                          Text('브랜드관리'), // 텍스트
-                        ],
-                      ),
+                    ),
+                  ],
+                ),
+      
+                const SizedBox(height: 24),
+      
+                // 관리자 메뉴
+                if (widget.grade == 1 || widget.grade == 2) ...[
+                  const Text(
+                    '관리자',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                      color: textDark,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              if (widget.grade == 1 || widget.grade == 2)
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: const Color(0xFFE3E6EB),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueGrey,
-                            foregroundColor: Colors.white,
-                          ),
+                        _adminButton(
+                          icon: Icons.admin_panel_settings_outlined,
+                          title: '관리자 페이지',
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -314,15 +411,12 @@ class _MyPageState extends State<MyPage> {
                               ),
                             );
                           },
-                          child: const Text('관리자 페이지'),
                         ),
-                        const SizedBox(height: 16),
-                        if (widget.grade == 2)
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueGrey,
-                              foregroundColor: Colors.white,
-                            ),
+                        if (widget.grade == 2) ...[
+                          const SizedBox(height: 10),
+                          _adminButton(
+                            icon: Icons.security_outlined,
+                            title: '관리자 권한 설정',
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -331,99 +425,110 @@ class _MyPageState extends State<MyPage> {
                                 ),
                               );
                             },
-                            child: const Text('관리자 권한 설정'),
                           ),
+                        ],
                       ],
                     ),
                   ),
-                ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    size: 14,
-                    color: Colors.grey.shade600,
+                  const SizedBox(height: 24),
+                ],
+      
+                // 앱 버전
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
                   ),
-                  const SizedBox(width: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: const Color(0xFFE5E8ED),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.info_outline_rounded,
+                        size: 18,
+                        color: textGrey,
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          '버전 3.0  ·  디자인, 기능 대폭 수정',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: textGrey,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+      
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+      
+        // 하단 회사 정보
+        bottomNavigationBar: Container(
+          height: 78,
+          color: navy,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   Text(
-                    '버전 3.0  디자인,기능 대폭 수정',
+                    '(주) 팀허스키',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey.shade600,
-                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Copyright © Team.HUSKY 2018',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFFBFC5D0),
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 5),
+              GestureDetector(
+                onTap: () {
+                  const siteUrl =
+                      'https://sites.google.com/view/teamhusky-privacy?usp=sharing';
+      
+                  _launchWebsite(siteUrl);
+                },
+                child: const Text(
+                  '개인정보 처리방침',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.white,
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 80, // 약 2cm
-        color: Colors.indigo[500],
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  '(주) 팀허스키',
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'Copyright © Team.HUSKY 2018',
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            GestureDetector(
-              onTap: () {
-                const siteUrl =
-                    'https://sites.google.com/view/teamhusky-privacy?usp=sharing'; // 원하는 사이트 URL
-                _launchWebsite(siteUrl);
-              },
-              child: const Text(
-                '개인정보 처리방침',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void showContentDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('알림'),
-          content: const Text('준비중입니다'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
-              },
-              child: const Text('확인'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
