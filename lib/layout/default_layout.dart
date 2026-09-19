@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
@@ -18,9 +19,16 @@ class DefaultLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor ?? Colors.white,
+
       appBar: renderAppBar(),
+
       body: child,
+
       bottomNavigationBar: bottomNavigationBar,
+
+      // 최상단 상태바(시간, 배터리, 와이파이) 색상
+      // 항상 흰색으로 표시
+      extendBodyBehindAppBar: false,
     );
   }
 
@@ -30,15 +38,26 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         automaticallyImplyLeading: false,
+
         backgroundColor: backgroundColor ?? Colors.white,
+
+        // 최상단 상태바 색상
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Color(0xFFF2F2F2),
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
+
         elevation: 0,
+
         title: Text(
           title!,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 25.0,
             fontWeight: FontWeight.w900,
           ),
         ),
+
         centerTitle: false,
         foregroundColor: Colors.black,
       );
