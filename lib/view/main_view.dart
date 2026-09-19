@@ -99,7 +99,7 @@ class _MainViewState extends State<MainView>
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: title,
+      title: index == 1 ? null : title,
       child: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: controller,

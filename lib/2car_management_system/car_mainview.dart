@@ -297,7 +297,7 @@ class CarManagementSystem extends StatelessWidget {
 
                       _menuCard(
                         location: '강남 [HMS]',
-                        title: '차량관리 시스템',
+                        title: '고객차 차량관리',
                         onTap: () {
                           if (team == 'PJcc0iQSHShpJvONGBC7' ||
                               team == 'e46miKLAbe8CjR1RsQkR') {
@@ -334,7 +334,7 @@ class CarManagementSystem extends StatelessWidget {
 
                       _menuCard(
                         location: '수지 [GENESIS]',
-                        title: '차량관리 시스템',
+                        title: '고객차 차량관리',
                         onTap: () {
                           if (team == 'B71qHzRliuN9iQeTygTe' ||
                               team == 'e46miKLAbe8CjR1RsQkR') {

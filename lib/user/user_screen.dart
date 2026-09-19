@@ -17,9 +17,18 @@ class _UserScreenState extends State<UserScreen> {
   String id = '';
   String password = '';
 
-  // ============================================================
-  // 디자인 색상
-  // ============================================================
+// ============================================================
+// 로그인 상태
+// ============================================================
+
+  bool _isLoading = false;
+
+// 비밀번호 보기 / 숨기기
+  bool _obscurePassword = true;
+
+// ============================================================
+// 디자인 색상
+// ============================================================
 
   static const Color navy = Color(0xFF17233C);
   static const Color navyLight = Color(0xFF253452);
@@ -31,10 +40,77 @@ class _UserScreenState extends State<UserScreen> {
   static const Color textDark = Color(0xFF202632);
   static const Color textGrey = Color(0xFF7A808B);
 
+// ============================================================
+// 로그인 실패 / 입력값 확인 Dialog
+// ============================================================
+
+  void _showLoginError() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const MyDialog();
+      },
+    );
+  }
+
+// ============================================================
+// 로그인
+// ============================================================
+
+  Future<void> _login() async {
+// 이미 로그인 처리 중이면 다시 실행하지 않음
+    if (_isLoading) {
+      return;
+    }
+
+// 아이디 또는 비밀번호가 비어있는 경우
+    if (id.trim().isEmpty || password.isEmpty) {
+      _showLoginError();
+      return;
+    }
+
+// 로그인 시작
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final newUser = await AUTH.signInWithEmailAndPassword(
+        email: id.trim(),
+        password: password,
+      );
+
+// 로그인 성공
+      if (newUser.user != null) {
+        if (!mounted) return;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return SplashScreen();
+            },
+          ),
+        );
+      }
+    } catch (e) {
+// 로그인 실패
+      if (!mounted) return;
+
+      _showLoginError();
+    } finally {
+// 로그인 처리 종료
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double screenHeight =
-        MediaQuery.of(context).size.height;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: background,
@@ -47,9 +123,9 @@ class _UserScreenState extends State<UserScreen> {
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                // ==================================================
-                // 상단 로고 영역
-                // ==================================================
+// ==================================================
+// 상단 로고 영역
+// ==================================================
 
                 Container(
                   width: double.infinity,
@@ -70,7 +146,7 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                   child: Stack(
                     children: [
-                      // 은은한 장식 원
+// 은은한 장식 원
                       Positioned(
                         top: -80,
                         right: -70,
@@ -97,15 +173,14 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                       ),
 
-                      // 로고
+// 로고
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.only(
                             top: 15,
                           ),
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
                                 width: 150,
@@ -113,13 +188,10 @@ class _UserScreenState extends State<UserScreen> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
-
-                                  // 이미지와 주변 흰색 영역 사이 경계선
                                   border: Border.all(
                                     color: const Color(0xFFD9DEE8),
                                     width: 1.5,
                                   ),
-
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.25),
@@ -135,29 +207,23 @@ class _UserScreenState extends State<UserScreen> {
                                   ),
                                 ),
                               ),
-
                               const SizedBox(height: 18),
-
                               const Text(
                                 'TEAM HUSKY',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,
-                                  fontWeight:
-                                  FontWeight.w900,
+                                  fontWeight: FontWeight.w900,
                                   letterSpacing: 3,
                                 ),
                               ),
-
                               const SizedBox(height: 5),
-
                               Text(
                                 'EMPLOYEE ONLY',
                                 style: TextStyle(
                                   color: goldLight,
                                   fontSize: 11,
-                                  fontWeight:
-                                  FontWeight.w700,
+                                  fontWeight: FontWeight.w700,
                                   letterSpacing: 2,
                                 ),
                               ),
@@ -169,9 +235,9 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                 ),
 
-                // ==================================================
-                // 로그인 카드
-                // ==================================================
+// ==================================================
+// 로그인 카드
+// ==================================================
 
                 Transform.translate(
                   offset: const Offset(0, -25),
@@ -189,43 +255,38 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius:
-                        BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(25),
                         border: Border.all(
                           color: const Color(0xFFE4E1D9),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black
-                                .withOpacity(0.10),
+                            color: Colors.black.withOpacity(0.10),
                             blurRadius: 25,
                             offset: const Offset(0, 10),
                           ),
                         ],
                       ),
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ==================================================
-                          // 로그인 제목
-                          // ==================================================
+// ==================================================
+// 로그인 제목
+// ==================================================
 
                           const Padding(
                             padding: EdgeInsets.only(
                               left: 5,
                             ),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '직원 로그인',
                                   style: TextStyle(
                                     color: textDark,
                                     fontSize: 24,
-                                    fontWeight:
-                                    FontWeight.w900,
+                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
                                 SizedBox(height: 5),
@@ -234,8 +295,7 @@ class _UserScreenState extends State<UserScreen> {
                                   style: TextStyle(
                                     color: textGrey,
                                     fontSize: 13,
-                                    fontWeight:
-                                    FontWeight.w500,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
@@ -244,75 +304,82 @@ class _UserScreenState extends State<UserScreen> {
 
                           const SizedBox(height: 22),
 
-                          // ==================================================
-                          // 아이디
-                          // ==================================================
+// ==================================================
+// 아이디
+// ==================================================
 
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black
-                                      .withOpacity(0.03),
+                                  color: Colors.black.withOpacity(0.03),
                                   blurRadius: 8,
-                                  offset:
-                                  const Offset(0, 3),
+                                  offset: const Offset(0, 3),
                                 ),
                               ],
                             ),
                             child: CustomTextForm(
                               hintText: '아이디',
-                              onChanged:
-                                  (String value) {
+                              onChanged: (String value) {
                                 id = value;
                               },
                               icon: const Icon(
-                                Icons
-                                    .account_circle_outlined,
+                                Icons.account_circle_outlined,
                               ),
                             ),
                           ),
 
                           const SizedBox(height: 12),
 
-                          // ==================================================
-                          // 비밀번호
-                          // ==================================================
+// ==================================================
+// 비밀번호
+// ==================================================
 
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black
-                                      .withOpacity(0.03),
+                                  color: Colors.black.withOpacity(0.03),
                                   blurRadius: 8,
-                                  offset:
-                                  const Offset(0, 3),
+                                  offset: const Offset(0, 3),
                                 ),
                               ],
                             ),
                             child: CustomTextForm(
                               hintText: '비밀번호',
-                              onChanged:
-                                  (String value) {
+                              onChanged: (String value) {
                                 password = value;
                               },
-                              obscureText: true,
+                              obscureText: _obscurePassword,
                               icon: const Icon(
                                 Icons.lock_outline,
+                              ),
+
+// 비밀번호 보기 / 숨기기
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: textGrey,
+                                  size: 21,
+                                ),
                               ),
                             ),
                           ),
 
                           const SizedBox(height: 20),
 
-                          // ==================================================
-                          // 로그인 버튼
-                          // ==================================================
+// ==================================================
+// 로그인 버튼
+// ==================================================
 
                           SizedBox(
                             width: double.infinity,
@@ -320,85 +387,91 @@ class _UserScreenState extends State<UserScreen> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: navy,
-                                foregroundColor:
-                                Colors.white,
-                                elevation: 4,
-                                shadowColor: navy
-                                    .withOpacity(0.35),
-                                shape:
-                                RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(
+                                foregroundColor: Colors.white,
+
+// 로그인 중에는 그림자 제거
+                                elevation: _isLoading ? 0 : 4,
+
+                                shadowColor: navy.withOpacity(0.35),
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
                                     16,
                                   ),
                                 ),
                               ),
-                              onPressed: () async {
-                                try {
-                                  final newUser =
-                                  await AUTH
-                                      .signInWithEmailAndPassword(
-                                    email: id,
-                                    password: password,
-                                  );
 
-                                  if (newUser.user != null) {
-                                    Navigator
-                                        .pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return SplashScreen();
-                                        },
-                                      ),
-                                    );
-                                  }
-                                } catch (e) {
-                                  print(e);
-                                }
-                              },
-                              child: const Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.login,
-                                    size: 21,
-                                  ),
-                                  SizedBox(width: 9),
-                                  Text(
-                                    '로그인',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight:
-                                      FontWeight.w900,
+// 로그인 중에는 버튼 비활성화
+                              onPressed: _isLoading ? null : _login,
+
+// ==================================================
+// 로그인 중 / 일반 상태
+// ==================================================
+
+                              child: _isLoading
+                                  ? const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.5,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          '로그인 중...',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.login,
+                                          size: 21,
+                                        ),
+                                        SizedBox(width: 9),
+                                        Text(
+                                          '로그인',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
 
                           const SizedBox(height: 12),
 
-                          // ==================================================
-                          // 비밀번호 찾기
-                          // ==================================================
+// ==================================================
+// 비밀번호 찾기
+// ==================================================
 
                           SizedBox(
                             width: double.infinity,
                             height: 48,
                             child: OutlinedButton(
-                              style:
-                              OutlinedButton.styleFrom(
+                              style: OutlinedButton.styleFrom(
                                 foregroundColor: navy,
                                 side: const BorderSide(
                                   color: Color(0xFFD5D2C9),
                                 ),
-                                shape:
-                                RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
                                     15,
                                   ),
                                 ),
@@ -414,12 +487,10 @@ class _UserScreenState extends State<UserScreen> {
                                 );
                               },
                               child: const Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    Icons
-                                        .lock_reset_outlined,
+                                    Icons.lock_reset_outlined,
                                     size: 19,
                                   ),
                                   SizedBox(width: 8),
@@ -427,8 +498,7 @@ class _UserScreenState extends State<UserScreen> {
                                     '비밀번호 찾기',
                                     style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight:
-                                      FontWeight.w700,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ],
@@ -441,9 +511,9 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                 ),
 
-                // ==================================================
-                // 이력서 작성 영역
-                // ==================================================
+// ==================================================
+// 이력서 작성 영역
+// ==================================================
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
@@ -457,12 +527,10 @@ class _UserScreenState extends State<UserScreen> {
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
                       color: navy,
-                      borderRadius:
-                      BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(22),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                          Colors.black.withOpacity(0.10),
+                          color: Colors.black.withOpacity(0.10),
                           blurRadius: 15,
                           offset: const Offset(0, 6),
                         ),
@@ -470,7 +538,7 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     child: Row(
                       children: [
-                        // 아이콘
+// 아이콘
                         Container(
                           width: 48,
                           height: 48,
@@ -482,8 +550,7 @@ class _UserScreenState extends State<UserScreen> {
                             ),
                           ),
                           child: const Icon(
-                            Icons
-                                .description_outlined,
+                            Icons.description_outlined,
                             color: goldLight,
                             size: 24,
                           ),
@@ -491,27 +558,24 @@ class _UserScreenState extends State<UserScreen> {
 
                         const SizedBox(width: 13),
 
-                        // 텍스트
+// 텍스트
                         const Expanded(
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 '신규 직원이신가요?',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
-                                  fontWeight:
-                                  FontWeight.w800,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                               SizedBox(height: 4),
                               Text(
                                 '이력서를 작성하여 직원 등록을 진행하세요.',
                                 style: TextStyle(
-                                  color:
-                                  Color(0xFFB8C0CF),
+                                  color: Color(0xFFB8C0CF),
                                   fontSize: 11,
                                 ),
                               ),
@@ -521,23 +585,19 @@ class _UserScreenState extends State<UserScreen> {
 
                         const SizedBox(width: 8),
 
-                        // 이력서 작성 버튼
+// 이력서 작성 버튼
                         SizedBox(
                           height: 43,
                           child: ElevatedButton(
-                            style:
-                            ElevatedButton.styleFrom(
+                            style: ElevatedButton.styleFrom(
                               backgroundColor: gold,
                               foregroundColor: navy,
                               elevation: 0,
-                              padding:
-                              const EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 15,
                               ),
-                              shape:
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
                                   13,
                                 ),
                               ),
@@ -556,8 +616,7 @@ class _UserScreenState extends State<UserScreen> {
                               '이력서 작성',
                               style: TextStyle(
                                 fontSize: 12,
-                                fontWeight:
-                                FontWeight.w900,
+                                fontWeight: FontWeight.w900,
                               ),
                             ),
                           ),
@@ -567,9 +626,9 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                 ),
 
-                // ==================================================
-                // 하단 안내
-                // ==================================================
+// ==================================================
+// 하단 안내
+// ==================================================
 
                 const SizedBox(height: 35),
 
@@ -580,8 +639,7 @@ class _UserScreenState extends State<UserScreen> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
                             width: 25,
@@ -594,8 +652,7 @@ class _UserScreenState extends State<UserScreen> {
                             style: TextStyle(
                               color: textGrey,
                               fontSize: 10,
-                              fontWeight:
-                              FontWeight.w800,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: 2,
                             ),
                           ),
@@ -607,9 +664,7 @@ class _UserScreenState extends State<UserScreen> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 10),
-
                       const Text(
                         '해당 앱은 팀허스키 직원 전용앱입니다.',
                         textAlign: TextAlign.center,
@@ -618,9 +673,7 @@ class _UserScreenState extends State<UserScreen> {
                           fontSize: 11,
                         ),
                       ),
-
                       const SizedBox(height: 4),
-
                       const Text(
                         'Copyright © Team.HUSKY 2018',
                         textAlign: TextAlign.center,
@@ -642,7 +695,7 @@ class _UserScreenState extends State<UserScreen> {
 }
 
 // ================================================================
-// 기존 MyDialog
+// 로그인 실패 Dialog
 // ================================================================
 
 class MyDialog extends StatelessWidget {
@@ -650,17 +703,82 @@ class MyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color navy = Color(0xFF17233C);
+    const Color gold = Color(0xFFC6A667);
+    const Color textGrey = Color(0xFF7A808B);
+
     return AlertDialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(22),
+      ),
+      titlePadding: const EdgeInsets.fromLTRB(
+        24,
+        24,
+        24,
+        0,
+      ),
+      contentPadding: const EdgeInsets.fromLTRB(
+        24,
+        10,
+        24,
+        0,
+      ),
+      actionsPadding: const EdgeInsets.fromLTRB(
+        16,
+        8,
+        16,
+        16,
+      ),
+      title: const Row(
+        children: [
+          Icon(
+            Icons.error_outline_rounded,
+            color: gold,
+            size: 26,
+          ),
+          SizedBox(width: 10),
+          Text(
+            '로그인 실패',
+            style: TextStyle(
+              color: navy,
+              fontSize: 19,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
       content: const Text(
         '아이디와 비밀번호를 확인하세요.',
+        style: TextStyle(
+          color: textGrey,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
       ),
       actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text(
-            '닫기',
+        SizedBox(
+          width: double.infinity,
+          height: 45,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: navy,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13),
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              '확인',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
         ),
       ],
