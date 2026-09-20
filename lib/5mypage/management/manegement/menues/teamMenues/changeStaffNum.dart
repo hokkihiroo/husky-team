@@ -7,7 +7,8 @@ class ChangeStaffNum extends StatefulWidget {
   final String position;
   final String teamDocId;
 
-  const ChangeStaffNum({super.key,
+  const ChangeStaffNum({
+    super.key,
     required this.teamName,
     required this.position,
     required this.teamDocId,
@@ -26,188 +27,388 @@ class _ChangeStaffNumState extends State<ChangeStaffNum> {
   String docId = '';
   int levelNumber = 0;
 
+  static const Color navy = Color(0xFF17233C);
+  static const Color navyLight = Color(0xFF253452);
+  static const Color gold = Color(0xFFC6A667);
+  static const Color textDark = Color(0xFF303641);
+  static const Color textGrey = Color(0xFF737B89);
+  static const Color background = Color(0xFFF4F5F7);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       appBar: AppBar(
-        title: Text(
-          ' 직원순서 변경',
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: navy,
+        foregroundColor: Colors.white,
+        title: const Text(
+          '직원순서 변경',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.2,
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.orange,
-        elevation: 2,
       ),
       body: SingleChildScrollView(
-        // SingleChildScrollView로 감싸기
-        child: Container(
-          color: Colors.white, // 전체 배경 색상
-          padding: const EdgeInsets.all(16.0), // 전체 패딩
-          child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('insa')
-                .doc(widget.teamDocId)
-                .collection('list')
-                .orderBy('levelNumber')
-                .snapshots(),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return Center(
-                  child: Text('데이터가 없습니다.'),
-                );
-              }
-
-              final docs = snapshot.data!.docs;
-              final filteredDocs =
-                  docs.where((doc) => doc['levelNumber'] != 0).toList();
-
-              memberList.clear(); // 이 부분을 넣어서 이전 데이터를 지운 후 새로 추가
-              for (var doc in filteredDocs) {
-                Map<String, dynamic> data = {
-                  'name': doc['name'],
-                  'docId': doc.id,
-                  'position': doc['position'],
-                  'grade': doc['grade'],
-                  'levelNumber': doc['levelNumber'],
-                };
-                memberList.add(data); // memberList에 추가
-              }
-
-              return Column(
-                children: [
-                  ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: filteredDocs.length,
-                    itemBuilder: (context, index) {
-                      final doc = filteredDocs[index];
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            name = doc['name'] ?? '이름 없음'; // null이면 '이름 없음' 사용
-                            grade =
-                                doc['grade'] ?? '학년 없음'; // null이면 '학년 없음' 사용
-                            position =
-                                doc['position'] ?? '직책 없음'; // null이면 '직책 없음' 사용
-                            levelNumber =
-                                doc['levelNumber'] ?? 0; // null이면 0 사용
-                            var document = doc;
-                            docId = document.id; // 문서 ID는 null이 될 수 없음, 안전하게 접근
-
-                            print(name);
-                            print(grade);
-                            print(position);
-                            print(levelNumber);
-                            print(docId);
-
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return changeNum(
-                                  name,
-                                  grade,
-                                  position,
-                                  levelNumber,
-                                  docId,
-                                  memberList,
-                                );
-                              },
-                            );
-                          },
-                          child: ChangeStaffNumCard(
-                            number: index + 1,
-                            name: doc['name'] ?? '',
-                            position: doc['position'] ?? '',
-                            grade: doc['grade'] ?? '',
-                          ),
-                        ),
-                      );
-                    },
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 상단 안내 카드
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 16,
+              ),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    navy,
+                    navyLight,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: navy.withOpacity(0.18),
+                    blurRadius: 12,
+                    offset: const Offset(0, 5),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 43,
+                    height: 43,
+                    decoration: BoxDecoration(
+                      color: gold.withOpacity(0.16),
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    child: const Icon(
+                      Icons.format_list_numbered_rounded,
+                      color: gold,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 13),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '직원순서 관리',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          '${widget.position} ${widget.teamName} 직원 순서를 변경합니다.',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xFFD5DAE3),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 22),
+
+            // 제목
+            Row(
+              children: [
+                const Text(
+                  '직원 목록',
+                  style: TextStyle(
+                    color: textDark,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    color: const Color(0xFFDDE1E7),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 12),
+
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('insa')
+                  .doc(widget.teamDocId)
+                  .collection('list')
+                  .orderBy('levelNumber')
+                  .snapshots(),
+              builder: (
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                  snapshot,
+                  ) {
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 50),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: gold,
+                        strokeWidth: 2.5,
+                      ),
+                    ),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  return _emptyCard(
+                    icon: Icons.error_outline_rounded,
+                    text: '직원 정보를 불러오지 못했습니다.',
+                  );
+                }
+
+                if (!snapshot.hasData ||
+                    snapshot.data!.docs.isEmpty) {
+                  return _emptyCard(
+                    icon: Icons.people_outline_rounded,
+                    text: '데이터가 없습니다.',
+                  );
+                }
+
+                final docs = snapshot.data!.docs;
+
+                final filteredDocs = docs
+                    .where((doc) => doc['levelNumber'] != 0)
+                    .toList();
+
+                memberList.clear();
+
+                for (var doc in filteredDocs) {
+                  Map<String, dynamic> data = {
+                    'name': doc['name'],
+                    'docId': doc.id,
+                    'position': doc['position'],
+                    'grade': doc['grade'],
+                    'levelNumber': doc['levelNumber'],
+                  };
+
+                  memberList.add(data);
+                }
+
+                if (filteredDocs.isEmpty) {
+                  return _emptyCard(
+                    icon: Icons.people_outline_rounded,
+                    text: '등록된 직원이 없습니다.',
+                  );
+                }
+
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredDocs.length,
+                  itemBuilder: (context, index) {
+                    final doc = filteredDocs[index];
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 9),
+                      child: GestureDetector(
+                        onTap: () {
+                          name = doc['name'] ?? '이름 없음';
+                          grade = doc['grade'] ?? '학년 없음';
+                          position = doc['position'] ?? '직책 없음';
+                          levelNumber =
+                              doc['levelNumber'] ?? 0;
+
+                          var document = doc;
+                          docId = document.id;
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return changeNum(
+                                name,
+                                grade,
+                                position,
+                                levelNumber,
+                                docId,
+                                memberList,
+                              );
+                            },
+                          );
+                        },
+                        child: ChangeStaffNumCard(
+                          number: index + 1,
+                          name: doc['name'] ?? '',
+                          position: doc['position'] ?? '',
+                          grade: doc['grade'] ?? '',
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget changeNum(
-    String name,
-    String grade,
-    String position,
-    int levelNumber,
-    String docId,
-    List<Map<String, dynamic>> memberList, // memberList
-  ) {
-    return AlertDialog(
-      title: Column(
-        mainAxisSize: MainAxisSize.min,
+  Widget _emptyCard({
+    required IconData icon,
+    required String text,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFE2E5EA),
+        ),
+      ),
+      child: Column(
         children: [
-          Text(
-            '$name 직원의 위치를',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+          Icon(
+            icon,
+            color: const Color(0xFFB5BBC5),
+            size: 32,
           ),
-          SizedBox(height: 8), // 텍스트 사이 간격
+          const SizedBox(height: 9),
           Text(
-            '누구와 바꾸시겠습니까?',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade600,
+            text,
+            style: const TextStyle(
+              color: textGrey,
+              fontSize: 13,
             ),
-          ),
-          Divider(
-            color: Colors.orange, // 구분선 색상
-            thickness: 2, // 구분선 두께
-            height: 20, // 구분선과 텍스트 간격
           ),
         ],
       ),
+    );
+  }
 
-      content: Container(
-        width: double.maxFinite, // 내용이 다 표시되도록 최대 너비 설정
-        height: 300, // 충분한 높이 설정
+  Widget changeNum(
+      String name,
+      String grade,
+      String position,
+      int levelNumber,
+      String docId,
+      List<Map<String, dynamic>> memberList,
+      ) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      titlePadding: const EdgeInsets.fromLTRB(
+        20,
+        20,
+        20,
+        8,
+      ),
+      contentPadding: const EdgeInsets.fromLTRB(
+        16,
+        8,
+        16,
+        8,
+      ),
+      actionsPadding: const EdgeInsets.fromLTRB(
+        16,
+        4,
+        16,
+        14,
+      ),
+      title: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: navy.withOpacity(0.07),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.swap_vert_rounded,
+                  color: navy,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 11),
+              Expanded(
+                child: Text(
+                  '$name 직원의 위치 변경',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: textDark,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '위치를 바꿀 직원을 선택하세요.',
+              style: TextStyle(
+                color: textGrey,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            height: 1,
+            color: const Color(0xFFE2E5EA),
+          ),
+        ],
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        height: 300,
         child: ListView.builder(
-          itemCount: memberList.length, // memberList의 길이만큼 아이템 수 설정
+          itemCount: memberList.length,
           itemBuilder: (context, index) {
-            var member = memberList[index]; // memberList의 각 아이템
+            var member = memberList[index];
 
-            // null 체크 후 기본값 설정
-            String memberName = member['name'] ?? '이름 없음';
-            String memberPosition = member['position'] ?? '직책 없음';
-            String memberGrade = member['grade'] ?? '직급 없음';
-            String memberdocId = member['docId'] ?? '아이디 없음';
-            int memberlevelNumber = member['levelNumber'] ?? '넘버 없음';
-
+            String memberName =
+                member['name'] ?? '이름 없음';
+            String memberPosition =
+                member['position'] ?? '직책 없음';
+            String memberGrade =
+                member['grade'] ?? '직급 없음';
+            String memberdocId =
+                member['docId'] ?? '아이디 없음';
+            int memberlevelNumber =
+                member['levelNumber'] ?? 0;
 
             return GestureDetector(
-              onTap: () async{
-                print('$memberName');
-                print('$memberPosition');
-                print('$memberGrade');
-                print('$memberdocId');
-                print('$memberlevelNumber');
-
+              onTap: () async {
                 Navigator.pop(context);
 
                 try {
@@ -219,6 +420,7 @@ class _ChangeStaffNumState extends State<ChangeStaffNum> {
                       .update({
                     'levelNumber': memberlevelNumber,
                   });
+
                   print('$name 이');
                   print('$memberName 으로감');
                 } catch (e) {
@@ -240,64 +442,109 @@ class _ChangeStaffNumState extends State<ChangeStaffNum> {
                 } catch (e) {
                   print(e);
                 }
-
-
               },
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 5),
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 4,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300), // 테두리 추가
-                  borderRadius: BorderRadius.circular(5), // 모서리 둥글게
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(13),
+                  border: Border.all(
+                    color: const Color(0xFFE2E5EA),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // 원형 번호 표시
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundColor: Colors.orange,
-                      child: Text(
-                        (index + 1).toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    // 순번
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: gold.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(
+                            color: navy,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    // 이름과 직책 가로 배치
+
+                    const SizedBox(width: 12),
+
+                    // 이름
                     Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            memberName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Text(
-                            memberPosition,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        memberName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: textDark,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                    // 직급 표시
+
+                    const SizedBox(width: 8),
+
+                    // 직책
                     Text(
-                      memberGrade,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                      memberPosition,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: textGrey,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    // 직급
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: navy.withOpacity(0.07),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        memberGrade,
+                        style: const TextStyle(
+                          color: navy,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 3),
+
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Color(0xFFB0B6C0),
+                      size: 18,
                     ),
                   ],
                 ),
@@ -306,12 +553,30 @@ class _ChangeStaffNumState extends State<ChangeStaffNum> {
           },
         ),
       ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('닫기'),
+      actions: [
+        SizedBox(
+          width: double.infinity,
+          height: 44,
+          child: OutlinedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: OutlinedButton.styleFrom(
+              foregroundColor: textGrey,
+              side: const BorderSide(
+                color: Color(0xFFDDE1E7),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              '닫기',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ),
       ],
     );

@@ -58,75 +58,7 @@ class _ManagementState extends State<Management> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 상단 안내 영역
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    navy,
-                    navyLight,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.12),
-                    blurRadius: 12,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: gold.withOpacity(0.18),
-                      borderRadius: BorderRadius.circular(13),
-                      border: Border.all(
-                        color: gold.withOpacity(0.45),
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.settings_rounded,
-                      color: goldLight,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 13),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '관리자 설정',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '팀 운영에 필요한 설정을 관리합니다.',
-                          style: TextStyle(
-                            color: Color(0xFFD4D9E2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
             const Padding(
               padding: EdgeInsets.only(left: 3),

@@ -8,25 +8,41 @@ import '../../0adress_const.dart';
 class ForGenesis extends StatefulWidget {
   final String teamDocId;
 
-  const ForGenesis({super.key, required this.teamDocId});
+  const ForGenesis({
+    super.key,
+    required this.teamDocId,
+  });
 
   @override
   State<ForGenesis> createState() => _ForGenesisState();
 }
 
 class _ForGenesisState extends State<ForGenesis> {
-  late String field; // 전역 변수로 선언
+  late String field;
+
   final List<String> categories = [
     '60',
     '70',
     '80',
     '90',
   ];
-  String selectedCategory = '80'; // ✅ 선택된 값 저장
-  int selectedCategoryNum = 3; //80이 제일 자주 사용하니 80으로 고정해둠 80이 3번임
+
+  String selectedCategory = '80';
+  int selectedCategoryNum = 3;
 
   final TextEditingController carModelController = TextEditingController();
   final TextEditingController carNumberController = TextEditingController();
+
+  String thisMonth = '';
+
+  // 디자인 색상
+  static const Color navy = Color(0xFF17233C);
+  static const Color navyLight = Color(0xFF253452);
+  static const Color gold = Color(0xFFC6A667);
+  static const Color goldLight = Color(0xFFE6D19A);
+  static const Color textDark = Color(0xFF303641);
+  static const Color textGrey = Color(0xFF737B89);
+  static const Color background = Color(0xFFF4F5F7);
 
   @override
   void dispose() {
@@ -35,131 +51,268 @@ class _ForGenesisState extends State<ForGenesis> {
     super.dispose();
   }
 
-//시승차 추가 코드
+  // 시승차 추가
   void _showDialog() {
-      carModelController.clear();
-      carNumberController.clear();
+    carModelController.clear();
+    carNumberController.clear();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(
-                '시승차종',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              titlePadding: const EdgeInsets.fromLTRB(
+                22,
+                22,
+                22,
+                8,
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(
+                22,
+                8,
+                22,
+                10,
+              ),
+              actionsPadding: const EdgeInsets.fromLTRB(
+                16,
+                4,
+                16,
+                16,
+              ),
+              title: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: navy.withOpacity(0.07),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.directions_car_rounded,
+                      color: navy,
+                      size: 21,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    '시승차 추가',
+                    style: TextStyle(
+                      color: textDark,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 19,
+                    ),
+                  ),
+                ],
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Text(
+                    '차량 정보를 입력해주세요.',
+                    style: TextStyle(
+                      color: textGrey,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 시승차종
                   TextField(
                     controller: carModelController,
                     maxLength: 8,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(8),
                     ],
-                    decoration: const InputDecoration(
-                      hintText: "시승차종",
-                      counterStyle: TextStyle(color: Colors.grey),
+                    decoration: InputDecoration(
+                      labelText: '시승차종',
+                      hintText: '예: GV80',
+                      counterStyle: const TextStyle(
+                        color: textGrey,
+                        fontSize: 11,
+                      ),
+                      filled: true,
+                      fillColor: background,
+                      prefixIcon: const Icon(
+                        Icons.directions_car_outlined,
+                        color: navy,
+                        size: 20,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(13),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(13),
+                        borderSide: const BorderSide(
+                          color: gold,
+                          width: 1.5,
+                        ),
+                      ),
                     ),
                   ),
+
+                  const SizedBox(height: 8),
+
+                  // 시승차번호
                   TextField(
                     controller: carNumberController,
                     maxLength: 4,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(4),
                     ],
-                    decoration: const InputDecoration(
-                      hintText: "시승차번호",
-                      counterStyle: TextStyle(color: Colors.grey),
+                    decoration: InputDecoration(
+                      labelText: '시승차번호',
+                      hintText: '예: 1234',
+                      counterStyle: const TextStyle(
+                        color: textGrey,
+                        fontSize: 11,
+                      ),
+                      filled: true,
+                      fillColor: background,
+                      prefixIcon: const Icon(
+                        Icons.confirmation_number_outlined,
+                        color: navy,
+                        size: 20,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(13),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(13),
+                        borderSide: const BorderSide(
+                          color: gold,
+                          width: 1.5,
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
               actions: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        String carModel = carModelController.text;
-                        String carNumber = carNumberController.text;
-
-                        String documentId = FirebaseFirestore.instance
-                            .collection(field)
-                            .doc()
-                            .id;
-
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection(field)
-                              .doc(documentId)
-                              .set({
-                            'carNumber': carNumber,
-                            'enterName': '',
-                            //자가주차하면 여기에 자가라고 들어가게함 *고객차한정*
-                            'name': '',
-                            'createdAt': FieldValue.serverTimestamp(),
-                            'location': 11,
-                            'color': 5,
-                            'etc': '',
-                            'movedLocation': '입차',
-                            'wigetName': '',
-                            'movingTime': '',
-                            'carBrand': '제네시스',
-                            'carModel': carModel,
-                            'option1': '',
-                            //필드에 있는 옵션1은 컬러5에 넣을 문서데이터저장
-                            'option2': '',
-                            //하이패스
-                            'option3': '',
-                            //기름잔량
-                            'option4': '',
-                            //총거리
-                            'option5': '',
-                            //시승차 기타
-                            'option6': '',
-                            //최근 3종 변경자 이름
-                            'option7': selectedCategoryNum,
-                            //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
-                            'option8': '',
-                            'option9': '',
-                            'option10':  FieldValue.serverTimestamp(),
-                            'option11': '',
-                            'option12': '',
-                          });
-                        } catch (e) {
-                          print('저장 에러: $e');
-                        }
-                        Navigator.of(context).pop();
-
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection(field)
-                              .doc(documentId)
-                              .collection(thisMonth)
-                              .doc()
-                              .set({
-                            'createdAt': FieldValue.serverTimestamp(),
-                            'name': '',
-                            'color': '',
-                            'location': '',
-                            'state': '시승차량입고',
-                            'wayToDrive': '',
-                          });
-                        } catch (e) {
-                          print('저장 에러: $e');
-                        }
-
-                      },
-                      child: Text('확인'),
+                    Expanded(
+                      child: SizedBox(
+                        height: 45,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: textGrey,
+                            side: const BorderSide(
+                              color: Color(0xFFDDE1E7),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            '취소',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('취소'),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SizedBox(
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            String carModel = carModelController.text;
+                            String carNumber = carNumberController.text;
+
+                            String documentId = FirebaseFirestore
+                                .instance
+                                .collection(field)
+                                .doc()
+                                .id;
+
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(field)
+                                  .doc(documentId)
+                                  .set({
+                                'carNumber': carNumber,
+                                'enterName': '',
+                                'name': '',
+                                'createdAt':
+                                FieldValue.serverTimestamp(),
+                                'location': 11,
+                                'color': 5,
+                                'etc': '',
+                                'movedLocation': '입차',
+                                'wigetName': '',
+                                'movingTime': '',
+                                'carBrand': '제네시스',
+                                'carModel': carModel,
+                                'option1': '',
+                                'option2': '',
+                                'option3': '',
+                                'option4': '',
+                                'option5': '',
+                                'option6': '',
+                                'option7': selectedCategoryNum,
+                                'option8': '',
+                                'option9': '',
+                                'option10':
+                                FieldValue.serverTimestamp(),
+                                'option11': '',
+                                'option12': '',
+                              });
+                            } catch (e) {
+                              print('저장 에러: $e');
+                            }
+
+                            Navigator.of(context).pop();
+
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(field)
+                                  .doc(documentId)
+                                  .collection(thisMonth)
+                                  .doc()
+                                  .set({
+                                'createdAt':
+                                FieldValue.serverTimestamp(),
+                                'name': '',
+                                'color': '',
+                                'location': '',
+                                'state': '시승차량입고',
+                                'wayToDrive': '',
+                              });
+                            } catch (e) {
+                              print('저장 에러: $e');
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: navy,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            '확인',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -171,12 +324,9 @@ class _ForGenesisState extends State<ForGenesis> {
     );
   }
 
-  String thisMonth='';
-
   @override
   void initState() {
     super.initState();
-    print('initState 호출됨');
 
     field = getForFieldAdress(widget.teamDocId);
   }
@@ -184,50 +334,138 @@ class _ForGenesisState extends State<ForGenesis> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
+
+      // 상단 AppBar
       appBar: AppBar(
-        title: Text(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: navy,
+        foregroundColor: Colors.white,
+        title: const Text(
           '시승차관리(제네시스전용)',
           style: TextStyle(
-            color: Colors.black,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.2,
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
-        centerTitle: true,
       ),
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Wrap(
-                  // ✅ 가로로 배치, 공간 부족하면 자동 줄바꿈
-                  spacing: 8, // ✅ 칩 간격
-                  children: categories.map((category) {
-                    return ChoiceChip(
-                      label: Text(category),
-                      // ✅ 칩 이름
-                      labelStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: selectedCategory == category
-                            ? Colors.white // ✅ 선택된 칩 글씨색
-                            : Colors.grey.shade700, // ✅ 기본 글씨색
-                      ),
-                      selected: selectedCategory == category,
-                      // ✅ 선택 상태 반영
-                      selectedColor: Colors.green.shade400,
-                      // ✅ 선택된 칩 배경
-                      backgroundColor: Colors.grey.shade200,
-                      // ✅ 기본 배경
-                      onSelected: (bool selected) {
-                        setState(() {
-                          selectedCategory = category; // ✅ 선택값 업데이트
-                          print("선택된 카테고리: $selectedCategory");
 
-                          // ✅ 선택된 카테고리에 따라 번호 매핑
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          16,
+          16,
+          16,
+          100,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 상단 안내 카드
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 16,
+              ),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    navy,
+                    navyLight,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: navy.withOpacity(0.18),
+                    blurRadius: 12,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 43,
+                    height: 43,
+                    decoration: BoxDecoration(
+                      color: gold.withOpacity(0.16),
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    child: const Icon(
+                      Icons.auto_awesome_rounded,
+                      color: gold,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 13),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '제네시스 시승차',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 3),
+                        Text(
+                          '시승차 타입을 선택하여 차량을 관리하세요.',
+                          style: TextStyle(
+                            color: Color(0xFFD5DAE3),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // 시승차 타입 제목
+            const Text(
+              '시승차 타입',
+              style: TextStyle(
+                color: textDark,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // 카테고리 선택
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: const Color(0xFFE2E5EA),
+                ),
+              ),
+              child: Row(
+                children: categories.map((category) {
+                  final bool isSelected =
+                      selectedCategory == category;
+
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = category;
+
                           if (selectedCategory == '60') {
                             selectedCategoryNum = 1;
                           } else if (selectedCategory == '70') {
@@ -237,39 +475,120 @@ class _ForGenesisState extends State<ForGenesis> {
                           } else if (selectedCategory == '90') {
                             selectedCategoryNum = 4;
                           }
-
-                          print("카테고리 번호: $selectedCategoryNum");
                         });
                       },
-                    );
-                  }).toList(),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? navy
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          category,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.white
+                                : textGrey,
+                            fontSize: 14,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // 차량 목록 제목
+            Row(
+              children: [
+                const Text(
+                  '차량 목록',
+                  style: TextStyle(
+                    color: textDark,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    color: const Color(0xFFDDE1E7),
+                  ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 10,
-            ),
+
+            const SizedBox(height: 8),
+
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection(field)
-                  .where('option7', isEqualTo: selectedCategoryNum)
+                  .where(
+                'option7',
+                isEqualTo: selectedCategoryNum,
+              )
                   .orderBy('createdAt')
                   .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+              builder: (
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                  snapshot,
+                  ) {
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 50),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: gold,
+                        strokeWidth: 2.5,
+                      ),
+                    ),
+                  );
                 }
-                // ✅ 데이터가 없는 경우 처리
-                if (!snapshot.hasData || snapshot.data == null) {
-                  return Center(child: Text("데이터가 없습니다."));
+
+                if (snapshot.hasError) {
+                  return _emptyCard(
+                    icon: Icons.error_outline_rounded,
+                    text: '차량 정보를 불러오지 못했습니다.',
+                  );
                 }
+
+                if (!snapshot.hasData ||
+                    snapshot.data == null) {
+                  return _emptyCard(
+                    icon: Icons.directions_car_outlined,
+                    text: '데이터가 없습니다.',
+                  );
+                }
+
                 final subDocs = snapshot.data!.docs;
 
-                // 바뀐 부분: ListView 대신 Column을 사용하여 하위 컬렉션의 데이터를 표시
+                if (subDocs.isEmpty) {
+                  return _emptyCard(
+                    icon: Icons.directions_car_outlined,
+                    text: '등록된 시승차가 없습니다.',
+                  );
+                }
+
                 return Column(
                   children: subDocs.map((subDoc) {
-                    var data = subDoc.data() ?? {}; // 데이터가 널인 경우 빈 맵 사용
+                    var data = subDoc.data();
+
                     return GestureDetector(
                       onTap: () async {
                         var document = subDoc.id;
@@ -278,41 +597,83 @@ class _ForGenesisState extends State<ForGenesis> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('삭제 확인'),
-                              content: Text('해당차종을 삭제하시겠습니까?'),
+                              backgroundColor: Colors.white,
+                              surfaceTintColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(18),
+                              ),
+                              title: Row(
+                                children: [
+                                  Container(
+                                    width: 38,
+                                    height: 38,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red
+                                          .withOpacity(0.08),
+                                      borderRadius:
+                                      BorderRadius.circular(11),
+                                    ),
+                                    child: const Icon(
+                                      Icons.delete_outline_rounded,
+                                      color: Colors.red,
+                                      size: 21,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 11),
+                                  const Text(
+                                    '삭제 확인',
+                                    style: TextStyle(
+                                      color: textDark,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              content: const Text(
+                                '해당 차종을 삭제하시겠습니까?',
+                                style: TextStyle(
+                                  color: textGrey,
+                                  fontSize: 14,
+                                ),
+                              ),
                               actions: [
-                                // ✅ grade == 1 일 때만 확인 버튼 표시
                                 TextButton(
                                   onPressed: () async {
                                     try {
-                                      await FirebaseFirestore.instance
+                                      await FirebaseFirestore
+                                          .instance
                                           .collection(field)
                                           .doc(document)
                                           .update({
-                                        'location': 14,       //location이 13이면 외부주차장으로보이고 14면 필드에서 사라짐
-                                        'option7': 5,         // option7  이 0은 고객차 1은 60이고 4가 90임
-                                                              // 5로 바꾸면 시승차관리 페이지에서도 사라지게해둠
+                                        'location': 14,
+                                        'option7': 5,
                                       });
 
-                                      Navigator.pop(context); // 다이얼로그 닫기
+                                      Navigator.pop(context);
                                     } catch (e) {
                                       print('❌ 삭제 에러: $e');
                                     }
                                   },
                                   child: const Text(
                                     '확인',
-                                    style: TextStyle(color: Colors.red),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
-
-                                // 취소 버튼 (항상 존재)
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   child: const Text(
                                     '취소',
-                                    style: TextStyle(color: Colors.blue),
+                                    style: TextStyle(
+                                      color: textGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -321,8 +682,9 @@ class _ForGenesisState extends State<ForGenesis> {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        // 👈 카드 사이 간격
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                        ),
                         child: ForgenesisCard(
                           carModel: data['carModel'],
                           carNumber: data['carNumber'],
@@ -336,34 +698,89 @@ class _ForGenesisState extends State<ForGenesis> {
           ],
         ),
       ),
+
       bottomNavigationBar: bottomOne(),
+    );
+  }
+
+  Widget _emptyCard({
+    required IconData icon,
+    required String text,
+  }) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 5),
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFE2E5EA),
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: const Color(0xFFB5BBC5),
+            size: 32,
+          ),
+          const SizedBox(height: 9),
+          Text(
+            text,
+            style: const TextStyle(
+              color: textGrey,
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget bottomOne() {
     return BottomAppBar(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(
-            width: 5,
+      color: Colors.white,
+      elevation: 10,
+      surfaceTintColor: Colors.white,
+      padding: const EdgeInsets.fromLTRB(
+        12,
+        8,
+        12,
+        10,
+      ),
+      child: SizedBox(
+        height: 50,
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            _showDialog();
+
+            thisMonth = carStateAddress();
+
+            print(thisMonth);
+          },
+          icon: const Icon(
+            Icons.add_rounded,
+            size: 22,
           ),
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
-              ),
-              onPressed: () {
-                _showDialog();
-                thisMonth = carStateAddress();    //이거 시승차 상태관리에 필요한 날짜
-                print(thisMonth);
-              },
-              child: Text('시승차 추가'),
+          label: const Text(
+            '시승차 추가',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
             ),
           ),
-        ],
+          style: ElevatedButton.styleFrom(
+            backgroundColor: navy,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+        ),
       ),
-      color: Colors.white,
     );
   }
 }
