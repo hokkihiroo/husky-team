@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -160,7 +161,7 @@ class _MyPageState extends State<MyPage> {
       borderRadius: BorderRadius.circular(14),
       child: Container(
         height: 58,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: const Color(0xFFF8F9FB),
           borderRadius: BorderRadius.circular(14),
@@ -173,14 +174,16 @@ class _MyPageState extends State<MyPage> {
             Icon(
               icon,
               color: navy,
-              size: 21,
+              size: 20,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 7),
             Expanded(
               child: Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: textDark,
                 ),
@@ -188,7 +191,7 @@ class _MyPageState extends State<MyPage> {
             ),
             const Icon(
               Icons.arrow_forward_ios_rounded,
-              size: 14,
+              size: 12,
               color: Color(0xFF8B929D),
             ),
           ],
@@ -201,16 +204,19 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+        // 상태바 배경
+        statusBarColor: navy,
+
+        // 시간 / 와이파이 / 배터리 흰색
         statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
         backgroundColor: background,
-      
+
         // 프로필 영역
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(142),
+          preferredSize: const Size.fromHeight(125),
           child: Container(
             decoration: const BoxDecoration(
               color: navy,
@@ -222,15 +228,15 @@ class _MyPageState extends State<MyPage> {
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 12, 16),
+                padding: const EdgeInsets.fromLTRB(16, 8, 8, 10),
                 child: Row(
                   children: [
                     GestureDetector(
                       onTap: _showProfilePicture,
                       child: Container(
-                        width: 78,
-                        height: 78,
-                        padding: const EdgeInsets.all(3),
+                        width: 68,
+                        height: 68,
+                        padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: gold,
@@ -309,172 +315,179 @@ class _MyPageState extends State<MyPage> {
             ),
           ),
         ),
-      
+
         // 본문
         body: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '내 메뉴',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                    color: textDark,
-                  ),
-                ),
-                const SizedBox(height: 12),
-      
-                // 급여명세서 / 브랜드관리
-                Row(
-                  children: [
-                    _menuButton(
-                      icon: Icons.payments_outlined,
-                      title: '급여명세서',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MySalary(
-                              name: widget.name,
-                              uid: widget.uid,
-                              team: widget.team,
-                              management: false,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 12),
-                    _menuButton(
-                      icon: Icons.directions_car_outlined,
-                      title: '브랜드관리',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrandManage(
-                              teamDocId: cjAdress,
-                              grade: 0,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-      
-                const SizedBox(height: 24),
-      
-                // 관리자 메뉴
-                if (widget.grade == 1 || widget.grade == 2) ...[
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const Text(
-                    '관리자',
+                    '내 메뉴',
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w800,
                       color: textDark,
                     ),
                   ),
+            
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: const Color(0xFFE3E6EB),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        _adminButton(
-                          icon: Icons.admin_panel_settings_outlined,
-                          title: '관리자 페이지',
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Management(
-                                  name: widget.name,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        if (widget.grade == 2) ...[
-                          const SizedBox(height: 10),
-                          _adminButton(
-                            icon: Icons.security_outlined,
-                            title: '관리자 권한 설정',
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Authorization(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-      
-                // 앱 버전
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: const Color(0xFFE5E8ED),
-                    ),
-                  ),
-                  child: Row(
+            
+                  // 급여명세서 / 브랜드관리
+                  Row(
                     children: [
-                      const Icon(
-                        Icons.info_outline_rounded,
-                        size: 18,
-                        color: textGrey,
+                      _menuButton(
+                        icon: Icons.payments_outlined,
+                        title: '급여명세서',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MySalary(
+                                name: widget.name,
+                                uid: widget.uid,
+                                team: widget.team,
+                                management: false,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text(
-                          '버전 3.0  ·  디자인, 기능 대폭 수정',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: textGrey,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                      const SizedBox(width: 12),
+                      _menuButton(
+                        icon: Icons.directions_car_outlined,
+                        title: '브랜드관리',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BrandManage(
+                                teamDocId: cjAdress,
+                                grade: 0,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
-      
-                const SizedBox(height: 20),
-              ],
+            
+                  const SizedBox(height: 24),
+            
+                  // 관리자 메뉴
+                  if (widget.grade == 1 || widget.grade == 2) ...[
+                    const Text(
+                      '관리자',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
+                        color: textDark,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: const Color(0xFFE3E6EB),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _adminButton(
+                              icon: Icons.admin_panel_settings_outlined,
+                              title: '관리자 페이지',
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Management(
+                                      name: widget.name,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+            
+                          if (widget.grade == 2) ...[
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _adminButton(
+                                icon: Icons.security_outlined,
+                                title: '관리자 권한 설정',
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Authorization(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+            
+                  // 앱 버전
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: const Color(0xFFE5E8ED),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          size: 18,
+                          color: textGrey,
+                        ),
+                        const SizedBox(width: 8),
+                        const Expanded(
+                          child: Text(
+                            '버전 3.0  ·  디자인, 기능 대폭 수정',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: textGrey,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      
+
         // 하단 회사 정보
         bottomNavigationBar: Container(
           height: 78,
@@ -512,7 +525,7 @@ class _MyPageState extends State<MyPage> {
                 onTap: () {
                   const siteUrl =
                       'https://sites.google.com/view/teamhusky-privacy?usp=sharing';
-      
+
                   _launchWebsite(siteUrl);
                 },
                 child: const Text(

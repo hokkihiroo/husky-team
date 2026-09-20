@@ -45,23 +45,20 @@ class _Team4OutCarState extends State<Team4OutCar> {
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Team4OutcarCard(
-                  carNumber: filteredDocs[index]['carNumber'],
-                  name: filteredDocs[index]['name'],
-                  dataId: filteredDocs[index].id,
-                  location:  filteredDocs[index]['location'],
-                  myName: widget.name,
-                  dataAdress: TEAM4CARLIST,
-                  movedLocation: filteredDocs[index]['movedLocation'],
-                  wigetName: filteredDocs[index]['wigetName'],
-                  movingTime: filteredDocs[index]['movingTime'],
-                  color:  filteredDocs[index]['color'],
-                  etc:  filteredDocs[index]['etc'],
-                  choolchaNum: index+1,
+              child: Team4OutcarCard(
+                carNumber: filteredDocs[index]['carNumber'],
+                name: filteredDocs[index]['name'],
+                dataId: filteredDocs[index].id,
+                location:  filteredDocs[index]['location'],
+                myName: widget.name,
+                dataAdress: TEAM4CARLIST,
+                movedLocation: filteredDocs[index]['movedLocation'],
+                wigetName: filteredDocs[index]['wigetName'],
+                movingTime: filteredDocs[index]['movingTime'],
+                color:  filteredDocs[index]['color'],
+                etc:  filteredDocs[index]['etc'],
+                choolchaNum: index+1,
 
-                ),
               ),
             );
           },

@@ -232,15 +232,9 @@ class _Team4ViewState extends State<Team4View> {
               SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                height: 10,
-              ),
               Divider(
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
-              ),
-              SizedBox(
-                height: 10,
               ),
               Team4OutCar(
                 name: widget.name,

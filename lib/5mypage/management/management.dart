@@ -13,7 +13,8 @@ import 'manegement/7salaryManage/salaryManage.dart';
 class Management extends StatefulWidget {
   final String name;
 
-  Management({super.key,
+  const Management({
+    super.key,
     required this.name,
   });
 
@@ -22,140 +23,245 @@ class Management extends StatefulWidget {
 }
 
 class _ManagementState extends State<Management> {
+  static const Color navy = Color(0xFF17233C);
+  static const Color navyLight = Color(0xFF253452);
+  static const Color gold = Color(0xFFC6A667);
+  static const Color goldLight = Color(0xFFE6D19A);
+  static const Color background = Color(0xFFF4F5F7);
+  static const Color textDark = Color(0xFF202632);
+  static const Color textGrey = Color(0xFF737B89);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       appBar: AppBar(
-        title: Text(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: navy,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        title: const Text(
           '관리자 설정',
           style: TextStyle(
-            color: Colors.white, // 텍스트를 흰색으로 변경
-            fontWeight: FontWeight.bold, // 굵은 글씨
-            fontSize: 20, // 텍스트 크기 증가
-            letterSpacing: 1.2, // 글자 간격 추가
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 1.0,
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
-        // 아이콘 색상 변경
-        centerTitle: true,
-        // 제목 중앙 정렬
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black, Colors.black], // 그라데이션 색상
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blue.withOpacity(0.3), // 그림자 색상
-                offset: Offset(0, 4), // 그림자 위치
-                blurRadius: 10, // 그림자 흐림 정도
-              ),
-            ],
-          ),
-        ),
-        elevation: 0, // AppBar 그림자 제거
       ),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildStyledButton(
-                context: context,
-                label: '팀 개설',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MakeTeam()),
-                  );
-                },
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 20, 16, 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 상단 안내 영역
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    navy,
+                    navyLight,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.12),
+                    blurRadius: 12,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
-              SizedBox(height: 15),
-              _buildStyledButton(
-                context: context,
-                label: '인사이동 / 직위, 포지션 변경',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MoveInsa()),
-                  );
-                },
-              ),
-              SizedBox(height: 15),
-              _buildStyledButton(
-                context: context,
-                label: '공지사항 관리',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ManageGongjiList(name: widget.name)),
-                  );
-                },
-              ),
-              SizedBox(height: 15),
-              _buildStyledButton(
-                context: context,
-                label: '스케줄 관리',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ManageSchedule()),
-                  );
-                },
-              ),
-              SizedBox(height: 15),
-              _buildStyledButton(
-                context: context,
-                label: '교육자료 등록/삭제',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            EducationManage(name: widget.name)),
-                  );
-                },
-              ),
-              SizedBox(height: 15),
-              _buildStyledButton(
-                context: context,
-                label: '운전면허관리',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LicenseManage(
-                        name: widget.name,
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: gold.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(13),
+                      border: Border.all(
+                        color: gold.withOpacity(0.45),
                       ),
                     ),
-                  );
-                },
-              ),
-              SizedBox(height: 15),
-              _buildStyledButton(
-                context: context,
-                label: '급여관리',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SalaryManage(
-                        name: widget.name,
-                      ),
+                    child: const Icon(
+                      Icons.settings_rounded,
+                      color: goldLight,
+                      size: 24,
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(width: 13),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '관리자 설정',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          '팀 운영에 필요한 설정을 관리합니다.',
+                          style: TextStyle(
+                            color: Color(0xFFD4D9E2),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 15),
+            ),
 
-              TeamOnly(),
-            ],
-          ),
+            const SizedBox(height: 24),
+
+            const Padding(
+              padding: EdgeInsets.only(left: 3),
+              child: Text(
+                '관리 메뉴',
+                style: TextStyle(
+                  color: textDark,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.groups_rounded,
+              label: '팀 개설',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MakeTeam(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.swap_horiz_rounded,
+              label: '인사이동 / 직위, 포지션 변경',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MoveInsa(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.campaign_rounded,
+              label: '공지사항 관리',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ManageGongjiList(name: widget.name),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.calendar_month_rounded,
+              label: '스케줄 관리',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManageSchedule(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.menu_book_rounded,
+              label: '교육자료 등록/삭제',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EducationManage(name: widget.name),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.badge_rounded,
+              label: '운전면허관리',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LicenseManage(
+                      name: widget.name,
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            _buildStyledButton(
+              context: context,
+              icon: Icons.payments_rounded,
+              label: '급여관리',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SalaryManage(
+                      name: widget.name,
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            TeamOnly(),
+          ],
         ),
       ),
     );
@@ -163,27 +269,88 @@ class _ManagementState extends State<Management> {
 
   Widget _buildStyledButton({
     required BuildContext context,
+    required IconData icon,
     required String label,
     required VoidCallback onPressed,
   }) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        minimumSize: Size(double.infinity, 50),
-        backgroundColor: Colors.blueAccent,
-        shadowColor: Colors.blue.withOpacity(0.5),
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
-      ),
-      onPressed: onPressed,
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(15),
+        child: Ink(
+          width: double.infinity,
+          height: 62,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: const Color(0xFFE2E5EA),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              const SizedBox(width: 15),
+
+              // 아이콘
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: navy.withOpacity(0.07),
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Icon(
+                  icon,
+                  color: navy,
+                  size: 21,
+                ),
+              ),
+
+              const SizedBox(width: 13),
+
+              // 메뉴명
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    color: textDark,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.1,
+                  ),
+                ),
+              ),
+
+              // 골드 포인트
+              Container(
+                width: 3,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: gold,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+
+              const SizedBox(width: 10),
+
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Color(0xFF9AA1AC),
+                size: 21,
+              ),
+
+              const SizedBox(width: 13),
+            ],
+          ),
         ),
       ),
     );

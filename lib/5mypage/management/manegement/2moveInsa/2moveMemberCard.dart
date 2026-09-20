@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class MoveMemberCard extends StatelessWidget {
   final String name;
   final String team;
@@ -14,53 +12,107 @@ class MoveMemberCard extends StatelessWidget {
     required this.position,
   }) : super(key: key);
 
+  static const Color navy = Color(0xFF17233C);
+  static const Color gold = Color(0xFFC6A667);
+  static const Color textDark = Color(0xFF303641);
+  static const Color textGrey = Color(0xFF737B89);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2.0), // 핸드폰 좌우로 2센치미터의 여백 설정
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 20,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 2,
+        vertical: 5,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 12,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: const Color(0xFFE2E5EA),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                name,
-                style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 10.0,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // 골드 포인트
+          Container(
+            width: 4,
+            height: 34,
+            decoration: BoxDecoration(
+              color: gold,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          // 이름
+          Expanded(
+            flex: 2,
+            child: Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: textDark,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.2,
               ),
-              SizedBox(
-                width: 10,
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          // 소속
+          Expanded(
+            flex: 2,
+            child: Text(
+              team,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: textGrey,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
               ),
-              Text(
-                team,
-                style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 10.0,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          // 직책
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 9,
+              vertical: 5,
+            ),
+            decoration: BoxDecoration(
+              color: navy.withOpacity(0.07),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              position,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: navy,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                position,
-                style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 10.0,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
