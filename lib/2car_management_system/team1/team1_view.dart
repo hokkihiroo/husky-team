@@ -26,17 +26,39 @@ class _Team1ViewState extends State<Team1View> {
   Telephony telephony = Telephony.instance;
   String CarScheduleAdress = formatTodayDate();
   String dayOfWeek = '';
+  // ⭐ park 전역변수
+  Map<String, dynamic> park = {};
 
   @override
   void initState() {
     super.initState();
+
+    getParkLocation();
+
     if (Platform.isAndroid) {
       requestSmsPermission(context);
     }
     DateTime now = DateTime.now();
     dayOfWeek = getDayOfWeek(now);
+    // ⭐ parkLocation 데이터 한 번 가져오기
   }
+// ⭐ parkLocation 문서 데이터 가져오기
+  Future<void> getParkLocation() async {
+    final DocumentSnapshot snapshot =
+    await FirebaseFirestore.instance
+        .doc(parkLocation)
+        .get();
 
+    if (!snapshot.exists) {
+      return;
+    }
+
+    setState(() {
+      park = snapshot.data() as Map<String, dynamic>;
+    });
+
+    print(park);
+  }
   void requestSmsPermission(BuildContext context) async {
     bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
     if (permissionsGranted ?? false) {
@@ -45,6 +67,8 @@ class _Team1ViewState extends State<Team1View> {
       print('SMS 및 전화 수신에 대한 퍼미션이 거부되었습니다.');
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +171,7 @@ class _Team1ViewState extends State<Team1View> {
                 height: 20,
               ),
               _Lists(
-                name: widget.name,
+                name: widget.name, park:park,
               ),
               Divider(
                 color: Colors.white, // 선 색상
@@ -442,8 +466,13 @@ class _Team1ViewState extends State<Team1View> {
 
 class _Lists extends StatelessWidget {
   final String name;
+  final Map<String, dynamic> park;
 
-  const _Lists({super.key, required this.name});
+  const _Lists({
+    super.key,
+    required this.name,
+    required this.park,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -457,7 +486,7 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: LOTARY,
                 reverse: 1,
-                check: () {},
+                check: () {}, park:park,
               ),
             ],
           ),
@@ -469,7 +498,7 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: OUTSIDE,
                 reverse: 1,
-                check: () {},
+                check: () {}, park:park,
               ),
             ],
           ),
@@ -481,7 +510,7 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: MAIN,
                 reverse: 1,
-                check: () {},
+                check: () {}, park:park,
               ),
             ],
           ),
@@ -493,7 +522,7 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: MOON,
                 reverse: 1,
-                check: () {},
+                check: () {}, park:park,
               ),
             ],
           ),
@@ -505,7 +534,7 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: SINSA,
                 reverse: 1,
-                check: () {},
+                check: () {}, park:park,
               ),
             ],
           ),

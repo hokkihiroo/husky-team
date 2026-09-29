@@ -206,6 +206,10 @@ class Team4OutcarCard extends StatelessWidget {
               ],
             ),
           ),
+          Container(
+            height: 1,
+            color: const Color(0xFF444444),
+          ),
         ],
       ),
     );

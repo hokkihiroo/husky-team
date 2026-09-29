@@ -129,7 +129,7 @@ class _UserScreenState extends State<UserScreen> {
 
                 Container(
                   width: double.infinity,
-                  height: screenHeight < 700 ? 260 : 310,
+                  height: screenHeight < 700 ? 130 : 155,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -159,7 +159,6 @@ class _UserScreenState extends State<UserScreen> {
                           ),
                         ),
                       ),
-
                       Positioned(
                         bottom: -100,
                         left: -80,
@@ -182,31 +181,6 @@ class _UserScreenState extends State<UserScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                width: 150,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: const Color(0xFFD9DEE8),
-                                    width: 1.5,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.25),
-                                      blurRadius: 25,
-                                      offset: const Offset(0, 10),
-                                    ),
-                                  ],
-                                ),
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    'asset/img/logo.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
                               const SizedBox(height: 18),
                               const Text(
                                 'TEAM HUSKY',
@@ -287,15 +261,6 @@ class _UserScreenState extends State<UserScreen> {
                                     color: textDark,
                                     fontSize: 24,
                                     fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  '팀허스키 직원 전용 서비스입니다.',
-                                  style: TextStyle(
-                                    color: textGrey,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],

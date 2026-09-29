@@ -123,51 +123,46 @@ class _MainViewState extends State<MainView>
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: index,
+        onDestinationSelected: (int index) {
           // 제한 사용자 + 시설(1) 제외 탭 클릭 시
           if (isRestrictedUser() && index != 1) {
             showRestrictedDialog();
             return;
           }
-          // 정상 사용자 or 시설 탭
+
           controller.animateTo(index);
         },
-        currentIndex: index,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.perm_identity_outlined,
-            ),
+        height: 70,
+        backgroundColor: Colors.white,
+        elevation: 3,
+        indicatorColor: const Color(0xFFE8EEF7),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.perm_identity_outlined),
+            selectedIcon: Icon(Icons.perm_identity),
             label: '조직',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.drive_eta_outlined,
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.drive_eta_outlined),
+            selectedIcon: Icon(Icons.drive_eta),
             label: '시설',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.notifications_outlined,
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.notifications_outlined),
+            selectedIcon: Icon(Icons.notifications),
             label: '공지',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.auto_stories_outlined,
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.auto_stories_outlined),
+            selectedIcon: Icon(Icons.auto_stories),
             label: '교육',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.menu_outlined,
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.menu_outlined),
+            selectedIcon: Icon(Icons.menu),
             label: '내정보',
           ),
         ],

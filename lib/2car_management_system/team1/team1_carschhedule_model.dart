@@ -42,10 +42,142 @@ class _CarScheduleViewState extends State<CarScheduleView> {
   List<String> carSeat = ["대","소","둘다"];
 
   Future<void> fetchCarNames() async {
-    final querySnapshot =
-        await FirebaseFirestore.instance.collection(GANGNAMCARLIST).get();
-    alphaItems =
-        querySnapshot.docs.map((doc) => doc['carName'] as String).toList();
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection(GANGNAMCARLIST)
+        .get();
+
+    // Firestore에서 시승차 이름을 가져온다.
+    alphaItems = querySnapshot.docs
+        .map((doc) => doc['carName'] as String)
+        .toList();
+
+    // ==========================================================
+    // 시승차 이름 정렬
+    //
+    // 정렬 순서
+    // 1. 숫자
+    // 2. 영문
+    // 3. 한글
+    // 4. 기타
+    //
+    // 같은 종류 안에서는 자연 정렬
+    //
+    // 예:
+    // G3
+    // G20
+    // G100
+    //
+    // 일반 문자열 정렬:
+    // G100 → G20 → G3
+    //
+    // 자연 정렬:
+    // G3 → G20 → G100
+    // ==========================================================
+
+    int getStringType(String value) {
+      if (value.isEmpty) {
+        return 4;
+      }
+
+      final int first = value.codeUnitAt(0);
+
+      // 숫자 0~9
+      if (first >= 48 && first <= 57) {
+        return 1;
+      }
+
+      // 영문 A~Z / a~z
+      if ((first >= 65 && first <= 90) ||
+          (first >= 97 && first <= 122)) {
+        return 2;
+      }
+
+      // 한글 가~힣
+      if (first >= 0xAC00 && first <= 0xD7A3) {
+        return 3;
+      }
+
+      // 그 외
+      return 4;
+    }
+
+    int naturalCompare(String a, String b) {
+      final String valueA = a.trim();
+      final String valueB = b.trim();
+
+      // --------------------------------------------------------
+      // 먼저 숫자 / 영문 / 한글 / 기타 순서로 분류
+      // --------------------------------------------------------
+
+      final int typeA = getStringType(valueA);
+      final int typeB = getStringType(valueB);
+
+      if (typeA != typeB) {
+        return typeA.compareTo(typeB);
+      }
+
+      // --------------------------------------------------------
+      // 같은 종류라면 자연 정렬
+      // --------------------------------------------------------
+
+      final RegExp numberRegExp = RegExp(r'\d+');
+
+      final List<String> partsA = valueA.split(numberRegExp);
+      final List<String> numbersA = numberRegExp
+          .allMatches(valueA)
+          .map((match) => match.group(0)!)
+          .toList();
+
+      final List<String> partsB = valueB.split(numberRegExp);
+      final List<String> numbersB = numberRegExp
+          .allMatches(valueB)
+          .map((match) => match.group(0)!)
+          .toList();
+
+      final int maxLength =
+      partsA.length > partsB.length ? partsA.length : partsB.length;
+
+      for (int i = 0; i < maxLength; i++) {
+        // ------------------------------------------------------
+        // 숫자 앞의 문자 비교
+        // ------------------------------------------------------
+
+        if (i < partsA.length && i < partsB.length) {
+          final int textCompare =
+          partsA[i].toLowerCase().compareTo(
+            partsB[i].toLowerCase(),
+          );
+
+          if (textCompare != 0) {
+            return textCompare;
+          }
+        } else {
+          return partsA.length.compareTo(partsB.length);
+        }
+
+        // ------------------------------------------------------
+        // 숫자가 있다면 숫자 자체를 숫자로 비교
+        // ------------------------------------------------------
+
+        if (i < numbersA.length && i < numbersB.length) {
+          final int numberA = int.tryParse(numbersA[i]) ?? 0;
+          final int numberB = int.tryParse(numbersB[i]) ?? 0;
+
+          if (numberA != numberB) {
+            return numberA.compareTo(numberB);
+          }
+        } else if (i < numbersA.length) {
+          return 1;
+        } else if (i < numbersB.length) {
+          return -1;
+        }
+      }
+
+      return 0;
+    }
+
+    // 최종적으로 시승차 이름 정렬
+    alphaItems.sort(naturalCompare);
   }
 
   @override

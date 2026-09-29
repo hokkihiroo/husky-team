@@ -13,8 +13,6 @@ class Team4IpchaView extends StatefulWidget {
   final Map<String, List<String>> importedFamousBrands;
   final Map<String, List<String>> otherBrands;
 
-  final List<Map<String, dynamic>> memberList;
-
   const Team4IpchaView({
     super.key,
     required this.name,
@@ -22,7 +20,6 @@ class Team4IpchaView extends StatefulWidget {
     required this.domesticBrands,
     required this.importedFamousBrands,
     required this.otherBrands,
-    required this.memberList,
   });
 
   @override

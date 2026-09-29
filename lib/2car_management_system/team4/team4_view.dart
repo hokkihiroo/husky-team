@@ -5,7 +5,7 @@ import 'package:team_husky/2car_management_system/team4/team4_adress.dart';
 import 'package:team_husky/2car_management_system/team4/team4_car_list.dart';
 import 'package:team_husky/2car_management_system/team4/team4_electric.dart';
 import 'package:team_husky/2car_management_system/team4/team4_outcar.dart';
-import 'package:team_husky/2car_management_system/team4/team4_worker_list.dart';
+import 'package:team_husky/2car_management_system/team4/team4_search.dart';
 import 'package:team_husky/2car_management_system/team4/tema4_ipcha_view.dart';
 
 class Team4View extends StatefulWidget {
@@ -28,13 +28,11 @@ class _Team4ViewState extends State<Team4View> {
 
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ차량데이터 불러오기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-  List<Map<String, dynamic>> memberList = []; //멤버리스트 불러오기
 
   @override
   void initState() {
     super.initState();
     _loadBrandModels();
-    // _loadMember();
   }
 
   Future<void> _loadBrandModels() async {
@@ -74,39 +72,6 @@ class _Team4ViewState extends State<Team4View> {
     }
   }
 
-// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ멤버불러오는함수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-//   Future<void> _loadMember() async {
-//     try {
-//       final snapshot = await FirebaseFirestore.instance
-//           .collection(TEAM4MEMBER)
-//           .orderBy('order') // ⭐ 추가
-//           .get();
-//
-//       print('🔥 member 문서 개수: ${snapshot.docs.length}');
-//
-//       // 🔥 여기서 snapshot → List<Map> 변환
-//       final loadedMembers = snapshot.docs.map((doc) {
-//         return {
-//           'id': doc.id,
-//           ...doc.data(),
-//         };
-//       }).toList();
-//
-//       // 상태에 저장
-//       setState(() {
-//         memberList = loadedMembers;
-//       });
-//
-//       // 디버그 출력
-//       for (final m in memberList) {
-//         print('📄 member: $m');
-//       }
-//     } catch (e, s) {
-//       print('❌ Firestore 에러: $e');
-//       print(s);
-//     }
-//   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,15 +87,15 @@ class _Team4ViewState extends State<Team4View> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => WorkerList(),
-                      //   ),
-                      // );
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const Team4Search();
+                        },
+                      );
                     },
                     child: const Text(
-                      '제네시스 수지',
+                      '제네시스수지',
                       style: TextStyle(
                         color: Color(0xFFFFC107),
                       ),
@@ -193,7 +158,6 @@ class _Team4ViewState extends State<Team4View> {
                 domesticBrands: domesticBrands,
                 importedFamousBrands: importedFamousBrands,
                 otherBrands: otherBrands,
-                memberList: memberList,
               ),
               SizedBox(
                 height: 10,
@@ -227,7 +191,6 @@ class _Team4ViewState extends State<Team4View> {
                 domesticBrands: domesticBrands,
                 importedFamousBrands: importedFamousBrands,
                 otherBrands: otherBrands,
-                memberList: memberList,
               ),
               SizedBox(
                 height: 10,

@@ -139,32 +139,7 @@ class _AuthorizationState extends State<Authorization> {
                 ),
               ],
             ),
-
             const SizedBox(height: 12),
-
-            // 일반직원 / 관리자
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: _buildGradeSection(
-                    title: '일반직원',
-                    icon: Icons.person_outline_rounded,
-                    grade: 0,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildGradeSection(
-                    title: '관리자',
-                    icon: Icons.admin_panel_settings_outlined,
-                    grade: 1,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 18),
 
             // 하단 안내
             Container(
@@ -201,6 +176,32 @@ class _AuthorizationState extends State<Authorization> {
                 ],
               ),
             ),
+            const SizedBox(height: 12),
+
+            // 일반직원 / 관리자
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: _buildGradeSection(
+                    title: '일반직원',
+                    icon: Icons.person_outline_rounded,
+                    grade: 0,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _buildGradeSection(
+                    title: '관리자',
+                    icon: Icons.admin_panel_settings_outlined,
+                    grade: 1,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
           ],
         ),
       ),

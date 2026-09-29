@@ -12,6 +12,7 @@ class RotaryList extends StatefulWidget {
   final int reverse;
   final VoidCallback check;
   final String name;
+  final Map<String, dynamic> park;
 
   const RotaryList({
     super.key,
@@ -19,6 +20,7 @@ class RotaryList extends StatefulWidget {
     required this.reverse,
     required this.check,
     required this.name,
+    required this.park,
   });
 
   @override
@@ -581,7 +583,7 @@ class _RotaryListState extends State<RotaryList> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '외벽',
+                            widget.park['b'],
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
                               fontSize: 18, // 글자 크게 (원하면 20도 가능)
@@ -634,7 +636,8 @@ class _RotaryListState extends State<RotaryList> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '광장',
+                            widget.park['c'],
+
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
                               fontSize: 18, // 글자 크게 (원하면 20도 가능)
@@ -686,7 +689,8 @@ class _RotaryListState extends State<RotaryList> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '문앞',
+                            widget.park['d'],
+
                             style: TextStyle(
                               fontWeight: FontWeight.bold, // 👈 볼드
                               fontSize: 18, // 글자 크게 (원하면 20도 가능)
