@@ -27,6 +27,36 @@ class _Team1LocationnameState extends State<Team1LocationName> {
     );
   }
 
+  Widget _buildLocationName(
+      String name, {
+        VoidCallback? onTap,
+      }) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox(
+          height: 35,
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                name,
+                maxLines: 1,
+                softWrap: false,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
@@ -45,92 +75,41 @@ class _Team1LocationnameState extends State<Team1LocationName> {
         final data = snapshot.data!.data() as Map<String, dynamic>;
 
         return Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(
-                child: Text(
-                  data['a'] ?? '로터',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
+              // 1열: 로터리
+              _buildLocationName(
+                data['a'] ?? '로터',
               ),
-              const SizedBox(
-                width: 5,
+
+              // 2열: 외벽
+              _buildLocationName(
+                data['b'] ?? '외벽',
+                onTap: () {
+                  _editLocationName('b', data['b'] ?? '외벽');
+                },
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _editLocationName(
-                      'b',
-                      data['b'] ?? '외벽',
-                    );
-                  },
-                  child: Text(
-                    data['b'] ?? '외벽',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
+
+              // 3열: 광장
+              _buildLocationName(
+                data['c'] ?? '광장',
+                onTap: () {
+                  _editLocationName('c', data['c'] ?? '광장');
+                },
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _editLocationName(
-                      'c',
-                      data['c'] ?? '광장',
-                    );
-                  },
-                  child: Text(
-                    data['c'] ?? '광장',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
+
+              // 4열: 문앞
+              _buildLocationName(
+                data['d'] ?? '문앞',
+                onTap: () {
+                  _editLocationName('d', data['d'] ?? '문앞');
+                },
               ),
-              const SizedBox(
-                width: 5,
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _editLocationName(
-                      'd',
-                      data['d'] ?? '문앞',
-                    );
-                  },
-                  child: Text(
-                    data['d'] ?? '문앞',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Expanded(
-                child: Text(
-                  data['e'] ?? '신사',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
+
+              // 5열: 신사
+              _buildLocationName(
+                data['e'] ?? '신사',
               ),
             ],
           ),
@@ -172,17 +151,18 @@ class _LocationEditDialogState extends State<_LocationEditDialog> {
     super.dispose();
   }
 
-  Future<void> _save() async {
+  Future<bool> _save() async {
     final newValue = controller.text.trim();
 
-    // 정확히 2글자가 아니면 저장 불가
+    // 정확히 2글자가 아니면 저장하지 않음
     if (newValue.characters.length != 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('위치명은 반드시 두 글자로 입력해주세요.'),
         ),
       );
-      return;
+
+      return false;
     }
 
     await FirebaseFirestore.instance.doc(parkLocation).update({
@@ -192,6 +172,8 @@ class _LocationEditDialogState extends State<_LocationEditDialog> {
     if (mounted) {
       Navigator.pop(context);
     }
+
+    return true;
   }
 
   @override
@@ -339,7 +321,9 @@ class _LocationEditDialogState extends State<_LocationEditDialog> {
                 height: 46,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await _save();
+                    final bool saved = await _save();
+
+                    if (!saved) return;
 
                     if (!context.mounted) return;
 

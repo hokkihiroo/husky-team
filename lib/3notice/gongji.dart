@@ -20,15 +20,8 @@ class _NoticationState extends State<Notication> {
   String docId = '';
   String contents = '';
   String subject = '';
+  String ADDRESS = 'dj8Jxkbcw5BR16sCF9jg';
 
-  // 운영내용 주소
-  final String operateAddress = 'dj8Jxkbcw5BR16sCF9jg';
-
-  // 사건사고 주소
-  final String issueAddress = 'doQRXV02Lid2jhjQeR99';
-
-  // 현재 선택된 주소
-  String address = 'dj8Jxkbcw5BR16sCF9jg';
 
   static const Color navy = Color(0xFF17233C);
   static const Color navyLight = Color(0xFF253452);
@@ -38,7 +31,7 @@ class _NoticationState extends State<Notication> {
   static const Color textDark = Color(0xFF303641);
   static const Color textGrey = Color(0xFF737B89);
 
-  bool get isOperate => address == operateAddress;
+  int selectedCategory = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +41,10 @@ class _NoticationState extends State<Notication> {
         children: [
           const SizedBox(height: 12),
 
-          // 상단 카테고리 선택
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Container(
-              height: 52,
+              height: 58,
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -72,25 +64,45 @@ class _NoticationState extends State<Notication> {
                 children: [
                   Expanded(
                     child: _buildCategoryButton(
-                      title: '운영내용',
+                      title: '본사운영',
                       icon: Icons.campaign_outlined,
-                      selected: isOperate,
+                      selected: selectedCategory == 0,
                       onTap: () {
                         setState(() {
-                          address = operateAddress;
+                          selectedCategory = 0;
+                          ADDRESS = OPERATEADDRESS;
                         });
                       },
                     ),
                   ),
+
                   const SizedBox(width: 4),
+
                   Expanded(
                     child: _buildCategoryButton(
                       title: '사건사고',
                       icon: Icons.warning_amber_rounded,
-                      selected: !isOperate,
+                      selected: selectedCategory == 1,
                       onTap: () {
                         setState(() {
-                          address = issueAddress;
+                          selectedCategory = 1;
+                          ADDRESS = ISSUEADDRESS;
+                        });
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: 4),
+
+                  Expanded(
+                    child: _buildCategoryButton(
+                      title: '앱관련',
+                      icon: Icons.phone_android_outlined,
+                      selected: selectedCategory == 2,
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = 2;
+                          ADDRESS = APPADDRESS;
                         });
                       },
                     ),
@@ -102,18 +114,29 @@ class _NoticationState extends State<Notication> {
 
           const SizedBox(height: 12),
 
-          // 공지 목록
           Expanded(
             child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance
+              stream: selectedCategory == 0 || selectedCategory == 1
+                  ? FirebaseFirestore.instance
                   .collection(GONGJI)
-                  .doc(address)
+                  .doc(ADDRESS)
                   .collection('List')
                   .orderBy(
                 'createdAt',
                 descending: true,
               )
+                  .snapshots()
+
+                  : FirebaseFirestore.instance
+                  .collection(EDUCATION)
+                  .doc(ADDRESS)
+                  .collection('list')
+                  .orderBy(
+                'createdAt',
+                descending: true,
+              )
                   .snapshots(),
+
               builder: (
                   BuildContext context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
@@ -143,9 +166,7 @@ class _NoticationState extends State<Notication> {
                 if (docs.isEmpty) {
                   return _buildEmptyMessage(
                     icon: Icons.notifications_none_rounded,
-                    message: isOperate
-                        ? '등록된 운영내용이 없습니다.'
-                        : '등록된 사건사고가 없습니다.',
+                    message: _getEmptyMessage(),
                   );
                 }
 
@@ -208,7 +229,19 @@ class _NoticationState extends State<Notication> {
     );
   }
 
-  // 카테고리 버튼
+  String _getEmptyMessage() {
+    switch (selectedCategory) {
+      case 0:
+        return '등록된 운영내용이 없습니다.';
+      case 1:
+        return '등록된 사건사고가 없습니다.';
+      case 2:
+        return '등록된 어플 공지가 없습니다.';
+      default:
+        return '등록된 공지사항이 없습니다.';
+    }
+  }
+
   Widget _buildCategoryButton({
     required String title,
     required IconData icon,
@@ -229,16 +262,17 @@ class _NoticationState extends State<Notication> {
           children: [
             Icon(
               icon,
-              size: 18,
+              size: 17,
               color: selected ? goldLight : textGrey,
             ),
-            const SizedBox(width: 7),
+            const SizedBox(width: 5),
             Text(
               title,
               style: TextStyle(
                 color: selected ? Colors.white : textGrey,
-                fontSize: 14,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                fontSize: 13,
+                fontWeight:
+                selected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
           ],
@@ -247,7 +281,6 @@ class _NoticationState extends State<Notication> {
     );
   }
 
-  // 빈 화면 / 오류 화면
   Widget _buildEmptyMessage({
     required IconData icon,
     required String message,

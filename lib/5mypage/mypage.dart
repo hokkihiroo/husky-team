@@ -471,7 +471,7 @@ class _MyPageState extends State<MyPage> {
                         const SizedBox(width: 8),
                         const Expanded(
                           child: Text(
-                            '버전 3.0  ·  디자인, 기능 대폭 수정',
+                            '버전 3.1  ·  요청사항 수정 및 행사 테스트',
                             style: TextStyle(
                               fontSize: 12,
                               color: textGrey,

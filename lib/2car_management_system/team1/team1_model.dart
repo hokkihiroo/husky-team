@@ -242,7 +242,7 @@ class _RotaryListState extends State<RotaryList> {
           itemCount: docs.length,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
               child: GestureDetector(
                 onTap: () async {
                   // 활성화 시키면 bar 가 바뀜 데이터 클릭시마다
@@ -382,7 +382,7 @@ class _RotaryListState extends State<RotaryList> {
         ],
       ),
       content: Container(
-        width: MediaQuery.of(context).size.width.clamp(0, 300),
+        width: MediaQuery.of(context).size.width.clamp(0, 550),
         height: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -573,7 +573,7 @@ class _RotaryListState extends State<RotaryList> {
                                 'location': 1,
                                 'name': name,
                                 'etc': etc,
-                                'movedLocation': '$movedLocation->외벽=외벽',
+                                'movedLocation': '$movedLocation->',
                                 'wigetName': '$wigetName=이름:${widget.name}',
                                 'movingTime': '$movingTime=$getMovingTime',
                               });
@@ -626,7 +626,7 @@ class _RotaryListState extends State<RotaryList> {
                                 'location': 2,
                                 'name': name,
                                 'etc': etc,
-                                'movedLocation': '$movedLocation->광장=광장',
+                                'movedLocation': '$movedLocation->',
                                 'wigetName': '$wigetName=이름:${widget.name}',
                                 'movingTime': '$movingTime=$getMovingTime',
                               });
@@ -679,7 +679,7 @@ class _RotaryListState extends State<RotaryList> {
                                 'location': 3,
                                 'name': name,
                                 'etc': etc,
-                                'movedLocation': '$movedLocation->문=문',
+                                'movedLocation': '$movedLocation->',
                                 'wigetName': '$wigetName=이름:${widget.name}',
                                 'movingTime': '$movingTime=$getMovingTime',
                               });

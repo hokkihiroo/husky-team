@@ -135,8 +135,8 @@ class _StandByState extends State<StandBy> {
                 option8 = displayList[index]['option8']; //시승차 A-1 A-2 C D
                 option9 = displayList[index]['option9']; //시승예약고객 성함
 
-
-                option10 = displayList[index]['option10'] as Timestamp?;       //출차시 사용할시간
+                option10 =
+                    displayList[index]['option10'] as Timestamp?; //출차시 사용할시간
                 //아래없음
                 option11 = displayList[index]['option11']; //시승차 예비용
                 option12 = displayList[index]['option12']; //시승차 예비용
@@ -307,6 +307,502 @@ class _StandByState extends State<StandBy> {
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '기본',
+                                      'option5': '기본시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '기본시승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-1',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '비교',
+                                      'option5': '비교시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '비교시승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-1',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '비대',
+                                      'option5': '비대면시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '비대면',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-1',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ), //대면비대면
+            SizedBox(
+              height: 2,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '현장',
+                                      'option5': '현장동승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '현장동승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-2',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '현비',
+                                      'option5': '현장비동승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '현비동승',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-2',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '비대',
+                                      'option5': '현장비대면', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          '현비대면',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                        Text(
+                          'A-2',
+                          style: TextStyle(
+                            fontSize: 11, // 텍스트 크기 증가
+                            fontWeight: FontWeight.bold, // 텍스트를 굵게
+                            color: Colors.black87, // 텍스트 색상
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ), //현장
+            SizedBox(
+              height: 2,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '교육',
+                                      'option5': '교육', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '교육 C',
+                      style: TextStyle(
+                        fontSize: 11, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                'name': '주유',
+                                'option5': '주유', //시승상태 기본 비교 비대면
+                                'option8': 'C', //A-1 A-2 C D
+                              }
+                                  : {
+                                'name': '',
+                                'option5': '',
+                                'option8': '',
+                              },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '주유 C',
+                      style: TextStyle(
+                        fontSize: 11, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      backgroundColor: Colors.grey, // 버튼 색상
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(FIELD)
+                            .doc(dataId)
+                            .update(
+                              name.isEmpty
+                                  ? {
+                                      'name': '컬러',
+                                      'option5': '컬러확인', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text(
+                      '컬러 C',
+                      style: TextStyle(
+                        fontSize: 11, // 텍스트 크기 증가
+                        fontWeight: FontWeight.bold, // 텍스트를 굵게
+                        color: Colors.black87, // 텍스트 색상
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ), //교육답사컬러
+            SizedBox(
+              height: 2,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
                     onPressed: () async {
                       try {
                         await FirebaseFirestore.instance
@@ -315,15 +811,17 @@ class _StandByState extends State<StandBy> {
                             .update({
                           'location': 11,
                           'name': '',
-                          'option1': '', //필드에 옵션1은 컬러5에 들어갈 문서 ID임
-                          'option5': '', //시승상태  기본 비대면 등등
-                          'option8': '', //C D A-1
-                          'option9': '', //예약자성함
+                          'option1': '', // 필드에 옵션1은 컬러5에 들어갈 문서 ID임
+                          'option5': '', // 시승상태 기본 비대면 등등
+                          'option8': '', // C D A-1
+                          'option9': '', // 예약자성함
                         });
                       } catch (e) {
                         print(e);
                       }
+
                       Navigator.pop(context);
+
                       try {
                         await FirebaseFirestore.instance
                             .collection(Color5List)
@@ -332,6 +830,7 @@ class _StandByState extends State<StandBy> {
                       } catch (e) {
                         print('데이터가 존재하지 않습니다');
                       }
+
                       await repo.createData(
                         dataId: dataId,
                         state: '시승취소(B1)',
@@ -343,212 +842,122 @@ class _StandByState extends State<StandBy> {
                         repairName: widget.name,
                       );
                     },
-                    child: Text(
-                      '시승취소',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
+                        vertical: 13,
+                      ),
                       backgroundColor: Colors.deepOrange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15, // ⬅ 두께(높이) 증가
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
                       textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
                         fontSize: 17,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    onPressed: () {
-                      String tempEtc = option9 ?? '';
-
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) {
-                          return AlertDialog(
-                            title: const Text('고객성함'),
-                            content: SizedBox(
-                              width: MediaQuery.of(dialogContext)
-                                  .size
-                                  .width
-                                  .clamp(0, 290),
-                              child: TextFormField(
-                                initialValue: tempEtc,
-                                maxLength: 4,
-                                decoration: const InputDecoration(
-                                  hintText: '고객성함 입력',
-                                  counterText: '',
-                                ),
-                                onChanged: (value) {
-                                  tempEtc = value;
-                                },
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('취소'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  final String newEtc = tempEtc.trim();
-
-                                  try {
-                                    await FirebaseFirestore.instance
-                                        .collection(FIELD)
-                                        .doc(dataId)
-                                        .update({
-                                      'option9': newEtc,
-                                    });
-
-                                    setState(() {
-                                      etc = newEtc;
-                                    });
-
-                                    Navigator.pop(dialogContext);
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('등록'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      '고객이름넣기',
+                    child: const Text(
+                      '시승취소',
                       style: TextStyle(
-                        fontSize: 13, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.black, // 텍스트 색상
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
+                const SizedBox(width: 10),
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
-                        vertical: 20, // ⬅ 두께(높이) 증가
+                        vertical: 13,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600, // 글자도 살짝 더 굵게
                         fontSize: 17,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
+
                       etcController.text = etc;
 
                       setState(() {
                         showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('특이사항'),
-                                content: Container(
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width
-                                      .clamp(0, 290),
-                                  height: 150,
-                                  child: Column(
-                                    children: [
-                                      TextField(
-                                        controller: etcController,
-                                        maxLength: 13,
-                                        decoration: InputDecoration(
-                                          hintText: '특이사항 13자까지가능',
-                                        ),
-                                        onChanged: (value) {
-                                          etc = value;
-                                        },
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('특이사항'),
+                              content: Container(
+                                width: MediaQuery.of(context)
+                                    .size
+                                    .width
+                                    .clamp(0, 290),
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      controller: etcController,
+                                      maxLength: 13,
+                                      decoration: const InputDecoration(
+                                        hintText: '특이사항 13자까지가능',
                                       ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                              child: ElevatedButton(
-                                                  onPressed: () async {
-                                                    Navigator.pop(context);
+                                      onChanged: (value) {
+                                        etc = value;
+                                      },
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
 
-                                                    try {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(FIELD)
-                                                          .doc(dataId)
-                                                          .update({
-                                                        'etc': etc,
-                                                      });
-                                                    } catch (e) {
-                                                      print(e);
-                                                    }
-                                                  },
-                                                  child: Text('등록'))),
-                                          SizedBox(
-                                            width: 20,
+                                              try {
+                                                await FirebaseFirestore.instance
+                                                    .collection(FIELD)
+                                                    .doc(dataId)
+                                                    .update({
+                                                  'etc': etc,
+                                                });
+                                              } catch (e) {
+                                                print(e);
+                                              }
+                                            },
+                                            child: const Text('등록'),
                                           ),
-                                          Expanded(
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text('취소'))),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('취소'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              );
-                            });
+                              ),
+                            );
+                          },
+                        );
                       });
                     },
-                    child: Text(
-                      '특이사항입력하기',
+                    child: const Text(
+                      '특이사항입력',
                       style: TextStyle(
-                        fontSize: 15, // 텍스트 크기 증가
-                        fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.yellow, // 텍스트 색상
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.yellow,
                       ),
                     ),
                   ),
@@ -556,8 +965,9 @@ class _StandByState extends State<StandBy> {
               ],
             ),
             SizedBox(
-              height: 5,
+              height: 10,
             ),
+
             Text(
               '$etc',
               style: TextStyle(

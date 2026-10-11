@@ -43,17 +43,52 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: backgroundColor ?? Colors.white,
+
+        // 상단 공지사항 남색
+        backgroundColor: const Color(0xFF17233C),
+
+        // AppBar 그림자 제거
         elevation: 0,
-        title: Text(
-          title!,
-          style: const TextStyle(
-            fontSize: 25.0,
-            fontWeight: FontWeight.w900,
-          ),
+
+        // 좌우 여백
+        titleSpacing: 20,
+
+        title: Row(
+          children: [
+            // 알림 아이콘
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: const Color(0xFF253452),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.notifications_none_rounded,
+                color: Color(0xFFE6D19A),
+                size: 22,
+              ),
+            ),
+
+            const SizedBox(width: 12),
+
+            // 제목
+            Text(
+              title!,
+              style: const TextStyle(
+                fontSize: 23.0,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: -0.5,
+              ),
+            ),
+          ],
         ),
+
         centerTitle: false,
-        foregroundColor: Colors.black,
+
+        // AppBar 내부 아이콘/텍스트 기본 색상
+        foregroundColor: Colors.white,
       );
     }
   }

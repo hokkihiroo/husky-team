@@ -11,6 +11,7 @@ import 'package:team_husky/2car_management_system/team1/team1_locationName.dart'
 import 'package:team_husky/2car_management_system/team1/team1_model.dart';
 import 'package:team_husky/2car_management_system/team1/team1_outcar.dart';
 import 'package:another_telephony/telephony.dart';
+
 class Team1View extends StatefulWidget {
   const Team1View({super.key, required this.name});
 
@@ -26,6 +27,7 @@ class _Team1ViewState extends State<Team1View> {
   Telephony telephony = Telephony.instance;
   String CarScheduleAdress = formatTodayDate();
   String dayOfWeek = '';
+
   // ⭐ park 전역변수
   Map<String, dynamic> park = {};
 
@@ -42,12 +44,11 @@ class _Team1ViewState extends State<Team1View> {
     dayOfWeek = getDayOfWeek(now);
     // ⭐ parkLocation 데이터 한 번 가져오기
   }
+
 // ⭐ parkLocation 문서 데이터 가져오기
   Future<void> getParkLocation() async {
     final DocumentSnapshot snapshot =
-    await FirebaseFirestore.instance
-        .doc(parkLocation)
-        .get();
+        await FirebaseFirestore.instance.doc(parkLocation).get();
 
     if (!snapshot.exists) {
       return;
@@ -59,6 +60,7 @@ class _Team1ViewState extends State<Team1View> {
 
     print(park);
   }
+
   void requestSmsPermission(BuildContext context) async {
     bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
     if (permissionsGranted ?? false) {
@@ -68,43 +70,55 @@ class _Team1ViewState extends State<Team1View> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Center(
-                  child: Text(
-                    '현대모터스튜디오 강남',
-                    style: TextStyle(
-                      color: Colors.blue,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '현대모터스튜디오 강남',
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
               ),
+              const SizedBox(width: 8),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CarSchedule()),
+                    MaterialPageRoute(
+                      builder: (context) => CarSchedule(),
+                    ),
                   );
                 },
-                child: Text(
-                  '시승차',
-                  style: TextStyle(
-                    color: Colors.blue,
+                child: const FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '시승차',
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-          iconTheme: IconThemeData(color: Colors.blue),
+          iconTheme: const IconThemeData(
+            color: Colors.blue,
+          ),
           backgroundColor: Colors.black,
           centerTitle: true,
         ),
@@ -171,7 +185,8 @@ class _Team1ViewState extends State<Team1View> {
                 height: 20,
               ),
               _Lists(
-                name: widget.name, park:park,
+                name: widget.name,
+                park: park,
               ),
               Divider(
                 color: Colors.white, // 선 색상
@@ -462,8 +477,6 @@ class _Team1ViewState extends State<Team1View> {
   }
 }
 
-
-
 class _Lists extends StatelessWidget {
   final String name;
   final Map<String, dynamic> park;
@@ -486,7 +499,8 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: LOTARY,
                 reverse: 1,
-                check: () {}, park:park,
+                check: () {},
+                park: park,
               ),
             ],
           ),
@@ -498,7 +512,8 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: OUTSIDE,
                 reverse: 1,
-                check: () {}, park:park,
+                check: () {},
+                park: park,
               ),
             ],
           ),
@@ -510,7 +525,8 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: MAIN,
                 reverse: 1,
-                check: () {}, park:park,
+                check: () {},
+                park: park,
               ),
             ],
           ),
@@ -522,7 +538,8 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: MOON,
                 reverse: 1,
-                check: () {}, park:park,
+                check: () {},
+                park: park,
               ),
             ],
           ),
@@ -534,7 +551,8 @@ class _Lists extends StatelessWidget {
                 name: name,
                 location: SINSA,
                 reverse: 1,
-                check: () {}, park:park,
+                check: () {},
+                park: park,
               ),
             ],
           ),

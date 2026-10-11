@@ -37,16 +37,21 @@ class NumberCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Text(
-              carNumber,
-              style: TextStyle(
-                color: color == 1
-                    ? Colors.white
-                    : (color == 2 && name == '')
-                        ? Colors.red
-                        : Colors.yellow,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                carNumber,
+                maxLines: 1,
+                softWrap: false,
+                style: TextStyle(
+                  color: color == 1
+                      ? Colors.white
+                      : (color == 2 && name == '')
+                      ? Colors.red
+                      : Colors.yellow,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

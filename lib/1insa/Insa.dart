@@ -8,6 +8,8 @@ import 'package:team_husky/1insa/InsaCard.dart';
 import 'package:team_husky/1insa/teamcard.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'Insa_detail.dart';
+
 class Organization extends StatefulWidget {
   const Organization({
     super.key,
@@ -35,18 +37,17 @@ class _OrganizationState extends State<Organization> {
   // Firestore 실시간 스트림
   // ------------------------------------------------------------
 
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
-  _insaSubscription;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _insaSubscription;
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
-  _employeeSubscription;
+      _employeeSubscription;
 
   // 건물 목록
   List<QueryDocumentSnapshot<Map<String, dynamic>>> _buildingDocs = [];
 
   // 건물ID별 직원 목록
   Map<String, List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-  _employeesByBuilding = {};
+      _employeesByBuilding = {};
 
   // 각각의 첫 데이터가 들어왔는지 확인
   bool _insaLoaded = false;
@@ -77,7 +78,7 @@ class _OrganizationState extends State<Organization> {
         .orderBy('createdAt')
         .snapshots()
         .listen(
-          (snapshot) {
+      (snapshot) {
         if (!mounted) return;
 
         setState(() {
@@ -103,16 +104,13 @@ class _OrganizationState extends State<Organization> {
   // ------------------------------------------------------------
 
   void _listenToEmployees() {
-    _employeeSubscription = FirebaseFirestore.instance
-        .collectionGroup(LIST)
-        .snapshots()
-        .listen(
-          (snapshot) {
+    _employeeSubscription =
+        FirebaseFirestore.instance.collectionGroup(LIST).snapshots().listen(
+      (snapshot) {
         if (!mounted) return;
 
-        final Map<String,
-            List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-        groupedEmployees = {};
+        final Map<String, List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+            groupedEmployees = {};
 
         for (final employeeDoc in snapshot.docs) {
           final data = employeeDoc.data();
@@ -141,9 +139,7 @@ class _OrganizationState extends State<Organization> {
             continue;
           }
 
-          groupedEmployees
-              .putIfAbsent(buildingId, () => [])
-              .add(employeeDoc);
+          groupedEmployees.putIfAbsent(buildingId, () => []).add(employeeDoc);
         }
 
         // levelNumber 순서대로 정렬
@@ -255,8 +251,7 @@ class _OrganizationState extends State<Organization> {
 
     // 기존 코드의 grade == 0 조건 유지
     final visibleBuildings = _buildingDocs.where((buildingDoc) {
-      if (widget.grade == 0 &&
-          buildingDoc.id == '3LDEwvJicNKtzDemmHY6') {
+      if (widget.grade == 0 && buildingDoc.id == '3LDEwvJicNKtzDemmHY6') {
         return false;
       }
 
@@ -272,8 +267,7 @@ class _OrganizationState extends State<Organization> {
         final String buildingId = buildingDoc.id;
 
         // 이 건물에 속한 직원들
-        final employees =
-            _employeesByBuilding[buildingId] ?? const [];
+        final employees = _employeesByBuilding[buildingId] ?? const [];
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -332,7 +326,7 @@ class _OrganizationState extends State<Organization> {
 
                         // 선택한 직원의 user 정보 가져오기
                         final Map<String, dynamic> userData =
-                        await getData(mansID);
+                            await getData(mansID);
 
                         // 입사일 처리
                         String selectedFormattedDate = '';
@@ -340,12 +334,10 @@ class _OrganizationState extends State<Organization> {
                         final enterDay = userData['enterDay'];
 
                         if (enterDay is Timestamp) {
-                          final DateTime dateTime =
-                          enterDay.toDate();
+                          final DateTime dateTime = enterDay.toDate();
 
                           selectedFormattedDate =
-                              DateFormat('yy/MM/dd')
-                                  .format(dateTime);
+                              DateFormat('yy/MM/dd').format(dateTime);
                         }
 
                         // 프로필 이미지
@@ -356,23 +348,21 @@ class _OrganizationState extends State<Organization> {
 
                         showDialog(
                           context: context,
-                          builder: (BuildContext context) {
-                            return viewInsa(
-                              userData,
-                              selectedFormattedDate,
-                              selectedPicUrl,
-                            );
-                          },
+                          builder: (context) => InsaDetail(
+                            data: userData,
+                            formattedDate: selectedFormattedDate,
+                            picUrl: selectedPicUrl,
+                          ),
                         );
                       },
                       child: OrganizationCard(
                         image: data['image'] != null
                             ? Image.asset(
-                          data['image'],
-                        )
+                                data['image'],
+                              )
                             : const Icon(
-                          Icons.image_outlined,
-                        ),
+                                Icons.image_outlined,
+                              ),
                         name: data['name'] ?? '',
                         grade: data['grade'] ?? '',
                         position: data['position'] ?? '',
@@ -389,345 +379,35 @@ class _OrganizationState extends State<Organization> {
     );
   }
 
-  // ------------------------------------------------------------
-  // 직원 상세정보
-  // ------------------------------------------------------------
-
-  Widget viewInsa(
-      Map<String, dynamic> data,
-      String formattedDate,
-      String picUrl,
-      ) {
-    return AlertDialog(
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // ------------------------------------------------------
-          // 브라운 색 배경 영역
-          // ------------------------------------------------------
-
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.brown.shade800,
-                  Colors.brown.shade200,
-                ],
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 20.0,
-            ),
-            child: Column(
-              children: [
-                const Text(
-                  '(주)팀허스키',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-
-                const SizedBox(height: 16.0),
-
-                GestureDetector(
-                  onTap: picUrl.isNotEmpty
-                      ? () {
-                    _showFullImage(
-                      context,
-                      picUrl,
-                    );
-                  }
-                      : null,
-                  child: CircleAvatar(
-                    backgroundImage: picUrl.isNotEmpty
-                        ? NetworkImage(picUrl)
-                        : const AssetImage(
-                      'asset/img/husky_Logo.png',
-                    ) as ImageProvider,
-                    radius: 50,
-                  ),
-                ),
-
-                const SizedBox(height: 16.0),
-
-                Text(
-                  data['name'] ?? '이름 없음',
-                  style: const TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 8.0),
-
-                Text(
-                  data['birthDay'] ?? '생일 정보 없음',
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ------------------------------------------------------
-          // 흰색 배경 영역
-          // ------------------------------------------------------
-
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-              vertical: 20.0,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 연락처
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _infoRow(
-                          '연락처',
-                          data['phoneNumber'],
-                        ),
-                      ),
-
-                      IconButton(
-                        icon: const Icon(
-                          Icons.phone,
-                          color: Colors.green,
-                        ),
-                        onPressed: () {
-                          final phone =
-                              data['phoneNumber']?.toString() ??
-                                  '';
-
-                          if (phone.isNotEmpty) {
-                            _makePhoneCall(phone);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey[300],
-                  ),
-
-                  // 등록일
-                  _infoRow(
-                    '등록일',
-                    formattedDate,
-                  ),
-
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey[300],
-                  ),
-
-                  // 상의 / 하의
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _infoRow(
-                          '상의',
-                          data['tShirtSize'],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _infoRow(
-                          '하의',
-                          data['pantsSize'],
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey[300],
-                  ),
-
-                  // 신발 / 키
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _infoRow(
-                          '신발',
-                          data['footSize'],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _infoRow(
-                          '키',
-                          '${data['cm'] ?? '정보 없음'} cm',
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey[300],
-                  ),
-
-                  // 몸무게
-                  _infoRow(
-                    '몸무게',
-                    '${data['kg'] ?? '정보 없음'} kg',
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ------------------------------------------------------------
-  // 상세정보 한 줄
-  // ------------------------------------------------------------
-
-  Widget _infoRow(
-      String label,
-      dynamic value,
-      ) {
-    final String displayValue =
-        value?.toString() ?? '정보 없음';
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$label:',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14.0,
-            color: Colors.black87,
-          ),
-        ),
-
-        const SizedBox(width: 8.0),
-
-        Expanded(
-          child: Text(
-            displayValue,
-            style: const TextStyle(
-              fontSize: 14.0,
-              color: Colors.black54,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ------------------------------------------------------------
-  // 전체 이미지 보기
-  // ------------------------------------------------------------
-
-  void _showFullImage(
-      BuildContext context,
-      String imageUrl,
-      ) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => FullImageView(
-          imageUrl: imageUrl,
-        ),
-      ),
-    );
-  }
-}
-
 // ================================================================
 // 선택한 직원 신상 불러오기
 // ================================================================
 
-Future<Map<String, dynamic>> getData(
+  Future<Map<String, dynamic>> getData(
     String documentId,
-    ) async {
-  try {
-    final DocumentSnapshot<Map<String, dynamic>>
-    documentSnapshot =
-    await FirebaseFirestore.instance
-        .collection('user')
-        .doc(documentId)
-        .get();
+  ) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await FirebaseFirestore.instance
+              .collection('user')
+              .doc(documentId)
+              .get();
 
-    if (documentSnapshot.exists) {
-      final Map<String, dynamic>? data =
-      documentSnapshot.data();
+      if (documentSnapshot.exists) {
+        final Map<String, dynamic>? data = documentSnapshot.data();
 
-      if (data != null) {
-        return data;
+        if (data != null) {
+          return data;
+        } else {
+          print('문서 데이터가 null입니다.');
+        }
       } else {
-        print('문서 데이터가 null입니다.');
+        print('문서가 존재하지 않습니다.');
       }
-    } else {
-      print('문서가 존재하지 않습니다.');
+    } catch (e) {
+      print('데이터를 가져오는 중에 오류가 발생했습니다: $e');
     }
-  } catch (e) {
-    print('데이터를 가져오는 중에 오류가 발생했습니다: $e');
-  }
 
-  return {};
-}
-
-// ================================================================
-// 전체 이미지 화면
-// ================================================================
-
-class FullImageView extends StatelessWidget {
-  final String imageUrl;
-
-  const FullImageView({
-    super.key,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Center(
-          child: Hero(
-            tag: 'fullImage',
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
-      ),
-    );
+    return {};
   }
 }

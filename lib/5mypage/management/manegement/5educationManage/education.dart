@@ -141,7 +141,6 @@ class _EducationManageState extends State<EducationManage> {
           ],
         ),
       ),
-      bottomNavigationBar: bottomOne(),
     );
   }
 

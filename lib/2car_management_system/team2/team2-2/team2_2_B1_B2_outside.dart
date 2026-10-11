@@ -40,7 +40,6 @@ class _B1B2OutsideStateState extends State<B1B2Outside> {
   String enterName = ''; //추가할 이름들 뽑음
   String movingTime = ''; //이동할 시각들 뽑음
   String carModelFrom = ''; // 눌럿을때 파베에서 차종뽑아서 전연변수에 넣은 값
-
   String option1 = ''; //컬러5에 들어갈 문서 필드에서 뽑아낸문서
   int option2 = 0; //하이패스잔액
   int option3 = 0; // 주유잔량
