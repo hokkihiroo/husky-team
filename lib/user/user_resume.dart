@@ -986,14 +986,13 @@ class _UserResumeState extends State<UserResume> {
                     // 이름
                     CustomTextForm(
                       hintText: '이름을 입력해주세요.',
-                      icon: const Icon(
-                        Icons.person_outline,
-                      ),
+                      icon: const Icon(Icons.person_outline),
+
+                      // [추가] 최대 3글자까지만 입력 허용
+                      maxLength: 3,
+
                       validator: (value) {
-                        return _requiredValidator(
-                          value,
-                          '이름',
-                        );
+                        return _requiredValidator(value, '이름');
                       },
                       onSaved: (value) {
                         name = value ?? '';

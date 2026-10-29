@@ -45,25 +45,28 @@ class Team5NumberCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: Text(
-                  carNumber,
-                  style: TextStyle(
-                    color: color == 1
-                        ? Colors.white
-                        : (color == 2 && name == '')
-                        ? Colors.red
-                        : (color == 3 || color == 6)
-                        ? Colors.blue
-                        : color == 4
-                        ? Colors.green
-                        : color == 5
-                        ? Colors.purple
-                        : Colors.yellow,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    carNumber,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: color == 1
+                          ? Colors.white
+                          : (color == 2 && name == '')
+                          ? Colors.red
+                          : (color == 3 || color == 6)
+                          ? Colors.blue
+                          : color == 4
+                          ? Colors.green
+                          : color == 5
+                          ? Colors.purple
+                          : Colors.yellow,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-
               ),
 
 

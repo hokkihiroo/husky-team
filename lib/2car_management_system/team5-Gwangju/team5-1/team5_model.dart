@@ -1258,6 +1258,42 @@ class _CarStateState extends State<CarState> {
                                   .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
+                                'location': 1,
+                                'wigetName': widget.name, //이게 입차한사람임
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'CX',
+                            style: TextStyle(
+                              fontSize: 17, // 텍스트 크기 증가
+                              fontWeight: FontWeight.bold, // 텍스트를 굵게
+                              color: Colors.black87, // 텍스트 색상
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                            ),
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(TEAM5FIELD)
+                                  .doc(dataId)
+                                  .update({
                                 'location': 2,
                                 'wigetName': widget.name, //이게 입차한사람임
                               });
@@ -1267,7 +1303,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B1',
+                            'AE',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1295,42 +1331,6 @@ class _CarStateState extends State<CarState> {
                                   .doc(dataId)
                                   .update({
                                 'location': 3,
-                                'wigetName': widget.name, //이게 입차한사람임
-                              });
-                            } catch (e) {
-                              print(e);
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'B2',
-                            style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
-                              color: Colors.black87, // 텍스트 색상
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white60, // 버튼 색상
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                            ),
-                          ),
-                          onPressed: () async {
-                            try {
-                              await FirebaseFirestore.instance
-                                  .collection(TEAM5FIELD)
-                                  .doc(dataId)
-                                  .update({
-                                'location': 4,
                                 'wigetName': widget.name,
                               });
                             } catch (e) {
@@ -1339,7 +1339,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '기타',
+                            'B벽',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1370,7 +1370,7 @@ class _CarStateState extends State<CarState> {
                                   .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
-                                'location': 1,
+                                'location': 4,
                                 'wigetName': widget.name,
                               });
                             } catch (e) {
@@ -1379,7 +1379,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '필드',
+                            'B2',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1451,7 +1451,7 @@ class _CarStateState extends State<CarState> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '외부',
+                            '기타',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게

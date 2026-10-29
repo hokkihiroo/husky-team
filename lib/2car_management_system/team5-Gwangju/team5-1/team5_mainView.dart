@@ -432,7 +432,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              'B앞',
+              'AE',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -442,7 +442,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              'B뒤',
+              'B벽',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -468,7 +468,7 @@ class _LocationName extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '외부',
+              '기타',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

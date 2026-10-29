@@ -75,10 +75,35 @@ class OrganizationCard extends StatelessWidget {
             // 이름
             Expanded(
               flex: 3,
-              child: Text(
-                name.length == 2
-                    ? '${name[0]}   ${name[1]}'
-                    : name,
+              child: name.length == 2
+                  ? Row(
+                children: [
+                  Text(
+                    name[0],
+                    style: const TextStyle(
+                      letterSpacing: 2.0,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF222222),
+                    ),
+                  ),
+                  const SizedBox(width: 15), // '영' 한 글자 너비만큼 간격
+                  Expanded(
+                    child: Text(
+                      name[1],
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        letterSpacing: 2.0,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF222222),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+                  : Text(
+                name,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   letterSpacing: 2.0,

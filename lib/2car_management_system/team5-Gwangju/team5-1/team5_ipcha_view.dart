@@ -723,7 +723,7 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                                   .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
-                                'location': 2,
+                                'location': 1,
                                 'wigetName': widget.name, //이게 나중에 리스트에서 입차한사람임
                               });
                             } catch (e) {
@@ -732,7 +732,43 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B1',
+                            'CX',
+                            style: TextStyle(
+                              fontSize: 17, // 텍스트 크기 증가
+                              fontWeight: FontWeight.bold, // 텍스트를 굵게
+                              color: Colors.black87, // 텍스트 색상
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Colors.white60, // 버튼 색상
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
+                            ),
+                          ),
+                          onPressed: () async {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection(TEAM5FIELD)
+                                  .doc(dataId)
+                                  .update({
+                                'location': 2,
+                                'wigetName': widget.name,
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'AE',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -768,43 +804,7 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'B2',
-                            style: TextStyle(
-                              fontSize: 17, // 텍스트 크기 증가
-                              fontWeight: FontWeight.bold, // 텍스트를 굵게
-                              color: Colors.black87, // 텍스트 색상
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            backgroundColor: Colors.white60, // 버튼 색상
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                            ),
-                          ),
-                          onPressed: () async {
-                            try {
-                              await FirebaseFirestore.instance
-                                  .collection(TEAM5FIELD)
-                                  .doc(dataId)
-                                  .update({
-                                'location': 4,
-                                'wigetName': widget.name,
-                              });
-                            } catch (e) {
-                              print(e);
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            '기타',
+                            'B벽',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -835,7 +835,7 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                                   .collection(TEAM5FIELD)
                                   .doc(dataId)
                                   .update({
-                                'location': 1,
+                                'location': 4,
                                 'wigetName': widget.name,
                               });
                             } catch (e) {
@@ -844,7 +844,7 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '필드',
+                            'B2',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -880,7 +880,7 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            '외부',
+                            '기타',
                             style: TextStyle(
                               fontSize: 17, // 텍스트 크기 증가
                               fontWeight: FontWeight.bold, // 텍스트를 굵게

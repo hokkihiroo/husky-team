@@ -713,7 +713,7 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.black,
+                      backgroundColor: Colors.yellow,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
@@ -726,7 +726,8 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                             .collection(TEAM4FIELD)
                             .doc(dataId)
                             .update({
-                          'etc': '',
+                          'name':
+                          (name == null || name.isEmpty) ? '픽업' : '',
                         });
                       } catch (e) {
                         print(e);
@@ -734,11 +735,11 @@ class _Team4IpchaViewState extends State<Team4IpchaView> {
                       Navigator.pop(context);
                     },
                     child: Text(
-                      '지우기',
+                      '지금픽업함',
                       style: TextStyle(
                         fontSize: 13, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
-                        color: Colors.yellow, // 텍스트 색상
+                        color: Colors.black, // 텍스트 색상
                       ),
                     ),
                   ),

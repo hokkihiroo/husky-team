@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:team_husky/4event/event_main_card_detail.dart';
 import 'address.dart';
 import 'event_brand_card.dart';
 import 'event_chajong_card.dart';
 import 'event_ipgo.dart';
+import 'event_main_card_detail_model.dart';
 import 'event_main_repository.dart';
 
 class EventMain extends StatefulWidget {
   final String name;
+
   const EventMain({super.key, required this.name});
 
   @override
@@ -17,8 +20,8 @@ class _EventMainState extends State<EventMain> {
   // ============================================================
   // Firebase 브랜드 컬렉션 주소
   final EventMainRepository repository = EventMainRepository();
-  // ============================================================
 
+  // ============================================================
 
   // ============================================================
   // 현재 선택된 브랜드
@@ -430,7 +433,7 @@ class _EventMainState extends State<EventMain> {
                           crossAxisCount: 3,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
-                          childAspectRatio: 1,
+                          mainAxisExtent: 90, // 카드 높이 고정
                         ),
                         itemCount: docs.length,
                         itemBuilder: (
@@ -439,11 +442,21 @@ class _EventMainState extends State<EventMain> {
                         ) {
                           final data = docs[index].data();
 
+                          // Map 데이터를 모델 객체로 변환
+                          final EventCarModel car = EventCarModel.fromMap(data);
+
                           return EventChajongCard(
                             data: data,
                             onTap: () {
-                              // TODO
-                              // 차량 상세
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EventCardDetail(
+                                    selectedBrandName :selectedBrandName!,
+                                    car: car,
+                                  ),
+                                ),
+                              );
                             },
                           );
                         },
@@ -489,7 +502,8 @@ class _EventMainState extends State<EventMain> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EventIpgo(
-                      selectedBrandId: selectedBrandId!, registName: widget.name,
+                      selectedBrandId: selectedBrandId!,
+                      registName: widget.name,
                     ),
                   ),
                 );

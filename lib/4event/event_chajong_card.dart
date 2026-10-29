@@ -41,7 +41,7 @@ class EventChajongCard extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(9),
+            padding: const EdgeInsets.all(7),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -70,7 +70,7 @@ class EventChajongCard extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
 
 // 브랜드 + 모델
                 Row(
@@ -80,7 +80,7 @@ class EventChajongCard extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 5,
-                          vertical: 4,
+                          vertical: 2,
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.gold.withOpacity(0.16),
@@ -115,71 +115,39 @@ class EventChajongCard extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 7),
+                const SizedBox(height: 4),
 
 // 구분선
                 Container(
                   height: 1,
                   color: AppColors.border,
                 ),
-                const SizedBox(height: 6),
-
-// 상세 정보
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.info_outline_rounded,
-                        size: 13,
-                        color: AppColors.textGrey,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                        '정보입력완료',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.textGrey,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            height: 1.25,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
 
 // 등록한사람이름
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.info_outline_rounded,
-                        size: 13,
-                        color: AppColors.textGrey,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          registName.isEmpty ? '상세 정보 없음' : registName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.textGrey,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            height: 1.25,
-                          ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.info_outline_rounded,
+                      size: 13,
+                      color: AppColors.textGrey,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        registName.isEmpty ? '상세 정보 없음' : registName,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: AppColors.textGrey,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          height: 1.25,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
