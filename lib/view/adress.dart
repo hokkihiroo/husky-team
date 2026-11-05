@@ -14,6 +14,8 @@ List<String> restrictedEmails() {
   return [
     'cj@teamhusky.co.kr',
     'sj@teamhusky.co.kr',
+    'gj@teamhusky.co.kr',
+
     // 나중에 여기 계속 추가
   ];
 }

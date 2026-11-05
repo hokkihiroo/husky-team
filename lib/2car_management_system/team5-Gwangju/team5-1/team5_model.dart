@@ -1172,7 +1172,7 @@ class _CarStateState extends State<CarState> {
                       }
                     },
                     child: Text(
-                      '차량픽업',
+                      '픽업/취소',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게

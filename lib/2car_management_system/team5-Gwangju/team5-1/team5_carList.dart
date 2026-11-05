@@ -472,163 +472,285 @@ class ListModel extends StatelessWidget {
       ) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext sheetContext) {
         return Container(
-          height: 400,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(sheetContext).size.height * 0.8,
+          ),
+          decoration: const BoxDecoration(
+            color: Color(0xFFF3F1EC),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(24),
+            ),
+          ),
+          child: SafeArea(
+            top: false,
             child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 상단 손잡이
+                  Center(
+                    child: Container(
+                      width: 38,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFCCCCCC),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  // 차량번호 및 삭제 버튼
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        '차번호:$carNumber',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF17233C),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.directions_car_rounded,
+                          color: Colors.white,
+                          size: 23,
                         ),
                       ),
-                      TextButton(
+
+                      const SizedBox(width: 12),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '차량 정보',
+                              style: TextStyle(
+                                color: Color(0xFF737B89),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              '차번호 : $carNumber',
+                              style: const TextStyle(
+                                color: Color(0xFF202632),
+                                fontSize: 21,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // 삭제 버튼
+                      TextButton.icon(
                         onPressed: () {
-                          Navigator.of(context).pop(); // 다이얼로그 닫기
+                          Navigator.of(sheetContext).pop();
 
                           showDialog(
                             context: context,
-                            builder: (BuildContext context) {
+                            builder: (BuildContext dialogContext) {
                               return AlertDialog(
-                                title: Text("삭제 확인"),
-                                content: Text("정말로 삭제하시겠습니까?"),
+                                backgroundColor: const Color(0xFF202632),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                title: const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.warning_amber_rounded,
+                                      color: Color(0xFFFF6B6B),
+                                      size: 25,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      '삭제 확인',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: const Text(
+                                  '정말로 삭제하시겠습니까?',
+                                  style: TextStyle(
+                                    color: Color(0xFFD0D3DA),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                actionsPadding:
+                                const EdgeInsets.fromLTRB(16, 0, 16, 16),
                                 actions: [
                                   TextButton(
-                                    child: Text("취소"),
                                     onPressed: () {
-                                      Navigator.of(context).pop(); // 다이얼로그 닫기
+                                      Navigator.of(dialogContext).pop();
                                     },
+                                    child: const Text(
+                                      '취소',
+                                      style: TextStyle(
+                                        color: Color(0xFFB8BEC9),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                   TextButton(
-                                    child: Text("삭제"),
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: const Color(0xFFB83232),
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(9),
+                                      ),
+                                    ),
                                     onPressed: () async {
                                       try {
-                                        // 삭제할 문서의 참조를 가져와
                                         await FirebaseFirestore.instance
-                                            .collection(
-                                            TEAM5CARLIST + adress) // 예: 'users'
-                                            .doc(id) // 예: 'abc123'
+                                            .collection(TEAM5CARLIST + adress)
+                                            .doc(id)
                                             .delete();
 
-                                        Navigator.of(context).pop(); // 다이얼로그 닫기
+                                        Navigator.of(dialogContext).pop();
                                         print('삭제 확인됨');
-                                        // 여기에 삭제 완료 후 처리 추가 (예: 스낵바 등)
                                       } catch (e) {
                                         print('삭제 중 오류 발생: $e');
-                                        // 오류 처리 로직 추가 가능
                                       }
                                     },
+                                    child: const Text(
+                                      '삭제',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               );
                             },
                           );
                         },
-                        style: TextButton.styleFrom(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          backgroundColor: Colors.red.withOpacity(0.1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          size: 17,
                         ),
-                        child: Text(
+                        label: const Text(
                           '삭제',
                           style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.red, // 삭제는 빨간색이 직관적
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                      )
+                        style: TextButton.styleFrom(
+                          foregroundColor: const Color(0xFFCE4545),
+                          backgroundColor: const Color(0xFFFCEAEA),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 9,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
+
+                  const SizedBox(height: 22),
+
+                  // 입차 정보
+                  _carInfoSection(
+                    title: '입차 정보',
+                    icon: Icons.login_rounded,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _carInfoRow('입차 시각', '$enterTime분'),
+                          ),
+                          Expanded(
+                            child: _carInfoRow('입차 담당자', '$enterName'),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+
+                  const SizedBox(height: 14),
+
+                  // 출차 정보
+                  _carInfoSection(
+                    title: '출차 정보',
+                    icon: Icons.logout_rounded,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _carInfoRow(
+                              '출차 시각',
+                              outTime != null ? getOutTime(outTime!) : '-',
+                            ),
+                          ),
+                          Expanded(
+                            child: _carInfoRow('출차 위치', outLocation ?? '-'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      _carInfoRow('출차 담당자', outName ?? '-'),
+                    ],
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // 특이사항
                   Container(
-                    // 여기에 다이얼로그의 내용을 추가할 수 있습니다.
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 17,
+                      vertical: 15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF17233C),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          '입차',
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          color: Color(0xFFE6D19A),
+                          size: 19,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          '특이사항 :',
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                        Row(
-                          children: [
-                            Text('시각 : $enterTime분'),
-                            SizedBox(
-                              width: 10,
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            etc != null && etc.toString().isNotEmpty
+                                ? '$etc'
+                                : '-',
+                            style: const TextStyle(
+                              color: Color(0xFFE6D19A),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
-                            Text('이름 : $enterName'),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '출차',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                '시각 : ${outTime != null ? getOutTime(outTime!) : ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('이름 : ${outName ?? ''}'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('위치 : ${outLocation ?? ''}'),
-                            // Text(selfParking),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '특이사항',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(width: 15,),
-                            Text(
-                              selfParking,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                  color: Colors.blue
-                              ),
-                            ),
-
-
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(etc),
-                          ],
                         ),
                       ],
                     ),
@@ -639,6 +761,88 @@ class ListModel extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+// 정보 섹션 디자인
+  Widget _carInfoSection({
+    required String title,
+    required IconData icon,
+    required List<Widget> children,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(17),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.035),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                icon,
+                color: const Color(0xFF17233C),
+                size: 19,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xFF202632),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 13),
+
+          ...children,
+        ],
+      ),
+    );
+  }
+
+// 정보 행 디자인
+  Widget _carInfoRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '$title : ',
+            style: const TextStyle(
+              color: Color(0xFF737B89),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Color(0xFF202632),
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

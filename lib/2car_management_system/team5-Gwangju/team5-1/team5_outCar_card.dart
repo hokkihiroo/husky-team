@@ -136,7 +136,7 @@ class Team5OutcarCard extends StatelessWidget {
                             'outLocation': location,
                             'movedLocation': movedLocation,
                             'wigetName': wigetName,
-                            'etc': '($option12) $etc',
+                            'etc': '$option12 $etc',
                           });
                           print('출차완료 업데이트 완료');
                         } catch (e) {

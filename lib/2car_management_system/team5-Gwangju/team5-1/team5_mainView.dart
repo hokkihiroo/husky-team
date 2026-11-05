@@ -173,38 +173,7 @@ class _Team5MainviewState extends State<Team5Mainview> {
                 color: Colors.white, // 선 색상
                 thickness: 2.0, // 선 두께
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '출차중',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '(번호순대로 출차하세요)',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+
 
               SizedBox(
                 height: 10,

@@ -112,15 +112,15 @@ String checkOutLocation(int location){
   if(location ==0){
     return '입차대기';
   }else if (location ==1){
-    return '가벽';
+    return 'CX';
   }else if(location==2){
-    return 'A존';
+    return 'AE';
   }else if(location==3){
-    return 'B존';
+    return 'B벽';
   }else if(location==4){
     return 'B2';
   }else if(location==5){
-    return '외부';
+    return '기타';
   }
   return '';
 }

@@ -120,7 +120,7 @@ class _MainViewState extends State<MainView>
       } else if (index == 2) {
         title = '공지사항';
       } else if (index == 3) {
-        title = '행사전용(베타테스트)';
+        title = '행사전용';
       } else if (index == 4) {
         title = 'MyPage';
       }
