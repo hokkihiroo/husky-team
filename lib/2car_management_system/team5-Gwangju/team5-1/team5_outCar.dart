@@ -6,8 +6,12 @@ import '../team5_adress.dart';
 
 class Team5Outcar extends StatefulWidget {
   final String name;
+  final String email;
 
-  const Team5Outcar({super.key, required this.name});
+  const Team5Outcar({super.key,
+    required this.name,
+    required this.email
+  });
 
 
   @override
@@ -139,6 +143,7 @@ class _OutCarState extends State<Team5Outcar> {
                   wigetName: filteredDocs[index]['wigetName'],
                   color:  filteredDocs[index]['color'],
                   choolchaNum: index+1,
+                  email:widget.email,
                 ),
               ),
             );

@@ -17,10 +17,12 @@ class CarManagementSystem extends StatelessWidget {
     super.key,
     required this.name,
     required this.team,
+    required this.email,
   });
 
   final String name;
   final String team;
+  final String email;
 
   final String cjAdress = 'zSvgctyCZUnOx8rYMioF';
 
@@ -444,6 +446,7 @@ class CarManagementSystem extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => Team5Mainview(
                               name: name,
+                              email: email,
                             ),
                           ),
                         );

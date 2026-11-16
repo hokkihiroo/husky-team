@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_electric_selector.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_numbercard.dart';
 
@@ -561,8 +562,7 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
-                        'enterName': enterName,
-                        'etc': '($option12) $etc',
+                        'etc': '$option12 $etc',
                       });
                     } catch (e) {
                       print(e);
@@ -624,20 +624,110 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(TEAM5FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name':
-                          (name == null || name.isEmpty) ? widget.name : '',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
+
+                      CarListAdress = TEAM5CARLIST + formatTodayDate();
+                      print(CarListAdress);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              '번호수정',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 30),
+                            ),
+                            actions: [
+                              TextField(
+                                keyboardType: TextInputType.number,
+                                autofocus: true,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp('[0-9]')),
+                                ],
+                                maxLength: 4,
+                                decoration: InputDecoration(
+                                  hintText: '현재번호 : $carNumber',
+                                ),
+                                onChanged: (value) {
+                                  carNumber = value;
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                      ),
+                                      onPressed: () async {
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(TEAM5FIELD)
+                                              .doc(dataId)
+                                              .update({
+                                            'carNumber': carNumber,
+                                          });
+                                        } catch (e) {
+                                          print(e);
+                                        }
+
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(CarListAdress)
+                                              .doc(dataId)
+                                              .update({
+                                            'carNumber': carNumber,
+                                          });
+                                        } catch (e) {}
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('수정'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('취소'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     },
                     child: Text(
-                      '픽업/취소',
+                      '번호수정',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -660,8 +750,6 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pop(context);
-
                       try {
                         await FirebaseFirestore.instance
                             .collection(TEAM5FIELD)
@@ -672,6 +760,35 @@ class _Team5IpchaViewState extends State<Team5IpchaView> {
                         });
                       } catch (e) {
                         print(e);
+                      }
+
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(CarListAdress)
+                            .doc(dataId)
+                            .update({
+                          'enterName': (color == 3) ? '' : '자가주차', //자가주차누르면 기입됨
+                        });
+                      } catch (e) {
+                        print(e);
+                        print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('하루 지난 데이터 입니다 '),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            });
                       }
                     },
                     child: Text(

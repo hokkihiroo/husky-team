@@ -1,17 +1,27 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_carList.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_electric.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_ipcha_view.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_model.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_outCar.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_search.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-1/team5_smoking.dart';
 import 'package:team_husky/2car_management_system/team5-Gwangju/team5_adress.dart';
 
 class Team5Mainview extends StatefulWidget {
-  const Team5Mainview({super.key, required this.name});
+  const Team5Mainview({super.key,
+    required this.name,
+    required this.email
+  });
 
   final String name;
+  final String email;
 
   @override
   State<Team5Mainview> createState() => _Team5MainviewState();
@@ -24,6 +34,12 @@ class _Team5MainviewState extends State<Team5Mainview> {
   String CarScheduleAdress = formatTodayDate();
   String dayOfWeek = '';
   int bottomAction = 0;
+  // 흡연 상태
+  bool isSmoking = false;
+
+
+// 사진 업로드 중복 실행 방지
+  bool isUploading = false;
 
   // 이건 브랜드 선택에 사용되는 맵
   Map<String, List<String>> domesticBrands = {};
@@ -79,6 +95,93 @@ class _Team5MainviewState extends State<Team5Mainview> {
       }
     }
   }
+////////////////////////////////////////////////////////////////////////////////
+
+// 사진 선택 및 업로드
+  Future<void> _pickAndUploadImage() async {
+    if (isUploading) return;
+
+    try {
+      // 1. 갤러리에서 사진 선택
+      final XFile? pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+
+      if (pickedFile == null) return;
+
+      final File imageFile = File(pickedFile.path);
+
+      if (!mounted) return;
+
+      // 2. 선택한 사진 미리보기 및 업로드 확인
+      final bool? confirm = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: const Text('사진 업로드'),
+            content: Image.file(
+              imageFile,
+              fit: BoxFit.contain,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext, false);
+                },
+                child: const Text('취소'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext, true);
+                },
+                child: const Text('업로드'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirm != true || !mounted) return;
+
+      setState(() {
+        isUploading = true;
+      });
+
+      // 3. Firebase Storage에 업로드
+      // 항상 같은 경로와 파일명을 사용하므로 기존 사진이 교체됨
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('team5_timeline/current_photo.jpg');
+
+      await storageRef.putFile(imageFile);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('사진이 업로드되었습니다.'),
+        ),
+      );
+    } catch (e) {
+      debugPrint('사진 업로드 오류: $e');
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('사진 업로드에 실패했습니다.'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isUploading = false;
+        });
+      }
+    }
+  }
+  ////////////////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +193,20 @@ class _Team5MainviewState extends State<Team5Mainview> {
             children: [
               Expanded(
                 child: Center(
-                  child: Text(
-                    '제네시스 광주',
-                    style: TextStyle(
-                      color: Colors.yellow, // 골드 컬러로 고급스러움 강조
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const Team5Search();
+                        },
+                      );
+                    },
+                    child: Text(
+                      '제네시스 광주',
+                      style: TextStyle(
+                        color: Colors.yellow, // 골드 컬러로 고급스러움 강조
+                      ),
                     ),
                   ),
                 ),
@@ -131,14 +244,140 @@ class _Team5MainviewState extends State<Team5Mainview> {
                 thickness: 2.0, // 선 두께
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    '입차 대기',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  // 왼쪽 흡연 버튼 + 이름
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: 10),
+
+                          InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () async {
+                              final doc = FirebaseFirestore.instance.doc(SMOKING);
+
+                              try {
+                                final snapshot = await doc.get();
+                                final currentName =
+                                    snapshot.data()?['name']?.toString() ?? '';
+
+                                await doc.update({
+                                  'name': currentName.isEmpty ? widget.name : '',
+                                });
+
+                                if (!mounted) return;
+
+                                setState(() {
+                                  isSmoking = currentName.isEmpty;
+                                });
+                              } catch (e) {
+                                debugPrint('흡연 상태 변경 오류: $e');
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                color: isSmoking
+                                    ? const Color(0xFFC6A667)
+                                    : Colors.white.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Text(
+                                '🚬',
+                                style: TextStyle(fontSize: 19),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          // 흡연 중인 직원 이름 실시간 표시
+                          Team5Smoking(
+                            stream: FirebaseFirestore.instance
+                                .doc(SMOKING)
+                                .snapshots(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // 중앙 입차 대기
+                  const Expanded(
+                    child: Center(
+                      child: Text(
+                        '입차 대기',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // 오른쪽 타임라인 + 사진 추가
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // 타임라인
+                          InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              // 추후 타임라인 사진 보기 기능
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 6,
+                              ),
+                              child: Text(
+                                '타임라인',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 5),
+
+                          // 사진 추가
+                          InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: isUploading ? null : _pickAndUploadImage,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: isUploading
+                                  ? const SizedBox(
+                                width: 19,
+                                height: 19,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  : const Icon(
+                                Icons.add,
+                                size: 19,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -181,6 +420,7 @@ class _Team5MainviewState extends State<Team5Mainview> {
 
               Team5Outcar(
                 name: widget.name,
+                email: widget.email,
               ),
               SizedBox(
                 height: 20,

@@ -16,6 +16,8 @@ class Team5OutcarCard extends StatelessWidget {
   final String movedLocation;
   final String wigetName;
   final int choolchaNum;
+  final String email;
+
 
   String CarListAdress = TEAM5CARLIST + formatTodayDate();
 
@@ -33,6 +35,7 @@ class Team5OutcarCard extends StatelessWidget {
     required this.wigetName,
     required this.color,
     required this.choolchaNum,
+    required this.email,
   });
 
   @override
@@ -66,7 +69,9 @@ class Team5OutcarCard extends StatelessWidget {
               ),
               Text(
                 (name != null && name.isNotEmpty)
-                    ? (color == 4 ? '회차중' : name)
+                    ? (color == 4
+                    ? '회차중'
+                    : (name.length == 2 ? '${name[0]}    ${name[1]}' : name))
                     : '비었음',
                 style: TextStyle(
                   fontSize: 20,
@@ -76,7 +81,44 @@ class Team5OutcarCard extends StatelessWidget {
                       : Colors.black,
                 ),
               ),
-              color == 4
+              email != 'gj@teamhusky.co.kr'
+                  ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(TEAM5FIELD)
+                            .doc(dataId)
+                            .update({
+                          'name':
+                          (name == null || name.isEmpty) ? myName : '',
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: const Text(
+                      '픽업/취소',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+
+                ],
+              )
+                  : color == 4
                   ? ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(horizontal: 20),

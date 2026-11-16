@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../team5_adress.dart';
 
-class Team5CarlistCard extends StatelessWidget {
+class Team5_2_CarlistCard extends StatelessWidget {
   final int index;
   final String carNum;
   final String carBrand;
@@ -12,7 +12,7 @@ class Team5CarlistCard extends StatelessWidget {
   final DateTime? outTime;
   final DateTime? movingTime;
 
-  const Team5CarlistCard({
+  const Team5_2_CarlistCard({
     super.key,
     required this.index,
     required this.carNum,

@@ -358,6 +358,7 @@ class _MainViewState extends State<MainView>
           CarManagementSystem(
             name: widget.name,
             team: widget.team,
+            email: widget.email,
           ),
 
           // ==========================================================

@@ -15,6 +15,7 @@ final ELECTRICLIST ='local/q0LRMbznxA2yPca1DKNw/NWIXrK7TWAq7gW8x1w1b/pNHnni1uB4x
 
 // b1b2에서 눌러서 차량들 내역볼때 나오는 주소
 final STATELIST ='local/q0LRMbznxA2yPca1DKNw/NWIXrK7TWAq7gW8x1w1b/fL35GKC4jObRZpSPmSQ8/field/';
+final SMOKING ='local/q0LRMbznxA2yPca1DKNw/NWIXrK7TWAq7gW8x1w1b/damtime/';
 
 
 

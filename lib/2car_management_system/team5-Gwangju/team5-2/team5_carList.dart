@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:team_husky/2car_management_system/team5-Gwangju/team5-2/team5_carList_card.dart';
 
 import '../team5-1/team5_carList_card.dart';
 import '../team5_adress.dart';
@@ -486,7 +487,7 @@ class ListModel extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
-                  child: Team5CarlistCard(
+                  child: Team5_2_CarlistCard(
                     index: index + 1,
                     carNum: docs[index]['carNumber'],
                     inTime: docs[index]['enter'],

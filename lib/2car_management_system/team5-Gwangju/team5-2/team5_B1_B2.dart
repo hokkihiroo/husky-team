@@ -22,7 +22,6 @@ class Team5B1B2 extends StatefulWidget {
 }
 
 class _Team5B1B2State extends State<Team5B1B2> {
-
   final repo = Team5Reposi();
 
   String Color5List = COLOR5 + formatTodayDate();
@@ -62,26 +61,26 @@ class _Team5B1B2State extends State<Team5B1B2> {
 
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
   void showIntInputBottomSheet(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+  ) {
     final TextEditingController fuelController = TextEditingController();
     final TextEditingController hipassController = TextEditingController();
     final TextEditingController totalKmController = TextEditingController();
@@ -172,7 +171,7 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             final int fuel = int.parse(fuelController.text);
                             final int hiPass = int.parse(hipassController.text);
                             final int totalKm =
-                            int.parse(totalKmController.text);
+                                int.parse(totalKmController.text);
 
                             // 🔥 Firebase 저장
                             try {
@@ -252,29 +251,29 @@ class _Team5B1B2State extends State<Team5B1B2> {
   }
 
   void bottomColor5Final(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      int fuel,
-      int hiPass,
-      int totalKm,
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+    int fuel,
+    int hiPass,
+    int totalKm,
+  ) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -502,10 +501,11 @@ class _Team5B1B2State extends State<Team5B1B2> {
                 option5 = displayList[index]['option5']; //시승차 기타
                 option6 = displayList[index]['option6']; //3종 최근변경자 이름
                 option7 = displayList[index]
-                ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                    ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                 option8 = displayList[index]['option8']; //A-1,A-2,C,D 시승상태
                 option9 = displayList[index]['option9']; ////시승예약고객 성함
-                option10 = displayList[index]['option10'] as Timestamp?;       //출차시 사용할시간
+                option10 =
+                    displayList[index]['option10'] as Timestamp?; //출차시 사용할시간
                 //아래없음
 
                 option11 = displayList[index]['option11']; //시승차 예비용
@@ -563,29 +563,29 @@ class _Team5B1B2State extends State<Team5B1B2> {
   }
 
   Widget bottomColor5(
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      BuildContext rootContext, // 메인화면 context (show용)
-      BuildContext context, // 컬러5화면 context (show용)
-      String option1,
-      int option2, //하이패스
-      int option3, //주유잔량
-      int option4, //총킬로수
-      String option5, //기타
-      String option6, //3대변경자
-      String option8, //3대변경자
-      ) {
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    BuildContext rootContext, // 메인화면 context (show용)
+    BuildContext context, // 컬러5화면 context (show용)
+    String option1,
+    int option2, //하이패스
+    int option3, //주유잔량
+    int option4, //총킬로수
+    String option5, //기타
+    String option6, //3대변경자
+    String option8, //3대변경자
+  ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -666,7 +666,7 @@ class _Team5B1B2State extends State<Team5B1B2> {
                   child: ElevatedButton(
                     onPressed: () async {
                       final nowLocation =
-                      getLocationName(location); //시승차 위치파악함수
+                          getLocationName(location); //시승차 위치파악함수
                       Color5List = COLOR5 + formatTodayDate();
                       String documentId = FirebaseFirestore.instance
                           .collection(Color5List)
@@ -735,7 +735,8 @@ class _Team5B1B2State extends State<Team5B1B2> {
                         leftGasBefore: option3,
                         hiPassBefore: option2,
                         prepareName: widget.name,
-                        wayToDrive2: option8,);
+                        wayToDrive2: option8,
+                      );
                     },
                     child: Text(
                       '스탠바이',
@@ -784,18 +785,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '기본',
-                            'option5': '기본시승', //시승상태 기본 비교 비대면
-                            'option8': 'A-1', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '기본',
+                                      'option5': '기본시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -842,18 +843,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '비교',
-                            'option5': '비교시승', //시승상태 기본 비교 비대면
-                            'option8': 'A-1', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '비교',
+                                      'option5': '비교시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -900,18 +901,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '비대',
-                            'option5': '비대면시승', //시승상태 기본 비교 비대면
-                            'option8': 'A-1', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '와인',
+                                      'option5': '와인딩시승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-1', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -919,7 +920,7 @@ class _Team5B1B2State extends State<Team5B1B2> {
                     child: Column(
                       children: [
                         Text(
-                          '비대면',
+                          '와인딩',
                           style: TextStyle(
                             fontSize: 11, // 텍스트 크기 증가
                             fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -958,18 +959,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '현장',
-                            'option5': '현장동승', //시승상태 기본 비교 비대면
-                            'option8': 'A-2', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '현장',
+                                      'option5': '현장동승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1016,18 +1017,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '현비',
-                            'option5': '현장비동승', //시승상태 기본 비교 비대면
-                            'option8': 'A-2', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '현비',
+                                      'option5': '현장비동승', //시승상태 기본 비교 비대면
+                                      'option8': 'A-2', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1035,65 +1036,7 @@ class _Team5B1B2State extends State<Team5B1B2> {
                     child: Column(
                       children: [
                         Text(
-                          '현비동승',
-                          style: TextStyle(
-                            fontSize: 11, // 텍스트 크기 증가
-                            fontWeight: FontWeight.bold, // 텍스트를 굵게
-                            color: Colors.black87, // 텍스트 색상
-                          ),
-                        ),
-                        Text(
-                          'A-2',
-                          style: TextStyle(
-                            fontSize: 11, // 텍스트 크기 증가
-                            fontWeight: FontWeight.bold, // 텍스트를 굵게
-                            color: Colors.black87, // 텍스트 색상
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      backgroundColor: Colors.grey, // 버튼 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 버튼 둥글게
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(context);
-
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(TEAM5FIELD)
-                            .doc(dataId)
-                            .update(
-                          name.isEmpty
-                              ? {
-                            'name': '비대',
-                            'option5': '현장비대면', //시승상태 기본 비교 비대면
-                            'option8': 'A-2', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
-                      } catch (e) {
-                        print(e);
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        Text(
-                          '현비대면',
+                          '현장 비동승',
                           style: TextStyle(
                             fontSize: 11, // 텍스트 크기 증가
                             fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1133,18 +1076,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '교육',
-                            'option5': '교육', //시승상태 기본 비교 비대면
-                            'option8': 'C', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '교육',
+                                      'option5': '교육', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1178,18 +1121,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '답사',
-                            'option5': '답사', //시승상태 기본 비교 비대면
-                            'option8': 'C', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '답사',
+                                      'option5': '답사', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1224,18 +1167,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '컬러',
-                            'option5': '컬러확인', //시승상태 기본 비교 비대면
-                            'option8': 'C', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '컬러',
+                                      'option5': '컬러확인', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1270,18 +1213,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '주유',
-                            'option5': '주유', //시승상태 기본 비교 비대면
-                            'option8': 'C', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '주유',
+                                      'option5': '주유', //시승상태 기본 비교 비대면
+                                      'option8': 'C', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1315,18 +1258,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                             .collection(TEAM5FIELD)
                             .doc(dataId)
                             .update(
-                          name.isEmpty
-                              ? {
-                            'name': '인도',
-                            'option5': '인도픽업', //시승상태 기본 비교 비대면
-                            'option8': 'D', //A-1 A-2 C D
-                          }
-                              : {
-                            'name': '',
-                            'option5': '',
-                            'option8': '',
-                          },
-                        );
+                              name.isEmpty
+                                  ? {
+                                      'name': '인도',
+                                      'option5': '인도픽업', //시승상태 기본 비교 비대면
+                                      'option8': 'D', //A-1 A-2 C D
+                                    }
+                                  : {
+                                      'name': '',
+                                      'option5': '',
+                                      'option8': '',
+                                    },
+                            );
                       } catch (e) {
                         print(e);
                       }
@@ -1433,9 +1376,8 @@ class _Team5B1B2State extends State<Team5B1B2> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
-                        movedName:widget.name,
+                        movedName: widget.name,
                         wayToDrive2: '이동',
-
                       );
                     },
                     child: Text(
@@ -1483,7 +1425,7 @@ class _Team5B1B2State extends State<Team5B1B2> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
-                        movedName:widget.name,
+                        movedName: widget.name,
                         wayToDrive2: '이동',
                       );
                     },
@@ -1532,9 +1474,8 @@ class _Team5B1B2State extends State<Team5B1B2> {
                         totalKmBefore: option4,
                         leftGasBefore: option3,
                         hiPassBefore: option2,
-                        movedName:widget.name,
+                        movedName: widget.name,
                         wayToDrive2: '이동',
-
                       );
                     },
                     child: Text(
@@ -1606,7 +1547,8 @@ class _Team5B1B2State extends State<Team5B1B2> {
                                                     try {
                                                       await FirebaseFirestore
                                                           .instance
-                                                          .collection(TEAM5FIELD)
+                                                          .collection(
+                                                              TEAM5FIELD)
                                                           .doc(dataId)
                                                           .update({
                                                         'etc': etc,
@@ -1712,29 +1654,29 @@ class _Team5B1B2State extends State<Team5B1B2> {
   }
 
   Widget bottomColor5Etc(
-      //기타 클릭시
-      BuildContext bottomColor5EtcContext, // 컬러5Etc화면 context (show용)
-      String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      String option6,
-      String option8,
-      ) {
+    //기타 클릭시
+    BuildContext bottomColor5EtcContext, // 컬러5Etc화면 context (show용)
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    String option6,
+    String option8,
+  ) {
     return AlertDialog(
       title: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -1792,18 +1734,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': 'VP',
-                          'option5': 'VIP시승', //시승상태 기본 비교 비대면
-                          'option8': 'A-1', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': 'VP',
+                                    'option5': 'VIP시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -1850,18 +1792,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '인도',
-                          'option5': '찾아가는시승', //시승상태 기본 비교 비대면
-                          'option8': 'A-1', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '인도',
+                                    'option5': '찾아가는시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -1909,18 +1851,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '오너',
-                          'option5': '오너스시승', //시승상태 기본 비교 비대면
-                          'option8': 'A-1', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '오너',
+                                    'option5': '오너스시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -1967,18 +1909,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '시그',
-                          'option5': '시그니처시승', //시승상태 기본 비교 비대면
-                          'option8': 'A-1', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '시그',
+                                    'option5': '시그니처시승', //시승상태 기본 비교 비대면
+                                    'option8': 'A-1', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -2026,18 +1968,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '오너',
-                          'option5': '오너스현장', //시승상태 기본 비교 비대면
-                          'option8': 'A-2', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '오너',
+                                    'option5': '오너스현장', //시승상태 기본 비교 비대면
+                                    'option8': 'A-2', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -2084,18 +2026,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '수리',
-                          'option5': '시승차수리', //시승상태 기본 비교 비대면
-                          'option8': 'C', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '수리',
+                                    'option5': '시승차수리', //시승상태 기본 비교 비대면
+                                    'option8': 'C', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -2131,18 +2073,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '장기',
-                          'option5': '장기시승', //시승상태 기본 비교 비대면
-                          'option8': 'C', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '장기',
+                                    'option5': '장기시승', //시승상태 기본 비교 비대면
+                                    'option8': 'C', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -2177,18 +2119,18 @@ class _Team5B1B2State extends State<Team5B1B2> {
                           .collection(TEAM5FIELD)
                           .doc(dataId)
                           .update(
-                        name.isEmpty
-                            ? {
-                          'name': '지원',
-                          'option5': '외부지원', //시승상태 기본 비교 비대면
-                          'option8': 'C', //A-1 A-2 C D
-                        }
-                            : {
-                          'name': '',
-                          'option5': '',
-                          'option8': '',
-                        },
-                      );
+                            name.isEmpty
+                                ? {
+                                    'name': '지원',
+                                    'option5': '외부지원', //시승상태 기본 비교 비대면
+                                    'option8': 'C', //A-1 A-2 C D
+                                  }
+                                : {
+                                    'name': '',
+                                    'option5': '',
+                                    'option8': '',
+                                  },
+                          );
                     } catch (e) {
                       print(e);
                     }
@@ -2209,5 +2151,4 @@ class _Team5B1B2State extends State<Team5B1B2> {
       ),
     );
   }
-
 }

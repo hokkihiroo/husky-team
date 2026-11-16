@@ -35,7 +35,6 @@ class CarState extends StatefulWidget {
 }
 
 class _CarStateState extends State<CarState> {
-
   final repo = Team5Reposi(); //시승차 상태리스트 객체
 
   String dataId = ''; //차번호 클릭시 그 차번호에 고유 아이디값
@@ -79,26 +78,27 @@ class _CarStateState extends State<CarState> {
   String option11 = '';
 
   //주유잔량 하이패스 킬로미터 넣는함수 (아래)
-  void showIntInputBottomSheet(String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      ) {
+  void showIntInputBottomSheet(
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+  ) {
     final TextEditingController fuelController = TextEditingController();
     final TextEditingController hipassController = TextEditingController();
     final TextEditingController totalKmController = TextEditingController();
@@ -111,20 +111,13 @@ class _CarStateState extends State<CarState> {
       builder: (sheetContext) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery
-                .of(context)
-                .viewInsets
-                .bottom + 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
             top: 50,
           ),
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width
-                  .clamp(0, 290), // ⭐ 여기
+              width: MediaQuery.of(context).size.width.clamp(0, 290), // ⭐ 여기
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -218,7 +211,7 @@ class _CarStateState extends State<CarState> {
                                 : int.parse(hipassController.text);
 
                             final int totalKm =
-                            int.parse(totalKmController.text);
+                                int.parse(totalKmController.text);
                             int? oilPriceValue; // 🔧 [수정] 실제 저장할 값
                             if (name == '주유' &&
                                 oilPriceController.text.isNotEmpty) {
@@ -412,29 +405,31 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-  void bottomColor5Final(String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      BuildContext rootContext, // 화면 context (show용)
-      int fuel,
-      int hiPass,
-      int totalKm,
-      int? oilPrice,) {
+  void bottomColor5Final(
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime, //최신화된 3대 (하이패스 총킬로수 주유잔량) 최종적용 함수
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    BuildContext rootContext, // 화면 context (show용)
+    int fuel,
+    int hiPass,
+    int totalKm,
+    int? oilPrice,
+  ) {
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
@@ -481,7 +476,7 @@ class _CarStateState extends State<CarState> {
                   SizedBox(width: 70, child: Text('주유 잔량')),
                   Expanded(
                       child:
-                      Text(formatKm(option3), textAlign: TextAlign.center)),
+                          Text(formatKm(option3), textAlign: TextAlign.center)),
                   Expanded(
                       child: Text(formatKm(fuel), textAlign: TextAlign.center)),
                 ],
@@ -497,7 +492,7 @@ class _CarStateState extends State<CarState> {
                           textAlign: TextAlign.center)),
                   Expanded(
                       child:
-                      Text(formatWon(hiPass), textAlign: TextAlign.center)),
+                          Text(formatWon(hiPass), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -508,10 +503,10 @@ class _CarStateState extends State<CarState> {
                   SizedBox(width: 70, child: Text('총 킬로수')),
                   Expanded(
                       child:
-                      Text(formatKm(option4), textAlign: TextAlign.center)),
+                          Text(formatKm(option4), textAlign: TextAlign.center)),
                   Expanded(
                       child:
-                      Text(formatKm(totalKm), textAlign: TextAlign.center)),
+                          Text(formatKm(totalKm), textAlign: TextAlign.center)),
                 ],
               ),
               SizedBox(height: 8),
@@ -609,15 +604,10 @@ class _CarStateState extends State<CarState> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               content: SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width
-                    .clamp(0, 290),
+                width: MediaQuery.of(context).size.width.clamp(0, 290),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-
                     /// 🔘 탭 버튼
                     ToggleButtons(
                       isSelected: [
@@ -665,7 +655,7 @@ class _CarStateState extends State<CarState> {
                         padding: const EdgeInsets.all(8),
                         childAspectRatio: 1,
                         children:
-                        getSelectedBrandMap().keys.map<Widget>((brand) {
+                            getSelectedBrandMap().keys.map<Widget>((brand) {
                           return Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
@@ -721,10 +711,12 @@ class _CarStateState extends State<CarState> {
   }
 
   //차종넣는함수(아래)
-  Widget carModel(BuildContext rootContext,
-      BuildContext carDialogContext, // ✅ 추가
-      String brand,
-      Map<String, List<String>> brandModels,) {
+  Widget carModel(
+    BuildContext rootContext,
+    BuildContext carDialogContext, // ✅ 추가
+    String brand,
+    Map<String, List<String>> brandModels,
+  ) {
     return AlertDialog(
       title: Center(
         child: Text(
@@ -734,11 +726,7 @@ class _CarStateState extends State<CarState> {
       ),
       content: Container(
         height: 360,
-        width: MediaQuery
-            .of(rootContext)
-            .size
-            .width
-            .clamp(0, 290),
+        width: MediaQuery.of(rootContext).size.width.clamp(0, 290),
         decoration: BoxDecoration(
           color: Colors.black12,
           borderRadius: BorderRadius.circular(10),
@@ -805,7 +793,6 @@ class _CarStateState extends State<CarState> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             /// 🔙 뒤로 → 브랜드 선택 다시 열기
             TextButton.icon(
               onPressed: () {
@@ -873,7 +860,7 @@ class _CarStateState extends State<CarState> {
                   movedLocation = filteredDocs[index]['movedLocation'];
                   final raw = filteredDocs[index]['movingTime'];
                   movingTime =
-                  raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
+                      raw is Timestamp ? movingTimeGet(raw.toDate()) : '';
                   Timestamp createdAt = filteredDocs[index]['createdAt'];
                   dateTime = createdAt.toDate();
                   remainTime = getRemainTime(dateTime);
@@ -892,12 +879,12 @@ class _CarStateState extends State<CarState> {
                   option5 = filteredDocs[index]['option5']; //시승차 차량상대 기본시승 비교시승
                   option6 = filteredDocs[index]['option6']; //최근 3종 변경자 이름
                   option7 = filteredDocs[index]
-                  ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
+                      ['option7']; //시승차 타입 (고객= 0 시승차 60= 1 70=2 80=3 90=4
                   option8 = filteredDocs[index]['option8']; //A-1 A-2 C D
                   option9 = filteredDocs[index]['option9']; //시승차예약자 성함
                   option12 = filteredDocs[index]['option12']; //전기차 충전시 사용 '충전'
                   option10 =
-                  filteredDocs[index]['option10'] as Timestamp?; //출차시 사용할시간
+                      filteredDocs[index]['option10'] as Timestamp?; //출차시 사용할시간
                   //아래없음
                   option11 = filteredDocs[index]['option11']; //시승차 예비용
 
@@ -976,24 +963,25 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-  Widget bottomTwo(String carNumber,
-      String name,
-      String option12,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime,
-      String getMovingTime,
-      String carModelFrom,
-      String enterName,
-      BuildContext rootContext, // 화면 context (show용)
-      BuildContext dialogContext, // bottomTwo 닫기용
-      ) {
+  Widget bottomTwo(
+    String carNumber,
+    String name,
+    String option12,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime,
+    String getMovingTime,
+    String carModelFrom,
+    String enterName,
+    BuildContext rootContext, // 화면 context (show용)
+    BuildContext dialogContext, // bottomTwo 닫기용
+  ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1092,8 +1080,7 @@ class _CarStateState extends State<CarState> {
                         'outLocation': location,
                         'movedLocation': '$movedLocation',
                         'wigetName': wigetName,
-                        'enterName': enterName,
-                        'etc': '($option12) $etc',
+                        'etc': '$option12 $etc',
                       });
                     } catch (e) {
                       print(e);
@@ -1136,11 +1123,7 @@ class _CarStateState extends State<CarState> {
         ],
       ),
       content: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width
-            .clamp(0, 300),
+        width: MediaQuery.of(context).size.width.clamp(0, 300),
         height: 320,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1159,20 +1142,93 @@ class _CarStateState extends State<CarState> {
                     ),
                     onPressed: () async {
                       Navigator.pop(context);
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection(TEAM5FIELD)
-                            .doc(dataId)
-                            .update({
-                          'name':
-                          (name == null || name.isEmpty) ? widget.name : '',
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
+
+                      CarListAdress = TEAM5CARLIST + formatTodayDate();
+                      print(CarListAdress);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              '번호수정',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 30),
+                            ),
+                            actions: [
+                              TextField(
+                                keyboardType: TextInputType.number,
+                                autofocus: true,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp('[0-9]')),
+                                ],
+                                maxLength: 4,
+                                decoration: InputDecoration(
+                                  hintText: '현재번호 : $carNumber',
+                                ),
+                                onChanged: (value) {
+                                  carNumber = value;
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                      ),
+                                      onPressed: () async {
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(TEAM5FIELD)
+                                              .doc(dataId)
+                                              .update({
+                                            'carNumber': carNumber,
+                                          });
+                                        } catch (e) {
+                                          print(e);
+                                        }
+
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection(CarListAdress)
+                                              .doc(dataId)
+                                              .update({
+                                            'carNumber': carNumber,
+                                          });
+                                        } catch (e) {}
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('수정'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0), // 버튼의 위아래 패딩 조정
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('취소'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Text(
-                      '픽업/취소',
+                      '번호수정',
                       style: TextStyle(
                         fontSize: 17, // 텍스트 크기 증가
                         fontWeight: FontWeight.bold, // 텍스트를 굵게
@@ -1195,7 +1251,6 @@ class _CarStateState extends State<CarState> {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.pop(context);
 
                       try {
                         await FirebaseFirestore.instance
@@ -1207,6 +1262,34 @@ class _CarStateState extends State<CarState> {
                         });
                       } catch (e) {
                         print(e);
+                      }
+                      Navigator.pop(context);
+
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection(CarListAdress)
+                            .doc(dataId)
+                            .update({
+                          'enterName': (color == 3) ? '' : '자가주차', //자가주차누르면 기입됨
+                        });
+                      } catch (e) {
+                        print(e);
+                        print('데이터가 존재하지 않아 업데이트 할게 없습니다');
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('하루 지난 데이터 입니다 '),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            });
                       }
                     },
                     child: Text(
@@ -1539,7 +1622,7 @@ class _CarStateState extends State<CarState> {
                         borderRadius: BorderRadius.circular(8), // 버튼 둥글게
                       ),
                       textStyle:
-                      TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -1551,10 +1634,7 @@ class _CarStateState extends State<CarState> {
                               return AlertDialog(
                                 title: Text('특이사항'),
                                 content: Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
+                                  width: MediaQuery.of(context).size.width,
                                   height: 150,
                                   child: Column(
                                     children: [
@@ -1600,7 +1680,7 @@ class _CarStateState extends State<CarState> {
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                Colors.blueGrey,
+                                                    Colors.blueGrey,
                                                 // 버튼 배경색
                                                 foregroundColor: Colors.white,
                                                 // 텍스트 색상
@@ -1609,8 +1689,8 @@ class _CarStateState extends State<CarState> {
                                                 // 버튼 높이 설정
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(
-                                                      12), // 둥근 모서리
+                                                      BorderRadius.circular(
+                                                          12), // 둥근 모서리
                                                 ),
                                               ),
                                               child: Text(
@@ -1618,7 +1698,7 @@ class _CarStateState extends State<CarState> {
                                                 style: TextStyle(
                                                   fontSize: 18, // 텍스트 크기
                                                   fontWeight:
-                                                  FontWeight.bold, // 텍스트 굵게
+                                                      FontWeight.bold, // 텍스트 굵게
                                                 ),
                                               ),
                                             ),
@@ -1633,7 +1713,7 @@ class _CarStateState extends State<CarState> {
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                Colors.blueGrey,
+                                                    Colors.blueGrey,
                                                 // 버튼 배경색
                                                 foregroundColor: Colors.white,
                                                 // 텍스트 색상
@@ -1642,8 +1722,8 @@ class _CarStateState extends State<CarState> {
                                                 // 버튼 높이 설정
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(
-                                                      12), // 둥근 모서리
+                                                      BorderRadius.circular(
+                                                          12), // 둥근 모서리
                                                 ),
                                               ),
                                               child: Text(
@@ -1651,7 +1731,7 @@ class _CarStateState extends State<CarState> {
                                                 style: TextStyle(
                                                   fontSize: 18, // 텍스트 크기
                                                   fontWeight:
-                                                  FontWeight.bold, // 텍스트 굵게
+                                                      FontWeight.bold, // 텍스트 굵게
                                                 ),
                                               ),
                                             ),
@@ -1689,9 +1769,7 @@ class _CarStateState extends State<CarState> {
                   onPressed: () async {
                     Navigator.pop(context); // 첫 번째 Dialog 닫기
 
-                    if (carModelFrom == null || carModelFrom
-                        .trim()
-                        .isEmpty) {
+                    if (carModelFrom == null || carModelFrom.trim().isEmpty) {
                       await showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -1700,11 +1778,11 @@ class _CarStateState extends State<CarState> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             titlePadding:
-                            const EdgeInsets.fromLTRB(24, 24, 24, 8),
+                                const EdgeInsets.fromLTRB(24, 24, 24, 8),
                             contentPadding:
-                            const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                                const EdgeInsets.fromLTRB(24, 0, 24, 16),
                             actionsPadding:
-                            const EdgeInsets.only(right: 12, bottom: 12),
+                                const EdgeInsets.only(right: 12, bottom: 12),
                             title: Row(
                               children: [
                                 Icon(Icons.warning_amber_rounded,
@@ -1803,32 +1881,33 @@ class _CarStateState extends State<CarState> {
     );
   }
 
-  Widget bottomColor5(String carNumber,
-      String name,
-      int color,
-      int location,
-      DateTime dateTime,
-      String dataId,
-      String etc,
-      String remainTime,
-      String movedLocation,
-      String wigetName,
-      String movingTime, //시승차 선택했을때 나오는함수 그다음 저위로 감
-      String getMovingTime,
-      String carModelFrom,
-      String option1,
-      int option2,
-      int option3,
-      int option4,
-      String option5,
-      String option6,
-      int option7,
-      String option8,
-      String option9,
-      String option11,
-      BuildContext rootContext, // 화면 context (show용)
-      BuildContext dialogContext, // bottomColor5 닫기용
-      ) {
+  Widget bottomColor5(
+    String carNumber,
+    String name,
+    int color,
+    int location,
+    DateTime dateTime,
+    String dataId,
+    String etc,
+    String remainTime,
+    String movedLocation,
+    String wigetName,
+    String movingTime, //시승차 선택했을때 나오는함수 그다음 저위로 감
+    String getMovingTime,
+    String carModelFrom,
+    String option1,
+    int option2,
+    int option3,
+    int option4,
+    String option5,
+    String option6,
+    int option7,
+    String option8,
+    String option9,
+    String option11,
+    BuildContext rootContext, // 화면 context (show용)
+    BuildContext dialogContext, // bottomColor5 닫기용
+  ) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1861,12 +1940,29 @@ class _CarStateState extends State<CarState> {
                     color: Colors.grey[700],
                   ),
                 ),
-                Text(
-                  '',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[700],
+                InkWell(
+                  onTap: ()async {
+                    try {
+                      await FirebaseFirestore.instance
+                          .collection(TEAM5FIELD)
+                          .doc(dataId)
+                          .update({
+                        'location': 0,
+                      });
+                    } catch (e) {
+                      print(e);
+                    }
+                    Navigator.pop(context);
+
+
+                  },
+                  child: Text(
+                    '출발취소버튼',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ),
               ],
@@ -1914,14 +2010,22 @@ class _CarStateState extends State<CarState> {
         ],
       ),
       content: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width
-            .clamp(0, 290),
+        width: MediaQuery.of(context).size.width.clamp(0, 290),
         height: 130,
         child: Column(
           children: [
+            Text(
+              etc,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.4, // 👈 글자 간격
+                color: Colors.black, // 텍스트 색상
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 Expanded(
@@ -1969,18 +2073,6 @@ class _CarStateState extends State<CarState> {
                   ),
                 ),
               ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              etc,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.4, // 👈 글자 간격
-                color: Colors.black, // 텍스트 색상
-              ),
             ),
           ],
         ),

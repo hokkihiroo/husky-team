@@ -437,6 +437,7 @@ class ListModel extends StatelessWidget {
                   child: Team5CarlistCard(
                     index: index + 1,
                     carNum: docs[index]['carNumber'],
+                    enterName: docs[index]['enterName'],
                     inTime: docs[index]['enter'],
                     outTime: docs[index]['out'] is Timestamp
                         ? (docs[index]['out'] as Timestamp).toDate()
