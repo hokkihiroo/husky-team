@@ -210,56 +210,60 @@ class _Team5MainviewState extends State<Team5Mainview> {
       // 사진 표시
       showDialog(
         context: context,
+        barrierColor: Colors.black,
         builder: (dialogContext) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 24,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Stack(
-                children: [
-                  Container(
-                    color: Colors.black,
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.8,
-                    ),
+          return Dialog.fullscreen(
+            backgroundColor: Colors.black,
+            child: Stack(
+              children: [
+                // 화면 전체 사진 영역
+                Positioned.fill(
+                  child: Dismissible(
+                    key: const ValueKey('timeline-image'),
+                    direction: DismissDirection.down,
+                    dismissThresholds: const {
+                      DismissDirection.down: 0.15,
+                    },
+                    onDismissed: (_) {
+                      Navigator.pop(dialogContext);
+                    },
                     child: InteractiveViewer(
                       minScale: 1,
                       maxScale: 4,
-                      child: Image.memory(
-                        imageData,
-                        fit: BoxFit.contain,
+                      child: SizedBox(
                         width: double.infinity,
+                        height: double.infinity,
+                        child: Image.memory(
+                          imageData,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
+                ),
 
-                  // 닫기 버튼
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: InkWell(
-                      onTap: () => Navigator.pop(dialogContext),
-                      borderRadius: BorderRadius.circular(30),
-                      child: Container(
-                        padding: const EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.55),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 22,
-                        ),
+                // 닫기 버튼
+                Positioned(
+                  top: 45,
+                  right: 18,
+                  child: InkWell(
+                    onTap: () => Navigator.pop(dialogContext),
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.55),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 24,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
