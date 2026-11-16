@@ -471,7 +471,7 @@ class _MyPageState extends State<MyPage> {
                         const SizedBox(width: 8),
                         const Expanded(
                           child: Text(
-                            '버전 3.4 · 광주 이슈 수정 ',
+                            '버전 3.4 · 각종 이슈 수정 ',
                             style: TextStyle(
                               fontSize: 12,
                               color: textGrey,
