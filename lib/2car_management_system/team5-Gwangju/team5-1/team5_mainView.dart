@@ -181,6 +181,111 @@ class _Team5MainviewState extends State<Team5Mainview> {
       }
     }
   }
+
+  // =========================
+// 타임라인 사진 조회
+// =========================
+  Future<void> _showTimelineImage() async {
+    try {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('team5_timeline/current_photo.jpg');
+
+      // Firebase Storage에서 사진 데이터 가져오기
+      final Uint8List? imageData = await storageRef.getData(
+        15 * 1024 * 1024,
+      );
+
+      if (!mounted) return;
+
+      if (imageData == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('등록된 타임라인 사진이 없습니다.'),
+          ),
+        );
+        return;
+      }
+
+      // 사진 표시
+      showDialog(
+        context: context,
+        builder: (dialogContext) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 24,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                children: [
+                  Container(
+                    color: Colors.black,
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.8,
+                    ),
+                    child: InteractiveViewer(
+                      minScale: 1,
+                      maxScale: 4,
+                      child: Image.memory(
+                        imageData,
+                        fit: BoxFit.contain,
+                        width: double.infinity,
+                      ),
+                    ),
+                  ),
+
+                  // 닫기 버튼
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: InkWell(
+                      onTap: () => Navigator.pop(dialogContext),
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        padding: const EdgeInsets.all(7),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.55),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } on FirebaseException catch (e) {
+      if (!mounted) return;
+
+      if (e.code == 'object-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('등록된 타임라인 사진이 없습니다.'),
+          ),
+        );
+      } else {
+        debugPrint('타임라인 사진 조회 오류: ${e.message}');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('사진을 불러오지 못했습니다.'),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('타임라인 사진 조회 오류: $e');
+    }
+  }
   ////////////////////////////////////////////////////////////////////////
 
   @override
@@ -329,9 +434,7 @@ class _Team5MainviewState extends State<Team5Mainview> {
                           // 타임라인
                           InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () {
-                              // 추후 타임라인 사진 보기 기능
-                            },
+                            onTap: _showTimelineImage,
                             child: const Padding(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 5,
